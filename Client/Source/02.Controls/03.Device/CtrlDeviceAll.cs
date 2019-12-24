@@ -1,0 +1,75 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlDeviceAll : UlUserControlEng
+    {
+        public CtrlDeviceAll()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            Color evenColor = Color.FromArgb(244, 244, 236);
+
+            powerMeterGrid.DataSource = Resource.Client.Devices.PowerMeter.Values;
+            powerMeterGridView.Appearance.EvenRow.BackColor = evenColor;
+            powerMeterGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            recorder1Grid.DataSource = Resource.Client.Devices.Recorder.ValueList[0];
+            recorder1GridView.Appearance.EvenRow.BackColor = evenColor;
+            recorder1GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            recorder2Grid.DataSource = Resource.Client.Devices.Recorder.ValueList[1];
+            recorder2GridView.Appearance.EvenRow.BackColor = evenColor;
+            recorder2GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            recorder3Grid.DataSource = Resource.Client.Devices.Recorder.ValueList[2];
+            recorder3GridView.Appearance.EvenRow.BackColor = evenColor;
+            recorder3GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            recorder4Grid.DataSource = Resource.Client.Devices.Recorder.ValueList[3];
+            recorder4GridView.Appearance.EvenRow.BackColor = evenColor;
+            recorder4GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            controllerGrid.DataSource = Resource.Client.Devices.Controller.Values;
+            controllerGridView.Appearance.EvenRow.BackColor = evenColor;
+            controllerGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            plcGrid.DataSource = Resource.Client.Devices.Plc.Values;
+            plcGridView.Appearance.EvenRow.BackColor = evenColor;
+            plcGridView.OptionsView.EnableAppearanceEvenRow = true;
+        }
+
+        public override void InvalidControl(object sender, EventArgs e)
+        {
+            if (this.InvokeRequired == true)
+            {
+                EventHandler func = new EventHandler(InvalidControl);
+                this.BeginInvoke(func, new object[] { sender, e });
+            }
+            else
+            {
+                powerMeterGridView.RefreshData();
+                recorder1GridView.RefreshData();
+                recorder2GridView.RefreshData();
+                recorder3GridView.RefreshData();
+                recorder4GridView.RefreshData();
+                controllerGridView.RefreshData();
+                plcGridView.RefreshData();
+            }
+        }
+    }
+}

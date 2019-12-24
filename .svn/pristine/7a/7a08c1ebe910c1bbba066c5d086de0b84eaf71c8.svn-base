@@ -1,0 +1,246 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Ulee.Device.Connection.Yokogawa;
+
+namespace Hnc.Calorimeter.Client
+{
+    #region enums
+    public enum ETestState
+    {
+        Started,
+        Paused,
+        Stopped
+    }
+
+    public enum ETestMode
+    {
+        [Description("Cooling")]
+        Cooling,
+        [Description("Heating")]
+        Heating
+    }
+
+    public enum EIndoorUse
+    {
+        [Description("Indoor")]
+        Indoor,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EIndoorMode
+    {
+        [Description("Cooling")]
+        Cooling,
+        [Description("Heating")]
+        Heating,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EIndoorDuct
+    {
+        [Description("1")]
+        N1,
+        [Description("2")]
+        N2,
+        [Description("3")]
+        N3,
+        [Description("4")]
+        N4,
+        [Description("5")]
+        N5,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EOutdoorUse
+    {
+        [Description("Outdoor")]
+        Outdoor,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EEtcUse
+    {
+        [Description("Use")]
+        Use,
+        [Description("Not Used")]
+        NotUsed
+    }
+    #endregion
+
+    #region TestContext
+    public class TestContext
+    {
+        public TestContext()
+        {
+            State = ETestState.Stopped;
+            Condition = new TestCondition();
+        }
+
+        public ETestState State { get; set; }
+        public TestCondition Condition { get; private set; }
+    }
+    #endregion
+
+    #region TestCondition
+    public class TestCondition
+    {
+        public TestCondition()
+        {
+            List<TestSchedule> Schedules = new List<TestSchedule>();
+
+            TestMethod Method = new TestMethod();
+
+            TestNote Note = new TestNote();
+
+            Dictionary<ETestRated, TestRated> Rated = new Dictionary<ETestRated, TestRated>();
+            Rated.Add(ETestRated.Total, new TestRated());
+            Rated.Add(ETestRated.ID11, new TestRated());
+            Rated.Add(ETestRated.ID12, new TestRated());
+            Rated.Add(ETestRated.ID21, new TestRated());
+            Rated.Add(ETestRated.ID22, new TestRated());
+
+            Dictionary<string, int> Termocouples = new Dictionary<string, int>();
+
+            Dictionary<string, int> Pressures = new Dictionary<string, int>();
+        }
+
+        public List<TestSchedule> Schedules { get; set; }
+        public TestMethod Method { get; set; }
+        public TestNote Note { get; set; }
+        public Dictionary<ETestRated, TestRated> Rateds { get; set; }
+        public Dictionary<string, int> Termocouples { get; set; }
+        public Dictionary<string, int> Pressures { get; set; }
+    }
+    #endregion
+
+    #region TestSchedule
+    public class TestSchedule
+    {
+        public TestSchedule(int no)
+        {
+            No = no;
+        }
+
+        public int No { get; set; }
+        public string Name { get; set; }
+        public int PreRun { get; set; }
+        public int Judge { get; set; }
+        public int Repeat { get; set; }
+        public float Indoor1DB { get; set; }
+        public float Indoor1WB { get; set; }
+        public float Indoor1CP1 { get; set; }
+        public float Indoor1CP2 { get; set; }
+        public float Indoor2DB { get; set; }
+        public float Indoor2WB { get; set; }
+        public float Indoor2CP1 { get; set; }
+        public float Indoor2CP2 { get; set; }
+        public float OutdoorDB { get; set; }
+        public float OutdoorWB { get; set; }
+        public float OutdoorDP { get; set; }
+        public float OutdoorVolt1 { get; set; }
+        public float OutdoorVolt2 { get; set; }
+        public EIndoorUse Indoor1Use { get; set; }
+        public EIndoorMode Indoor1Mode1 { get; set; }
+        public EIndoorDuct Indoor1Duct1 { get; set; }
+        public EIndoorMode Indoor1Mode2 { get; set; }
+        public EIndoorDuct Indoor1Duct2 { get; set; }
+        public EIndoorUse Indoor2Use { get; set; }
+        public EIndoorMode Indoor2Mode1 { get; set; }
+        public EIndoorDuct Indoor2Duct1 { get; set; }
+        public EIndoorMode Indoor2Mode2 { get; set; }
+        public EIndoorDuct Indoor2Duct2 { get; set; }
+        public EOutdoorUse OutdoorUse { get; set; }
+        public EEtcUse OutdoorDpSensor { get; set; }
+        public EEtcUse OutdoorAutoVolt { get; set; }
+    }
+    #endregion
+
+    #region TestMethod
+    public class TestMethod
+    {
+        public TestMethod()
+        {
+            Mode = ETestMode.Cooling;
+            IntegralCount = 1;
+            IntegralTime = 1;
+            ScanTime = 1;
+            Capacity = EUnitCapacity.Watt;
+            AirFlow = EUnitAirFlow.CMM;
+            Enthalpy = EUnitEnthalpy.Watt;
+            Pressure = EUnitBarPressure.Bar;
+            DiffPressure = EUnitmmAqPressure.mmAq;
+            AtmPressure = EUnitmmAqPressure.mmAq;
+            AutoControllerSetting = false;
+            UsePowerMeterIntegral = false;
+        }
+
+        public ETestMode Mode { get; set; }
+        public int IntegralCount { get; set; }
+        public int IntegralTime { get; set; }
+        public int ScanTime { get; set; }
+        public EUnitCapacity Capacity { get; set; }
+        public EUnitAirFlow AirFlow { get; set; }
+        public EUnitEnthalpy Enthalpy { get; set; }
+        public EUnitBarPressure Pressure { get; set; }
+        public EUnitmmAqPressure DiffPressure { get; set; }
+        public EUnitmmAqPressure AtmPressure { get; set; }
+        public EUnitTemperature Temperature { get; set; }
+        public bool AutoControllerSetting { get; set; }
+        public bool UsePowerMeterIntegral { get; set; }
+    }
+    #endregion
+
+    #region TestNote
+    public class TestNote
+    {
+        public TestNote()
+        {
+        }
+
+        public string Company { get; set; }
+        public string Name { get; set; }
+        public string No { get; set; }
+        public string Observer { get; set; }
+        public string Maker { get; set; }
+        public string Model1 { get; set; }
+        public string Serial1 { get; set; }
+        public string Model2 { get; set; }
+        public string Serial2 { get; set; }
+        public string Model3 { get; set; }
+        public string Serial3 { get; set; }
+        public string ExpDevice { get; set; }
+        public string Refrigerant { get; set; }
+        public string RefCharge { get; set; }
+        public string Memo { get; set; }
+    }
+    #endregion
+
+    #region TestRated
+    public enum ETestRated { Total, ID11, ID12, ID21, ID22 }
+
+    public class TestRated
+    {
+        public TestRated()
+        {
+        }
+
+        public float Capacity { get; set; }
+        public float PowerInput { get; set; }
+        public float EER_COP { get; set; }
+        public float Voltage { get; set; }
+        public float Current { get; set; }
+        public EWT330Phase Phase { get; set; }
+        public float Frequency { get; set; }
+        public EWT330Wiring Wiring { get; set; }
+    }
+    #endregion
+}

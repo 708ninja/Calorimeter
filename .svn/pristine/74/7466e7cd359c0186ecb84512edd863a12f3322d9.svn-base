@@ -1,0 +1,79 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlTestTop : UlUserControlEng
+    {
+        public CtrlTestTop()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            DefMenu = new UlMenu(viewPanel);
+            DefMenu.Add(new CtrlTestLine1(), line1Button);
+            DefMenu.Add(new CtrlTestLine1(), line2Button);
+            DefMenu.Add(new CtrlTestLine1(), line3Button);
+            DefMenu.Add(new CtrlTestLine1(), line4Button);
+        }
+
+        private void CtrlTestTop_Load(object sender, EventArgs e)
+        {
+            DefMenu.Index = 0;
+            stopButton.PerformClick();
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            startButton.Enabled = false;
+            pauseButton.Enabled = true;
+            nextButton.Enabled = true;
+            resetButton.Enabled = true;
+            stopButton.Enabled = true;
+
+            CtrlTestLine1 ctrl = DefMenu.ActiveControl as CtrlTestLine1;
+            ctrl.conditionPanel.Hide();
+            ctrl.measPanel.Show();
+        }
+
+        private void pauseButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void nextButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void stopButton_Click(object sender, EventArgs e)
+        {
+            startButton.Enabled = true;
+            pauseButton.Enabled = false;
+            nextButton.Enabled = false;
+            resetButton.Enabled = false;
+            stopButton.Enabled = false;
+
+            CtrlTestLine1 ctrl = DefMenu.ActiveControl as CtrlTestLine1;
+            ctrl.conditionPanel.Show();
+            ctrl.measPanel.Hide();
+        }
+    }
+}

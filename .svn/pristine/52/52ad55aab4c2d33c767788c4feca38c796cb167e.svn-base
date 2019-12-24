@@ -1,0 +1,108 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlConfigCondition : UlUserControlEng
+    {
+        public CtrlConfigCondition()
+        {
+            Initialized = false;
+            InitializeComponent();
+
+            Initialize();
+            Initialized = true;
+        }
+
+        private bool Initialized;
+
+        private void Initialize()
+        {
+            methodCapaCoolingUnitCombo.DisplayMember = "Name";
+            methodCapaCoolingUnitCombo.ValueMember = "Value";
+            methodCapaCoolingUnitCombo.DataSource = EnumHelper.GetNameValues<EUnitCapacity>();
+
+            methodCapaHeatingUnitCombo.DisplayMember = "Name";
+            methodCapaHeatingUnitCombo.ValueMember = "Value";
+            methodCapaHeatingUnitCombo.DataSource = EnumHelper.GetNameValues<EUnitCapacity>();
+
+            foreach (TabPage page in ratedTab.TabPages)
+            {
+                EConditionRated index = (EConditionRated)int.Parse(page.Tag.ToString());
+                CtrlTestRated ctrl = new CtrlTestRated(index, Resource.Variables);
+                page.Controls.Add(ctrl);
+            }
+
+            SetPanelActive(true);
+        }
+
+        private void CtrlConfigCondition_Load(object sender, EventArgs e)
+        {
+            methodCapaCoolingUnitCombo.SelectedValue = EUnitCapacity.kcal;
+            methodCapaCoolingUnitCombo_SelectedValueChanged(null, null);
+
+            methodCapaHeatingUnitCombo.SelectedValue = EUnitCapacity.Btu;
+            methodCapaHeatingUnitCombo_SelectedValueChanged(null, null);
+        }
+
+        private void methodCapaCoolingUnitCombo_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (Initialized == false) return;
+
+            int nUnit = (int)methodCapaCoolingUnitCombo.SelectedValue;
+            string sUnit = methodCapaCoolingUnitCombo.Text;
+
+            SetRatedConditionCoolingUnit(ETestRatedField.Capacity, sUnit);
+            SetRatedConditionCoolingUnit(ETestRatedField.EER_COP, EnumHelper.GetNames<EUnitEER_COP>()[nUnit]);
+        }
+
+        private void methodCapaHeatingUnitCombo_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (Initialized == false) return;
+
+            int nUnit = (int)methodCapaHeatingUnitCombo.SelectedValue;
+            string sUnit = methodCapaHeatingUnitCombo.Text;
+
+            SetRatedConditionHeatingUnit(ETestRatedField.Capacity, sUnit);
+            SetRatedConditionHeatingUnit(ETestRatedField.EER_COP, EnumHelper.GetNames<EUnitEER_COP>()[nUnit]);
+        }
+
+        private void SetRatedConditionCoolingUnit(ETestRatedField index, string unit)
+        {
+            foreach (TabPage page in ratedTab.TabPages)
+            {
+                CtrlTestRated ctrl = (CtrlTestRated)page.Controls[0];
+                ctrl.SetCoolingUnit(index, unit);
+            }
+        }
+
+        private void SetRatedConditionHeatingUnit(ETestRatedField index, string unit)
+        {
+            foreach (TabPage page in ratedTab.TabPages)
+            {
+                CtrlTestRated ctrl = (CtrlTestRated)page.Controls[0];
+                ctrl.SetHeatingUnit(index, unit);
+            }
+        }
+
+        private void SetPanelActive(bool active)
+        {
+            Color bkColor = (active == true) ? Color.DeepSkyBlue : Color.Gray;
+
+            noteTitlePanel.BackColor = bkColor;
+            thermoTitlePanel.BackColor = bkColor;
+            pressureTitlePanel.BackColor = bkColor;
+            ratedTitlePanel.BackColor = bkColor;
+        }
+    }
+}

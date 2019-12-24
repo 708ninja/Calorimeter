@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Ulee.Threading;
+
+namespace Hnc.Calorimeter.Client
+{
+    public class TestThread : UlThread
+    {
+        public TestThread(TestContext context)
+        {
+            this.context = context;
+        }
+
+        private TestContext context;
+
+        protected override void Execute()
+        {
+        }
+    }
+}

@@ -1,0 +1,398 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.Utils;
+using DevExpress.XtraCharts;
+
+using Ulee.Controls;
+using Ulee.DllImport.Win32;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlViewGraph : UlUserControlEng
+    {
+        public CtrlViewGraph(int handle)
+        {
+            InitializeComponent();
+
+            this.handle = handle;
+            Initialize();
+        }
+
+        private int handle;
+        private string fName;
+        private int scanTime;
+        private ConditionMethod method;
+        private CalorimeterViewDatabase db;
+
+        private void Initialize()
+        {
+            db = Resource.ViewDB;
+            method = new ConditionMethod();
+            graphDescriptionLed.Active = true;
+            InitGraph();
+        }
+
+        private void InitGraph()
+        {
+            CtrlViewGraphSetting ctrl;
+
+            foreach (TabPage page in graphTab.TabPages)
+            {
+                int graphNo = int.Parse(page.Tag.ToString());
+
+                ctrl = new CtrlViewGraphSetting(
+                    handle, graphNo, Resource.Variables.Graph, method);
+
+                page.Controls.Add(ctrl);
+            }
+
+            graphTab.SelectedIndex = 0;
+
+            viewGraph.Clear();
+            viewGraph.BackColor = Color.White;
+            viewGraph.LegendFont = new Font("Arial", 7, FontStyle.Regular);
+
+            ctrl = graph1Page.Controls[0] as CtrlViewGraphSetting;
+            foreach (SeriesRow row in ctrl.SeriesRows)
+            {
+                viewGraph.AddSeries(row.Name, row.Color);
+            }
+
+            viewGraph.SetPrimaryAxisX(AxisAlignment.Near, "Time", StringAlignment.Center, 0, 60000);
+
+            foreach (YAxisRow row in ctrl.YAxisRows)
+            {
+                AxisAlignment align = (row.Align == EAxisAlign.Left) ? AxisAlignment.Near : AxisAlignment.Far;
+
+                if (row.AxisNo == 0)
+                    viewGraph.SetPrimaryAxisY(align, row.DescriptionUnit, StringAlignment.Far, row.Min, row.Max);
+                else
+                    viewGraph.AddSecondaryAxisY(align, row.DescriptionUnit, StringAlignment.Far, row.Min, row.Max);
+            }
+
+            foreach (SeriesRow row in ctrl.SeriesRows)
+            {
+                viewGraph.Series[row.Name].Visible = row.Checked;
+                viewGraph.SetSeriesAxisY(row.Name, ctrl.GetAxisNo(row.UnitType));
+            }
+
+            foreach (YAxisRow row in ctrl.YAxisRows)
+            {
+                viewGraph.AxesY[row.AxisNo].Visibility =
+                    (row.Checked == true) ? DefaultBoolean.True : DefaultBoolean.False;
+            }
+
+            viewGraph.CustomDrawAxisLabel += viewGraph_CustomDrawAxisLabel;
+
+            viewGraph.Prepare();
+            viewGraph.SetGridLinesAxisX(true);
+            viewGraph.SetGridLinesAxisY(true);
+        }
+
+        public void Open(Int64 recNo)
+        {
+            ResetGraph();
+            db.Lock();
+
+            try
+            {
+                double time = 0;
+                double interval = 0;
+                double totalTime = 0;
+                SeriesPoint[] pt;
+                DataBookDataSet bookSet = db.DataBookSet;
+                DataRawUnitDataSet rawUnitSet = db.DataRawUnitSet;
+                DataRawDataSet rawSet = db.DataRawSet;
+
+                bookSet.Select(recNo);
+
+                if (bookSet.IsEmpty() == false)
+                {
+                    bookSet.Fetch();
+
+                    scanTime = bookSet.ScanTime;
+                    if (string.IsNullOrWhiteSpace(bookSet.TestName) == true)
+                        fName = $"None_Line{bookSet.TestLine + 1}";
+                    else
+                        fName = $"{bookSet.TestName}_Line{bookSet.TestLine + 1}";
+
+                    rawUnitSet.Select(bookSet.RecNo);
+                    viewGraph.Series.BeginUpdate();
+
+                    try
+                    {
+                        for (int i = 0; i < rawUnitSet.GetRowCount(); i++)
+                        {
+                            rawUnitSet.Fetch(i);
+                            rawSet.Select(rawUnitSet.RecNo);
+
+                            time = 0;
+                            for (int j = 0; j < rawSet.GetRowCount(); j++)
+                            {
+                                rawSet.Fetch(j);
+                                if (rawSet.DataRaw == null) break;
+
+                                if (interval == 0) interval = rawSet.ScanTime * 1000;
+                                pt = new SeriesPoint[rawSet.DataRaw.Length];
+
+                                for (int k = 0; k < rawSet.DataRaw.Length; k++)
+                                {
+                                    pt[k] = new SeriesPoint(time, rawSet.DataRaw[k]);
+                                    time += interval;
+                                }
+
+                                if (totalTime == 0) totalTime = time - interval;
+
+                                viewGraph.AddSeriesPoint(i, pt);
+                            }
+
+                            Win32.SwitchToThread();
+                        }
+                    }
+                    finally
+                    {
+                        Axis2D axis = viewGraph.AxesX[0];
+
+                        axis.WholeRange.MaxValue = totalTime;
+                        axis.WholeRange.MinValue = 0;
+                        axis.VisualRange.MaxValue = totalTime;
+                        axis.VisualRange.MinValue = 0;
+
+                        viewGraph.Series.EndUpdate();
+                    }
+                }
+            }
+            finally
+            {
+                db.Unlock();
+            }
+        }
+
+        public void SaveExcel()
+        {
+            string str;
+            string excelName = Resource.Settings.Options.ExcelPath + "\\" + fName + "_Raw_"
+                + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+            StreamWriter stream = null;
+            FormSaveDataRaw form = new FormSaveDataRaw();
+
+            viewGraph.Series.BeginUpdate();
+            form.Show();
+
+            try
+            {
+                int i, j;
+                stream = new StreamWriter(excelName, false, Encoding.Default);
+
+                form.SavingProgress.Properties.Maximum = viewGraph.Series[0].Points.Count;
+                form.SavingProgress.Position = 0;
+                str = "Time";
+
+                for (i=0; i<150; i++)
+                {
+                    str += $",{viewGraph.Series[i].Name}";
+                }
+                stream.WriteLine(str);
+
+                for (i = 0; i < viewGraph.Series[0].Points.Count; i++)
+                {
+                    str = $"{viewGraph.Series[0].Points[i].NumericalArgument/1000}";
+
+                    for (j = 0; j < 150; j++)
+                    {
+                        str += $",{viewGraph.Series[j].Points[i].Values[0]}";
+                    }
+                    stream.WriteLine(str);
+
+                    form.SavingProgress.Position = i;
+                    Win32.SwitchToThread();
+
+                    if (form.Cancel == true) break;
+                }
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+            }
+            finally
+            {
+                if (stream != null) stream.Close();
+                if (form.Cancel == false) form.Close();
+
+                viewGraph.Series.EndUpdate();
+            }
+        }
+
+        private void SetGraphProperies(bool saving = false)
+        {
+            TabPage page = graphTab.SelectedTab;
+            CtrlViewGraphSetting ctrl = page.Controls[0] as CtrlViewGraphSetting;
+
+            if (ctrl.YAxesCheckCount == 0)
+            {
+                ctrl.YAxisRows[0].Checked = true;
+                //MessageBox.Show("You must check at leat one Y-Axis!",
+                //    Resource.Caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                //return;
+            }
+
+            if (ctrl.YAxesCheckCount > 14)
+            {
+                int count = ctrl.YAxesCheckCount - 14;
+
+                foreach (YAxisRow row in ctrl.YAxisRows)
+                {
+                    if (row.Checked == true)
+                    {
+                        row.Checked = false;
+                        if (ctrl.YAxesCheckCount < 15) break;
+                    }
+                }
+
+                //MessageBox.Show("You can't check Y-Axes over 14!",
+                //    Resource.Caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                //return;
+            }
+
+            if (ctrl.SeriesCheckCount == 0)
+            {
+                ctrl.SeriesRows[0].Checked = true;
+                //MessageBox.Show("You must check at least one plot series!",
+                //    Resource.Caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                //return;
+            }
+
+            SetGraph(ctrl);
+            //if (saving == true) ctrl.Insert();
+        }
+
+        private void SetGraph(CtrlViewGraphSetting ctrl)
+        {
+            Axis2D axis;
+
+            foreach (YAxisRow row in ctrl.YAxisRows)
+            {
+                axis = viewGraph.AxesY[row.AxisNo];
+
+                axis.Alignment = (row.Align == EAxisAlign.Left) ? AxisAlignment.Near : AxisAlignment.Far;
+                axis.Visibility = (row.Checked == true) ? DefaultBoolean.True : DefaultBoolean.False;
+
+                axis.WholeRange.MinValue = row.Min;
+                axis.WholeRange.MaxValue = row.Max;
+                axis.VisualRange.MinValue = row.Min;
+                axis.VisualRange.MaxValue = row.Max;
+            }
+
+            foreach (SeriesRow row in ctrl.SeriesRows)
+            {
+                Series series = viewGraph.Series[row.Name];
+
+                series.Visible = row.Checked;
+                ((SwiftPlotSeriesView)series.View).Color = row.Color;
+            }
+        }
+
+        private void ResetGraph()
+        {
+            viewGraph.Series.BeginUpdate();
+
+            try
+            {
+                viewGraph.ClearSeriesPoint();
+                graphResetButton.PerformClick();
+            }
+            finally
+            {
+                viewGraph.Series.EndUpdate();
+            }
+        }
+
+        private void CtrlViewGraph_Enter(object sender, EventArgs e)
+        {
+            SetGraphProperies();
+        }
+
+        private void graphTab_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetGraphProperies();
+        }
+
+        private void viewGraph_CustomDrawAxisLabel(object sender, CustomDrawAxisLabelEventArgs e)
+        {
+            if (viewGraph.AxesX.Count == 0) return;
+            if (viewGraph.AxesY.Count == 0) return;
+
+            if (e.Item.Axis.Name == "Primary AxisX")
+            {
+                double value = (double)e.Item.AxisValue;
+                long secTicks = (long)value % 60000;
+                long minTick = (long)value - secTicks;
+                long sec = secTicks / 1000;
+                long min = minTick / 60000;
+
+                e.Item.Text = $"{min}:{sec:d2}";
+            }
+        }
+
+        private void graphApplyButton_Click(object sender, EventArgs e)
+        {
+            SetGraphProperies(true);
+        }
+
+        private void graphPauseButton_Click(object sender, EventArgs e)
+        {
+            graphDescriptionLed.Active = !graphDescriptionLed.Active;
+            viewGraph.Description.Enabled = graphDescriptionLed.Active;
+        }
+
+        private void graphCursorButton_Click(object sender, EventArgs e)
+        {
+            viewGraph.VertCursor.Visible = !viewGraph.VertCursor.Visible;
+        }
+
+        private void graphAutosetButton_Click(object sender, EventArgs e)
+        {
+            viewGraph.VertCursor.Reset();
+            viewGraph.Zooming.AutoSet();
+        }
+
+        private void graphStackButton_Click(object sender, EventArgs e)
+        {
+            viewGraph.VertCursor.Reset();
+            viewGraph.Zooming.Stack();
+        }
+
+        private void graphUndoButton_Click(object sender, EventArgs e)
+        {
+            viewGraph.VertCursor.Reset();
+            viewGraph.Zooming.Out();
+        }
+
+        private void graphResetButton_Click(object sender, EventArgs e)
+        {
+            viewGraph.Description.Reset();
+            viewGraph.VertCursor.Reset();
+            viewGraph.Zooming.Reset();
+        }
+
+        private void hideUncheckedCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (TabPage page in graphTab.TabPages)
+            {
+                CtrlViewGraphSetting ctrl = page.Controls[0] as CtrlViewGraphSetting;
+
+                ctrl.InvisibleUnchecked = hideUncheckedCheck.Checked;
+                ctrl.RefreshGrid();
+            }
+        }
+    }
+}

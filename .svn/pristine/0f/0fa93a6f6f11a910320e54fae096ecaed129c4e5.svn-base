@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6AB3808B-1095-4D62-8978-D29CEB150D34}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Hnc.Calorimeter.Server</RootNamespace>
+    <AssemblyName>Hnc.Calorimeter.Server</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>server_Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Data.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Printing.v17.2.Core, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraCharts.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraCharts.v17.2.UI, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraGrid.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraLayout.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraPrinting.v17.2, Version=17.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="FirebirdSql.Data.FirebirdClient, Version=5.12.1.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
+      <HintPath>..\packages\FirebirdSql.Data.FirebirdClient.5.12.1\lib\net452\FirebirdSql.Data.FirebirdClient.dll</HintPath>
+    </Reference>
+    <Reference Include="NModbus4, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NModbus4.2.1.0\lib\net40\NModbus4.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TwinCAT.Ads, Version=4.1.8.0, Culture=neutral, PublicKeyToken=180016cd49e5e8c3, processorArchitecture=MSIL">
+      <HintPath>..\packages\TwinCat.Ads.4.0.30319\lib\TwinCAT.Ads.dll</HintPath>
+    </Reference>
+    <Reference Include="Ulee.Framework, Version=1.0.0.17833, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Ulee.Framework\Bin\Debug\Ulee.Framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Source\01.Forms\02.Dialog\FormCalibratorEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormCalibratorEdit.Designer.cs">
+      <DependentUpon>FormCalibratorEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormDeviceEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormDeviceEdit.Designer.cs">
+      <DependentUpon>FormDeviceEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormOpenCalibration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormOpenCalibration.Designer.cs">
+      <DependentUpon>FormOpenCalibration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\01.Forms\01.Main\FormServerMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\01.Forms\01.Main\FormServerMain.Designer.cs">
+      <DependentUpon>FormServerMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormUserEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormUserEdit.Designer.cs">
+      <DependentUpon>FormUserEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormUserLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormUserLogin.Designer.cs">
+      <DependentUpon>FormUserLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.View\CtrlViewClient.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.View\CtrlViewClient.Designer.cs">
+      <DependentUpon>CtrlViewClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.View\CtrlViewDevice.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.View\CtrlViewDevice.Designer.cs">
+      <DependentUpon>CtrlViewDevice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.View\CtrlViewTop.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.View\CtrlViewTop.Designer.cs">
+      <DependentUpon>CtrlViewTop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.View\CtrlViewValue.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.View\CtrlViewValue.Designer.cs">
+      <DependentUpon>CtrlViewValue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\02.Log\CtrlLogTop.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\02.Log\CtrlLogTop.Designer.cs">
+      <DependentUpon>CtrlLogTop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Calib\CtrlCalibGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Calib\CtrlCalibGrid.Designer.cs">
+      <DependentUpon>CtrlCalibGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Calib\CtrlCalibTop.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Calib\CtrlCalibTop.Designer.cs">
+      <DependentUpon>CtrlCalibTop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\04.Config\CtrlConfigTop.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\04.Config\CtrlConfigTop.Designer.cs">
+      <DependentUpon>CtrlConfigTop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\03.Units\UnitCalibration.cs" />
+    <Compile Include="Source\03.Units\UnitDatabase.cs" />
+    <Compile Include="Source\03.Units\UnitInvalidThread.cs" />
+    <Compile Include="Source\03.Units\UnitServer.cs" />
+    <Compile Include="Source\03.Units\UnitClientRow.cs" />
+    <Compile Include="Source\03.Units\UnitServerListener.cs" />
+    <Compile Include="Source\03.Units\UnitServerDevice.cs" />
+    <Compile Include="Source\03.Units\UnitResource.cs" />
+    <Compile Include="Source\03.Units\UnitServerSender.cs" />
+    <Compile Include="Source\03.Units\UnitTypes.cs" />
+    <Compile Include="Source\ServerMain.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Source\01.Forms\02.Dialog\FormCalibratorEdit.resx">
+      <DependentUpon>FormCalibratorEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\01.Forms\02.Dialog\FormDeviceEdit.resx">
+      <DependentUpon>FormDeviceEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\01.Forms\01.Main\FormServerMain.resx">
+      <DependentUpon>FormServerMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\01.Forms\02.Dialog\FormOpenCalibration.resx">
+      <DependentUpon>FormOpenCalibration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\01.Forms\02.Dialog\FormUserEdit.resx">
+      <DependentUpon>FormUserEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\01.Forms\02.Dialog\FormUserLogin.resx">
+      <DependentUpon>FormUserLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\01.View\CtrlViewClient.resx">
+      <DependentUpon>CtrlViewClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\01.View\CtrlViewDevice.resx">
+      <DependentUpon>CtrlViewDevice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\01.View\CtrlViewTop.resx">
+      <DependentUpon>CtrlViewTop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\01.View\CtrlViewValue.resx">
+      <DependentUpon>CtrlViewValue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\02.Log\CtrlLogTop.resx">
+      <DependentUpon>CtrlLogTop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\03.Calib\CtrlCalibGrid.resx">
+      <DependentUpon>CtrlCalibGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\03.Calib\CtrlCalibTop.resx">
+      <DependentUpon>CtrlCalibTop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\04.Config\CtrlConfigTop.resx">
+      <DependentUpon>CtrlConfigTop.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Config\Hnc.Calorimeter.3R.Calibrator.ini" />
+    <None Include="Config\Hnc.Calorimeter.3R.Config.ini" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Doc\프로그램 수정 리스트 %28v1.0%29.xlsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="server_Icon.ico" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

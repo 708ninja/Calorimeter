@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Utils;
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Server
+{
+    public partial class CtrlLogTop : UlUserControlEng
+    {
+        public CtrlLogTop()
+        {
+            InitializeComponent();
+        }
+
+        private void CtrlLogTop_Load(object sender, EventArgs e)
+        {
+            Resource.TLog.LoggerMessage += DoLoggerMessage;
+        }
+
+        private void DoLoggerMessage(string messge)
+        {
+            logEdit.Text += messge;
+        }
+    }
+}

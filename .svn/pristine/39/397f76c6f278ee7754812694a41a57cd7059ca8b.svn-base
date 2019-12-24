@@ -1,0 +1,1009 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    #region enum Unit
+    public enum EUnitType
+    {
+        None,
+        Current,
+        Voltage,
+        Frequency,
+        Flux,
+        Ratio,
+        HumidityRatio,
+        Power,
+        PowerComsumption,
+        Velocity,
+        Volume,
+        Time,
+        Capacity,
+        Enthalpy,
+        Heat,
+        EER_COP,
+        Pressure,
+        DiffPressure,
+        AtmPressure,
+        AirFlow,
+        Temperature
+    }
+
+    public enum EUnitSingle
+    {
+        [Description("None")]
+        None,
+        [Description("A")]
+        A,
+        [Description("V")]
+        V,
+        [Description("Hz")]
+        Hz,
+        [Description("kg/h")]
+        kg_h,
+        [Description("%")]
+        Percent,
+        [Description("kg/kg'")]
+        kg_kg,
+        [Description("W")]
+        W,
+        [Description("Wh")]
+        Wh,
+        [Description("m/s")]
+        m_s,
+        [Description("㎥/kg")]
+        m3_kg,
+        [Description("sec")]
+        sec
+    }
+
+    public enum EUnitAirFlow
+    {
+        [Description("CMM")]
+        CMM,
+        [Description("CFM")]
+        CFM,
+        [Description("CMH")]
+        CMH
+    }
+
+    public enum EUnitCapacity
+    {
+        [Description("W")]
+        W,
+        [Description("kcal/h")]
+        kcal,
+        [Description("Btu/h")]
+        Btu,
+        [Description("kJ/h")]
+        kJ
+    }
+
+    public enum EUnitEnthalpy
+    {
+        [Description("W/kg'")]
+        W,
+        [Description("kcal/kg'")]
+        kcal,
+        [Description("Btu/kg'")]
+        Btu,
+        [Description("kJ/kg'")]
+        kJ
+    }
+
+    public enum EUnitHeat
+    {
+        [Description("W/kg℃")]
+        W,
+        [Description("kcal/kg℃")]
+        kcal,
+        [Description("Btu/kg℃")]
+        Btu,
+        [Description("kJ/kg℃")]
+        kJ
+    }
+
+    public enum EUnitEER_COP
+    {
+        [Description("W/W")]
+        W,
+        [Description("kcal/hW")]
+        kcal,
+        [Description("Btu/hW")]
+        Btu,
+        [Description("kJ/hW")]
+        kj
+    }
+
+    public enum EUnitTemperature
+    {
+        [Description("℃")]
+        Celsius,
+        [Description("ºF")]
+        Fahrenheit
+    }
+
+    public enum EUnitPressure
+    {
+        [Description("Bar")]
+        Bar,
+        [Description("kPa")]
+        kPa,
+        [Description("MPa")]
+        MPa,
+        [Description("kg/㎠")]
+        kg_cm2
+    }
+
+    public enum EUnitDiffPressure
+    {
+        [Description("mmAq")]
+        mmAq,
+        [Description("Pa")]
+        Pa,
+        [Description("kPa")]
+        kPa,
+        [Description("kg/㎠")]
+        kg_cm2
+    }
+
+    public enum EUnitAtmPressure
+    {
+        [Description("mmAq")]
+        mmAq,
+        [Description("Pa")]
+        Pa,
+        [Description("kPa")]
+        kPa,
+        [Description("mmHg")]
+        mmHg
+    }
+
+    public enum EUnitTime
+    {
+        [Description("sec")]
+        sec,
+        [Description("min")]
+        min
+    }
+    #endregion
+
+    public class UnitConvert
+    {
+        public UnitConvert(EUnitType type, int from, int to)
+        {
+            Type = type;
+            From = from;
+            To = to;
+        }
+
+        #region Properties
+        public EUnitType Type { get; private set; }
+
+        public int From { get; private set; }
+
+        public string FromDescription { get { return GetDescription(Type, From); } }
+
+        public int To { get; set; }
+
+        public string ToDescription { get { return GetDescription(Type, To); } }
+        #endregion
+
+        #region Methods
+
+        #region Convert
+        private string GetDescription(EUnitType type, int unit)
+        {
+            string desc;
+
+            switch (type)
+            {
+                case EUnitType.Current:
+                case EUnitType.Voltage:
+                case EUnitType.Frequency:
+                case EUnitType.Flux:
+                case EUnitType.Ratio:
+                case EUnitType.HumidityRatio:
+                case EUnitType.Power:
+                case EUnitType.PowerComsumption:
+                case EUnitType.Velocity:
+                case EUnitType.Volume:
+                    desc = EnumHelper.GetNames<EUnitSingle>()[unit];
+                    break;
+
+                case EUnitType.AirFlow:
+                    desc = EnumHelper.GetNames<EUnitAirFlow>()[unit];
+                    break;
+
+                case EUnitType.Capacity:
+                    desc = EnumHelper.GetNames<EUnitCapacity>()[unit];
+                    break;
+
+                case EUnitType.Enthalpy:
+                    desc = EnumHelper.GetNames<EUnitEnthalpy>()[unit];
+                    break;
+
+                case EUnitType.Heat:
+                    desc = EnumHelper.GetNames<EUnitHeat>()[unit];
+                    break;
+
+                case EUnitType.EER_COP:
+                    desc = EnumHelper.GetNames<EUnitEER_COP>()[unit];
+                    break;
+
+                case EUnitType.Temperature:
+                    desc = EnumHelper.GetNames<EUnitTemperature>()[unit];
+                    break;
+
+                case EUnitType.Pressure:
+                    desc = EnumHelper.GetNames<EUnitPressure>()[unit];
+                    break;
+
+                case EUnitType.DiffPressure:
+                    desc = EnumHelper.GetNames<EUnitDiffPressure>()[unit];
+                    break;
+
+                case EUnitType.AtmPressure:
+                    desc = EnumHelper.GetNames<EUnitAtmPressure>()[unit];
+                    break;
+
+                case EUnitType.Time:
+                    desc = EnumHelper.GetNames<EUnitTime>()[unit];
+                    break;
+
+                default:
+                    desc = EUnitType.None.ToString();
+                    break;
+            }
+
+            return desc;
+        }
+
+        public double Convert(double value)
+        {
+            return Convert(value, Type, From, To);
+        }
+
+        public double Convert(double value, int to)
+        {
+            return Convert(value, Type, From, to);
+        }
+
+        public double Convert(double value, EUnitType type, int from, int to)
+        {
+            double ret = 0;
+
+            switch (type)
+            {
+                case EUnitType.None:
+                case EUnitType.Current:
+                case EUnitType.Voltage:
+                case EUnitType.Frequency:
+                case EUnitType.Flux:
+                case EUnitType.Ratio:
+                case EUnitType.HumidityRatio:
+                case EUnitType.Power:
+                case EUnitType.PowerComsumption:
+                case EUnitType.Velocity:
+                case EUnitType.Volume:
+                    ret = value;
+                    break;
+
+                case EUnitType.Temperature:
+                    ret = ConvertTemperature(value, from, to);
+                    break;
+
+                case EUnitType.Time:
+                    ret = ConvertTime(value, from, to);
+                    break;
+
+                default:
+                    ret = value * GetRatio(type, from, to);
+                    break;
+            }
+
+            return ret;
+        }
+
+        private double ConvertTemperature(double value, int from, int to)
+        {
+            if (from == to) return value;
+
+            switch ((EUnitTemperature)from)
+            {
+                case EUnitTemperature.Celsius:
+                    value = value * 1.8 + 32.0;
+                    break;
+
+                case EUnitTemperature.Fahrenheit:
+                    value = (value - 32.0) / 1.8;
+                    break;
+            }
+            
+            return value;
+        }
+
+        private double ConvertTime(double value, int from, int to)
+        {
+            if (from == to) return value;
+
+            double min = 0;
+            double sec = 0;
+
+            switch ((EUnitTime)from)
+            {
+                case EUnitTime.sec:
+                    min = (value - (value % 60)) / 60.0;
+                    sec = (value % 60) / 100.0;
+                    break;
+
+                case EUnitTime.min:
+                    min = Math.Round(value) * 60.0;
+                    sec = (value - Math.Round(value)) * 100.0;
+                    break;
+            }
+
+            return (min + sec);
+        }
+        #endregion
+
+        private double GetRatio(EUnitType type, int from, int to)
+        {
+            double ratio = 0;
+
+            switch (type)
+            {
+                case EUnitType.AirFlow:
+                    ratio = GetAirFlowRatio((EUnitAirFlow)from, (EUnitAirFlow)to);
+                    break;
+
+                case EUnitType.Capacity:
+                case EUnitType.Enthalpy:
+                case EUnitType.Heat:
+                case EUnitType.EER_COP:
+                    ratio = GetCapacityRatio((EUnitCapacity)from, (EUnitCapacity)to);
+                    break;
+
+                case EUnitType.Pressure:
+                    ratio = GetPressureRatio((EUnitPressure)from, (EUnitPressure)to);
+                    break;
+
+                case EUnitType.AtmPressure:
+                    ratio = GetAtmPressureRatio((EUnitAtmPressure)from, (EUnitAtmPressure)to);
+                    break;
+
+                case EUnitType.DiffPressure:
+                    ratio = GetDiffPressureRatio((EUnitDiffPressure)from, (EUnitDiffPressure)to);
+                    break;
+            }
+
+            return ratio;
+        }
+
+        #region AirFlow
+        private double GetAirFlowRatio(EUnitAirFlow from, EUnitAirFlow to)
+        {
+            double ratio = 0;
+
+            switch (from)
+            {
+                case EUnitAirFlow.CMM:
+                    ratio = GetAirFlowRatioCMM(to);
+                    break;
+
+                case EUnitAirFlow.CFM:
+                    ratio = GetAirFlowRatioCFM(to);
+                    break;
+
+                case EUnitAirFlow.CMH:
+                    ratio = GetAirFlowRatioCMH(to);
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetAirFlowRatioCMM(EUnitAirFlow to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitAirFlow.CMM:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitAirFlow.CFM:
+                    ratio = 35.3147;
+                    break;
+
+                case EUnitAirFlow.CMH:
+                    ratio = 60.0;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetAirFlowRatioCFM(EUnitAirFlow to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitAirFlow.CMM:
+                    ratio = 1.0 / 35.3147;
+                    break;
+
+                case EUnitAirFlow.CFM:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitAirFlow.CMH:
+                    ratio = 1.0 / 35.3147 * 60.0;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetAirFlowRatioCMH(EUnitAirFlow to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitAirFlow.CMM:
+                    ratio = 1.0 / 60.0;
+                    break;
+
+                case EUnitAirFlow.CFM:
+                    ratio = 1.0 / 60.0 * 35.3147;
+                    break;
+
+                case EUnitAirFlow.CMH:
+                    ratio = 1.0;
+                    break;
+            }
+
+            return ratio;
+        }
+        #endregion
+
+        #region Capacity and Enthalpy
+        private double GetCapacityRatio(EUnitCapacity from, EUnitCapacity to)
+        {
+            double ratio = 0;
+
+            switch (from)
+            {
+                case EUnitCapacity.W:
+                    ratio = GetCapacityRatioWatt(to);
+                    break;
+
+                case EUnitCapacity.kcal:
+                    ratio = GetCapacityRatiokcal(to);
+                    break;
+
+                case EUnitCapacity.Btu:
+                    ratio = GetCapacityRatioBtu(to);
+                    break;
+
+                case EUnitCapacity.kJ:
+                    ratio = GetCapacityRatiokj(to);
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetCapacityRatioWatt(EUnitCapacity to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitCapacity.W:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitCapacity.kcal:
+                    ratio = 1.0 / 1.1628;
+                    break;
+
+                case EUnitCapacity.Btu:
+                    ratio = 1.0 / 1.1628 * 3.968;
+                    break;
+
+                case EUnitCapacity.kJ:
+                    ratio = 1.0 / 1.1628 * 4.1868;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetCapacityRatiokcal(EUnitCapacity to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitCapacity.W:
+                    ratio = 1.1628;
+                    break;
+
+                case EUnitCapacity.kcal:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitCapacity.Btu:
+                    ratio = 3.968;
+                    break;
+
+                case EUnitCapacity.kJ:
+                    ratio = 4.1868;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetCapacityRatioBtu(EUnitCapacity to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitCapacity.W:
+                    ratio = 1.0 / 3.968 * 1.1628;
+                    break;
+
+                case EUnitCapacity.kcal:
+                    ratio = 1.0 / 3.968;
+                    break;
+
+                case EUnitCapacity.Btu:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitCapacity.kJ:
+                    ratio = 1.0 / 3.968 * 4.1868;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetCapacityRatiokj(EUnitCapacity to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitCapacity.W:
+                    ratio = 1.0 / 4.1868 * 1.1628;
+                    break;
+
+                case EUnitCapacity.kcal:
+                    ratio = 1.0 / 4.1868;
+                    break;
+
+                case EUnitCapacity.Btu:
+                    ratio = 1.0 / 4.1868 * 3.968;
+                    break;
+
+                case EUnitCapacity.kJ:
+                    ratio = 1.0;
+                    break;
+            }
+
+            return ratio;
+        }
+        #endregion
+
+        #region Pressure
+        private double GetPressureRatio(EUnitPressure from, EUnitPressure to)
+        {
+            double ratio = 0;
+
+            switch (from)
+            {
+                case EUnitPressure.Bar:
+                    ratio = GetBarPressureRatioBar(to);
+                    break;
+
+                case EUnitPressure.kPa:
+                    ratio = GetBarPressureRatiokPa(to);
+                    break;
+
+                case EUnitPressure.MPa:
+                    ratio = GetBarPressureRatioMPa(to);
+                    break;
+
+                case EUnitPressure.kg_cm2:
+                    ratio = GetBarPressureRatiokg_cm2(to);
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetBarPressureRatioBar(EUnitPressure to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitPressure.Bar:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitPressure.kPa:
+                    ratio = 100.0;
+                    break;
+
+                case EUnitPressure.MPa:
+                    ratio = 0.1;
+                    break;
+
+                case EUnitPressure.kg_cm2:
+                    ratio = 1.019716;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetBarPressureRatiokPa(EUnitPressure to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitPressure.Bar:
+                    ratio = 1.0 / 100.0;
+                    break;
+
+                case EUnitPressure.kPa:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitPressure.MPa:
+                    ratio = 1.0 / 100.0 * 0.1;
+                    break;
+
+                case EUnitPressure.kg_cm2:
+                    ratio = 1.0 / 100.0 * 1.019716;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetBarPressureRatioMPa(EUnitPressure to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitPressure.Bar:
+                    ratio = 1.0 / 0.1;
+                    break;
+
+                case EUnitPressure.kPa:
+                    ratio = 1.0 / 0.1 * 100.0;
+                    break;
+
+                case EUnitPressure.MPa:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitPressure.kg_cm2:
+                    ratio = 1.0 / 0.1 * 1.019716;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetBarPressureRatiokg_cm2(EUnitPressure to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitPressure.Bar:
+                    ratio = 1.0 / 1.019716;
+                    break;
+
+                case EUnitPressure.kPa:
+                    ratio = 1.0 / 1.019716 * 100.0;
+                    break;
+
+                case EUnitPressure.MPa:
+                    ratio = 1.0 / 1.019716 * 0.1;
+                    break;
+
+                case EUnitPressure.kg_cm2:
+                    ratio = 1.0;
+                    break;
+            }
+
+            return ratio;
+        }
+        #endregion
+
+        #region Atm Pressure
+        private double GetAtmPressureRatio(EUnitAtmPressure from, EUnitAtmPressure to)
+        {
+            double ratio = 0;
+
+            switch (from)
+            {
+                case EUnitAtmPressure.mmAq:
+                    ratio = GetAtmPressureRatiommAq(to);
+                    break;
+
+                case EUnitAtmPressure.Pa:
+                    ratio = GetAtmPressureRatioPa(to);
+                    break;
+
+                case EUnitAtmPressure.kPa:
+                    ratio = GetAtmPressureRatiokPa(to);
+                    break;
+
+                case EUnitAtmPressure.mmHg:  //* Default
+                    ratio = GetAtmPressureRatiommHg(to);
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetAtmPressureRatiommAq(EUnitAtmPressure to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitAtmPressure.mmAq:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitAtmPressure.Pa:
+                    ratio = 1.0 / 13.5951 * 133.3224;
+                    break;
+
+                case EUnitAtmPressure.kPa:
+                    ratio = 1.0 / 13.5951 * 0.1333224;
+                    break;
+
+                case EUnitAtmPressure.mmHg:
+                    ratio = 1.0 / 13.5951;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetAtmPressureRatioPa(EUnitAtmPressure to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitAtmPressure.mmAq:
+                    ratio = 1.0 / 133.3224 * 13.5951;
+                    break;
+
+                case EUnitAtmPressure.Pa:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitAtmPressure.kPa:
+                    ratio = 1.0 / 133.3224 * 0.1333224;
+                    break;
+
+                case EUnitAtmPressure.mmHg:
+                    ratio = 1.0 / 133.3224;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetAtmPressureRatiokPa(EUnitAtmPressure to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitAtmPressure.mmAq:
+                    ratio = 1.0 / 0.1333224 * 13.5951;
+                    break;
+
+                case EUnitAtmPressure.Pa:
+                    ratio = 1.0 / 0.1333224 * 133.3224;
+                    break;
+
+                case EUnitAtmPressure.kPa:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitAtmPressure.mmHg:
+                    ratio = 1.0 / 0.1333224;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetAtmPressureRatiommHg(EUnitAtmPressure to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitAtmPressure.mmAq:
+                    ratio = 13.5951;
+                    break;
+
+                case EUnitAtmPressure.Pa:
+                    ratio = 133.3224;
+                    break;
+
+                case EUnitAtmPressure.kPa:
+                    ratio = 0.1333224;
+                    break;
+
+                case EUnitAtmPressure.mmHg:
+                    ratio = 1.0;
+                    break;
+            }
+
+            return ratio;
+        }
+        #endregion
+
+        #region Diff Pressure
+        private double GetDiffPressureRatio(EUnitDiffPressure from, EUnitDiffPressure to)
+        {
+            double ratio = 0;
+
+            switch (from)
+            {
+                case EUnitDiffPressure.mmAq:  //* Default
+                    ratio = GetDiffPressureRatiommAq(to);
+                    break;
+
+                case EUnitDiffPressure.Pa:
+                    ratio = GetDiffPressureRatioPa(to);
+                    break;
+
+                case EUnitDiffPressure.kPa:
+                    ratio = GetDiffPressureRatiokPa(to);
+                    break;
+
+                case EUnitDiffPressure.kg_cm2:
+                    ratio = GetDiffPressureRatiokg_cm2(to);
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetDiffPressureRatiommAq(EUnitDiffPressure to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitDiffPressure.mmAq:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitDiffPressure.Pa:
+                    ratio = 9.80665;
+                    break;
+
+                case EUnitDiffPressure.kPa:
+                    ratio = 0.00980665;
+                    break;
+
+                case EUnitDiffPressure.kg_cm2:
+                    ratio = 0.0001;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetDiffPressureRatioPa(EUnitDiffPressure to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitDiffPressure.mmAq:
+                    ratio = 1.0 / 9.80665;
+                    break;
+
+                case EUnitDiffPressure.Pa:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitDiffPressure.kPa:
+                    ratio = 1.0 / 9.80665 * 0.00980665;
+                    break;
+
+                case EUnitDiffPressure.kg_cm2:
+                    ratio = 1.0 / 9.80665 * 0.0001;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetDiffPressureRatiokPa(EUnitDiffPressure to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitDiffPressure.mmAq:
+                    ratio = 1.0 / 0.00980665;
+                    break;
+
+                case EUnitDiffPressure.Pa:
+                    ratio = 1.0 / 0.00980665 * 9.80665;
+                    break;
+
+                case EUnitDiffPressure.kPa:
+                    ratio = 1.0;
+                    break;
+
+                case EUnitDiffPressure.kg_cm2:
+                    ratio = 1.0 / 0.00980665 * 0.0001;
+                    break;
+            }
+
+            return ratio;
+        }
+
+        private double GetDiffPressureRatiokg_cm2(EUnitDiffPressure to)
+        {
+            double ratio = 0;
+
+            switch (to)
+            {
+                case EUnitDiffPressure.mmAq:
+                    ratio = 1.0 / 0.0001;
+                    break;
+
+                case EUnitDiffPressure.Pa:
+                    ratio = 1.0 / 0.0001 * 9.80665;
+                    break;
+
+                case EUnitDiffPressure.kPa:
+                    ratio = 1.0 / 0.0001 * 0.00980665;
+                    break;
+
+                case EUnitDiffPressure.kg_cm2:
+                    ratio = 1.0;
+                    break;
+            }
+
+            return ratio;
+        }
+        #endregion
+
+        #endregion
+    }
+}

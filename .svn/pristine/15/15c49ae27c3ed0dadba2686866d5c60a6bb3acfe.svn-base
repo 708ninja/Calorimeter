@@ -1,0 +1,1656 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class CtrlTestMeas
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CtrlTestMeas));
+            this.ulPanel4 = new Ulee.Controls.UlPanel();
+            this.ulPanel6 = new Ulee.Controls.UlPanel();
+            this.ulPanel1 = new Ulee.Controls.UlPanel();
+            this.ulPanel2 = new Ulee.Controls.UlPanel();
+            this.testMeasTab = new System.Windows.Forms.TabControl();
+            this.measPage = new System.Windows.Forms.TabPage();
+            this.measTab = new System.Windows.Forms.TabControl();
+            this.meas1Page = new System.Windows.Forms.TabPage();
+            this.meas2Page = new System.Windows.Forms.TabPage();
+            this.reportPage = new System.Windows.Forms.TabPage();
+            this.reportSheet = new DevExpress.XtraSpreadsheet.SpreadsheetControl();
+            this.graphPage = new System.Windows.Forms.TabPage();
+            this.graphTab = new System.Windows.Forms.TabControl();
+            this.graph1Page = new System.Windows.Forms.TabPage();
+            this.graph2Page = new System.Windows.Forms.TabPage();
+            this.graph3Page = new System.Windows.Forms.TabPage();
+            this.graph4Page = new System.Windows.Forms.TabPage();
+            this.graph5Page = new System.Windows.Forms.TabPage();
+            this.graph6Page = new System.Windows.Forms.TabPage();
+            this.measCurrentLabel = new System.Windows.Forms.Label();
+            this.measCurrentEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label10 = new System.Windows.Forms.Label();
+            this.measCurrentRatioLabel = new System.Windows.Forms.Label();
+            this.measCurrentRatioEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label8 = new System.Windows.Forms.Label();
+            this.measTotalEERCOPLabel = new System.Windows.Forms.Label();
+            this.measTotalEERCOPEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label6 = new System.Windows.Forms.Label();
+            this.measTotalPowerInLabel = new System.Windows.Forms.Label();
+            this.measTotalPowerInEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label3 = new System.Windows.Forms.Label();
+            this.measTotalCapacityLabel = new System.Windows.Forms.Label();
+            this.measTotalCapacityEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label1 = new System.Windows.Forms.Label();
+            this.measRatedPowerInLabel = new System.Windows.Forms.Label();
+            this.measRatedPowerInEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label4 = new System.Windows.Forms.Label();
+            this.measCapacityRatioLabel = new System.Windows.Forms.Label();
+            this.measCapacityRatioEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label7 = new System.Windows.Forms.Label();
+            this.measRatedCapacityLabel = new System.Windows.Forms.Label();
+            this.measRatedCapacityEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label11 = new System.Windows.Forms.Label();
+            this.measEERCOPRatioLabel = new System.Windows.Forms.Label();
+            this.measEERCOPRatioEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.measRatedEERCOPEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label15 = new System.Windows.Forms.Label();
+            this.measPowerInRatioLabel = new System.Windows.Forms.Label();
+            this.measPowerInRatioEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label17 = new System.Windows.Forms.Label();
+            this.measPowerFactorLabel = new System.Windows.Forms.Label();
+            this.measPowerFactorEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.measFreqEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label34 = new System.Windows.Forms.Label();
+            this.measRatedCurrentLabel = new System.Windows.Forms.Label();
+            this.measRatedCurrentEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label33 = new System.Windows.Forms.Label();
+            this.measVoltageLabel = new System.Windows.Forms.Label();
+            this.measVoltageEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.ulPanel3 = new Ulee.Controls.UlPanel();
+            this.ulPanel5 = new Ulee.Controls.UlPanel();
+            this.label12 = new System.Windows.Forms.Label();
+            this.ulPanel7 = new Ulee.Controls.UlPanel();
+            this.label9 = new System.Windows.Forms.Label();
+            this.ulPanel8 = new Ulee.Controls.UlPanel();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.ulPanel9 = new Ulee.Controls.UlPanel();
+            this.label22 = new System.Windows.Forms.Label();
+            this.ulPanel10 = new Ulee.Controls.UlPanel();
+            this.label23 = new System.Windows.Forms.Label();
+            this.ulPanel11 = new Ulee.Controls.UlPanel();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.ulPanel12 = new Ulee.Controls.UlPanel();
+            this.label26 = new System.Windows.Forms.Label();
+            this.ulPanel13 = new Ulee.Controls.UlPanel();
+            this.label27 = new System.Windows.Forms.Label();
+            this.ulPanel14 = new Ulee.Controls.UlPanel();
+            this.label29 = new System.Windows.Forms.Label();
+            this.progressBarControl1 = new DevExpress.XtraEditors.ProgressBarControl();
+            this.label30 = new System.Windows.Forms.Label();
+            this.progressBarControl2 = new DevExpress.XtraEditors.ProgressBarControl();
+            this.bgPanel.SuspendLayout();
+            this.ulPanel4.SuspendLayout();
+            this.ulPanel1.SuspendLayout();
+            this.testMeasTab.SuspendLayout();
+            this.measPage.SuspendLayout();
+            this.measTab.SuspendLayout();
+            this.reportPage.SuspendLayout();
+            this.graphPage.SuspendLayout();
+            this.graphTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.measCurrentEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measCurrentRatioEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measTotalEERCOPEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measTotalPowerInEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measTotalCapacityEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measRatedPowerInEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measCapacityRatioEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measRatedCapacityEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measEERCOPRatioEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measRatedEERCOPEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measPowerInRatioEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measPowerFactorEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measFreqEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measRatedCurrentEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measVoltageEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.progressBarControl2.Properties)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.bgPanel.Controls.Add(this.testMeasTab);
+            this.bgPanel.Controls.Add(this.ulPanel1);
+            this.bgPanel.Controls.Add(this.ulPanel4);
+            this.bgPanel.Size = new System.Drawing.Size(1728, 915);
+            // 
+            // ulPanel4
+            // 
+            this.ulPanel4.BevelInner = Ulee.Controls.EUlBevelStyle.Raised;
+            this.ulPanel4.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel4.Controls.Add(this.label2);
+            this.ulPanel4.Controls.Add(this.label28);
+            this.ulPanel4.Controls.Add(this.measVoltageLabel);
+            this.ulPanel4.Controls.Add(this.measVoltageEdit);
+            this.ulPanel4.Controls.Add(this.label5);
+            this.ulPanel4.Controls.Add(this.measPowerFactorLabel);
+            this.ulPanel4.Controls.Add(this.measPowerFactorEdit);
+            this.ulPanel4.Controls.Add(this.label19);
+            this.ulPanel4.Controls.Add(this.label20);
+            this.ulPanel4.Controls.Add(this.measFreqEdit);
+            this.ulPanel4.Controls.Add(this.label34);
+            this.ulPanel4.Controls.Add(this.measRatedCurrentLabel);
+            this.ulPanel4.Controls.Add(this.measRatedCurrentEdit);
+            this.ulPanel4.Controls.Add(this.label33);
+            this.ulPanel4.Controls.Add(this.measEERCOPRatioLabel);
+            this.ulPanel4.Controls.Add(this.measEERCOPRatioEdit);
+            this.ulPanel4.Controls.Add(this.label13);
+            this.ulPanel4.Controls.Add(this.label14);
+            this.ulPanel4.Controls.Add(this.measRatedEERCOPEdit);
+            this.ulPanel4.Controls.Add(this.label15);
+            this.ulPanel4.Controls.Add(this.measPowerInRatioLabel);
+            this.ulPanel4.Controls.Add(this.measPowerInRatioEdit);
+            this.ulPanel4.Controls.Add(this.label17);
+            this.ulPanel4.Controls.Add(this.measRatedPowerInLabel);
+            this.ulPanel4.Controls.Add(this.measRatedPowerInEdit);
+            this.ulPanel4.Controls.Add(this.label4);
+            this.ulPanel4.Controls.Add(this.measCapacityRatioLabel);
+            this.ulPanel4.Controls.Add(this.measCapacityRatioEdit);
+            this.ulPanel4.Controls.Add(this.label7);
+            this.ulPanel4.Controls.Add(this.measRatedCapacityLabel);
+            this.ulPanel4.Controls.Add(this.measRatedCapacityEdit);
+            this.ulPanel4.Controls.Add(this.label11);
+            this.ulPanel4.Controls.Add(this.measCurrentLabel);
+            this.ulPanel4.Controls.Add(this.measCurrentEdit);
+            this.ulPanel4.Controls.Add(this.label10);
+            this.ulPanel4.Controls.Add(this.measCurrentRatioLabel);
+            this.ulPanel4.Controls.Add(this.measCurrentRatioEdit);
+            this.ulPanel4.Controls.Add(this.label8);
+            this.ulPanel4.Controls.Add(this.measTotalEERCOPLabel);
+            this.ulPanel4.Controls.Add(this.measTotalEERCOPEdit);
+            this.ulPanel4.Controls.Add(this.label6);
+            this.ulPanel4.Controls.Add(this.measTotalPowerInLabel);
+            this.ulPanel4.Controls.Add(this.measTotalPowerInEdit);
+            this.ulPanel4.Controls.Add(this.label3);
+            this.ulPanel4.Controls.Add(this.measTotalCapacityLabel);
+            this.ulPanel4.Controls.Add(this.measTotalCapacityEdit);
+            this.ulPanel4.Controls.Add(this.label1);
+            this.ulPanel4.Controls.Add(this.ulPanel6);
+            this.ulPanel4.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel4.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel4.Location = new System.Drawing.Point(0, 0);
+            this.ulPanel4.Name = "ulPanel4";
+            this.ulPanel4.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel4.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel4.Size = new System.Drawing.Size(260, 455);
+            this.ulPanel4.Spacing = 0;
+            this.ulPanel4.TabIndex = 5;
+            this.ulPanel4.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel4.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel6
+            // 
+            this.ulPanel6.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.ulPanel6.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel6.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel6.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel6.ForeColor = System.Drawing.Color.White;
+            this.ulPanel6.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel6.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel6.Location = new System.Drawing.Point(6, 6);
+            this.ulPanel6.Name = "ulPanel6";
+            this.ulPanel6.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel6.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel6.Size = new System.Drawing.Size(248, 28);
+            this.ulPanel6.Spacing = 0;
+            this.ulPanel6.TabIndex = 5;
+            this.ulPanel6.Text = "MEASURE INFORMATION";
+            this.ulPanel6.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel6.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel1
+            // 
+            this.ulPanel1.BevelInner = Ulee.Controls.EUlBevelStyle.Raised;
+            this.ulPanel1.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel1.Controls.Add(this.progressBarControl2);
+            this.ulPanel1.Controls.Add(this.label30);
+            this.ulPanel1.Controls.Add(this.progressBarControl1);
+            this.ulPanel1.Controls.Add(this.ulPanel12);
+            this.ulPanel1.Controls.Add(this.label26);
+            this.ulPanel1.Controls.Add(this.ulPanel13);
+            this.ulPanel1.Controls.Add(this.label27);
+            this.ulPanel1.Controls.Add(this.ulPanel14);
+            this.ulPanel1.Controls.Add(this.label29);
+            this.ulPanel1.Controls.Add(this.label25);
+            this.ulPanel1.Controls.Add(this.ulPanel9);
+            this.ulPanel1.Controls.Add(this.label22);
+            this.ulPanel1.Controls.Add(this.ulPanel10);
+            this.ulPanel1.Controls.Add(this.label23);
+            this.ulPanel1.Controls.Add(this.ulPanel11);
+            this.ulPanel1.Controls.Add(this.label24);
+            this.ulPanel1.Controls.Add(this.label21);
+            this.ulPanel1.Controls.Add(this.ulPanel7);
+            this.ulPanel1.Controls.Add(this.label9);
+            this.ulPanel1.Controls.Add(this.ulPanel8);
+            this.ulPanel1.Controls.Add(this.label16);
+            this.ulPanel1.Controls.Add(this.ulPanel5);
+            this.ulPanel1.Controls.Add(this.label12);
+            this.ulPanel1.Controls.Add(this.ulPanel3);
+            this.ulPanel1.Controls.Add(this.label18);
+            this.ulPanel1.Controls.Add(this.ulPanel2);
+            this.ulPanel1.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Location = new System.Drawing.Point(0, 461);
+            this.ulPanel1.Name = "ulPanel1";
+            this.ulPanel1.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Size = new System.Drawing.Size(260, 455);
+            this.ulPanel1.Spacing = 0;
+            this.ulPanel1.TabIndex = 6;
+            this.ulPanel1.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel1.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel2
+            // 
+            this.ulPanel2.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.ulPanel2.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel2.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel2.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel2.ForeColor = System.Drawing.Color.White;
+            this.ulPanel2.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel2.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel2.Location = new System.Drawing.Point(6, 6);
+            this.ulPanel2.Name = "ulPanel2";
+            this.ulPanel2.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel2.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel2.Size = new System.Drawing.Size(248, 28);
+            this.ulPanel2.Spacing = 0;
+            this.ulPanel2.TabIndex = 5;
+            this.ulPanel2.Text = "RUN INFORMATION";
+            this.ulPanel2.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel2.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // testMeasTab
+            // 
+            this.testMeasTab.Controls.Add(this.measPage);
+            this.testMeasTab.Controls.Add(this.reportPage);
+            this.testMeasTab.Controls.Add(this.graphPage);
+            this.testMeasTab.Location = new System.Drawing.Point(266, 0);
+            this.testMeasTab.Margin = new System.Windows.Forms.Padding(0);
+            this.testMeasTab.Name = "testMeasTab";
+            this.testMeasTab.Padding = new System.Drawing.Point(0, 0);
+            this.testMeasTab.SelectedIndex = 0;
+            this.testMeasTab.Size = new System.Drawing.Size(1460, 915);
+            this.testMeasTab.TabIndex = 7;
+            // 
+            // measPage
+            // 
+            this.measPage.Controls.Add(this.measTab);
+            this.measPage.Location = new System.Drawing.Point(4, 24);
+            this.measPage.Margin = new System.Windows.Forms.Padding(0);
+            this.measPage.Name = "measPage";
+            this.measPage.Size = new System.Drawing.Size(1452, 887);
+            this.measPage.TabIndex = 0;
+            this.measPage.Text = " Measure ";
+            this.measPage.UseVisualStyleBackColor = true;
+            // 
+            // measTab
+            // 
+            this.measTab.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.measTab.Controls.Add(this.meas1Page);
+            this.measTab.Controls.Add(this.meas2Page);
+            this.measTab.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.measTab.Location = new System.Drawing.Point(0, 0);
+            this.measTab.Margin = new System.Windows.Forms.Padding(0);
+            this.measTab.Multiline = true;
+            this.measTab.Name = "measTab";
+            this.measTab.Padding = new System.Drawing.Point(0, 0);
+            this.measTab.SelectedIndex = 0;
+            this.measTab.Size = new System.Drawing.Size(1452, 887);
+            this.measTab.TabIndex = 0;
+            // 
+            // meas1Page
+            // 
+            this.meas1Page.Location = new System.Drawing.Point(4, 4);
+            this.meas1Page.Margin = new System.Windows.Forms.Padding(0);
+            this.meas1Page.Name = "meas1Page";
+            this.meas1Page.Size = new System.Drawing.Size(1444, 859);
+            this.meas1Page.TabIndex = 0;
+            this.meas1Page.Text = " Measure #1 ";
+            this.meas1Page.UseVisualStyleBackColor = true;
+            // 
+            // meas2Page
+            // 
+            this.meas2Page.Location = new System.Drawing.Point(4, 4);
+            this.meas2Page.Margin = new System.Windows.Forms.Padding(0);
+            this.meas2Page.Name = "meas2Page";
+            this.meas2Page.Size = new System.Drawing.Size(1444, 859);
+            this.meas2Page.TabIndex = 1;
+            this.meas2Page.Text = " Measure #2 ";
+            this.meas2Page.UseVisualStyleBackColor = true;
+            // 
+            // reportPage
+            // 
+            this.reportPage.Controls.Add(this.reportSheet);
+            this.reportPage.Location = new System.Drawing.Point(4, 24);
+            this.reportPage.Margin = new System.Windows.Forms.Padding(0);
+            this.reportPage.Name = "reportPage";
+            this.reportPage.Size = new System.Drawing.Size(1452, 887);
+            this.reportPage.TabIndex = 1;
+            this.reportPage.Text = " Report ";
+            this.reportPage.UseVisualStyleBackColor = true;
+            // 
+            // reportSheet
+            // 
+            this.reportSheet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.reportSheet.Location = new System.Drawing.Point(0, 0);
+            this.reportSheet.Margin = new System.Windows.Forms.Padding(0);
+            this.reportSheet.Name = "reportSheet";
+            this.reportSheet.Options.Import.Csv.Encoding = ((System.Text.Encoding)(resources.GetObject("reportSheet.Options.Import.Csv.Encoding")));
+            this.reportSheet.Options.Import.Txt.Encoding = ((System.Text.Encoding)(resources.GetObject("reportSheet.Options.Import.Txt.Encoding")));
+            this.reportSheet.Options.View.ShowColumnHeaders = false;
+            this.reportSheet.Options.View.ShowRowHeaders = false;
+            this.reportSheet.ReadOnly = true;
+            this.reportSheet.Size = new System.Drawing.Size(1452, 887);
+            this.reportSheet.TabIndex = 1;
+            // 
+            // graphPage
+            // 
+            this.graphPage.Controls.Add(this.graphTab);
+            this.graphPage.Location = new System.Drawing.Point(4, 24);
+            this.graphPage.Margin = new System.Windows.Forms.Padding(0);
+            this.graphPage.Name = "graphPage";
+            this.graphPage.Size = new System.Drawing.Size(1452, 887);
+            this.graphPage.TabIndex = 2;
+            this.graphPage.Text = " Graph ";
+            this.graphPage.UseVisualStyleBackColor = true;
+            // 
+            // graphTab
+            // 
+            this.graphTab.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.graphTab.Controls.Add(this.graph1Page);
+            this.graphTab.Controls.Add(this.graph2Page);
+            this.graphTab.Controls.Add(this.graph3Page);
+            this.graphTab.Controls.Add(this.graph4Page);
+            this.graphTab.Controls.Add(this.graph5Page);
+            this.graphTab.Controls.Add(this.graph6Page);
+            this.graphTab.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.graphTab.Location = new System.Drawing.Point(0, 0);
+            this.graphTab.Margin = new System.Windows.Forms.Padding(0);
+            this.graphTab.Name = "graphTab";
+            this.graphTab.Padding = new System.Drawing.Point(0, 0);
+            this.graphTab.SelectedIndex = 0;
+            this.graphTab.Size = new System.Drawing.Size(1452, 887);
+            this.graphTab.TabIndex = 0;
+            // 
+            // graph1Page
+            // 
+            this.graph1Page.Location = new System.Drawing.Point(4, 4);
+            this.graph1Page.Margin = new System.Windows.Forms.Padding(0);
+            this.graph1Page.Name = "graph1Page";
+            this.graph1Page.Size = new System.Drawing.Size(1444, 859);
+            this.graph1Page.TabIndex = 0;
+            this.graph1Page.Text = " Graph #1 ";
+            this.graph1Page.UseVisualStyleBackColor = true;
+            // 
+            // graph2Page
+            // 
+            this.graph2Page.Location = new System.Drawing.Point(4, 4);
+            this.graph2Page.Margin = new System.Windows.Forms.Padding(0);
+            this.graph2Page.Name = "graph2Page";
+            this.graph2Page.Size = new System.Drawing.Size(1444, 859);
+            this.graph2Page.TabIndex = 1;
+            this.graph2Page.Text = " Graph #2 ";
+            this.graph2Page.UseVisualStyleBackColor = true;
+            // 
+            // graph3Page
+            // 
+            this.graph3Page.Location = new System.Drawing.Point(4, 4);
+            this.graph3Page.Margin = new System.Windows.Forms.Padding(0);
+            this.graph3Page.Name = "graph3Page";
+            this.graph3Page.Size = new System.Drawing.Size(1444, 859);
+            this.graph3Page.TabIndex = 2;
+            this.graph3Page.Text = " Graph #3 ";
+            this.graph3Page.UseVisualStyleBackColor = true;
+            // 
+            // graph4Page
+            // 
+            this.graph4Page.Location = new System.Drawing.Point(4, 4);
+            this.graph4Page.Name = "graph4Page";
+            this.graph4Page.Padding = new System.Windows.Forms.Padding(3);
+            this.graph4Page.Size = new System.Drawing.Size(1444, 859);
+            this.graph4Page.TabIndex = 3;
+            this.graph4Page.Text = " Graph #4 ";
+            this.graph4Page.UseVisualStyleBackColor = true;
+            // 
+            // graph5Page
+            // 
+            this.graph5Page.Location = new System.Drawing.Point(4, 4);
+            this.graph5Page.Name = "graph5Page";
+            this.graph5Page.Padding = new System.Windows.Forms.Padding(3);
+            this.graph5Page.Size = new System.Drawing.Size(1444, 859);
+            this.graph5Page.TabIndex = 4;
+            this.graph5Page.Text = " Graph #5 ";
+            this.graph5Page.UseVisualStyleBackColor = true;
+            // 
+            // graph6Page
+            // 
+            this.graph6Page.Location = new System.Drawing.Point(4, 4);
+            this.graph6Page.Name = "graph6Page";
+            this.graph6Page.Padding = new System.Windows.Forms.Padding(3);
+            this.graph6Page.Size = new System.Drawing.Size(1444, 859);
+            this.graph6Page.TabIndex = 5;
+            this.graph6Page.Text = " Graph #6 ";
+            this.graph6Page.UseVisualStyleBackColor = true;
+            // 
+            // measCurrentLabel
+            // 
+            this.measCurrentLabel.Location = new System.Drawing.Point(195, 372);
+            this.measCurrentLabel.Name = "measCurrentLabel";
+            this.measCurrentLabel.Size = new System.Drawing.Size(58, 22);
+            this.measCurrentLabel.TabIndex = 99;
+            this.measCurrentLabel.Text = "A";
+            this.measCurrentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measCurrentEdit
+            // 
+            this.measCurrentEdit.EditValue = "0.0";
+            this.measCurrentEdit.Location = new System.Drawing.Point(128, 372);
+            this.measCurrentEdit.Name = "measCurrentEdit";
+            this.measCurrentEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measCurrentEdit.Properties.Appearance.Options.UseFont = true;
+            this.measCurrentEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measCurrentEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measCurrentEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measCurrentEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measCurrentEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measCurrentEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measCurrentEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measCurrentEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measCurrentEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measCurrentEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measCurrentEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measCurrentEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measCurrentEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.measCurrentEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measCurrentEdit.Properties.EditFormat.FormatString = "f1";
+            this.measCurrentEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measCurrentEdit.Properties.Mask.EditMask = "f1";
+            this.measCurrentEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measCurrentEdit.Properties.MaxLength = 4;
+            this.measCurrentEdit.Properties.ReadOnly = true;
+            this.measCurrentEdit.Size = new System.Drawing.Size(64, 22);
+            this.measCurrentEdit.TabIndex = 12;
+            // 
+            // label10
+            // 
+            this.label10.Location = new System.Drawing.Point(11, 371);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(110, 22);
+            this.label10.TabIndex = 97;
+            this.label10.Text = "Current";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measCurrentRatioLabel
+            // 
+            this.measCurrentRatioLabel.Location = new System.Drawing.Point(195, 302);
+            this.measCurrentRatioLabel.Name = "measCurrentRatioLabel";
+            this.measCurrentRatioLabel.Size = new System.Drawing.Size(58, 22);
+            this.measCurrentRatioLabel.TabIndex = 96;
+            this.measCurrentRatioLabel.Text = "%";
+            this.measCurrentRatioLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measCurrentRatioEdit
+            // 
+            this.measCurrentRatioEdit.EditValue = "0.0";
+            this.measCurrentRatioEdit.Location = new System.Drawing.Point(128, 302);
+            this.measCurrentRatioEdit.Name = "measCurrentRatioEdit";
+            this.measCurrentRatioEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measCurrentRatioEdit.Properties.Appearance.Options.UseFont = true;
+            this.measCurrentRatioEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measCurrentRatioEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measCurrentRatioEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measCurrentRatioEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measCurrentRatioEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measCurrentRatioEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measCurrentRatioEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measCurrentRatioEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measCurrentRatioEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measCurrentRatioEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measCurrentRatioEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measCurrentRatioEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measCurrentRatioEdit.Properties.DisplayFormat.FormatString = "f2";
+            this.measCurrentRatioEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measCurrentRatioEdit.Properties.EditFormat.FormatString = "f2";
+            this.measCurrentRatioEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measCurrentRatioEdit.Properties.Mask.EditMask = "f2";
+            this.measCurrentRatioEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measCurrentRatioEdit.Properties.MaxLength = 6;
+            this.measCurrentRatioEdit.Properties.ReadOnly = true;
+            this.measCurrentRatioEdit.Size = new System.Drawing.Size(64, 22);
+            this.measCurrentRatioEdit.TabIndex = 10;
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(11, 301);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(110, 22);
+            this.label8.TabIndex = 94;
+            this.label8.Text = "Current Ratio";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measTotalEERCOPLabel
+            // 
+            this.measTotalEERCOPLabel.Location = new System.Drawing.Point(195, 88);
+            this.measTotalEERCOPLabel.Name = "measTotalEERCOPLabel";
+            this.measTotalEERCOPLabel.Size = new System.Drawing.Size(58, 22);
+            this.measTotalEERCOPLabel.TabIndex = 93;
+            this.measTotalEERCOPLabel.Text = "W/W";
+            this.measTotalEERCOPLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measTotalEERCOPEdit
+            // 
+            this.measTotalEERCOPEdit.EditValue = "0.000";
+            this.measTotalEERCOPEdit.Location = new System.Drawing.Point(128, 88);
+            this.measTotalEERCOPEdit.Name = "measTotalEERCOPEdit";
+            this.measTotalEERCOPEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measTotalEERCOPEdit.Properties.Appearance.Options.UseFont = true;
+            this.measTotalEERCOPEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measTotalEERCOPEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measTotalEERCOPEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measTotalEERCOPEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measTotalEERCOPEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measTotalEERCOPEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measTotalEERCOPEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measTotalEERCOPEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measTotalEERCOPEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measTotalEERCOPEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measTotalEERCOPEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measTotalEERCOPEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measTotalEERCOPEdit.Properties.DisplayFormat.FormatString = "f3";
+            this.measTotalEERCOPEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measTotalEERCOPEdit.Properties.EditFormat.FormatString = "f3";
+            this.measTotalEERCOPEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measTotalEERCOPEdit.Properties.Mask.EditMask = "f1";
+            this.measTotalEERCOPEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measTotalEERCOPEdit.Properties.MaxLength = 7;
+            this.measTotalEERCOPEdit.Properties.ReadOnly = true;
+            this.measTotalEERCOPEdit.Size = new System.Drawing.Size(64, 22);
+            this.measTotalEERCOPEdit.TabIndex = 2;
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(11, 87);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(110, 22);
+            this.label6.TabIndex = 91;
+            this.label6.Text = "Total EER/COP";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measTotalPowerInLabel
+            // 
+            this.measTotalPowerInLabel.Location = new System.Drawing.Point(195, 64);
+            this.measTotalPowerInLabel.Name = "measTotalPowerInLabel";
+            this.measTotalPowerInLabel.Size = new System.Drawing.Size(58, 22);
+            this.measTotalPowerInLabel.TabIndex = 90;
+            this.measTotalPowerInLabel.Text = "W";
+            this.measTotalPowerInLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measTotalPowerInEdit
+            // 
+            this.measTotalPowerInEdit.EditValue = "0.0";
+            this.measTotalPowerInEdit.Location = new System.Drawing.Point(128, 64);
+            this.measTotalPowerInEdit.Name = "measTotalPowerInEdit";
+            this.measTotalPowerInEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measTotalPowerInEdit.Properties.Appearance.Options.UseFont = true;
+            this.measTotalPowerInEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measTotalPowerInEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measTotalPowerInEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measTotalPowerInEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measTotalPowerInEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measTotalPowerInEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measTotalPowerInEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measTotalPowerInEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measTotalPowerInEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measTotalPowerInEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measTotalPowerInEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measTotalPowerInEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measTotalPowerInEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.measTotalPowerInEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measTotalPowerInEdit.Properties.EditFormat.FormatString = "f1";
+            this.measTotalPowerInEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measTotalPowerInEdit.Properties.Mask.EditMask = "f1";
+            this.measTotalPowerInEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measTotalPowerInEdit.Properties.MaxLength = 4;
+            this.measTotalPowerInEdit.Properties.ReadOnly = true;
+            this.measTotalPowerInEdit.Size = new System.Drawing.Size(64, 22);
+            this.measTotalPowerInEdit.TabIndex = 1;
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(11, 63);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(110, 22);
+            this.label3.TabIndex = 88;
+            this.label3.Text = "Total Power Input";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measTotalCapacityLabel
+            // 
+            this.measTotalCapacityLabel.Location = new System.Drawing.Point(195, 40);
+            this.measTotalCapacityLabel.Name = "measTotalCapacityLabel";
+            this.measTotalCapacityLabel.Size = new System.Drawing.Size(58, 22);
+            this.measTotalCapacityLabel.TabIndex = 87;
+            this.measTotalCapacityLabel.Text = "W";
+            this.measTotalCapacityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measTotalCapacityEdit
+            // 
+            this.measTotalCapacityEdit.EditValue = "0.0";
+            this.measTotalCapacityEdit.Location = new System.Drawing.Point(128, 40);
+            this.measTotalCapacityEdit.Name = "measTotalCapacityEdit";
+            this.measTotalCapacityEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measTotalCapacityEdit.Properties.Appearance.Options.UseFont = true;
+            this.measTotalCapacityEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measTotalCapacityEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measTotalCapacityEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measTotalCapacityEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measTotalCapacityEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measTotalCapacityEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measTotalCapacityEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measTotalCapacityEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measTotalCapacityEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measTotalCapacityEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measTotalCapacityEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measTotalCapacityEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measTotalCapacityEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.measTotalCapacityEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measTotalCapacityEdit.Properties.EditFormat.FormatString = "f1";
+            this.measTotalCapacityEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measTotalCapacityEdit.Properties.Mask.EditMask = "f1";
+            this.measTotalCapacityEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measTotalCapacityEdit.Properties.MaxLength = 4;
+            this.measTotalCapacityEdit.Properties.ReadOnly = true;
+            this.measTotalCapacityEdit.Size = new System.Drawing.Size(64, 22);
+            this.measTotalCapacityEdit.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(11, 39);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(110, 22);
+            this.label1.TabIndex = 85;
+            this.label1.Text = "Total Capacity";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measRatedPowerInLabel
+            // 
+            this.measRatedPowerInLabel.Location = new System.Drawing.Point(195, 182);
+            this.measRatedPowerInLabel.Name = "measRatedPowerInLabel";
+            this.measRatedPowerInLabel.Size = new System.Drawing.Size(58, 22);
+            this.measRatedPowerInLabel.TabIndex = 108;
+            this.measRatedPowerInLabel.Text = "W";
+            this.measRatedPowerInLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measRatedPowerInEdit
+            // 
+            this.measRatedPowerInEdit.EditValue = "0.0";
+            this.measRatedPowerInEdit.Location = new System.Drawing.Point(128, 182);
+            this.measRatedPowerInEdit.Name = "measRatedPowerInEdit";
+            this.measRatedPowerInEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedPowerInEdit.Properties.Appearance.Options.UseFont = true;
+            this.measRatedPowerInEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measRatedPowerInEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measRatedPowerInEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedPowerInEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measRatedPowerInEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measRatedPowerInEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measRatedPowerInEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedPowerInEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measRatedPowerInEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedPowerInEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measRatedPowerInEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measRatedPowerInEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measRatedPowerInEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.measRatedPowerInEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measRatedPowerInEdit.Properties.EditFormat.FormatString = "f1";
+            this.measRatedPowerInEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measRatedPowerInEdit.Properties.Mask.EditMask = "f1";
+            this.measRatedPowerInEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measRatedPowerInEdit.Properties.MaxLength = 5;
+            this.measRatedPowerInEdit.Properties.ReadOnly = true;
+            this.measRatedPowerInEdit.Size = new System.Drawing.Size(64, 22);
+            this.measRatedPowerInEdit.TabIndex = 5;
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(11, 181);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(110, 22);
+            this.label4.TabIndex = 106;
+            this.label4.Text = "Rated Power Input";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measCapacityRatioLabel
+            // 
+            this.measCapacityRatioLabel.Location = new System.Drawing.Point(195, 158);
+            this.measCapacityRatioLabel.Name = "measCapacityRatioLabel";
+            this.measCapacityRatioLabel.Size = new System.Drawing.Size(58, 22);
+            this.measCapacityRatioLabel.TabIndex = 105;
+            this.measCapacityRatioLabel.Text = "%";
+            this.measCapacityRatioLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measCapacityRatioEdit
+            // 
+            this.measCapacityRatioEdit.EditValue = "0.00";
+            this.measCapacityRatioEdit.Location = new System.Drawing.Point(128, 158);
+            this.measCapacityRatioEdit.Name = "measCapacityRatioEdit";
+            this.measCapacityRatioEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measCapacityRatioEdit.Properties.Appearance.Options.UseFont = true;
+            this.measCapacityRatioEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measCapacityRatioEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measCapacityRatioEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measCapacityRatioEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measCapacityRatioEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measCapacityRatioEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measCapacityRatioEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measCapacityRatioEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measCapacityRatioEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measCapacityRatioEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measCapacityRatioEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measCapacityRatioEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measCapacityRatioEdit.Properties.DisplayFormat.FormatString = "f2";
+            this.measCapacityRatioEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measCapacityRatioEdit.Properties.EditFormat.FormatString = "f2";
+            this.measCapacityRatioEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measCapacityRatioEdit.Properties.Mask.EditMask = "f1";
+            this.measCapacityRatioEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measCapacityRatioEdit.Properties.MaxLength = 4;
+            this.measCapacityRatioEdit.Properties.ReadOnly = true;
+            this.measCapacityRatioEdit.Size = new System.Drawing.Size(64, 22);
+            this.measCapacityRatioEdit.TabIndex = 4;
+            // 
+            // label7
+            // 
+            this.label7.Location = new System.Drawing.Point(11, 157);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(110, 22);
+            this.label7.TabIndex = 103;
+            this.label7.Text = "Capacity Ratio";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measRatedCapacityLabel
+            // 
+            this.measRatedCapacityLabel.Location = new System.Drawing.Point(195, 134);
+            this.measRatedCapacityLabel.Name = "measRatedCapacityLabel";
+            this.measRatedCapacityLabel.Size = new System.Drawing.Size(58, 22);
+            this.measRatedCapacityLabel.TabIndex = 102;
+            this.measRatedCapacityLabel.Text = "W";
+            this.measRatedCapacityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measRatedCapacityEdit
+            // 
+            this.measRatedCapacityEdit.EditValue = "0.0";
+            this.measRatedCapacityEdit.Location = new System.Drawing.Point(128, 134);
+            this.measRatedCapacityEdit.Name = "measRatedCapacityEdit";
+            this.measRatedCapacityEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedCapacityEdit.Properties.Appearance.Options.UseFont = true;
+            this.measRatedCapacityEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measRatedCapacityEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measRatedCapacityEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedCapacityEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measRatedCapacityEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measRatedCapacityEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measRatedCapacityEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedCapacityEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measRatedCapacityEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedCapacityEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measRatedCapacityEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measRatedCapacityEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measRatedCapacityEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.measRatedCapacityEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measRatedCapacityEdit.Properties.EditFormat.FormatString = "f1";
+            this.measRatedCapacityEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measRatedCapacityEdit.Properties.Mask.EditMask = "f1";
+            this.measRatedCapacityEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measRatedCapacityEdit.Properties.MaxLength = 4;
+            this.measRatedCapacityEdit.Properties.ReadOnly = true;
+            this.measRatedCapacityEdit.Size = new System.Drawing.Size(64, 22);
+            this.measRatedCapacityEdit.TabIndex = 3;
+            // 
+            // label11
+            // 
+            this.label11.Location = new System.Drawing.Point(11, 133);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(110, 22);
+            this.label11.TabIndex = 100;
+            this.label11.Text = "Rated Capacity";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measEERCOPRatioLabel
+            // 
+            this.measEERCOPRatioLabel.Location = new System.Drawing.Point(195, 254);
+            this.measEERCOPRatioLabel.Name = "measEERCOPRatioLabel";
+            this.measEERCOPRatioLabel.Size = new System.Drawing.Size(58, 22);
+            this.measEERCOPRatioLabel.TabIndex = 117;
+            this.measEERCOPRatioLabel.Text = "%";
+            this.measEERCOPRatioLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measEERCOPRatioEdit
+            // 
+            this.measEERCOPRatioEdit.EditValue = "0.00";
+            this.measEERCOPRatioEdit.Location = new System.Drawing.Point(128, 254);
+            this.measEERCOPRatioEdit.Name = "measEERCOPRatioEdit";
+            this.measEERCOPRatioEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measEERCOPRatioEdit.Properties.Appearance.Options.UseFont = true;
+            this.measEERCOPRatioEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measEERCOPRatioEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measEERCOPRatioEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measEERCOPRatioEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measEERCOPRatioEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measEERCOPRatioEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measEERCOPRatioEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measEERCOPRatioEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measEERCOPRatioEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measEERCOPRatioEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measEERCOPRatioEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measEERCOPRatioEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measEERCOPRatioEdit.Properties.DisplayFormat.FormatString = "f2";
+            this.measEERCOPRatioEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measEERCOPRatioEdit.Properties.EditFormat.FormatString = "f2";
+            this.measEERCOPRatioEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measEERCOPRatioEdit.Properties.Mask.EditMask = "f1";
+            this.measEERCOPRatioEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measEERCOPRatioEdit.Properties.MaxLength = 6;
+            this.measEERCOPRatioEdit.Properties.ReadOnly = true;
+            this.measEERCOPRatioEdit.Size = new System.Drawing.Size(64, 22);
+            this.measEERCOPRatioEdit.TabIndex = 8;
+            // 
+            // label13
+            // 
+            this.label13.Location = new System.Drawing.Point(11, 253);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(110, 22);
+            this.label13.TabIndex = 115;
+            this.label13.Text = "EER/COP Ratio";
+            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label14
+            // 
+            this.label14.Location = new System.Drawing.Point(195, 230);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(58, 22);
+            this.label14.TabIndex = 114;
+            this.label14.Text = "W";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measRatedEERCOPEdit
+            // 
+            this.measRatedEERCOPEdit.EditValue = "0.000";
+            this.measRatedEERCOPEdit.Location = new System.Drawing.Point(128, 230);
+            this.measRatedEERCOPEdit.Name = "measRatedEERCOPEdit";
+            this.measRatedEERCOPEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedEERCOPEdit.Properties.Appearance.Options.UseFont = true;
+            this.measRatedEERCOPEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measRatedEERCOPEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measRatedEERCOPEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedEERCOPEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measRatedEERCOPEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measRatedEERCOPEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measRatedEERCOPEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedEERCOPEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measRatedEERCOPEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedEERCOPEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measRatedEERCOPEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measRatedEERCOPEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measRatedEERCOPEdit.Properties.DisplayFormat.FormatString = "f3";
+            this.measRatedEERCOPEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measRatedEERCOPEdit.Properties.EditFormat.FormatString = "f3";
+            this.measRatedEERCOPEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measRatedEERCOPEdit.Properties.Mask.EditMask = "f3";
+            this.measRatedEERCOPEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measRatedEERCOPEdit.Properties.MaxLength = 7;
+            this.measRatedEERCOPEdit.Properties.ReadOnly = true;
+            this.measRatedEERCOPEdit.Size = new System.Drawing.Size(64, 22);
+            this.measRatedEERCOPEdit.TabIndex = 113;
+            // 
+            // label15
+            // 
+            this.label15.Location = new System.Drawing.Point(11, 229);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(110, 22);
+            this.label15.TabIndex = 112;
+            this.label15.Text = "Rated EER/COP";
+            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measPowerInRatioLabel
+            // 
+            this.measPowerInRatioLabel.Location = new System.Drawing.Point(195, 206);
+            this.measPowerInRatioLabel.Name = "measPowerInRatioLabel";
+            this.measPowerInRatioLabel.Size = new System.Drawing.Size(58, 22);
+            this.measPowerInRatioLabel.TabIndex = 111;
+            this.measPowerInRatioLabel.Text = "%";
+            this.measPowerInRatioLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measPowerInRatioEdit
+            // 
+            this.measPowerInRatioEdit.EditValue = "0.00";
+            this.measPowerInRatioEdit.Location = new System.Drawing.Point(128, 206);
+            this.measPowerInRatioEdit.Name = "measPowerInRatioEdit";
+            this.measPowerInRatioEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measPowerInRatioEdit.Properties.Appearance.Options.UseFont = true;
+            this.measPowerInRatioEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measPowerInRatioEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measPowerInRatioEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measPowerInRatioEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measPowerInRatioEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measPowerInRatioEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measPowerInRatioEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measPowerInRatioEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measPowerInRatioEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measPowerInRatioEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measPowerInRatioEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measPowerInRatioEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measPowerInRatioEdit.Properties.DisplayFormat.FormatString = "f2";
+            this.measPowerInRatioEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measPowerInRatioEdit.Properties.EditFormat.FormatString = "f2";
+            this.measPowerInRatioEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measPowerInRatioEdit.Properties.Mask.EditMask = "f2";
+            this.measPowerInRatioEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measPowerInRatioEdit.Properties.MaxLength = 6;
+            this.measPowerInRatioEdit.Properties.ReadOnly = true;
+            this.measPowerInRatioEdit.Size = new System.Drawing.Size(64, 22);
+            this.measPowerInRatioEdit.TabIndex = 7;
+            // 
+            // label17
+            // 
+            this.label17.Location = new System.Drawing.Point(11, 205);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(110, 22);
+            this.label17.TabIndex = 109;
+            this.label17.Text = "Power Input Ratio";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measPowerFactorLabel
+            // 
+            this.measPowerFactorLabel.Location = new System.Drawing.Point(195, 420);
+            this.measPowerFactorLabel.Name = "measPowerFactorLabel";
+            this.measPowerFactorLabel.Size = new System.Drawing.Size(58, 22);
+            this.measPowerFactorLabel.TabIndex = 126;
+            this.measPowerFactorLabel.Text = "%";
+            this.measPowerFactorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measPowerFactorEdit
+            // 
+            this.measPowerFactorEdit.EditValue = "0.00";
+            this.measPowerFactorEdit.Location = new System.Drawing.Point(128, 420);
+            this.measPowerFactorEdit.Name = "measPowerFactorEdit";
+            this.measPowerFactorEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measPowerFactorEdit.Properties.Appearance.Options.UseFont = true;
+            this.measPowerFactorEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measPowerFactorEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measPowerFactorEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measPowerFactorEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measPowerFactorEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measPowerFactorEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measPowerFactorEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measPowerFactorEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measPowerFactorEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measPowerFactorEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measPowerFactorEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measPowerFactorEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measPowerFactorEdit.Properties.DisplayFormat.FormatString = "f2";
+            this.measPowerFactorEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measPowerFactorEdit.Properties.EditFormat.FormatString = "f2";
+            this.measPowerFactorEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measPowerFactorEdit.Properties.Mask.EditMask = "f2";
+            this.measPowerFactorEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measPowerFactorEdit.Properties.MaxLength = 6;
+            this.measPowerFactorEdit.Properties.ReadOnly = true;
+            this.measPowerFactorEdit.Size = new System.Drawing.Size(64, 22);
+            this.measPowerFactorEdit.TabIndex = 14;
+            // 
+            // label19
+            // 
+            this.label19.Location = new System.Drawing.Point(11, 419);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(110, 22);
+            this.label19.TabIndex = 124;
+            this.label19.Text = "Power Factor";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label20
+            // 
+            this.label20.Location = new System.Drawing.Point(195, 396);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(58, 22);
+            this.label20.TabIndex = 123;
+            this.label20.Text = "Hz";
+            this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measFreqEdit
+            // 
+            this.measFreqEdit.EditValue = "0.0";
+            this.measFreqEdit.Location = new System.Drawing.Point(128, 396);
+            this.measFreqEdit.Name = "measFreqEdit";
+            this.measFreqEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measFreqEdit.Properties.Appearance.Options.UseFont = true;
+            this.measFreqEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measFreqEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measFreqEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measFreqEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measFreqEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measFreqEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measFreqEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measFreqEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measFreqEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measFreqEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measFreqEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measFreqEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measFreqEdit.Properties.DisplayFormat.FormatString = "f2";
+            this.measFreqEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measFreqEdit.Properties.EditFormat.FormatString = "f2";
+            this.measFreqEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measFreqEdit.Properties.Mask.EditMask = "f2";
+            this.measFreqEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measFreqEdit.Properties.MaxLength = 6;
+            this.measFreqEdit.Properties.ReadOnly = true;
+            this.measFreqEdit.Size = new System.Drawing.Size(64, 22);
+            this.measFreqEdit.TabIndex = 13;
+            // 
+            // label34
+            // 
+            this.label34.Location = new System.Drawing.Point(11, 395);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(110, 22);
+            this.label34.TabIndex = 121;
+            this.label34.Text = "Frequency";
+            this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measRatedCurrentLabel
+            // 
+            this.measRatedCurrentLabel.Location = new System.Drawing.Point(195, 278);
+            this.measRatedCurrentLabel.Name = "measRatedCurrentLabel";
+            this.measRatedCurrentLabel.Size = new System.Drawing.Size(58, 22);
+            this.measRatedCurrentLabel.TabIndex = 120;
+            this.measRatedCurrentLabel.Text = "A";
+            this.measRatedCurrentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measRatedCurrentEdit
+            // 
+            this.measRatedCurrentEdit.EditValue = "0.00";
+            this.measRatedCurrentEdit.Location = new System.Drawing.Point(128, 278);
+            this.measRatedCurrentEdit.Name = "measRatedCurrentEdit";
+            this.measRatedCurrentEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedCurrentEdit.Properties.Appearance.Options.UseFont = true;
+            this.measRatedCurrentEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measRatedCurrentEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measRatedCurrentEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedCurrentEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measRatedCurrentEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measRatedCurrentEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measRatedCurrentEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedCurrentEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measRatedCurrentEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measRatedCurrentEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measRatedCurrentEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measRatedCurrentEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measRatedCurrentEdit.Properties.DisplayFormat.FormatString = "f2";
+            this.measRatedCurrentEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measRatedCurrentEdit.Properties.EditFormat.FormatString = "f2";
+            this.measRatedCurrentEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measRatedCurrentEdit.Properties.Mask.EditMask = "f2";
+            this.measRatedCurrentEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measRatedCurrentEdit.Properties.MaxLength = 5;
+            this.measRatedCurrentEdit.Properties.ReadOnly = true;
+            this.measRatedCurrentEdit.Size = new System.Drawing.Size(64, 22);
+            this.measRatedCurrentEdit.TabIndex = 9;
+            // 
+            // label33
+            // 
+            this.label33.Location = new System.Drawing.Point(11, 277);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(110, 22);
+            this.label33.TabIndex = 118;
+            this.label33.Text = "Rated Current";
+            this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measVoltageLabel
+            // 
+            this.measVoltageLabel.Location = new System.Drawing.Point(195, 348);
+            this.measVoltageLabel.Name = "measVoltageLabel";
+            this.measVoltageLabel.Size = new System.Drawing.Size(58, 22);
+            this.measVoltageLabel.TabIndex = 129;
+            this.measVoltageLabel.Text = "V";
+            this.measVoltageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // measVoltageEdit
+            // 
+            this.measVoltageEdit.EditValue = "0.0";
+            this.measVoltageEdit.Location = new System.Drawing.Point(128, 348);
+            this.measVoltageEdit.Name = "measVoltageEdit";
+            this.measVoltageEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measVoltageEdit.Properties.Appearance.Options.UseFont = true;
+            this.measVoltageEdit.Properties.Appearance.Options.UseTextOptions = true;
+            this.measVoltageEdit.Properties.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measVoltageEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measVoltageEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.measVoltageEdit.Properties.AppearanceDisabled.Options.UseTextOptions = true;
+            this.measVoltageEdit.Properties.AppearanceDisabled.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measVoltageEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measVoltageEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.measVoltageEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measVoltageEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.measVoltageEdit.Properties.AppearanceReadOnly.Options.UseTextOptions = true;
+            this.measVoltageEdit.Properties.AppearanceReadOnly.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.measVoltageEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.measVoltageEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measVoltageEdit.Properties.EditFormat.FormatString = "f1";
+            this.measVoltageEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.measVoltageEdit.Properties.Mask.EditMask = "f1";
+            this.measVoltageEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.measVoltageEdit.Properties.MaxLength = 5;
+            this.measVoltageEdit.Properties.ReadOnly = true;
+            this.measVoltageEdit.Size = new System.Drawing.Size(64, 22);
+            this.measVoltageEdit.TabIndex = 11;
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(11, 347);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(110, 22);
+            this.label5.TabIndex = 127;
+            this.label5.Text = "Voltage";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label28
+            // 
+            this.label28.Location = new System.Drawing.Point(9, 328);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(247, 13);
+            this.label28.TabIndex = 130;
+            this.label28.Text = "------------------------------------------------------------";
+            this.label28.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(9, 114);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(247, 13);
+            this.label2.TabIndex = 131;
+            this.label2.Text = "------------------------------------------------------------";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label18
+            // 
+            this.label18.Location = new System.Drawing.Point(11, 39);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(110, 22);
+            this.label18.TabIndex = 92;
+            this.label18.Text = "Test Condition";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ulPanel3
+            // 
+            this.ulPanel3.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel3.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel3.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel3.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel3.Location = new System.Drawing.Point(128, 40);
+            this.ulPanel3.Name = "ulPanel3";
+            this.ulPanel3.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel3.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel3.Size = new System.Drawing.Size(125, 20);
+            this.ulPanel3.Spacing = 0;
+            this.ulPanel3.TabIndex = 95;
+            this.ulPanel3.Text = "Unnamed";
+            this.ulPanel3.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel3.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel5
+            // 
+            this.ulPanel5.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel5.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel5.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel5.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel5.Location = new System.Drawing.Point(128, 62);
+            this.ulPanel5.Name = "ulPanel5";
+            this.ulPanel5.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel5.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel5.Size = new System.Drawing.Size(125, 20);
+            this.ulPanel5.Spacing = 0;
+            this.ulPanel5.TabIndex = 97;
+            this.ulPanel5.Text = "Unnamed";
+            this.ulPanel5.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel5.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // label12
+            // 
+            this.label12.Location = new System.Drawing.Point(11, 61);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(110, 22);
+            this.label12.TabIndex = 96;
+            this.label12.Text = "Running Step";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ulPanel7
+            // 
+            this.ulPanel7.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel7.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel7.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel7.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel7.Location = new System.Drawing.Point(128, 106);
+            this.ulPanel7.Name = "ulPanel7";
+            this.ulPanel7.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel7.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel7.Size = new System.Drawing.Size(125, 20);
+            this.ulPanel7.Spacing = 0;
+            this.ulPanel7.TabIndex = 101;
+            this.ulPanel7.Text = "Unnamed";
+            this.ulPanel7.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel7.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(11, 105);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(118, 22);
+            this.label9.TabIndex = 100;
+            this.label9.Text = "Total Elapsed Time";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ulPanel8
+            // 
+            this.ulPanel8.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel8.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel8.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel8.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel8.Location = new System.Drawing.Point(128, 84);
+            this.ulPanel8.Name = "ulPanel8";
+            this.ulPanel8.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel8.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel8.Size = new System.Drawing.Size(125, 20);
+            this.ulPanel8.Spacing = 0;
+            this.ulPanel8.TabIndex = 99;
+            this.ulPanel8.Text = "Unnamed";
+            this.ulPanel8.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel8.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // label16
+            // 
+            this.label16.Location = new System.Drawing.Point(11, 83);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(110, 22);
+            this.label16.TabIndex = 98;
+            this.label16.Text = "Elapsed Time";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label21
+            // 
+            this.label21.Location = new System.Drawing.Point(9, 128);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(247, 13);
+            this.label21.TabIndex = 131;
+            this.label21.Text = "------------------------------------------------------------";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ulPanel9
+            // 
+            this.ulPanel9.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel9.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel9.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel9.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel9.Location = new System.Drawing.Point(128, 190);
+            this.ulPanel9.Name = "ulPanel9";
+            this.ulPanel9.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel9.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel9.Size = new System.Drawing.Size(125, 20);
+            this.ulPanel9.Spacing = 0;
+            this.ulPanel9.TabIndex = 137;
+            this.ulPanel9.Text = "00:00:00 / 00:00:00";
+            this.ulPanel9.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel9.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // label22
+            // 
+            this.label22.Location = new System.Drawing.Point(11, 189);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(110, 22);
+            this.label22.TabIndex = 136;
+            this.label22.Text = "Integration";
+            this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ulPanel10
+            // 
+            this.ulPanel10.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel10.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel10.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel10.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel10.Location = new System.Drawing.Point(128, 168);
+            this.ulPanel10.Name = "ulPanel10";
+            this.ulPanel10.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel10.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel10.Size = new System.Drawing.Size(125, 20);
+            this.ulPanel10.Spacing = 0;
+            this.ulPanel10.TabIndex = 135;
+            this.ulPanel10.Text = "00:00:00 / 00:00:00";
+            this.ulPanel10.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel10.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // label23
+            // 
+            this.label23.Location = new System.Drawing.Point(11, 167);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(110, 22);
+            this.label23.TabIndex = 134;
+            this.label23.Text = "Judgement";
+            this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ulPanel11
+            // 
+            this.ulPanel11.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel11.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel11.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel11.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel11.Location = new System.Drawing.Point(128, 146);
+            this.ulPanel11.Name = "ulPanel11";
+            this.ulPanel11.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel11.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel11.Size = new System.Drawing.Size(125, 20);
+            this.ulPanel11.Spacing = 0;
+            this.ulPanel11.TabIndex = 133;
+            this.ulPanel11.Text = "00:00:00 / 00:00:00";
+            this.ulPanel11.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel11.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // label24
+            // 
+            this.label24.Location = new System.Drawing.Point(11, 145);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(110, 22);
+            this.label24.TabIndex = 132;
+            this.label24.Text = "Preparation";
+            this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label25
+            // 
+            this.label25.Location = new System.Drawing.Point(9, 212);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(247, 13);
+            this.label25.TabIndex = 138;
+            this.label25.Text = "------------------------------------------------------------";
+            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ulPanel12
+            // 
+            this.ulPanel12.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel12.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel12.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel12.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel12.Location = new System.Drawing.Point(128, 274);
+            this.ulPanel12.Name = "ulPanel12";
+            this.ulPanel12.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel12.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel12.Size = new System.Drawing.Size(125, 20);
+            this.ulPanel12.Spacing = 0;
+            this.ulPanel12.TabIndex = 144;
+            this.ulPanel12.Text = "1 / 1";
+            this.ulPanel12.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel12.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // label26
+            // 
+            this.label26.Location = new System.Drawing.Point(11, 273);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(110, 22);
+            this.label26.TabIndex = 143;
+            this.label26.Text = "Schedule";
+            this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ulPanel13
+            // 
+            this.ulPanel13.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel13.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel13.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel13.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel13.Location = new System.Drawing.Point(128, 252);
+            this.ulPanel13.Name = "ulPanel13";
+            this.ulPanel13.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel13.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel13.Size = new System.Drawing.Size(125, 20);
+            this.ulPanel13.Spacing = 0;
+            this.ulPanel13.TabIndex = 142;
+            this.ulPanel13.Text = "1 / 1";
+            this.ulPanel13.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel13.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // label27
+            // 
+            this.label27.Location = new System.Drawing.Point(11, 251);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(110, 22);
+            this.label27.TabIndex = 141;
+            this.label27.Text = "Repeat";
+            this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ulPanel14
+            // 
+            this.ulPanel14.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel14.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel14.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel14.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel14.Location = new System.Drawing.Point(128, 230);
+            this.ulPanel14.Name = "ulPanel14";
+            this.ulPanel14.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel14.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel14.Size = new System.Drawing.Size(125, 20);
+            this.ulPanel14.Spacing = 0;
+            this.ulPanel14.TabIndex = 140;
+            this.ulPanel14.Text = "1 / 1";
+            this.ulPanel14.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel14.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // label29
+            // 
+            this.label29.Location = new System.Drawing.Point(11, 229);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(110, 22);
+            this.label29.TabIndex = 139;
+            this.label29.Text = "No of Steady";
+            this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // progressBarControl1
+            // 
+            this.progressBarControl1.Location = new System.Drawing.Point(128, 314);
+            this.progressBarControl1.Name = "progressBarControl1";
+            this.progressBarControl1.Properties.AllowFocused = false;
+            this.progressBarControl1.Properties.DisplayFormat.FormatString = "f1";
+            this.progressBarControl1.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.progressBarControl1.Properties.TextOrientation = DevExpress.Utils.Drawing.TextOrientation.Horizontal;
+            this.progressBarControl1.Size = new System.Drawing.Size(125, 18);
+            this.progressBarControl1.TabIndex = 145;
+            // 
+            // label30
+            // 
+            this.label30.Location = new System.Drawing.Point(9, 296);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(247, 13);
+            this.label30.TabIndex = 146;
+            this.label30.Text = "------------------------------------------------------------";
+            this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // progressBarControl2
+            // 
+            this.progressBarControl2.Location = new System.Drawing.Point(128, 334);
+            this.progressBarControl2.Name = "progressBarControl2";
+            this.progressBarControl2.Properties.AllowFocused = false;
+            this.progressBarControl2.Properties.DisplayFormat.FormatString = "f1";
+            this.progressBarControl2.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.progressBarControl2.Properties.TextOrientation = DevExpress.Utils.Drawing.TextOrientation.Horizontal;
+            this.progressBarControl2.Size = new System.Drawing.Size(125, 18);
+            this.progressBarControl2.TabIndex = 147;
+            // 
+            // CtrlTestMeas
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlTestMeas";
+            this.Size = new System.Drawing.Size(1728, 915);
+            this.bgPanel.ResumeLayout(false);
+            this.ulPanel4.ResumeLayout(false);
+            this.ulPanel1.ResumeLayout(false);
+            this.testMeasTab.ResumeLayout(false);
+            this.measPage.ResumeLayout(false);
+            this.measTab.ResumeLayout(false);
+            this.reportPage.ResumeLayout(false);
+            this.graphPage.ResumeLayout(false);
+            this.graphTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.measCurrentEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measCurrentRatioEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measTotalEERCOPEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measTotalPowerInEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measTotalCapacityEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measRatedPowerInEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measCapacityRatioEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measRatedCapacityEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measEERCOPRatioEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measRatedEERCOPEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measPowerInRatioEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measPowerFactorEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measFreqEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measRatedCurrentEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measVoltageEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.progressBarControl2.Properties)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.TabControl testMeasTab;
+        private System.Windows.Forms.TabPage measPage;
+        private System.Windows.Forms.TabControl measTab;
+        private System.Windows.Forms.TabPage meas1Page;
+        private System.Windows.Forms.TabPage meas2Page;
+        private System.Windows.Forms.TabPage reportPage;
+        private System.Windows.Forms.TabPage graphPage;
+        private System.Windows.Forms.TabControl graphTab;
+        private System.Windows.Forms.TabPage graph1Page;
+        private System.Windows.Forms.TabPage graph2Page;
+        private Ulee.Controls.UlPanel ulPanel1;
+        private Ulee.Controls.UlPanel ulPanel2;
+        private Ulee.Controls.UlPanel ulPanel4;
+        private Ulee.Controls.UlPanel ulPanel6;
+        private DevExpress.XtraSpreadsheet.SpreadsheetControl reportSheet;
+        private System.Windows.Forms.TabPage graph3Page;
+        private System.Windows.Forms.TabPage graph4Page;
+        private System.Windows.Forms.TabPage graph5Page;
+        private System.Windows.Forms.TabPage graph6Page;
+        private System.Windows.Forms.Label measCurrentLabel;
+        public DevExpress.XtraEditors.TextEdit measCurrentEdit;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label measCurrentRatioLabel;
+        public DevExpress.XtraEditors.TextEdit measCurrentRatioEdit;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label measTotalEERCOPLabel;
+        public DevExpress.XtraEditors.TextEdit measTotalEERCOPEdit;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label measTotalPowerInLabel;
+        public DevExpress.XtraEditors.TextEdit measTotalPowerInEdit;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label measTotalCapacityLabel;
+        public DevExpress.XtraEditors.TextEdit measTotalCapacityEdit;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label measPowerFactorLabel;
+        public DevExpress.XtraEditors.TextEdit measPowerFactorEdit;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label20;
+        public DevExpress.XtraEditors.TextEdit measFreqEdit;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label measRatedCurrentLabel;
+        public DevExpress.XtraEditors.TextEdit measRatedCurrentEdit;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label measEERCOPRatioLabel;
+        public DevExpress.XtraEditors.TextEdit measEERCOPRatioEdit;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        public DevExpress.XtraEditors.TextEdit measRatedEERCOPEdit;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label measPowerInRatioLabel;
+        public DevExpress.XtraEditors.TextEdit measPowerInRatioEdit;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label measRatedPowerInLabel;
+        public DevExpress.XtraEditors.TextEdit measRatedPowerInEdit;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label measCapacityRatioLabel;
+        public DevExpress.XtraEditors.TextEdit measCapacityRatioEdit;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label measRatedCapacityLabel;
+        public DevExpress.XtraEditors.TextEdit measRatedCapacityEdit;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label measVoltageLabel;
+        public DevExpress.XtraEditors.TextEdit measVoltageEdit;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label18;
+        private DevExpress.XtraEditors.ProgressBarControl progressBarControl2;
+        private System.Windows.Forms.Label label30;
+        private DevExpress.XtraEditors.ProgressBarControl progressBarControl1;
+        private Ulee.Controls.UlPanel ulPanel12;
+        private System.Windows.Forms.Label label26;
+        private Ulee.Controls.UlPanel ulPanel13;
+        private System.Windows.Forms.Label label27;
+        private Ulee.Controls.UlPanel ulPanel14;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label25;
+        private Ulee.Controls.UlPanel ulPanel9;
+        private System.Windows.Forms.Label label22;
+        private Ulee.Controls.UlPanel ulPanel10;
+        private System.Windows.Forms.Label label23;
+        private Ulee.Controls.UlPanel ulPanel11;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label21;
+        private Ulee.Controls.UlPanel ulPanel7;
+        private System.Windows.Forms.Label label9;
+        private Ulee.Controls.UlPanel ulPanel8;
+        private System.Windows.Forms.Label label16;
+        private Ulee.Controls.UlPanel ulPanel5;
+        private System.Windows.Forms.Label label12;
+        private Ulee.Controls.UlPanel ulPanel3;
+    }
+}

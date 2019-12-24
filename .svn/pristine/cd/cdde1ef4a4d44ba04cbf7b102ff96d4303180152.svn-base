@@ -1,0 +1,673 @@
+﻿using System;
+using System.Data;
+using System.Linq;
+using System.Collections.Generic;
+
+using FirebirdSql.Data.FirebirdClient;
+
+using Ulee.Database.Firebird;
+
+namespace Hnc.Calorimeter.Server
+{
+    public class CalorimeterDatabase : UlFirebird
+    {
+        public CalorimeterDatabase(FbServerType type = FbServerType.Default) : base(type)
+        {
+            UserSet = new UserDataSet(connect, null, null);
+            CalibratorSet = new CalibratorDataSet(connect, null, null);
+            CalibratorRowSet = new CalibratorRowDataSet(connect, null, null);
+            CalibPointSet = new CalibPointDataSet(connect, null, null);
+        }
+
+        public UserDataSet UserSet { get; }
+        public CalibratorDataSet CalibratorSet { get; }
+        public CalibratorRowDataSet CalibratorRowSet { get; }
+        public CalibPointDataSet CalibPointSet { get; }
+
+        public void Load(int recNo)
+        {
+            CalibratorDataSet set = CalibratorSet;
+            Dictionary<int, CalibratorRow> allRows = 
+                Resource.Server.Devices.Calibrators.Category["All"];
+
+            try
+            {
+                set.Select(recNo);
+
+                if (set.GetRowCount() > 0)
+                {
+                    set.Fetch();
+
+                    CalibratorRowDataSet rowSet = CalibratorRowSet;
+                    rowSet.Select(set.RecNo);
+
+                    for (int i = 0; i < rowSet.GetRowCount(); i++)
+                    {
+                        rowSet.Fetch(i);
+                        CalibratorRow row = null;
+
+                        if (allRows.TryGetValue(rowSet.Channel, out row) == true)
+                        {
+                            row.No = rowSet.Channel;
+                            row.Calibrator.Active = true;
+                            row.Calibrator.RawA = rowSet.RawA;
+                            row.Calibrator.RawB = rowSet.RawB;
+                            row.Calibrator.RawC = rowSet.RawC;
+                            row.Calibrator.DiffA = rowSet.DiffA;
+                            row.Calibrator.DiffB = rowSet.DiffB;
+                            row.Calibrator.DiffC = rowSet.DiffC;
+
+                            CalibPointDataSet pointSet = CalibPointSet;
+                            pointSet.Select(rowSet.RecNo);
+
+                            for (int j = 0; j < pointSet.GetRowCount(); j++)
+                            {
+                                pointSet.Fetch(j);
+
+                                row.Calibrator.Points[j].PV = (float)pointSet.PV;
+                                row.Calibrator.Points[j].SV = (float)pointSet.SV;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+                throw new Exception("Occurred loading error of calibrator in UlFirebird.Load");
+            }
+        }
+
+        public void Save(int recNo, int userNo, DateTime regTime, string memo)
+        {
+            List<CalibratorRow> allRows = 
+                Resource.Server.Devices.Calibrators.Category["All"].Values.ToList();
+
+            BeginTrans();
+
+            try
+            {
+                CalibratorDataSet set = CalibratorSet;
+
+                set.RecNo = recNo;
+                set.UserNo = userNo;
+                set.RegTime = regTime.ToString("yyyy-MM-dd HH:mm:ss");
+                set.Memo = memo;
+                set.Insert(Trans);
+
+                foreach (CalibratorRow row in allRows)
+                {
+                    int rowRecNo = (int)GetGenNo("GN_CALIBRATOR_ROW");
+                    CalibratorRowDataSet rowSet = CalibratorRowSet;
+
+                    rowSet.RecNo = rowRecNo;
+                    rowSet.CalibratorNo = recNo;
+                    rowSet.Channel = row.No;
+                    rowSet.RawA = row.Calibrator.RawA;
+                    rowSet.RawB = row.Calibrator.RawB;
+                    rowSet.RawC = row.Calibrator.RawC;
+                    rowSet.DiffA = row.Calibrator.DiffA;
+                    rowSet.DiffB = row.Calibrator.DiffB;
+                    rowSet.DiffC = row.Calibrator.DiffC;
+                    rowSet.Insert(Trans);
+
+                    int i = 0;
+                    CalibPointDataSet pointSet = CalibPointSet;
+
+                    foreach (CalibrationPoint point in row.Calibrator.Points)
+                    {
+                        int pointRecNo = (int)GetGenNo("GN_CALIBPOINT");
+
+                        pointSet.RecNo = pointRecNo;
+                        pointSet.CalibratorRowNo = rowRecNo;
+                        pointSet.PointNo = i++;
+                        pointSet.PV = point.PV;
+                        pointSet.SV = point.SV;
+                        pointSet.Insert(Trans);
+                    }
+                }
+
+                CommitTrans();
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+                RollbackTrans();
+            }
+        }
+
+        public void Delete(int recNo)
+        {
+            CalibratorDataSet row = Resource.Db.CalibratorSet;
+            CalibratorRowDataSet rowSet = Resource.Db.CalibratorRowSet;
+            CalibPointDataSet pointSet = Resource.Db.CalibPointSet;
+
+            BeginTrans();
+
+            try
+            {
+                rowSet.Select(recNo);
+
+                for (int i = 0; i < rowSet.GetRowCount(); i++)
+                {
+                    rowSet.Fetch(i);
+                    pointSet.Delete(rowSet.RecNo, Trans);
+                }
+
+                rowSet.Delete(recNo, Trans);
+                row.Delete(recNo, Trans);
+                CommitTrans();
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+                RollbackTrans();
+            }
+        }
+    }
+
+    public class UserDataSet : UlDataSet
+    {
+        public int RecNo { get; set; }
+        public string Name { get; set; }
+        public int Authority { get; set; }
+        public string Passwd { get; set; }
+        public string Memo { get; set; }
+
+        public UserDataSet(FbConnection connect, FbCommand command, FbDataAdapter adapter)
+            : base(connect, command, adapter)
+        {
+        }
+
+        public void Select()
+        {
+            SetTrans(null);
+            command.CommandText = "select * from TB_USER where pk_recno>0 order by pk_recno asc";
+            dataSet.Clear();
+            dataAdapter.Fill(dataSet);
+        }
+
+        public void Select(int recno)
+        {
+            SetTrans(null);
+            command.CommandText = $"select * from TB_USER where pk_recno={recno} order by pk_recno asc";
+            dataSet.Clear();
+            dataAdapter.Fill(dataSet);
+        }
+
+        public void Select(string name)
+        {
+            SetTrans(null);
+            command.CommandText = $"select * from TB_USER where name='{name}' order by pk_recno asc";
+            dataSet.Clear();
+            dataAdapter.Fill(dataSet);
+        }
+
+        public int GetRecNo(string name)
+        {
+            Select(name);
+            Fetch();
+
+            return RecNo;
+        }
+
+        public string GetName(int recno)
+        {
+            Select(recno);
+            Fetch();
+
+            return Name;
+        }
+
+        public void Insert(FbTransaction trans = null)
+        {
+            string sql = $"insert into TB_USER values ({RecNo}, '{Name}', {Authority}, '{Passwd}', '{Memo}')";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Update(FbTransaction trans = null)
+        {
+            string sql =
+                $"update TB_USER set name='{Name}', authority={Authority}, passwd='{Passwd}', memo='{Memo}' where pk_recno={RecNo}";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Delete(FbTransaction trans = null)
+        {
+            string sql = $"delete from TB_USER where pk_recno={RecNo}";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Fetch(int index = 0, int tableNo = 0)
+        {
+            if (index < GetRowCount(tableNo))
+            {
+                Fetch(dataSet.Tables[tableNo].Rows[index]);
+            }
+            else
+            {
+                RecNo = 0;
+                Name = "";
+                Authority = 0;
+                Passwd = "";
+                Memo = "";
+            }
+        }
+
+        public void Fetch(DataRow row)
+        {
+            RecNo = Convert.ToInt32(row["pk_recno"]);
+            Name = Convert.ToString(row["name"]);
+            Authority = Convert.ToInt32(row["authority"]);
+            Passwd = Convert.ToString(row["passwd"]);
+            Memo = Convert.ToString(row["memo"]);
+        }
+    }
+
+    public class CalibratorDataSet : UlDataSet
+    {
+        public int RecNo { get; set; }
+        public int UserNo { get; set; }
+        public string RegTime { get; set; }
+        public string Memo { get; set; }
+
+        public CalibratorDataSet(FbConnection connect, FbCommand command, FbDataAdapter adapter)
+            : base(connect, command, adapter)
+        {
+        }
+
+        public void Select()
+        {
+            SetTrans(null);
+            command.CommandText =
+                " select t1.*, t2.name as username from TB_CALIBRATOR t1 " +
+                " join TB_USER t2 on t2.pk_recno=t1.fk_userno " +
+                " order by t1.pk_recno asc ";
+            dataSet.Clear();
+            dataAdapter.Fill(dataSet);
+        }
+
+        public void Select(int recNo)
+        {
+            SetTrans(null);
+            command.CommandText =
+                " select t1.*, t2.name as username from TB_CALIBRATOR t1 " +
+                " join TB_USER t2 on t2.pk_recno=t1.fk_userno " + 
+                $" where t1.pk_recno={recNo} ";
+            dataSet.Clear();
+            dataAdapter.Fill(dataSet);
+        }
+
+        public void SelectByUserNo(int userNo)
+        {
+            SetTrans(null);
+            command.CommandText =
+                " select t1.*, t2.name as username from TB_CALIBRATOR t1 " +
+                " join TB_USER t2 on t2.pk_recno=t1.fk_userno " +
+                $" where t1.fk_userno={userNo} " +
+                " order by t1.pk_recno asc ";
+            dataSet.Clear();
+            dataAdapter.Fill(dataSet);
+        }
+
+        public void Insert(FbTransaction trans = null)
+        {
+            string sql = $"insert into TB_CALIBRATOR values ({RecNo}, {UserNo}, '{RegTime}', '{Memo}')";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Update(FbTransaction trans = null)
+        {
+            string sql = $"update TB_CALIBRATOR set regtime='{RegTime}', memo='{Memo}' where pk_recno={RecNo}";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Delete(int recNo, FbTransaction trans = null)
+        {
+            string sql = $"delete from TB_CALIBRATOR where pk_recno={recNo}";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Fetch(int index = 0, int tableNo = 0)
+        {
+            if (index < GetRowCount(tableNo))
+            {
+                Fetch(dataSet.Tables[tableNo].Rows[index]);
+            }
+            else
+            {
+                RecNo = 0;
+                UserNo = 0;
+                RegTime = "";
+                Memo = "";
+            }
+        }
+
+        public void Fetch(DataRow row)
+        {
+            RecNo = Convert.ToInt32(row["pk_recno"]);
+            UserNo = Convert.ToInt32(row["fk_userno"]);
+            RegTime = Convert.ToString(row["regtime"]);
+            Memo = Convert.ToString(row["memo"]);
+        }
+
+        public string GetMemo(int recNo)
+        {
+            Select(recNo);
+            Fetch();
+
+            return Memo;
+        }
+    }
+
+    public class CalibratorRowDataSet : UlDataSet
+    {
+        public int RecNo { get; set; }
+        public int CalibratorNo { get; set; }
+        public int Channel { get; set; }
+        public double RawA { get; set; }
+        public double RawB { get; set; }
+        public double RawC { get; set; }
+        public double DiffA { get; set; }
+        public double DiffB { get; set; }
+        public double DiffC { get; set; }
+
+        public CalibratorRowDataSet(FbConnection connect, FbCommand command, FbDataAdapter adapter)
+            : base(connect, command, adapter)
+        {
+        }
+
+        public void Select()
+        {
+            SetTrans(null);
+            command.CommandText = " select * from TB_CALIBRATOR_ROW order by pk_recno asc ";
+            dataSet.Clear();
+            dataAdapter.Fill(dataSet);
+        }
+
+        public void Select(int recNo)
+        {
+            SetTrans(null);
+            command.CommandText =
+                " select * from TB_CALIBRATOR_ROW " +
+                $" where fk_calibratorno={recNo} " +
+                " order by pk_recno asc ";
+            dataSet.Clear();
+            dataAdapter.Fill(dataSet);
+        }
+
+        public void Insert(FbTransaction trans = null)
+        {
+            string sql =
+                $" insert into TB_CALIBRATOR_ROW values ({RecNo}, {CalibratorNo}, " +
+                $" {Channel}, {RawA}, {RawB}, {RawC}, {DiffA}, {DiffB}, {DiffC}) ";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Update(FbTransaction trans = null)
+        {
+            string sql =
+                $" update TB_CALIBRATOR_ROW set channel={Channel}, " +
+                $" raw_a={RawA}, raw_b={RawB}, raw_c={RawC}, " +
+                $" diff_a={DiffA}, diff_b={DiffB}, diff_c={DiffC}, " +
+                $" where pk_recno={RecNo} ";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Delete(int recNo, FbTransaction trans = null)
+        {
+            string sql = $" delete from TB_CALIBRATOR_ROW where fk_calibratorno={recNo} ";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Fetch(int index = 0, int tableNo = 0)
+        {
+            if (index < GetRowCount(tableNo))
+            {
+                Fetch(dataSet.Tables[tableNo].Rows[index]);
+            }
+            else
+            {
+                RecNo = 0;
+                CalibratorNo = 0;
+                Channel = 0;
+                RawA = 0;
+                RawB = 0;
+                RawC = 0;
+                DiffA = 0;
+                DiffB = 0;
+                DiffC = 0;
+            }
+        }
+
+        public void Fetch(DataRow row)
+        {
+            RecNo = Convert.ToInt32(row["pk_recno"]);
+            CalibratorNo = Convert.ToInt32(row["fk_calibratorno"]);
+            Channel = Convert.ToInt32(row["channel"]);
+            RawA = Convert.ToDouble(row["raw_a"]);
+            RawB = Convert.ToDouble(row["raw_b"]);
+            RawC = Convert.ToDouble(row["raw_c"]);
+            DiffA = Convert.ToDouble(row["diff_a"]);
+            DiffB = Convert.ToDouble(row["diff_b"]);
+            DiffC = Convert.ToDouble(row["diff_c"]);
+        }
+    }
+
+    public class CalibPointDataSet : UlDataSet
+    {
+        public int RecNo { get; set; }
+        public int CalibratorRowNo { get; set; }
+        public int PointNo { get; set; }
+        public double PV { get; set; }
+        public double SV { get; set; }
+
+        public CalibPointDataSet(FbConnection connect, FbCommand command, FbDataAdapter adapter)
+            : base(connect, command, adapter)
+        {
+        }
+
+        public void Select(int calibRowNo)
+        {
+            SetTrans(null);
+            command.CommandText = 
+                $" select * from TB_CALIBPOINT where fk_calib_rowno={calibRowNo} " +
+                " order by pointno asc ";
+            dataSet.Clear();
+            dataAdapter.Fill(dataSet);
+        }
+
+        public void Insert(FbTransaction trans = null)
+        {
+            string sql =
+                $" insert into TB_CALIBPOINT values ({RecNo}, " +
+                $" {CalibratorRowNo}, {PointNo}, {PV}, {SV}) ";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Delete(int calibRowNo, FbTransaction trans = null)
+        {
+            string sql = $" delete from TB_CALIBPOINT where fk_calib_rowno={calibRowNo} ";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Fetch(int index = 0, int tableNo = 0)
+        {
+            if (index < GetRowCount(tableNo))
+            {
+                Fetch(dataSet.Tables[tableNo].Rows[index]);
+            }
+            else
+            {
+                RecNo = 0;
+                CalibratorRowNo = 0;
+                PointNo = 0;
+                PV = 0;
+                SV = 0;
+            }
+        }
+
+        public void Fetch(DataRow row)
+        {
+            RecNo = Convert.ToInt32(row["pk_recno"]);
+            CalibratorRowNo = Convert.ToInt32(row["fk_calib_rowno"]);
+            PointNo = Convert.ToInt32(row["pointno"]);
+            PV = Convert.ToDouble(row["pv"]);
+            SV = Convert.ToDouble(row["sv"]);
+        }
+    }
+}

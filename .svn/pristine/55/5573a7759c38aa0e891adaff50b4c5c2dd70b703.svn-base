@@ -1,0 +1,140 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Ulee.Utils;
+using Ulee.DllImport.Win32;
+
+namespace Hnc.Calorimeter.Client
+{
+    public enum EClientState
+    {
+        Openning,
+        Running,
+        Closing
+    }
+
+    static public class Resource
+    {
+        public const string Caption = "Calorimeter.Client";
+
+        private const string csConfigIniFName = @"..\..\Config\Hnc.Calorimeter.3R.Client.Config.Ini";
+
+        public const string csExcelOriginReport = @"..\..\Resource\Excel\PsychrometricDataSheet.LG.P14.xlsx";
+
+        static public EClientState State { get; set; }
+
+        static public int UserNo { get; set; }
+
+        static public EUserAuthority Authority { get; set; }
+
+        static public UlIniFile Ini { get; private set; }
+
+        static public UlLogger TLog { get; private set; }
+
+        static public UlLogger ALog { get; private set; }
+
+        static public CalorimeterClientDatabase Db { get; private set; }
+
+        static public CalorimeterClient Client { get; private set; }
+        
+        static public NameTag Tag { get; private set; }
+
+        static public TestValue Variables { get; set; }
+
+        static public TestSettings Settings { get; set; }
+
+        static public void Create()
+        {
+            State = EClientState.Openning;
+
+            Ini = new UlIniFile(csConfigIniFName);
+
+            UserNo = -1;
+            Authority = EUserAuthority.Viewer;
+
+            Tag = new NameTag(Ini);
+
+            TLog = new UlLogger();
+            TLog.Path = Ini.GetString("Log", "TotalPath");
+            TLog.FName = Ini.GetString("Log", "TotalFileName");
+            TLog.AddHead("NOTE");
+            TLog.AddHead("ERROR");
+            TLog.AddHead("EXCEPTION");
+
+            Client = new CalorimeterClient(Ini);
+
+            Settings = new TestSettings(Ini);
+            Settings.Load();
+
+            Db = new CalorimeterClientDatabase();
+            Db.Database = Ini.GetString("Database", "FileName");
+            Db.Open();
+        }
+
+        static public void Destroy()
+        {
+            if (Db != null)
+            {
+                Db.Close();
+            }
+        }
+    }
+
+    public class NameTag
+    {
+        public NameTag(UlIniFile ini)
+        {
+            Thermos = new List<MeasureRow>();
+            Presses = new List<MeasureRow>();
+
+            string value = ini.GetString("Recorder", "Pressure");
+            string[] values = value.Split(new[] { ',' }, StringSplitOptions.None);
+
+            PressIndex = int.Parse(values[0]);
+            PressLength = int.Parse(values[1]);
+
+            value = ini.GetString("Recorder", "Thermocouple");
+            values = value.Split(new[] { ',' }, StringSplitOptions.None);
+
+            ThermoIndex = int.Parse(values[0]);
+            ThermoLength = int.Parse(values[1]);
+
+            int i = 1;
+            string key = $"Tag{i}";
+            string name = ini.GetString("TC.Tag", key);
+
+            while (string.IsNullOrWhiteSpace(name) == false)
+            {
+                Thermos.Add(new MeasureRow(null, "", name, i));
+
+                i++;
+                key = $"Tag{i}";
+                name = ini.GetString("TC.Tag", key);
+            }
+
+            i = 1;
+            key = $"Tag{i}";
+            name = ini.GetString("Press.Tag", key);
+
+            while (string.IsNullOrWhiteSpace(name) == false)
+            {
+                Presses.Add(new MeasureRow(null, "", name, i));
+
+                i++;
+                key = $"Tag{i}";
+                name = ini.GetString("Press.Tag", key);
+            }
+        }
+
+        public int ThermoIndex { get; private set; }
+        public int ThermoLength { get; private set; }
+        public List<MeasureRow> Thermos { get; private set; }
+
+        public int PressIndex { get; private set; }
+        public int PressLength { get; private set; }
+        public List<MeasureRow> Presses { get; private set; }
+    }
+}

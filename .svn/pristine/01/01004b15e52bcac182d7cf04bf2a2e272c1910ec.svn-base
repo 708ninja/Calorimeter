@@ -1,0 +1,630 @@
+﻿namespace Hnc.Calorimeter.Server
+{
+    partial class CtrlViewValue
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.powerMeterPanel = new Ulee.Controls.UlPanel();
+            this.powerMeterGrid = new DevExpress.XtraGrid.GridControl();
+            this.powerMeterGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.pmNameColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.pmValueColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.ulPanel1 = new Ulee.Controls.UlPanel();
+            this.recorderTypeCombo = new System.Windows.Forms.ComboBox();
+            this.recorderGrid = new DevExpress.XtraGrid.GridControl();
+            this.recorderGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.rgNameColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.rgValueColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.ulPanel2 = new Ulee.Controls.UlPanel();
+            this.controllerGrid = new DevExpress.XtraGrid.GridControl();
+            this.controllerGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.cgNameColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.cgValueColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.ulPanel3 = new Ulee.Controls.UlPanel();
+            this.plcGrid = new DevExpress.XtraGrid.GridControl();
+            this.plcGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.pgNameColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.pgValueColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.bgPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.powerMeterGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.powerMeterGridView)).BeginInit();
+            this.ulPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.recorderGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.recorderGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.controllerGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.controllerGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.plcGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.plcGridView)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.bgPanel.Controls.Add(this.ulPanel3);
+            this.bgPanel.Controls.Add(this.plcGrid);
+            this.bgPanel.Controls.Add(this.ulPanel2);
+            this.bgPanel.Controls.Add(this.controllerGrid);
+            this.bgPanel.Controls.Add(this.ulPanel1);
+            this.bgPanel.Controls.Add(this.recorderGrid);
+            this.bgPanel.Controls.Add(this.powerMeterPanel);
+            this.bgPanel.Controls.Add(this.powerMeterGrid);
+            this.bgPanel.Size = new System.Drawing.Size(904, 645);
+            // 
+            // powerMeterPanel
+            // 
+            this.powerMeterPanel.BackColor = System.Drawing.Color.Navy;
+            this.powerMeterPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.powerMeterPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.powerMeterPanel.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
+            this.powerMeterPanel.ForeColor = System.Drawing.Color.White;
+            this.powerMeterPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.powerMeterPanel.InnerColor2 = System.Drawing.Color.White;
+            this.powerMeterPanel.Location = new System.Drawing.Point(0, 0);
+            this.powerMeterPanel.Name = "powerMeterPanel";
+            this.powerMeterPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.powerMeterPanel.OuterColor2 = System.Drawing.Color.White;
+            this.powerMeterPanel.Size = new System.Drawing.Size(223, 24);
+            this.powerMeterPanel.Spacing = 0;
+            this.powerMeterPanel.TabIndex = 4;
+            this.powerMeterPanel.Text = " Power Meter";
+            this.powerMeterPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Left;
+            this.powerMeterPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // powerMeterGrid
+            // 
+            this.powerMeterGrid.Cursor = System.Windows.Forms.Cursors.Default;
+            this.powerMeterGrid.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.powerMeterGrid.Location = new System.Drawing.Point(0, 25);
+            this.powerMeterGrid.MainView = this.powerMeterGridView;
+            this.powerMeterGrid.Name = "powerMeterGrid";
+            this.powerMeterGrid.Size = new System.Drawing.Size(223, 620);
+            this.powerMeterGrid.TabIndex = 3;
+            this.powerMeterGrid.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.powerMeterGridView});
+            // 
+            // powerMeterGridView
+            // 
+            this.powerMeterGridView.Appearance.FixedLine.Font = new System.Drawing.Font("Arial", 9F);
+            this.powerMeterGridView.Appearance.FixedLine.Options.UseFont = true;
+            this.powerMeterGridView.Appearance.FocusedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.powerMeterGridView.Appearance.FocusedRow.Options.UseFont = true;
+            this.powerMeterGridView.Appearance.HeaderPanel.Font = new System.Drawing.Font("Arial", 9F);
+            this.powerMeterGridView.Appearance.HeaderPanel.Options.UseFont = true;
+            this.powerMeterGridView.Appearance.HideSelectionRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.powerMeterGridView.Appearance.HideSelectionRow.Options.UseFont = true;
+            this.powerMeterGridView.Appearance.OddRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.powerMeterGridView.Appearance.OddRow.Options.UseFont = true;
+            this.powerMeterGridView.Appearance.Preview.Font = new System.Drawing.Font("Arial", 9F);
+            this.powerMeterGridView.Appearance.Preview.Options.UseFont = true;
+            this.powerMeterGridView.Appearance.Row.Font = new System.Drawing.Font("Arial", 9F);
+            this.powerMeterGridView.Appearance.Row.Options.UseFont = true;
+            this.powerMeterGridView.Appearance.SelectedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.powerMeterGridView.Appearance.SelectedRow.Options.UseFont = true;
+            this.powerMeterGridView.Appearance.ViewCaption.Font = new System.Drawing.Font("Arial", 9F);
+            this.powerMeterGridView.Appearance.ViewCaption.Options.UseFont = true;
+            this.powerMeterGridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.pmNameColumn,
+            this.pmValueColumn});
+            this.powerMeterGridView.CustomizationFormBounds = new System.Drawing.Rectangle(2884, 580, 210, 186);
+            this.powerMeterGridView.GridControl = this.powerMeterGrid;
+            this.powerMeterGridView.Name = "powerMeterGridView";
+            this.powerMeterGridView.OptionsView.ColumnAutoWidth = false;
+            this.powerMeterGridView.OptionsView.ShowGroupPanel = false;
+            this.powerMeterGridView.OptionsView.ShowIndicator = false;
+            this.powerMeterGridView.Tag = 0;
+            // 
+            // pmNameColumn
+            // 
+            this.pmNameColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pmNameColumn.AppearanceCell.Options.UseFont = true;
+            this.pmNameColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F);
+            this.pmNameColumn.AppearanceHeader.Options.UseFont = true;
+            this.pmNameColumn.Caption = "Name";
+            this.pmNameColumn.FieldName = "Name";
+            this.pmNameColumn.Name = "pmNameColumn";
+            this.pmNameColumn.OptionsColumn.AllowEdit = false;
+            this.pmNameColumn.OptionsColumn.AllowFocus = false;
+            this.pmNameColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.pmNameColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.pmNameColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.pmNameColumn.OptionsColumn.AllowMove = false;
+            this.pmNameColumn.OptionsColumn.AllowShowHide = false;
+            this.pmNameColumn.OptionsColumn.AllowSize = false;
+            this.pmNameColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.pmNameColumn.OptionsColumn.FixedWidth = true;
+            this.pmNameColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.pmNameColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.pmNameColumn.OptionsColumn.ReadOnly = true;
+            this.pmNameColumn.OptionsColumn.TabStop = false;
+            this.pmNameColumn.OptionsFilter.AllowAutoFilter = false;
+            this.pmNameColumn.OptionsFilter.AllowFilter = false;
+            this.pmNameColumn.Visible = true;
+            this.pmNameColumn.VisibleIndex = 0;
+            this.pmNameColumn.Width = 100;
+            // 
+            // pmValueColumn
+            // 
+            this.pmValueColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pmValueColumn.AppearanceCell.Options.UseFont = true;
+            this.pmValueColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F);
+            this.pmValueColumn.AppearanceHeader.Options.UseFont = true;
+            this.pmValueColumn.Caption = "Value";
+            this.pmValueColumn.DisplayFormat.FormatString = "{0:F2}";
+            this.pmValueColumn.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.pmValueColumn.FieldName = "Value";
+            this.pmValueColumn.Name = "pmValueColumn";
+            this.pmValueColumn.OptionsColumn.AllowEdit = false;
+            this.pmValueColumn.OptionsColumn.AllowFocus = false;
+            this.pmValueColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.pmValueColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.pmValueColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.pmValueColumn.OptionsColumn.AllowMove = false;
+            this.pmValueColumn.OptionsColumn.AllowShowHide = false;
+            this.pmValueColumn.OptionsColumn.AllowSize = false;
+            this.pmValueColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.pmValueColumn.OptionsColumn.FixedWidth = true;
+            this.pmValueColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.pmValueColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.pmValueColumn.OptionsColumn.ReadOnly = true;
+            this.pmValueColumn.OptionsColumn.TabStop = false;
+            this.pmValueColumn.OptionsFilter.AllowAutoFilter = false;
+            this.pmValueColumn.OptionsFilter.AllowFilter = false;
+            this.pmValueColumn.Visible = true;
+            this.pmValueColumn.VisibleIndex = 1;
+            this.pmValueColumn.Width = 100;
+            // 
+            // ulPanel1
+            // 
+            this.ulPanel1.BackColor = System.Drawing.Color.Navy;
+            this.ulPanel1.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel1.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel1.Controls.Add(this.recorderTypeCombo);
+            this.ulPanel1.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
+            this.ulPanel1.ForeColor = System.Drawing.Color.White;
+            this.ulPanel1.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Location = new System.Drawing.Point(227, 0);
+            this.ulPanel1.Name = "ulPanel1";
+            this.ulPanel1.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Size = new System.Drawing.Size(223, 24);
+            this.ulPanel1.Spacing = 0;
+            this.ulPanel1.TabIndex = 6;
+            this.ulPanel1.Text = " Recorder";
+            this.ulPanel1.TextHAlign = Ulee.Controls.EUlHoriAlign.Left;
+            this.ulPanel1.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // recorderTypeCombo
+            // 
+            this.recorderTypeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.recorderTypeCombo.Font = new System.Drawing.Font("Arial", 9F);
+            this.recorderTypeCombo.FormattingEnabled = true;
+            this.recorderTypeCombo.Items.AddRange(new object[] {
+            "Raw",
+            "Real"});
+            this.recorderTypeCombo.Location = new System.Drawing.Point(164, 1);
+            this.recorderTypeCombo.Name = "recorderTypeCombo";
+            this.recorderTypeCombo.Size = new System.Drawing.Size(58, 23);
+            this.recorderTypeCombo.TabIndex = 0;
+            this.recorderTypeCombo.SelectedIndexChanged += new System.EventHandler(this.recorderTypeCombo_SelectedIndexChanged);
+            // 
+            // recorderGrid
+            // 
+            this.recorderGrid.Cursor = System.Windows.Forms.Cursors.Default;
+            this.recorderGrid.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.recorderGrid.Location = new System.Drawing.Point(227, 25);
+            this.recorderGrid.MainView = this.recorderGridView;
+            this.recorderGrid.Name = "recorderGrid";
+            this.recorderGrid.Size = new System.Drawing.Size(223, 620);
+            this.recorderGrid.TabIndex = 5;
+            this.recorderGrid.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.recorderGridView});
+            // 
+            // recorderGridView
+            // 
+            this.recorderGridView.Appearance.FixedLine.Font = new System.Drawing.Font("Arial", 9F);
+            this.recorderGridView.Appearance.FixedLine.Options.UseFont = true;
+            this.recorderGridView.Appearance.FocusedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.recorderGridView.Appearance.FocusedRow.Options.UseFont = true;
+            this.recorderGridView.Appearance.HeaderPanel.Font = new System.Drawing.Font("Arial", 9F);
+            this.recorderGridView.Appearance.HeaderPanel.Options.UseFont = true;
+            this.recorderGridView.Appearance.HideSelectionRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.recorderGridView.Appearance.HideSelectionRow.Options.UseFont = true;
+            this.recorderGridView.Appearance.OddRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.recorderGridView.Appearance.OddRow.Options.UseFont = true;
+            this.recorderGridView.Appearance.Preview.Font = new System.Drawing.Font("Arial", 9F);
+            this.recorderGridView.Appearance.Preview.Options.UseFont = true;
+            this.recorderGridView.Appearance.Row.Font = new System.Drawing.Font("Arial", 9F);
+            this.recorderGridView.Appearance.Row.Options.UseFont = true;
+            this.recorderGridView.Appearance.SelectedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.recorderGridView.Appearance.SelectedRow.Options.UseFont = true;
+            this.recorderGridView.Appearance.ViewCaption.Font = new System.Drawing.Font("Arial", 9F);
+            this.recorderGridView.Appearance.ViewCaption.Options.UseFont = true;
+            this.recorderGridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.rgNameColumn,
+            this.rgValueColumn});
+            this.recorderGridView.CustomizationFormBounds = new System.Drawing.Rectangle(2884, 580, 210, 186);
+            this.recorderGridView.GridControl = this.recorderGrid;
+            this.recorderGridView.Name = "recorderGridView";
+            this.recorderGridView.OptionsView.ColumnAutoWidth = false;
+            this.recorderGridView.OptionsView.ShowGroupPanel = false;
+            this.recorderGridView.OptionsView.ShowIndicator = false;
+            this.recorderGridView.Tag = 0;
+            // 
+            // rgNameColumn
+            // 
+            this.rgNameColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F);
+            this.rgNameColumn.AppearanceCell.Options.UseFont = true;
+            this.rgNameColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F);
+            this.rgNameColumn.AppearanceHeader.Options.UseFont = true;
+            this.rgNameColumn.Caption = "Name";
+            this.rgNameColumn.FieldName = "Name";
+            this.rgNameColumn.Name = "rgNameColumn";
+            this.rgNameColumn.OptionsColumn.AllowEdit = false;
+            this.rgNameColumn.OptionsColumn.AllowFocus = false;
+            this.rgNameColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.rgNameColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.rgNameColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.rgNameColumn.OptionsColumn.AllowMove = false;
+            this.rgNameColumn.OptionsColumn.AllowShowHide = false;
+            this.rgNameColumn.OptionsColumn.AllowSize = false;
+            this.rgNameColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.rgNameColumn.OptionsColumn.FixedWidth = true;
+            this.rgNameColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.rgNameColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.rgNameColumn.OptionsColumn.ReadOnly = true;
+            this.rgNameColumn.OptionsColumn.TabStop = false;
+            this.rgNameColumn.OptionsFilter.AllowAutoFilter = false;
+            this.rgNameColumn.OptionsFilter.AllowFilter = false;
+            this.rgNameColumn.Visible = true;
+            this.rgNameColumn.VisibleIndex = 0;
+            this.rgNameColumn.Width = 100;
+            // 
+            // rgValueColumn
+            // 
+            this.rgValueColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F);
+            this.rgValueColumn.AppearanceCell.Options.UseFont = true;
+            this.rgValueColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F);
+            this.rgValueColumn.AppearanceHeader.Options.UseFont = true;
+            this.rgValueColumn.Caption = "Value";
+            this.rgValueColumn.DisplayFormat.FormatString = "{0:F2}";
+            this.rgValueColumn.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.rgValueColumn.FieldName = "Value";
+            this.rgValueColumn.Name = "rgValueColumn";
+            this.rgValueColumn.OptionsColumn.AllowEdit = false;
+            this.rgValueColumn.OptionsColumn.AllowFocus = false;
+            this.rgValueColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.rgValueColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.rgValueColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.rgValueColumn.OptionsColumn.AllowMove = false;
+            this.rgValueColumn.OptionsColumn.AllowShowHide = false;
+            this.rgValueColumn.OptionsColumn.AllowSize = false;
+            this.rgValueColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.rgValueColumn.OptionsColumn.FixedWidth = true;
+            this.rgValueColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.rgValueColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.rgValueColumn.OptionsColumn.ReadOnly = true;
+            this.rgValueColumn.OptionsColumn.TabStop = false;
+            this.rgValueColumn.OptionsFilter.AllowAutoFilter = false;
+            this.rgValueColumn.OptionsFilter.AllowFilter = false;
+            this.rgValueColumn.Visible = true;
+            this.rgValueColumn.VisibleIndex = 1;
+            this.rgValueColumn.Width = 100;
+            // 
+            // ulPanel2
+            // 
+            this.ulPanel2.BackColor = System.Drawing.Color.Navy;
+            this.ulPanel2.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel2.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel2.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
+            this.ulPanel2.ForeColor = System.Drawing.Color.White;
+            this.ulPanel2.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel2.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel2.Location = new System.Drawing.Point(681, 0);
+            this.ulPanel2.Name = "ulPanel2";
+            this.ulPanel2.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel2.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel2.Size = new System.Drawing.Size(223, 24);
+            this.ulPanel2.Spacing = 0;
+            this.ulPanel2.TabIndex = 8;
+            this.ulPanel2.Text = " PLC";
+            this.ulPanel2.TextHAlign = Ulee.Controls.EUlHoriAlign.Left;
+            this.ulPanel2.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // controllerGrid
+            // 
+            this.controllerGrid.Cursor = System.Windows.Forms.Cursors.Default;
+            this.controllerGrid.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.controllerGrid.Location = new System.Drawing.Point(454, 25);
+            this.controllerGrid.MainView = this.controllerGridView;
+            this.controllerGrid.Name = "controllerGrid";
+            this.controllerGrid.Size = new System.Drawing.Size(223, 620);
+            this.controllerGrid.TabIndex = 7;
+            this.controllerGrid.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.controllerGridView});
+            // 
+            // controllerGridView
+            // 
+            this.controllerGridView.Appearance.FixedLine.Font = new System.Drawing.Font("Arial", 9F);
+            this.controllerGridView.Appearance.FixedLine.Options.UseFont = true;
+            this.controllerGridView.Appearance.FocusedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.controllerGridView.Appearance.FocusedRow.Options.UseFont = true;
+            this.controllerGridView.Appearance.HeaderPanel.Font = new System.Drawing.Font("Arial", 9F);
+            this.controllerGridView.Appearance.HeaderPanel.Options.UseFont = true;
+            this.controllerGridView.Appearance.HideSelectionRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.controllerGridView.Appearance.HideSelectionRow.Options.UseFont = true;
+            this.controllerGridView.Appearance.OddRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.controllerGridView.Appearance.OddRow.Options.UseFont = true;
+            this.controllerGridView.Appearance.Preview.Font = new System.Drawing.Font("Arial", 9F);
+            this.controllerGridView.Appearance.Preview.Options.UseFont = true;
+            this.controllerGridView.Appearance.Row.Font = new System.Drawing.Font("Arial", 9F);
+            this.controllerGridView.Appearance.Row.Options.UseFont = true;
+            this.controllerGridView.Appearance.SelectedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.controllerGridView.Appearance.SelectedRow.Options.UseFont = true;
+            this.controllerGridView.Appearance.ViewCaption.Font = new System.Drawing.Font("Arial", 9F);
+            this.controllerGridView.Appearance.ViewCaption.Options.UseFont = true;
+            this.controllerGridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.cgNameColumn,
+            this.cgValueColumn});
+            this.controllerGridView.CustomizationFormBounds = new System.Drawing.Rectangle(2884, 580, 210, 186);
+            this.controllerGridView.GridControl = this.controllerGrid;
+            this.controllerGridView.Name = "controllerGridView";
+            this.controllerGridView.OptionsView.ColumnAutoWidth = false;
+            this.controllerGridView.OptionsView.ShowGroupPanel = false;
+            this.controllerGridView.OptionsView.ShowIndicator = false;
+            this.controllerGridView.Tag = 0;
+            // 
+            // cgNameColumn
+            // 
+            this.cgNameColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F);
+            this.cgNameColumn.AppearanceCell.Options.UseFont = true;
+            this.cgNameColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F);
+            this.cgNameColumn.AppearanceHeader.Options.UseFont = true;
+            this.cgNameColumn.Caption = "Name";
+            this.cgNameColumn.FieldName = "Name";
+            this.cgNameColumn.Name = "cgNameColumn";
+            this.cgNameColumn.OptionsColumn.AllowEdit = false;
+            this.cgNameColumn.OptionsColumn.AllowFocus = false;
+            this.cgNameColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.cgNameColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.cgNameColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.cgNameColumn.OptionsColumn.AllowMove = false;
+            this.cgNameColumn.OptionsColumn.AllowShowHide = false;
+            this.cgNameColumn.OptionsColumn.AllowSize = false;
+            this.cgNameColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.cgNameColumn.OptionsColumn.FixedWidth = true;
+            this.cgNameColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.cgNameColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.cgNameColumn.OptionsColumn.ReadOnly = true;
+            this.cgNameColumn.OptionsColumn.TabStop = false;
+            this.cgNameColumn.OptionsFilter.AllowAutoFilter = false;
+            this.cgNameColumn.OptionsFilter.AllowFilter = false;
+            this.cgNameColumn.Visible = true;
+            this.cgNameColumn.VisibleIndex = 0;
+            this.cgNameColumn.Width = 100;
+            // 
+            // cgValueColumn
+            // 
+            this.cgValueColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F);
+            this.cgValueColumn.AppearanceCell.Options.UseFont = true;
+            this.cgValueColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F);
+            this.cgValueColumn.AppearanceHeader.Options.UseFont = true;
+            this.cgValueColumn.Caption = "Value";
+            this.cgValueColumn.DisplayFormat.FormatString = "{0:F2}";
+            this.cgValueColumn.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.cgValueColumn.FieldName = "Value";
+            this.cgValueColumn.Name = "cgValueColumn";
+            this.cgValueColumn.OptionsColumn.AllowEdit = false;
+            this.cgValueColumn.OptionsColumn.AllowFocus = false;
+            this.cgValueColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.cgValueColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.cgValueColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.cgValueColumn.OptionsColumn.AllowMove = false;
+            this.cgValueColumn.OptionsColumn.AllowShowHide = false;
+            this.cgValueColumn.OptionsColumn.AllowSize = false;
+            this.cgValueColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.cgValueColumn.OptionsColumn.FixedWidth = true;
+            this.cgValueColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.cgValueColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.cgValueColumn.OptionsColumn.ReadOnly = true;
+            this.cgValueColumn.OptionsColumn.TabStop = false;
+            this.cgValueColumn.OptionsFilter.AllowAutoFilter = false;
+            this.cgValueColumn.OptionsFilter.AllowFilter = false;
+            this.cgValueColumn.Visible = true;
+            this.cgValueColumn.VisibleIndex = 1;
+            this.cgValueColumn.Width = 100;
+            // 
+            // ulPanel3
+            // 
+            this.ulPanel3.BackColor = System.Drawing.Color.Navy;
+            this.ulPanel3.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel3.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel3.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
+            this.ulPanel3.ForeColor = System.Drawing.Color.White;
+            this.ulPanel3.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel3.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel3.Location = new System.Drawing.Point(454, 0);
+            this.ulPanel3.Name = "ulPanel3";
+            this.ulPanel3.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel3.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel3.Size = new System.Drawing.Size(223, 24);
+            this.ulPanel3.Spacing = 0;
+            this.ulPanel3.TabIndex = 10;
+            this.ulPanel3.Text = " Controller";
+            this.ulPanel3.TextHAlign = Ulee.Controls.EUlHoriAlign.Left;
+            this.ulPanel3.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // plcGrid
+            // 
+            this.plcGrid.Cursor = System.Windows.Forms.Cursors.Default;
+            this.plcGrid.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.plcGrid.Location = new System.Drawing.Point(681, 25);
+            this.plcGrid.MainView = this.plcGridView;
+            this.plcGrid.Name = "plcGrid";
+            this.plcGrid.Size = new System.Drawing.Size(223, 620);
+            this.plcGrid.TabIndex = 9;
+            this.plcGrid.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.plcGridView});
+            // 
+            // plcGridView
+            // 
+            this.plcGridView.Appearance.FixedLine.Font = new System.Drawing.Font("Arial", 9F);
+            this.plcGridView.Appearance.FixedLine.Options.UseFont = true;
+            this.plcGridView.Appearance.FocusedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.plcGridView.Appearance.FocusedRow.Options.UseFont = true;
+            this.plcGridView.Appearance.HeaderPanel.Font = new System.Drawing.Font("Arial", 9F);
+            this.plcGridView.Appearance.HeaderPanel.Options.UseFont = true;
+            this.plcGridView.Appearance.HideSelectionRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.plcGridView.Appearance.HideSelectionRow.Options.UseFont = true;
+            this.plcGridView.Appearance.OddRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.plcGridView.Appearance.OddRow.Options.UseFont = true;
+            this.plcGridView.Appearance.Preview.Font = new System.Drawing.Font("Arial", 9F);
+            this.plcGridView.Appearance.Preview.Options.UseFont = true;
+            this.plcGridView.Appearance.Row.Font = new System.Drawing.Font("Arial", 9F);
+            this.plcGridView.Appearance.Row.Options.UseFont = true;
+            this.plcGridView.Appearance.SelectedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.plcGridView.Appearance.SelectedRow.Options.UseFont = true;
+            this.plcGridView.Appearance.ViewCaption.Font = new System.Drawing.Font("Arial", 9F);
+            this.plcGridView.Appearance.ViewCaption.Options.UseFont = true;
+            this.plcGridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.pgNameColumn,
+            this.pgValueColumn});
+            this.plcGridView.CustomizationFormBounds = new System.Drawing.Rectangle(2884, 580, 210, 186);
+            this.plcGridView.GridControl = this.plcGrid;
+            this.plcGridView.Name = "plcGridView";
+            this.plcGridView.OptionsView.ColumnAutoWidth = false;
+            this.plcGridView.OptionsView.ShowGroupPanel = false;
+            this.plcGridView.OptionsView.ShowIndicator = false;
+            this.plcGridView.Tag = 0;
+            // 
+            // pgNameColumn
+            // 
+            this.pgNameColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F);
+            this.pgNameColumn.AppearanceCell.Options.UseFont = true;
+            this.pgNameColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F);
+            this.pgNameColumn.AppearanceHeader.Options.UseFont = true;
+            this.pgNameColumn.Caption = "Name";
+            this.pgNameColumn.FieldName = "Name";
+            this.pgNameColumn.Name = "pgNameColumn";
+            this.pgNameColumn.OptionsColumn.AllowEdit = false;
+            this.pgNameColumn.OptionsColumn.AllowFocus = false;
+            this.pgNameColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.pgNameColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.pgNameColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.pgNameColumn.OptionsColumn.AllowMove = false;
+            this.pgNameColumn.OptionsColumn.AllowShowHide = false;
+            this.pgNameColumn.OptionsColumn.AllowSize = false;
+            this.pgNameColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.pgNameColumn.OptionsColumn.FixedWidth = true;
+            this.pgNameColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.pgNameColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.pgNameColumn.OptionsColumn.ReadOnly = true;
+            this.pgNameColumn.OptionsColumn.TabStop = false;
+            this.pgNameColumn.OptionsFilter.AllowAutoFilter = false;
+            this.pgNameColumn.OptionsFilter.AllowFilter = false;
+            this.pgNameColumn.Visible = true;
+            this.pgNameColumn.VisibleIndex = 0;
+            this.pgNameColumn.Width = 100;
+            // 
+            // pgValueColumn
+            // 
+            this.pgValueColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F);
+            this.pgValueColumn.AppearanceCell.Options.UseFont = true;
+            this.pgValueColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F);
+            this.pgValueColumn.AppearanceHeader.Options.UseFont = true;
+            this.pgValueColumn.Caption = "Value";
+            this.pgValueColumn.DisplayFormat.FormatString = "{0:X4}";
+            this.pgValueColumn.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.pgValueColumn.FieldName = "Value";
+            this.pgValueColumn.Name = "pgValueColumn";
+            this.pgValueColumn.OptionsColumn.AllowEdit = false;
+            this.pgValueColumn.OptionsColumn.AllowFocus = false;
+            this.pgValueColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.pgValueColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.pgValueColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.pgValueColumn.OptionsColumn.AllowMove = false;
+            this.pgValueColumn.OptionsColumn.AllowShowHide = false;
+            this.pgValueColumn.OptionsColumn.AllowSize = false;
+            this.pgValueColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.pgValueColumn.OptionsColumn.FixedWidth = true;
+            this.pgValueColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.pgValueColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.pgValueColumn.OptionsColumn.ReadOnly = true;
+            this.pgValueColumn.OptionsColumn.TabStop = false;
+            this.pgValueColumn.OptionsFilter.AllowAutoFilter = false;
+            this.pgValueColumn.OptionsFilter.AllowFilter = false;
+            this.pgValueColumn.Visible = true;
+            this.pgValueColumn.VisibleIndex = 1;
+            this.pgValueColumn.Width = 100;
+            // 
+            // CtrlViewValue
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlViewValue";
+            this.Size = new System.Drawing.Size(904, 645);
+            this.Enter += new System.EventHandler(this.CtrlViewValue_Enter);
+            this.bgPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.powerMeterGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.powerMeterGridView)).EndInit();
+            this.ulPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.recorderGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.recorderGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.controllerGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.controllerGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.plcGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.plcGridView)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private Ulee.Controls.UlPanel powerMeterPanel;
+        private DevExpress.XtraGrid.GridControl powerMeterGrid;
+        private DevExpress.XtraGrid.Views.Grid.GridView powerMeterGridView;
+        private DevExpress.XtraGrid.Columns.GridColumn pmNameColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn pmValueColumn;
+        private Ulee.Controls.UlPanel ulPanel3;
+        private DevExpress.XtraGrid.GridControl plcGrid;
+        private DevExpress.XtraGrid.Views.Grid.GridView plcGridView;
+        private DevExpress.XtraGrid.Columns.GridColumn pgNameColumn;
+        private Ulee.Controls.UlPanel ulPanel2;
+        private DevExpress.XtraGrid.GridControl controllerGrid;
+        private DevExpress.XtraGrid.Views.Grid.GridView controllerGridView;
+        private DevExpress.XtraGrid.Columns.GridColumn cgNameColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn cgValueColumn;
+        private Ulee.Controls.UlPanel ulPanel1;
+        private DevExpress.XtraGrid.GridControl recorderGrid;
+        private DevExpress.XtraGrid.Views.Grid.GridView recorderGridView;
+        private DevExpress.XtraGrid.Columns.GridColumn rgNameColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn rgValueColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn pgValueColumn;
+        private System.Windows.Forms.ComboBox recorderTypeCombo;
+    }
+}

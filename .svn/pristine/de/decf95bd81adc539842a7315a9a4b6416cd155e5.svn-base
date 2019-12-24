@@ -1,0 +1,292 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Server
+{
+    public partial class FormServerMain : UlFormEng
+    {
+        public FormServerMain()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private const int csInvalidTime = 500;
+
+        private InvalidThread invalidThread;
+
+        private bool isExit;
+
+        private bool isFirst;
+
+        private void FormServerMain_Load(object sender, EventArgs e)
+        {
+            Resource.TLog.Log((int)ELogItem.Note, "Start Calorimeter Server Program.");
+
+            DispCaption();
+            DefMenu.Index = 0;
+
+            Resource.TLog.Log((int)ELogItem.Note, "Connect TCP socket of devices.");
+            Resource.Server.Connect();
+
+            Resource.TLog.Log((int)ELogItem.Note, "Resume all threads of devices, listener and sender.");
+            Resource.Server.Resume();
+
+            Resource.TLog.Log((int)ELogItem.Note, "Resume invalidation thread of screen.");
+            invalidThread = new InvalidThread(csInvalidTime);
+            invalidThread.InvalidControls += InvalidForm;
+            invalidThread.Resume();
+
+            isExit = false;
+            isFirst = false;
+
+            logoffTimer.Interval = Resource.Ini.GetInteger("System", "LogoffTime") * 1000;
+            logoffTimer.Enabled = true;
+
+            Resource.UserNo = -1;
+            Resource.Authority = EUserAuthority.Viewer;
+            SetAuthority();
+        }
+
+        private void FormServerMain_Shown(object sender, EventArgs e)
+        {
+            //if (isFirst == true)
+            //{
+            //    if (IsLogin() == false)
+            //    {
+            //        Resource.UserNo = -1;
+            //        Resource.Authority = EUserAuthority.Viewer;
+            //        SetAuthority();
+            //        return;
+            //    }
+
+            //    isFirst = false;
+            //}
+        }
+
+        private void FormServerMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isFirst == true) return;
+
+            if (isExit == true)
+            {
+                if (MessageBox.Show("Would you like to exit this program?",
+                    Resource.Caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    == DialogResult.No)
+                {
+                    isExit = false;
+                    e.Cancel = true;
+                }
+            }
+            else
+            {
+                Resource.TLog.Log((int)ELogItem.Note, "Drop down this program to system tray.");
+                notifyIcon.Visible = true;
+                ShowInTaskbar = true;
+                Hide();
+                e.Cancel = true;
+            }
+        }
+
+        private void FormServerMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            invalidThread.Terminate();
+
+            Resource.Server.NotifyTermination();
+            Resource.Server.Terminate();
+            Resource.Server.Close();
+
+            Resource.TLog.Log((int)ELogItem.Note, "Exit Calorimeter Server Program.");
+        }
+
+        private void loginButton_Click(object sender, EventArgs e)
+        {
+            if (IsLogin() == false)
+            {
+                logoffButton.PerformClick();
+            }
+        }
+
+        private void logoffButton_Click(object sender, EventArgs e)
+        {
+            Resource.UserNo = -1;
+            Resource.Authority = EUserAuthority.Viewer;
+            SetAuthority();
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            if (Resource.Authority > EUserAuthority.Admin) return;
+
+            isExit = true;
+            Close();
+        }
+
+        private void Initialize()
+        {
+            DefMenu = new UlMenu(viewPanel);
+            DefMenu.Add(new CtrlViewTop(), viewButton);
+            DefMenu.Add(new CtrlLogTop(), logButton);
+            DefMenu.Add(new CtrlCalibTop(), calibButton);
+            DefMenu.Add(new CtrlConfigTop(), configButton);
+        }
+
+        private void DispCaption()
+        {
+            Text = "H&C System Calorimeter Server Program Ver " + 
+                Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
+
+        private void InvalidUserControls(UlMenu menu)
+        {
+            if (menu == null) return;
+
+            UlUserControlEng userControl = menu.Controls(menu.Index) as UlUserControlEng;
+
+            userControl.InvalidControl(this, null);
+            InvalidUserControls(userControl.DefMenu);
+        }
+
+        private void InvalidDateTime()
+        {
+            string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            if (dateTimeLabel.Text != dateTime)
+            {
+                dateTimeLabel.Text = dateTime;
+            }
+        }
+
+        private void InvalidDeviceLed()
+        {
+            bool active;
+
+            active = (powerMeterLedLabel.BackColor == SystemColors.Control) ? false : true;
+            if (active != Resource.Server.Devices.PowerMeterConnected)
+            {
+                powerMeterLedLabel.BackColor = (active == true) ? Color.Khaki : SystemColors.Control;
+            }
+
+            active = (recorderLedLabel.BackColor == SystemColors.Control) ? false : true;
+            if (active != Resource.Server.Devices.RecorderConnected)
+            {
+                recorderLedLabel.BackColor = (active == true) ? Color.Khaki : SystemColors.Control;
+            }
+
+            active = (controllerLedLabel.BackColor == SystemColors.Control) ? false : true;
+            if (active != Resource.Server.Devices.ControllerConnected)
+            {
+                controllerLedLabel.BackColor = (active == true) ? Color.Khaki : SystemColors.Control;
+            }
+
+            active = (plcLedLabel.BackColor == SystemColors.Control) ? false : true;
+            if (active != Resource.Server.Devices.PlcConnected)
+            {
+                plcLedLabel.BackColor = (active == true) ? Color.Khaki : SystemColors.Control;
+            }
+        }
+
+        public override void InvalidForm(object sender, EventArgs e)
+        {
+            if (this.InvokeRequired == true)
+            {
+                EventHandler func = new EventHandler(InvalidForm);
+                this.BeginInvoke(func, new object[] { sender, e });
+            }
+            else
+            {
+                InvalidDateTime();
+                InvalidDeviceLed();
+                InvalidUserControls(DefMenu);
+            }
+        }
+
+        private bool IsLogin()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                FormUserLogin loginForm = new FormUserLogin();
+
+                loginForm.ShowDialog();
+                if (loginForm.DialogResult == DialogResult.OK)
+                {
+                    Resource.Db.UserSet.Select(loginForm.userCombo.Text.Trim());
+                    Resource.Db.UserSet.Fetch();
+                    string passwd = Resource.Db.UserSet.Passwd;
+                    //string passwd = Encoding.ASCII.GetString(Convert.FromBase64String(Resource.Db.UserSet.Passwd));
+
+                    if (loginForm.passwdEdit.Text == passwd)
+                    {
+                        Resource.UserNo = Resource.Db.UserSet.RecNo;
+                        Resource.Authority = (EUserAuthority)Resource.Db.UserSet.Authority;
+                        SetAuthority();
+                        return true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid password!\r\nPlease keyin password again!",
+                            Resource.Caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+                else break;
+            }
+
+            return false;
+        }
+
+        private void SetAuthority()
+        {
+            UserLabel.Text = Resource.Db.UserSet.GetName(Resource.UserNo);
+
+            if (Resource.Authority < EUserAuthority.Operator)
+            {
+                loginButton.Left = 746;
+                logoffButton.Left = 828;
+                logoffButton.Visible = true;
+                exitButton.Visible = true;
+                calibButton.Visible = true;
+                configButton.Visible = true;
+                exitToolStripMenuItem.Visible = true;
+            }
+            else
+            {
+                loginButton.Left = 910;
+                logoffButton.Visible = false;
+                exitButton.Visible = false;
+                calibButton.Visible = false;
+                configButton.Visible = false;
+                exitToolStripMenuItem.Visible = false;
+
+                if (DefMenu.Index > 1) DefMenu.Index = 0;
+            }
+        }
+
+        private void showUpMenuItem_Click(object sender, EventArgs e)
+        {
+            Resource.TLog.Log((int)ELogItem.Note, "Show up this program on screen.");
+            notifyIcon.Visible = false;
+            ShowInTaskbar = false;
+            Show();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            isExit = true;
+            Close();
+        }
+
+        private void logoffTimer_Tick(object sender, EventArgs e)
+        {
+        }
+    }
+}

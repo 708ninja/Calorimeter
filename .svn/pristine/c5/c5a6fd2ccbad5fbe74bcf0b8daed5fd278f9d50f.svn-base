@@ -1,0 +1,196 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.XtraGrid.Views.Grid;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlTestMeas : UlUserControlEng
+    {
+        public CtrlTestMeas(TestContext context)
+        {
+            InitializeComponent();
+
+            this.context = context;
+            Initialize();
+        }
+
+        private TestContext context;
+
+        private void Initialize()
+        {
+            Color evenColor = Color.FromArgb(244, 244, 236);
+
+            totalRatedGrid.DataSource = context.Measure.TotalRateds;
+            totalRatedGridView.Appearance.EvenRow.BackColor = evenColor;
+            totalRatedGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            runStateGrid.DataSource = context.Measure.RunStates;
+            runStateGridView.Appearance.EvenRow.BackColor = evenColor;
+            runStateGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            airSideGrid.DataSource = context.Measure.AirSides;
+            airSideGridView.Appearance.EvenRow.BackColor = evenColor;
+            airSideGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            asNozzleGrid.DataSource = null;
+            asNozzleGridView.Appearance.EvenRow.BackColor = evenColor;
+            asNozzleGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            outsideGrid.DataSource = context.Measure.Outsides;
+            outsideGridView.Appearance.EvenRow.BackColor = evenColor;
+            outsideGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            methodGrid.DataSource = context.Measure.Methods;
+            methodGridView.Appearance.EvenRow.BackColor = evenColor;
+            methodGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            noteGrid.DataSource = context.Measure.Notes;
+            noteGridView.Appearance.EvenRow.BackColor = evenColor;
+            noteGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            ratedGrid.DataSource = context.Measure.Rateds;
+            ratedGridView.Appearance.EvenRow.BackColor = evenColor;
+            ratedGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor11Grid.DataSource = context.Measure.Indoors11;
+            indoor11GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor11GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor12Grid.DataSource = context.Measure.Indoors12;
+            indoor12GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor12GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor21Grid.DataSource = context.Measure.Indoors21;
+            indoor21GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor21GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor22Grid.DataSource = context.Measure.Indoors22;
+            indoor22GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor22GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            outdoorGrid.DataSource = context.Measure.Outdoors;
+            outdoorGridView.Appearance.EvenRow.BackColor = evenColor;
+            outdoorGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            tc1Grid.DataSource = null;
+            tc1GridView.Appearance.EvenRow.BackColor = evenColor;
+            tc1GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            tc2Grid.DataSource = null;
+            tc2GridView.Appearance.EvenRow.BackColor = evenColor;
+            tc2GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            tc3Grid.DataSource = null;
+            tc3GridView.Appearance.EvenRow.BackColor = evenColor;
+            tc3GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            pressureGrid.DataSource = null;
+            pressureGridView.Appearance.EvenRow.BackColor = evenColor;
+            pressureGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+
+        }
+
+        public override void InvalidControl(object sender, EventArgs args)
+        {
+            if (this.InvokeRequired == true)
+            {
+                EventHandler func = new EventHandler(InvalidControl);
+                Invoke(func);
+            }
+            else
+            {
+                totalRatedGridView.RefreshData();
+                runStateGridView.RefreshData();
+                airSideGridView.RefreshData();
+                asNozzleGridView.RefreshData();
+                outsideGridView.RefreshData();
+                methodGridView.RefreshData();
+                noteGridView.RefreshData();
+                ratedGridView.RefreshData();
+                indoor11GridView.RefreshData();
+                indoor12GridView.RefreshData();
+                indoor21GridView.RefreshData();
+                indoor22GridView.RefreshData();
+                outdoorGridView.RefreshData();
+                tc1GridView.RefreshData();
+                tc2GridView.RefreshData();
+                tc3GridView.RefreshData();
+                pressureGridView.RefreshData();
+            }
+        }
+
+        public void SetCapacityUnit(string unit)
+        {
+            totalRatedGridView.SetRowCellValue((int)EMeasTotalRated.TotalCapacity, totalRatedGridView.Columns["Unit"], unit);
+            totalRatedGridView.SetRowCellValue((int)EMeasTotalRated.RatedCapacity, totalRatedGridView.Columns["Unit"], unit);
+
+            airSideGridView.SetRowCellValue((int)EMeasAirSide.Capacity, airSideGridView.Columns["Unit"], unit);
+
+            ratedGridView.SetRowCellValue((int)EMeasRated.Capacity, ratedGridView.Columns["Unit"], unit);
+        }
+
+        public void SetAirFlowUnit(string unit)
+        {
+            airSideGridView.SetRowCellValue((int)EMeasAirSide.AirFlowLev, airSideGridView.Columns["Unit"], unit);
+        }
+
+        public void SetEnthalpyUnit(string unit)
+        {
+            airSideGridView.SetRowCellValue((int)EMeasAirSide.EnteringEnthalpy, airSideGridView.Columns["Unit"], unit);
+            airSideGridView.SetRowCellValue((int)EMeasAirSide.LeavingEnthalpy, airSideGridView.Columns["Unit"], unit);
+        }
+
+        public void SetPressureUnit(string unit)
+        {
+            airSideGridView.SetRowCellValue((int)EMeasAirSide.StaticPressure, airSideGridView.Columns["Unit"], unit);
+        }
+
+        public void SetTemperatureUnit(string unit)
+        {
+            airSideGridView.SetRowCellValue((int)EMeasAirSide.EnteringDB, airSideGridView.Columns["Unit"], unit);
+            airSideGridView.SetRowCellValue((int)EMeasAirSide.EnteringWB, airSideGridView.Columns["Unit"], unit);
+            airSideGridView.SetRowCellValue((int)EMeasAirSide.LeavingDB, airSideGridView.Columns["Unit"], unit);
+            airSideGridView.SetRowCellValue((int)EMeasAirSide.LeavingWB, airSideGridView.Columns["Unit"], unit);
+            airSideGridView.SetRowCellValue((int)EMeasAirSide.NozzleInletTemp, airSideGridView.Columns["Unit"], unit);
+
+            outsideGridView.SetRowCellValue((int)EMeasOutside.EnteringDB, outsideGridView.Columns["Unit"], unit);
+            outsideGridView.SetRowCellValue((int)EMeasOutside.EnteringWB, outsideGridView.Columns["Unit"], unit);
+
+            indoor11GridView.SetRowCellValue((int)EMeasIndoor.DB, indoor11GridView.Columns["Unit"], unit);
+            indoor11GridView.SetRowCellValue((int)EMeasIndoor.WB, indoor11GridView.Columns["Unit"], unit);
+
+            indoor12GridView.SetRowCellValue((int)EMeasIndoor.DB, indoor12GridView.Columns["Unit"], unit);
+            indoor12GridView.SetRowCellValue((int)EMeasIndoor.WB, indoor12GridView.Columns["Unit"], unit);
+
+            indoor21GridView.SetRowCellValue((int)EMeasIndoor.DB, indoor21GridView.Columns["Unit"], unit);
+            indoor21GridView.SetRowCellValue((int)EMeasIndoor.WB, indoor21GridView.Columns["Unit"], unit);
+
+            indoor22GridView.SetRowCellValue((int)EMeasIndoor.DB, indoor22GridView.Columns["Unit"], unit);
+            indoor22GridView.SetRowCellValue((int)EMeasIndoor.WB, indoor22GridView.Columns["Unit"], unit);
+
+            outdoorGridView.SetRowCellValue((int)EMeasOutdoor.DB, outdoorGridView.Columns["Unit"], unit);
+            outdoorGridView.SetRowCellValue((int)EMeasOutdoor.WB, outdoorGridView.Columns["Unit"], unit);
+        }
+
+        public void SetDiffPressureUnit(string unit)
+        {
+            airSideGridView.SetRowCellValue((int)EMeasAirSide.NozzleDiffPressure, airSideGridView.Columns["Unit"], unit);
+        }
+
+        public void SetAtmPressureUnit(string unit)
+        {
+            airSideGridView.SetRowCellValue((int)EMeasAirSide.AtmosphericPressure, airSideGridView.Columns["Unit"], unit);
+        }
+    }
+}

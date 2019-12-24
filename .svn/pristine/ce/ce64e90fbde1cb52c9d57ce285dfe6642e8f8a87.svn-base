@@ -1,0 +1,3135 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+using Ulee.Threading;
+using Ulee.Device.Connection.Yokogawa;
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    #region enums
+    public enum ETestState
+    {
+        Started,
+        Paused,
+        Stopped
+    }
+
+    public enum ETestMode
+    {
+        [Description("Cooling")]
+        Cooling,
+        [Description("Heating")]
+        Heating
+    }
+
+    public enum EValueState
+    {
+        None,
+        Ok,
+        Ng
+    }
+
+    public enum EIndoorUse
+    {
+        [Description("Indoor")]
+        Indoor,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EIndoorMode
+    {
+        [Description("Cooling")]
+        Cooling,
+        [Description("Heating")]
+        Heating,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EIndoorDuct
+    {
+        [Description("1")]
+        N1,
+        [Description("2")]
+        N2,
+        [Description("3")]
+        N3,
+        [Description("4")]
+        N4,
+        [Description("5")]
+        N5,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EOutdoorUse
+    {
+        [Description("Outdoor")]
+        Outdoor,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EEtcUse
+    {
+        [Description("Use")]
+        Use,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EMeasTotalRated
+    {
+        TotalCapacity,
+        TotalPowerInput,
+        TotalEER_COP,
+        None1,
+        TotalRatedCapacity,
+        TotalCapacityRatio,
+        TotalRatedPowerInput,
+        TotalPowerInputRatio,
+        TotalRatedEER_COP,
+        TotalEER_COPRatio,
+        TotalRatedCurrent,
+        TotalCurrentRatio,
+        None2,
+        IDU_PowerInput,
+        IDU_Voltage,
+        IDU_Current,
+        IDU_Frequency,
+        IDU_PowerFactor,
+        None3,
+        ODU_PowerInput,
+        ODU_Voltage,
+        ODU_Current,
+        ODU_Frequency,
+        ODU_PowerFactor
+    }
+
+    public enum EMeasRunState
+    {
+        Condition,
+        RunningStep,
+        ElapsedTime,
+        TotalElapsed,
+        None1,
+        Preparation,
+        Judgement,
+        Integration,
+        None2,
+        NoOfSteady,
+        Repeat,
+        Schedule
+    }
+
+    public enum EMeasAirSide
+    {
+        Capacity,
+        CapacityRatio,
+        SensibleHeat,
+        LatentHeat,
+        SensibleHeatRatio,
+        HeatLeakage,
+        DrainWeight,
+        None1,
+        EnteringDB,
+        EnteringWB,
+        EnteringRH,
+        LeavingDB,
+        LeavingWB,
+        LeavingRH,
+        None2,
+        EnteringEnthalpy,
+        LeavingEnthalpy,
+        EnteringHumidityRatio,
+        LeavingHumidityRatio,
+        LeavingSpecificHeat,
+        LeavingSpecificVolume,
+        None3,
+        AirFlowLev,
+        AirVelocityLev,
+        StaticPressure,
+        NozzleDiffPressure,
+        AtmosphericPressure,
+        NozzleInletTemp,
+    }
+
+    public enum EMeasNozzle
+    {
+        Nozzle1,
+        Nozzle2,
+        Nozzle3,
+        Nozzle4
+    }
+
+    public enum EMeasOutside
+    {
+        EnteringDB,
+        EnteringWB,
+        EnteringRH,
+        EnteringDP,
+        None1,
+        SatDisTemp1,
+        SatSucTemp1,
+        SatSubCooling1,
+        SuperHeat1,
+        SatDisTemp2,
+        SatSucTemp2,
+        SatSubCooling2,
+        SuperHeat2
+    }
+
+    public enum EMeasMethod
+    {
+        Method,
+        ScanTime
+    }
+
+    public enum EMeasNote
+    {
+        Company,
+        TestName,
+        TestNo,
+        Observer,
+        None1,
+        Maker,
+        Model1,
+        SerialNo1,
+        Model2,
+        SerialNo2,
+        Model3,
+        SerialNo3,
+        ExpDevice,
+        Refrigerant,
+        RefCharge,
+        Memo
+    }
+
+    public enum EMeasRated
+    {
+        Capacity,
+        PowerInput,
+        EER_COP,
+        None1,
+        IDU_Voltage,
+        IDU_Current,
+        IDU_Frequency,
+        IDU_SelectedPM,
+        ODU_SelectedPM,
+        ODU_Phase
+    }
+
+    public enum EMeasIndoor
+    {
+        Use,
+        Mode,
+        Duct,
+        DB,
+        WB
+    }
+
+    public enum EMeasOutdoor
+    {
+        Use,
+        DPSensor,
+        AutoVoltage,
+        DB,
+        WB
+    }
+    #endregion
+
+    #region TestContext
+    public class TestContext : UlThread
+    {
+        public TestContext(long ticks=500) : base(false)
+        {
+            prevTicks = 0;
+            invalidTicks = ticks;
+            valueStack = new Stack<float>();
+
+            State = ETestState.Stopped;
+
+            Value = new TestValue();
+            Measure = new TestMeasure(Value);
+            Condition = new TestCondition(Value);
+        }
+
+        private const float csMinimumTemp = -99.9f;
+        private const float csLimitedTemp = -300.0f;
+
+        private long prevTicks;
+        private long invalidTicks;
+
+        private Stack<float> valueStack;
+
+        public ETestState State { get; set; }
+        public TestCondition Condition { get; set; }
+        public TestMeasure Measure { get; set; }
+        public TestValue Value { get; set; }
+
+        public void Initialize(int index)
+        {
+            List<ConditionRated> rateds = null;
+            ConditionSchedule sch = Condition.Schedules[index];
+
+            if (sch.IndoorMode == EIndoorMode.NotUsed)
+            {
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalCapacity].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalPowerInput].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalEER_COP].Row = null;
+
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalRatedCapacity].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalCapacityRatio].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalRatedPowerInput].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalPowerInputRatio].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalRatedEER_COP].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalEER_COPRatio].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalRatedCurrent].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalCurrentRatio].Row = null;
+
+                Measure.TotalRateds[(int)EMeasTotalRated.IDU_PowerInput].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.IDU_Voltage].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.IDU_Current].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.IDU_Frequency].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.IDU_PowerFactor].Row = null;
+
+                Measure.TotalRateds[(int)EMeasTotalRated.ODU_PowerInput].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.ODU_Voltage].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.ODU_Current].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.ODU_Frequency].Row = null;
+                Measure.TotalRateds[(int)EMeasTotalRated.ODU_PowerFactor].Row = null;
+            }
+            else
+            {
+                rateds = Condition.Rateds[EConditionRated.Total];
+                Value.Const["Total.Rated.Capacity"].Value = rateds[(int)sch.IndoorMode].Capacity;
+                Value.Const["Total.Rated.Power"].Value = rateds[(int)sch.IndoorMode].PowerInput;
+                Value.Const["Total.Rated.EER_COP"].Value = rateds[(int)sch.IndoorMode].EER_COP;
+                Value.Const["Total.Rated.Voltage"].Value = rateds[(int)sch.IndoorMode].Voltage;
+                Value.Const["Total.Rated.Current"].Value = rateds[(int)sch.IndoorMode].Current;
+
+                try
+                {
+                    Value.Const["Total.Rated.Frequency"].Value = float.Parse(rateds[(int)sch.IndoorMode].Frequency);
+                }
+                catch
+                {
+                    Value.Const["Total.Rated.Frequency"].Value = 0;
+                }
+
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalCapacity].Row = Value.Calcurated["Total.Capacity"];
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalPowerInput].Row = Value.Calcurated["Total.Power"];
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalEER_COP].Row = Value.Calcurated["Total.EER_COP"];
+
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalRatedCapacity].Row = Value.Const["Total.Rated.Capacity"];
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalCapacityRatio].Row = Value.Calcurated["Total.Capacity.Ratio"];
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalRatedPowerInput].Row = Value.Const["Total.Rated.Power"];
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalPowerInputRatio].Row = Value.Calcurated["Total.Power.Ratio"];
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalRatedEER_COP].Row = Value.Const["Total.Rated.EER_COP"];
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalEER_COPRatio].Row = Value.Calcurated["Total.EER_COP.Ratio"];
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalRatedCurrent].Row = Value.Const["Total.Rated.Current"];
+                Measure.TotalRateds[(int)EMeasTotalRated.TotalCurrentRatio].Row = Value.Calcurated["Total.Current.Ratio"];
+
+                if (sch.Indoor1Mode != EIndoorMode.NotUsed)
+                {
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_PowerInput].Row = Value.Calcurated["ID1.IDU.Power"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_Voltage].Row = Value.Calcurated["ID1.IDU.Voltage"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_Current].Row = Value.Calcurated["ID1.IDU.Current"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_Frequency].Row = Value.Calcurated["ID1.IDU.Frequency"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_PowerFactor].Row = Value.Calcurated["ID1.IDU.Power.Factor"];
+
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_PowerInput].Row = Value.Calcurated["ID1.ODU.Power"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_Voltage].Row = Value.Calcurated["ID1.ODU.Voltage"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_Current].Row = Value.Calcurated["ID1.ODU.Current"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_Frequency].Row = Value.Calcurated["ID1.ODU.Frequency"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_PowerFactor].Row = Value.Calcurated["ID1.ODU.Power.Factor"];
+                }
+                else if (sch.Indoor2Mode != EIndoorMode.NotUsed)
+                {
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_PowerInput].Row = Value.Calcurated["ID2.IDU.Power"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_Voltage].Row = Value.Calcurated["ID2.IDU.Voltage"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_Current].Row = Value.Calcurated["ID2.IDU.Current"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_Frequency].Row = Value.Calcurated["ID2.IDU.Frequency"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_PowerFactor].Row = Value.Calcurated["ID2.IDU.Power.Factor"];
+
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_PowerInput].Row = Value.Calcurated["ID2.ODU.Power"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_Voltage].Row = Value.Calcurated["ID2.ODU.Voltage"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_Current].Row = Value.Calcurated["ID2.ODU.Current"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_Frequency].Row = Value.Calcurated["ID2.ODU.Frequency"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_PowerFactor].Row = Value.Calcurated["ID2.ODU.Power.Factor"];
+                }
+                else
+                {
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_PowerInput].Row = Value.Calcurated["ID1.IDU.Power"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_Voltage].Row = Value.Calcurated["ID1.IDU.Voltage"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_Current].Row = Value.Calcurated["ID1.IDU.Current"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_Frequency].Row = Value.Calcurated["ID1.IDU.Frequency"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.IDU_PowerFactor].Row = Value.Calcurated["ID1.IDU.Power.Factor"];
+
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_PowerInput].Row = Value.Calcurated["ID1.ODU.Power"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_Voltage].Row = Value.Calcurated["ID1.ODU.Voltage"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_Current].Row = Value.Calcurated["ID1.ODU.Current"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_Frequency].Row = Value.Calcurated["ID1.ODU.Frequency"];
+                    Measure.TotalRateds[(int)EMeasTotalRated.ODU_PowerFactor].Row = Value.Calcurated["ID1.ODU.Power.Factor"];
+                }
+            }
+
+            if (sch.IndoorMode == EIndoorMode.NotUsed)
+            {
+                Measure.Rateds[(int)EMeasRated.Capacity].Row = null;
+                Measure.Rateds[(int)EMeasRated.PowerInput].Row = null;
+                Measure.Rateds[(int)EMeasRated.EER_COP].Row = null;
+                Measure.Rateds[(int)EMeasRated.IDU_Voltage].Row = null;
+                Measure.Rateds[(int)EMeasRated.IDU_Current].Row = null;
+                Measure.Rateds[(int)EMeasRated.IDU_Frequency].Row = null;
+                Measure.Rateds[(int)EMeasRated.IDU_SelectedPM].Row = null;
+                Measure.Rateds[(int)EMeasRated.ODU_SelectedPM].Row = null;
+                Measure.Rateds[(int)EMeasRated.ODU_Phase].Row = null;
+            }
+            else
+            {
+                Measure.Rateds[(int)EMeasRated.Capacity].Row = Value.Const["Total.Rated.Capacity"];
+                Measure.Rateds[(int)EMeasRated.PowerInput].Row = Value.Const["Total.Rated.Power"];
+                Measure.Rateds[(int)EMeasRated.EER_COP].Row = Value.Const["Total.Rated.EER_COP"];
+                Measure.Rateds[(int)EMeasRated.IDU_Voltage].Row = Value.Const["Total.Rated.Voltage"];
+                Measure.Rateds[(int)EMeasRated.IDU_Current].Row = Value.Const["Total.Rated.Current"];
+                Measure.Rateds[(int)EMeasRated.IDU_Frequency].Row = Value.Const["Total.Rated.Frequency"];
+                Measure.Rateds[(int)EMeasRated.IDU_SelectedPM].Value = GetNameIDU(rateds[(int)sch.IndoorMode].PM_IDU);
+                Measure.Rateds[(int)EMeasRated.ODU_SelectedPM].Value = GetNameODU(rateds[(int)sch.IndoorMode].PM_ODU);
+                Measure.Rateds[(int)EMeasRated.ODU_Phase].Value = EnumHelper.GetNames<EWT330Wiring>()[(int)rateds[(int)sch.IndoorMode].Wiring];
+            }
+
+            if (sch.Indoor1Mode == EIndoorMode.NotUsed)
+            {
+                foreach (EMeasAirSide airSide in Enum.GetValues(typeof(EMeasAirSide)))
+                {
+                    Measure.AirSides[(int)airSide].Indoor11Enabled = false;
+                    Measure.AirSides[(int)airSide].Indoor12Enabled = false;
+                }
+
+                Measure.AirSides[(int)EMeasAirSide.EnteringDB].Indoor11Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.EnteringWB].Indoor11Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.EnteringRH].Indoor11Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.LeavingDB].Indoor11Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.LeavingWB].Indoor11Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.LeavingRH].Indoor11Enabled = true;
+
+                Measure.AirSides[(int)EMeasAirSide.EnteringDB].Indoor12Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.EnteringWB].Indoor12Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.EnteringRH].Indoor12Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.LeavingDB].Indoor12Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.LeavingWB].Indoor12Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.LeavingRH].Indoor12Enabled = true;
+
+                foreach (EMeasNozzle nozzle in Enum.GetValues(typeof(EMeasNozzle)))
+                {
+                    Measure.Nozzles[(int)nozzle].ID11Enabled = false;
+                    Measure.Nozzles[(int)nozzle].ID12Enabled = false;
+                }
+            }
+            else
+            {
+                if (sch.Indoor1Mode1 == EIndoorMode.NotUsed)
+                {
+                    foreach (EMeasAirSide airSide in Enum.GetValues(typeof(EMeasAirSide)))
+                    {
+                        Measure.AirSides[(int)airSide].Indoor11Enabled = false;
+                    }
+
+                    Measure.AirSides[(int)EMeasAirSide.EnteringDB].Indoor11Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.EnteringWB].Indoor11Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.EnteringRH].Indoor11Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.LeavingDB].Indoor11Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.LeavingWB].Indoor11Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.LeavingRH].Indoor11Enabled = true;
+
+                    foreach (EMeasNozzle nozzle in Enum.GetValues(typeof(EMeasNozzle)))
+                    {
+                        Measure.Nozzles[(int)nozzle].ID11Enabled = false;
+                    }
+                }
+                else
+                {
+                    foreach (EMeasAirSide airSide in Enum.GetValues(typeof(EMeasAirSide)))
+                    {
+                        Measure.AirSides[(int)airSide].Indoor11Enabled = true;
+                    }
+
+                    foreach (EMeasNozzle nozzle in Enum.GetValues(typeof(EMeasNozzle)))
+                    {
+                        Measure.Nozzles[(int)nozzle].ID11Enabled = true;
+                    }
+                }
+
+                if (sch.Indoor1Mode2 == EIndoorMode.NotUsed)
+                {
+                    foreach (EMeasAirSide airSide in Enum.GetValues(typeof(EMeasAirSide)))
+                    {
+                        Measure.AirSides[(int)airSide].Indoor12Enabled = false;
+                    }
+
+                    Measure.AirSides[(int)EMeasAirSide.EnteringDB].Indoor12Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.EnteringWB].Indoor12Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.EnteringRH].Indoor12Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.LeavingDB].Indoor12Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.LeavingWB].Indoor12Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.LeavingRH].Indoor12Enabled = true;
+
+                    foreach (EMeasNozzle nozzle in Enum.GetValues(typeof(EMeasNozzle)))
+                    {
+                        Measure.Nozzles[(int)nozzle].ID12Enabled = false;
+                    }
+                }
+                else
+                {
+                    foreach (EMeasAirSide airSide in Enum.GetValues(typeof(EMeasAirSide)))
+                    {
+                        Measure.AirSides[(int)airSide].Indoor12Enabled = true;
+                    }
+
+                    foreach (EMeasNozzle nozzle in Enum.GetValues(typeof(EMeasNozzle)))
+                    {
+                        Measure.Nozzles[(int)nozzle].ID12Enabled = true;
+                    }
+                }
+            }
+
+            if (sch.Indoor2Mode == EIndoorMode.NotUsed)
+            {
+                foreach (EMeasAirSide airSide in Enum.GetValues(typeof(EMeasAirSide)))
+                {
+                    Measure.AirSides[(int)airSide].Indoor21Enabled = false;
+                    Measure.AirSides[(int)airSide].Indoor22Enabled = false;
+                }
+
+                Measure.AirSides[(int)EMeasAirSide.EnteringDB].Indoor21Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.EnteringWB].Indoor21Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.EnteringRH].Indoor21Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.LeavingDB].Indoor21Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.LeavingWB].Indoor21Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.LeavingRH].Indoor21Enabled = true;
+
+                Measure.AirSides[(int)EMeasAirSide.EnteringDB].Indoor22Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.EnteringWB].Indoor22Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.EnteringRH].Indoor22Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.LeavingDB].Indoor22Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.LeavingWB].Indoor22Enabled = true;
+                Measure.AirSides[(int)EMeasAirSide.LeavingRH].Indoor22Enabled = true;
+
+                foreach (EMeasNozzle nozzle in Enum.GetValues(typeof(EMeasNozzle)))
+                {
+                    Measure.Nozzles[(int)nozzle].ID21Enabled = false;
+                    Measure.Nozzles[(int)nozzle].ID22Enabled = false;
+                }
+            }
+            else
+            {
+                if (sch.Indoor2Mode1 == EIndoorMode.NotUsed)
+                {
+                    foreach (EMeasAirSide airSide in Enum.GetValues(typeof(EMeasAirSide)))
+                    {
+                        Measure.AirSides[(int)airSide].Indoor21Enabled = false;
+                    }
+
+                    Measure.AirSides[(int)EMeasAirSide.EnteringDB].Indoor21Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.EnteringWB].Indoor21Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.EnteringRH].Indoor21Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.LeavingDB].Indoor21Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.LeavingWB].Indoor21Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.LeavingRH].Indoor21Enabled = true;
+
+                    foreach (EMeasNozzle nozzle in Enum.GetValues(typeof(EMeasNozzle)))
+                    {
+                        Measure.Nozzles[(int)nozzle].ID21Enabled = false;
+                    }
+                }
+                else
+                {
+                    foreach (EMeasAirSide airSide in Enum.GetValues(typeof(EMeasAirSide)))
+                    {
+                        Measure.AirSides[(int)airSide].Indoor21Enabled = true;
+                    }
+
+                    foreach (EMeasNozzle nozzle in Enum.GetValues(typeof(EMeasNozzle)))
+                    {
+                        Measure.Nozzles[(int)nozzle].ID21Enabled = true;
+                    }
+                }
+
+                if (sch.Indoor2Mode2 == EIndoorMode.NotUsed)
+                {
+                    foreach (EMeasAirSide airSide in Enum.GetValues(typeof(EMeasAirSide)))
+                    {
+                        Measure.AirSides[(int)airSide].Indoor22Enabled = false;
+                    }
+
+                    Measure.AirSides[(int)EMeasAirSide.EnteringDB].Indoor22Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.EnteringWB].Indoor22Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.EnteringRH].Indoor22Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.LeavingDB].Indoor22Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.LeavingWB].Indoor22Enabled = true;
+                    Measure.AirSides[(int)EMeasAirSide.LeavingRH].Indoor22Enabled = true;
+
+                    foreach (EMeasNozzle nozzle in Enum.GetValues(typeof(EMeasNozzle)))
+                    {
+                        Measure.Nozzles[(int)nozzle].ID22Enabled = false;
+                    }
+                }
+                else
+                {
+                    foreach (EMeasAirSide airSide in Enum.GetValues(typeof(EMeasAirSide)))
+                    {
+                        Measure.AirSides[(int)airSide].Indoor22Enabled = true;
+                    }
+
+                    foreach (EMeasNozzle nozzle in Enum.GetValues(typeof(EMeasNozzle)))
+                    {
+                        Measure.Nozzles[(int)nozzle].ID22Enabled = true;
+                    }
+                }
+            }
+
+            if (sch.OutdoorUse == EOutdoorUse.NotUsed)
+            {
+                Measure.Outsides[(int)EMeasOutside.EnteringDB].Value = "-";
+                Measure.Outsides[(int)EMeasOutside.EnteringWB].Value = "-";
+                Measure.Outsides[(int)EMeasOutside.EnteringDP].Value = "-";
+                Measure.Outsides[(int)EMeasOutside.EnteringRH].Value = "-";
+            }
+            else
+            {
+                Measure.Outsides[(int)EMeasOutside.EnteringDB].Value = "";
+                Measure.Outsides[(int)EMeasOutside.EnteringWB].Value = "";
+                Measure.Outsides[(int)EMeasOutside.EnteringDP].Value = "";
+                Measure.Outsides[(int)EMeasOutside.EnteringRH].Value = "";
+            }
+
+            // Note
+            Measure.Notes[(int)EMeasNote.Company].Value = Condition.Note.Company;
+            Measure.Notes[(int)EMeasNote.TestName].Value = Condition.Note.Name;
+            Measure.Notes[(int)EMeasNote.TestNo].Value = Condition.Note.No;
+            Measure.Notes[(int)EMeasNote.Observer].Value = Condition.Note.Observer;
+            Measure.Notes[(int)EMeasNote.Maker].Value = Condition.Note.Maker;
+            Measure.Notes[(int)EMeasNote.Model1].Value = Condition.Note.Model1;
+            Measure.Notes[(int)EMeasNote.SerialNo1].Value = Condition.Note.Serial1;
+            Measure.Notes[(int)EMeasNote.Model2].Value = Condition.Note.Model2;
+            Measure.Notes[(int)EMeasNote.SerialNo2].Value = Condition.Note.Serial2;
+            Measure.Notes[(int)EMeasNote.Model3].Value = Condition.Note.Model3;
+            Measure.Notes[(int)EMeasNote.SerialNo3].Value = Condition.Note.Serial3;
+            Measure.Notes[(int)EMeasNote.ExpDevice].Value = Condition.Note.ExpDevice;
+            Measure.Notes[(int)EMeasNote.Refrigerant].Value = Condition.Note.Refrigerant;
+            Measure.Notes[(int)EMeasNote.RefCharge].Value = Condition.Note.RefCharge;
+            Measure.Notes[(int)EMeasNote.Memo].Value = Condition.Note.Memo;
+
+            // Method
+            Measure.Methods[(int)EMeasMethod.Method].Value = $"{Condition.Method.IntegralTime}min / {Condition.Method.IntegralCount}times";
+            Measure.Methods[(int)EMeasMethod.ScanTime].Value = $"{Condition.Method.ScanTime} sec";
+
+            //Indoor1 #1
+            Measure.Indoors11[(int)EMeasIndoor.Use].Value = EnumHelper.GetNames<EIndoorUse>()[(int)Condition.Schedules[index].Indoor1Use];
+            Measure.Indoors11[(int)EMeasIndoor.Mode].Value = EnumHelper.GetNames<EIndoorMode>()[(int)Condition.Schedules[index].Indoor1Mode1];
+            Measure.Indoors11[(int)EMeasIndoor.Duct].Value = EnumHelper.GetNames<EIndoorDuct>()[(int)Condition.Schedules[index].Indoor1Duct1];
+            Measure.Indoors11[(int)EMeasIndoor.DB].Value = Condition.Schedules[index].Indoor1DB.ToString();
+            Measure.Indoors11[(int)EMeasIndoor.DB].Unit = Condition.Method.Temperature.ToDescription();
+            Measure.Indoors11[(int)EMeasIndoor.WB].Value = Condition.Schedules[index].Indoor1WB.ToString();
+            Measure.Indoors11[(int)EMeasIndoor.WB].Unit = Condition.Method.Temperature.ToDescription();
+
+            //Indoor1 #2
+            Measure.Indoors12[(int)EMeasIndoor.Use].Value = EnumHelper.GetNames<EIndoorUse>()[(int)Condition.Schedules[index].Indoor1Use];
+            Measure.Indoors12[(int)EMeasIndoor.Mode].Value = EnumHelper.GetNames<EIndoorMode>()[(int)Condition.Schedules[index].Indoor1Mode2];
+            Measure.Indoors12[(int)EMeasIndoor.Duct].Value = EnumHelper.GetNames<EIndoorDuct>()[(int)Condition.Schedules[index].Indoor1Duct2];
+            Measure.Indoors12[(int)EMeasIndoor.DB].Value = Condition.Schedules[index].Indoor1DB.ToString();
+            Measure.Indoors12[(int)EMeasIndoor.DB].Unit = Condition.Method.Temperature.ToDescription();
+            Measure.Indoors12[(int)EMeasIndoor.WB].Value = Condition.Schedules[index].Indoor1WB.ToString();
+            Measure.Indoors12[(int)EMeasIndoor.WB].Unit = Condition.Method.Temperature.ToDescription();
+
+            //Indoor2 #1
+            Measure.Indoors21[(int)EMeasIndoor.Use].Value = EnumHelper.GetNames<EIndoorUse>()[(int)Condition.Schedules[index].Indoor2Use];
+            Measure.Indoors21[(int)EMeasIndoor.Mode].Value = EnumHelper.GetNames<EIndoorMode>()[(int)Condition.Schedules[index].Indoor2Mode1];
+            Measure.Indoors21[(int)EMeasIndoor.Duct].Value = EnumHelper.GetNames<EIndoorDuct>()[(int)Condition.Schedules[index].Indoor2Duct1];
+            Measure.Indoors21[(int)EMeasIndoor.DB].Value = Condition.Schedules[index].Indoor2DB.ToString();
+            Measure.Indoors21[(int)EMeasIndoor.DB].Unit = Condition.Method.Temperature.ToDescription();
+            Measure.Indoors21[(int)EMeasIndoor.WB].Value = Condition.Schedules[index].Indoor2WB.ToString();
+            Measure.Indoors21[(int)EMeasIndoor.WB].Unit = Condition.Method.Temperature.ToDescription();
+
+            //Indoor2 #2
+            Measure.Indoors22[(int)EMeasIndoor.Use].Value = EnumHelper.GetNames<EIndoorUse>()[(int)Condition.Schedules[index].Indoor2Use];
+            Measure.Indoors22[(int)EMeasIndoor.Mode].Value = EnumHelper.GetNames<EIndoorMode>()[(int)Condition.Schedules[index].Indoor2Mode2];
+            Measure.Indoors22[(int)EMeasIndoor.Duct].Value = EnumHelper.GetNames<EIndoorDuct>()[(int)Condition.Schedules[index].Indoor2Duct2];
+            Measure.Indoors22[(int)EMeasIndoor.DB].Value = Condition.Schedules[index].Indoor2DB.ToString();
+            Measure.Indoors22[(int)EMeasIndoor.DB].Unit = Condition.Method.Temperature.ToDescription();
+            Measure.Indoors22[(int)EMeasIndoor.WB].Value = Condition.Schedules[index].Indoor2WB.ToString();
+            Measure.Indoors22[(int)EMeasIndoor.WB].Unit = Condition.Method.Temperature.ToDescription();
+
+            //Outdoor
+            Measure.Outdoors[(int)EMeasOutdoor.Use].Value = EnumHelper.GetNames<EOutdoorUse>()[(int)Condition.Schedules[index].OutdoorUse];
+            Measure.Outdoors[(int)EMeasOutdoor.DPSensor].Value = EnumHelper.GetNames<EEtcUse>()[(int)Condition.Schedules[index].OutdoorDpSensor];
+            Measure.Outdoors[(int)EMeasOutdoor.AutoVoltage].Value = EnumHelper.GetNames<EEtcUse>()[(int)Condition.Schedules[index].OutdoorAutoVolt];
+            Measure.Outdoors[(int)EMeasIndoor.DB].Value = Condition.Schedules[index].OutdoorDB.ToString();
+            Measure.Outdoors[(int)EMeasIndoor.DB].Unit = Condition.Method.Temperature.ToDescription();
+            Measure.Outdoors[(int)EMeasIndoor.WB].Value = Condition.Schedules[index].OutdoorWB.ToString();
+            Measure.Outdoors[(int)EMeasIndoor.WB].Unit = Condition.Method.Temperature.ToDescription();
+
+            for (int i = 0; i < Condition.TC1.Count; i++)
+            {
+                if (Condition.TC1[i].Name.Trim() != "")
+                {
+                    Measure.IndoorTC1[i].Value = "";
+                    Measure.IndoorTC1[i].Unit = "";
+                    Measure.IndoorTC1[i].Name = Condition.TC1[i].Name.Trim();
+                }
+                else
+                {
+                    Measure.IndoorTC1[i].Value = "-";
+                    Measure.IndoorTC1[i].Unit = "-";
+                    Measure.IndoorTC1[i].Name = "-";
+                }
+            }
+
+            for (int i = 0; i < Condition.TC2.Count; i++)
+            {
+                if (Condition.TC2[i].Name.Trim() != "")
+                {
+                    Measure.IndoorTC2[i].Value = "";
+                    Measure.IndoorTC2[i].Unit = "";
+                    Measure.IndoorTC2[i].Name = Condition.TC2[i].Name.Trim();
+                }
+                else
+                {
+                    Measure.IndoorTC2[i].Value = "-";
+                    Measure.IndoorTC2[i].Unit = "-";
+                    Measure.IndoorTC2[i].Name = "-";
+                }
+            }
+
+            for (int i = 0; i < Condition.TC3.Count; i++)
+            {
+                if (Condition.TC3[i].Name.Trim() != "")
+                {
+                    Measure.OutdoorTC[i].Value = "";
+                    Measure.OutdoorTC[i].Unit = "";
+                    Measure.OutdoorTC[i].Name = Condition.TC3[i].Name.Trim();
+                }
+                else
+                {
+                    Measure.OutdoorTC[i].Value = "-";
+                    Measure.OutdoorTC[i].Unit = "-";
+                    Measure.OutdoorTC[i].Name = "-";
+                }
+            }
+
+            for (int i = 0; i < Condition.Pressures.Count; i++)
+            {
+                if (Condition.Pressures[i].Name.Trim() != "")
+                {
+                    Measure.Pressures[i].Value = "";
+                    Measure.Pressures[i].Unit = "";
+                    Measure.Pressures[i].Name = Condition.Pressures[i].Name.Trim();
+                }
+                else
+                {
+                    Measure.Pressures[i].Value = "-";
+                    Measure.Pressures[i].Unit = "-";
+                    Measure.Pressures[i].Name = "-";
+                }
+            }
+        }
+
+        public void Calcurate(int index)
+        {
+            Value.Lock();
+
+            try
+            {
+                InitializeCalc();
+                SetPowerMeterValues(index);
+                MainCalc(index);
+                FinalizeCalc();
+            }
+            finally
+            {
+                Value.Unlock();
+            }
+        }
+
+        private void MainCalc(int index)
+        {
+            ConditionSchedule sch = Condition.Schedules[index];
+            Dictionary<string, ValueRow> inVar = new Dictionary<string, ValueRow>();
+            Dictionary<string, ValueRow> outVar = new Dictionary<string, ValueRow>();
+
+            inVar.Clear();
+            inVar.Add("Entering DB", Value.Measured["ID11.Entering.DB"]);
+            inVar.Add("Entering WB", Value.Measured["ID11.Entering.WB"]);
+            inVar.Add("Leaving DB", Value.Measured["ID11.Leaving.DB"]);
+            inVar.Add("Leaving WB", Value.Measured["ID11.Leaving.WB"]);
+            inVar.Add("Nozzle1", Value.Measured["ID11.Nozzle1"]);
+            inVar.Add("Nozzle2", Value.Measured["ID11.Nozzle2"]);
+            inVar.Add("Nozzle3", Value.Measured["ID11.Nozzle3"]);
+            inVar.Add("Nozzle4", Value.Measured["ID11.Nozzle4"]);
+            inVar.Add("Nozzle Diff Pressure", Value.Measured["ID11.Nozzle.Diff.Pressure"]);
+            inVar.Add("Atmospheric Pressure", Value.Measured["ID1.Atm.Pressure"]);
+            inVar.Add("Static Pressure", Value.Measured["ID11.Static.Pressure"]);
+            inVar.Add("Nozzle Inlet Temp", Value.Measured["ID11.Nozzle.Inlet.Temp"]);
+
+            outVar.Clear();
+            outVar.Add("Capacity", Value.Calcurated["ID11.Capacity"]);
+            outVar.Add("Drain Weight", Value.Calcurated["ID11.Drain.Weight"]);
+            outVar.Add("Latent Heat", Value.Calcurated["ID11.Latent.Heat"]);
+            outVar.Add("Sensible Heat", Value.Calcurated["ID11.Sensible.Heat"]);
+            outVar.Add("Sensible Heat Ratio", Value.Calcurated["ID11.Sensible.Heat.Ratio"]);
+            outVar.Add("Heat Leakage", Value.Calcurated["ID11.Heat.Leakage"]);
+            outVar.Add("Entering RH", Value.Calcurated["ID11.Entering.RH"]);
+            outVar.Add("Leaving RH", Value.Calcurated["ID11.Leaving.RH"]);
+            outVar.Add("Entering Enthalpy", Value.Calcurated["ID11.Entering.Enthalpy"]);
+            outVar.Add("Leaving Enthalpy", Value.Calcurated["ID11.Leaving.Enthalpy"]);
+            outVar.Add("Entering Humidity Ratio", Value.Calcurated["ID11.Entering.Humidity.Ratio"]);
+            outVar.Add("Leaving Humidity Ratio", Value.Calcurated["ID11.Leaving.Humidity.Ratio"]);
+            outVar.Add("Leaving Specific Heat", Value.Calcurated["ID11.Leaving.Specific.Heat"]);
+            outVar.Add("Leaving Specific Volume", Value.Calcurated["ID11.Leaving.Specific.Volume"]);
+            outVar.Add("Air Flow [Lev]", Value.Calcurated["ID11.Air.Flow.Lev"]);
+            outVar.Add("Air Velocity [Lev]", Value.Calcurated["ID11.Air.Velocity.Lev"]);
+
+            CalcAir(Resource.Settings.Coefficients[0], sch.Indoor1Mode1, sch.Indoor1Duct1, inVar, outVar);
+
+            try
+            {
+                Value.Calcurated["ID11.Capacity.Ratio"].Value =
+                    Value.Calcurated["ID11.Capacity"].Raw / Condition.Rateds[EConditionRated.ID11].Capacity * 100.0f;
+            }
+            catch
+            {
+                Value.Calcurated["ID11.Capacity.Ratio"].Value = 0;
+            }
+
+            inVar.Clear();
+            inVar.Add("Entering DB", Value.Measured["ID12.Entering.DB"]);
+            inVar.Add("Entering WB", Value.Measured["ID12.Entering.WB"]);
+            inVar.Add("Leaving DB", Value.Measured["ID12.Leaving.DB"]);
+            inVar.Add("Leaving WB", Value.Measured["ID12.Leaving.WB"]);
+            inVar.Add("Nozzle1", Value.Measured["ID12.Nozzle1"]);
+            inVar.Add("Nozzle2", Value.Measured["ID12.Nozzle2"]);
+            inVar.Add("Nozzle3", Value.Measured["ID12.Nozzle3"]);
+            inVar.Add("Nozzle4", Value.Measured["ID12.Nozzle4"]);
+            inVar.Add("Nozzle Diff Pressure", Value.Measured["ID12.Nozzle.Diff.Pressure"]);
+            inVar.Add("Atmospheric Pressure", Value.Measured["ID1.Atm.Pressure"]);
+            inVar.Add("Static Pressure", Value.Measured["ID12.Static.Pressure"]);
+            inVar.Add("Nozzle Inlet Temp", Value.Measured["ID12.Nozzle.Inlet.Temp"]);
+
+            outVar.Clear();
+            outVar.Add("Capacity", Value.Calcurated["ID12.Capacity"]);
+            outVar.Add("Drain Weight", Value.Calcurated["ID12.Drain.Weight"]);
+            outVar.Add("Latent Heat", Value.Calcurated["ID12.Latent.Heat"]);
+            outVar.Add("Sensible Heat", Value.Calcurated["ID12.Sensible.Heat"]);
+            outVar.Add("Sensible Heat Ratio", Value.Calcurated["ID12.Sensible.Heat.Ratio"]);
+            outVar.Add("Heat Leakage", Value.Calcurated["ID12.Heat.Leakage"]);
+            outVar.Add("Entering RH", Value.Calcurated["ID12.Entering.RH"]);
+            outVar.Add("Leaving RH", Value.Calcurated["ID12.Leaving.RH"]);
+            outVar.Add("Entering Enthalpy", Value.Calcurated["ID12.Entering.Enthalpy"]);
+            outVar.Add("Leaving Enthalpy", Value.Calcurated["ID12.Leaving.Enthalpy"]);
+            outVar.Add("Entering Humidity Ratio", Value.Calcurated["ID12.Entering.Humidity.Ratio"]);
+            outVar.Add("Leaving Humidity Ratio", Value.Calcurated["ID12.Leaving.Humidity.Ratio"]);
+            outVar.Add("Leaving Specific Heat", Value.Calcurated["ID12.Leaving.Specific.Heat"]);
+            outVar.Add("Leaving Specific Volume", Value.Calcurated["ID12.Leaving.Specific.Volume"]);
+            outVar.Add("Air Flow [Lev]", Value.Calcurated["ID12.Air.Flow.Lev"]);
+            outVar.Add("Air Velocity [Lev]", Value.Calcurated["ID12.Air.Velocity.Lev"]);
+
+            CalcAir(Resource.Settings.Coefficients[1], sch.Indoor1Mode2, sch.Indoor1Duct2, inVar, outVar);
+
+            try
+            {
+                Value.Calcurated["ID12.Capacity.Ratio"].Value =
+                    Value.Calcurated["ID12.Capacity"].Raw / Condition.Rateds[EConditionRated.ID12].Capacity * 100.0f;
+            }
+            catch
+            {
+                Value.Calcurated["ID12.Capacity.Ratio"].Value = 0;
+            }
+
+            inVar.Clear();
+            inVar.Add("Entering DB", Value.Measured["ID21.Entering.DB"]);
+            inVar.Add("Entering WB", Value.Measured["ID21.Entering.WB"]);
+            inVar.Add("Leaving DB", Value.Measured["ID21.Leaving.DB"]);
+            inVar.Add("Leaving WB", Value.Measured["ID21.Leaving.WB"]);
+            inVar.Add("Nozzle1", Value.Measured["ID21.Nozzle1"]);
+            inVar.Add("Nozzle2", Value.Measured["ID21.Nozzle2"]);
+            inVar.Add("Nozzle3", Value.Measured["ID21.Nozzle3"]);
+            inVar.Add("Nozzle4", Value.Measured["ID21.Nozzle4"]);
+            inVar.Add("Nozzle Diff Pressure", Value.Measured["ID21.Nozzle.Diff.Pressure"]);
+            inVar.Add("Atmospheric Pressure", Value.Measured["ID2.Atm.Pressure"]);
+            inVar.Add("Static Pressure", Value.Measured["ID21.Static.Pressure"]);
+            inVar.Add("Nozzle Inlet Temp", Value.Measured["ID21.Nozzle.Inlet.Temp"]);
+
+            outVar.Clear();
+            outVar.Add("Capacity", Value.Calcurated["ID21.Capacity"]);
+            outVar.Add("Drain Weight", Value.Calcurated["ID21.Drain.Weight"]);
+            outVar.Add("Latent Heat", Value.Calcurated["ID21.Latent.Heat"]);
+            outVar.Add("Sensible Heat", Value.Calcurated["ID21.Sensible.Heat"]);
+            outVar.Add("Sensible Heat Ratio", Value.Calcurated["ID21.Sensible.Heat.Ratio"]);
+            outVar.Add("Heat Leakage", Value.Calcurated["ID21.Heat.Leakage"]);
+            outVar.Add("Entering RH", Value.Calcurated["ID21.Entering.RH"]);
+            outVar.Add("Leaving RH", Value.Calcurated["ID21.Leaving.RH"]);
+            outVar.Add("Entering Enthalpy", Value.Calcurated["ID21.Entering.Enthalpy"]);
+            outVar.Add("Leaving Enthalpy", Value.Calcurated["ID21.Leaving.Enthalpy"]);
+            outVar.Add("Entering Humidity Ratio", Value.Calcurated["ID21.Entering.Humidity.Ratio"]);
+            outVar.Add("Leaving Humidity Ratio", Value.Calcurated["ID21.Leaving.Humidity.Ratio"]);
+            outVar.Add("Leaving Specific Heat", Value.Calcurated["ID21.Leaving.Specific.Heat"]);
+            outVar.Add("Leaving Specific Volume", Value.Calcurated["ID21.Leaving.Specific.Volume"]);
+            outVar.Add("Air Flow [Lev]", Value.Calcurated["ID21.Air.Flow.Lev"]);
+            outVar.Add("Air Velocity [Lev]", Value.Calcurated["ID21.Air.Velocity.Lev"]);
+
+            CalcAir(Resource.Settings.Coefficients[2], sch.Indoor2Mode1, sch.Indoor2Duct1, inVar, outVar);
+
+            try
+            {
+                Value.Calcurated["ID21.Capacity.Ratio"].Value =
+                    Value.Calcurated["ID21.Capacity"].Raw / Condition.Rateds[EConditionRated.ID21].Capacity * 100.0f;
+            }
+            catch
+            {
+                Value.Calcurated["ID21.Capacity.Ratio"].Value = 0;
+            }
+
+            inVar.Clear();
+            inVar.Add("Entering DB", Value.Measured["ID22.Entering.DB"]);
+            inVar.Add("Entering WB", Value.Measured["ID22.Entering.WB"]);
+            inVar.Add("Leaving DB", Value.Measured["ID22.Leaving.DB"]);
+            inVar.Add("Leaving WB", Value.Measured["ID22.Leaving.WB"]);
+            inVar.Add("Nozzle1", Value.Measured["ID22.Nozzle1"]);
+            inVar.Add("Nozzle2", Value.Measured["ID22.Nozzle2"]);
+            inVar.Add("Nozzle3", Value.Measured["ID22.Nozzle3"]);
+            inVar.Add("Nozzle4", Value.Measured["ID22.Nozzle4"]);
+            inVar.Add("Nozzle Diff Pressure", Value.Measured["ID22.Nozzle.Diff.Pressure"]);
+            inVar.Add("Atmospheric Pressure", Value.Measured["ID2.Atm.Pressure"]);
+            inVar.Add("Static Pressure", Value.Measured["ID22.Static.Pressure"]);
+            inVar.Add("Nozzle Inlet Temp", Value.Measured["ID22.Nozzle.Inlet.Temp"]);
+
+            outVar.Clear();
+            outVar.Add("Capacity", Value.Calcurated["ID22.Capacity"]);
+            outVar.Add("Drain Weight", Value.Calcurated["ID22.Drain.Weight"]);
+            outVar.Add("Latent Heat", Value.Calcurated["ID22.Latent.Heat"]);
+            outVar.Add("Sensible Heat", Value.Calcurated["ID22.Sensible.Heat"]);
+            outVar.Add("Sensible Heat Ratio", Value.Calcurated["ID22.Sensible.Heat.Ratio"]);
+            outVar.Add("Heat Leakage", Value.Calcurated["ID22.Heat.Leakage"]);
+            outVar.Add("Entering RH", Value.Calcurated["ID22.Entering.RH"]);
+            outVar.Add("Leaving RH", Value.Calcurated["ID22.Leaving.RH"]);
+            outVar.Add("Entering Enthalpy", Value.Calcurated["ID22.Entering.Enthalpy"]);
+            outVar.Add("Leaving Enthalpy", Value.Calcurated["ID22.Leaving.Enthalpy"]);
+            outVar.Add("Entering Humidity Ratio", Value.Calcurated["ID22.Entering.Humidity.Ratio"]);
+            outVar.Add("Leaving Humidity Ratio", Value.Calcurated["ID22.Leaving.Humidity.Ratio"]);
+            outVar.Add("Leaving Specific Heat", Value.Calcurated["ID22.Leaving.Specific.Heat"]);
+            outVar.Add("Leaving Specific Volume", Value.Calcurated["ID22.Leaving.Specific.Volume"]);
+            outVar.Add("Air Flow [Lev]", Value.Calcurated["ID22.Air.Flow.Lev"]);
+            outVar.Add("Air Velocity [Lev]", Value.Calcurated["ID22.Air.Velocity.Lev"]);
+
+            CalcAir(Resource.Settings.Coefficients[3], sch.Indoor2Mode2, sch.Indoor2Duct2, inVar, outVar);
+
+            try
+            {
+                Value.Calcurated["ID22.Capacity.Ratio"].Value =
+                    Value.Calcurated["ID22.Capacity"].Raw / Condition.Rateds[EConditionRated.ID22].Capacity * 100.0f;
+            }
+            catch
+            {
+                Value.Calcurated["ID22.Capacity.Ratio"].Value = 0;
+            }
+
+            Value.Calcurated["Total.Capacity"].Value =
+                Value.Calcurated["ID11.Capacity"].Raw + Value.Calcurated["ID12.Capacity"].Raw +
+                Value.Calcurated["ID21.Capacity"].Raw + Value.Calcurated["ID22.Capacity"].Raw;
+        }
+
+        private void CalcAir(
+            CoefficientDataRow coefficient, 
+            EIndoorMode mode, 
+            EIndoorDuct duct,
+            Dictionary<string, ValueRow> i, 
+            Dictionary<string, ValueRow> o)
+        {
+            if (mode == EIndoorMode.NotUsed)
+            {
+                foreach (KeyValuePair<string, ValueRow> row in o)
+                {
+                    if (row.Value != null)
+                    {
+                        row.Value.Value = 0;
+                    }
+                }
+                return;
+            }
+
+            double coefCapacity = (mode == EIndoorMode.Cooling) ? coefficient.CoolingCapacity : coefficient.HeatingCapacity;
+            double coefAirFlow = coefficient.Airflow;
+
+            double etd = i["Entering DB"].Raw;
+            double etw = i["Entering WB"].Raw;
+
+            double pb = i["Atmospheric Pressure"].Convert((int)EUnitAtmPressure.mmHg);
+
+            double epds = AirFormula.GetPws(etd); // Entering DB 기준 포화수증기압
+            double epws = AirFormula.GetPws(etw); // Entering WB 기준 포화수증기압
+            double exs = AirFormula.GetXs(pb, epws); // Entering WB 기준 포화절대습도
+            double exw = AirFormula.GetXw(etd, etw, exs); // Entering 절대습도
+
+            // ### 11. Entering RH (상대습도)
+            o["Entering RH"].Value = (float)AirFormula.GetRh(pb, epds, exw, AirFormula.GetU(exw, exs), etd);
+
+
+            double ltd = i["Leaving DB"].Raw;
+            double ltw = i["Leaving WB"].Raw;
+
+            double deltaT = etd - ltd;
+            if (mode == EIndoorMode.Heating) deltaT = -deltaT;
+
+            double qLoss = (float)GetQLoss(coefficient, mode, duct, deltaT);
+
+
+            // ### 1. Capacity (Qac)
+            double qac = 0d;
+
+            double[] noz = GetNozzleCheckedList(i, "Nozzle1", "Nozzle2", "Nozzle3", "Nozzle4");
+            double[] d = GetNozzleValueList(coefficient, noz.Length);
+            double pn = i["Nozzle Diff Pressure"].Convert((int)EUnitDiffPressure.kg_cm2);
+            double pc = i["Static Pressure"].Convert((int)EUnitDiffPressure.kg_cm2);
+            double rho5 = AirFormula.GetRho5(ltd, ltw, pc, pb);
+
+            double lpds = AirFormula.GetPws(ltd); // Leaving DB 기준 포화수증기압
+            double lpws = AirFormula.GetPws(ltw); // Leaving WB 기준 포화수증기압
+            double lxs = AirFormula.GetXs(pb, lpws); // Leaving WB 기준 포화절대습도
+            double lxw = 0d;
+            if (mode == EIndoorMode.Heating)
+                lxw = exw;
+            else
+                lxw = AirFormula.GetXw(ltd, ltw, lxs); // Leaving 절대습도
+
+            double nozzleInletTemp = i["Nozzle Inlet Temp"].Raw;
+            double nvw = AirFormula.GetVw(AirFormula.GetVd(pb, nozzleInletTemp, lxw), lxw); // Nozzle Inlet Temp. 기준 비체적(습공기)
+            double[] vx = AirFormula.GetVx(d, pn, pb, rho5, nozzleInletTemp, nvw); // Nozzle Inlet 기준 노즐통과풍속
+
+            double vw = AirFormula.GetVw(AirFormula.GetVd(pb, ltd, lxw), lxw); // Leaving DB 기준 비체적(습공기)
+            double yex = AirFormula.GetYex(nozzleInletTemp, ltw, pn, pc, pb); // Nozzle Inlet 기준 팽창계수
+            double ga = AirFormula.GetGa(noz, vx, d, yex, pn, AirFormula.GetVd(pb, nozzleInletTemp, lxw)); // Original 풍량
+            ga *= coefAirFlow;
+
+            double vmDry = AirFormula.GetVmDry(ga, vw, nvw, exw); // 체적 풍량
+            double maDry = AirFormula.GetMaDry(ga, AirFormula.GetVd(pb, nozzleInletTemp, lxw)); // 질량 풍량
+
+            if (mode == EIndoorMode.Cooling)
+            {
+                double haI = AirFormula.GetHa(etd, exw);
+                double haO = AirFormula.GetHa(ltd, lxw);
+
+                qac = AirFormula.GetQacCold(maDry, AirFormula.GetVd(pb, nozzleInletTemp, lxw), exw, haI, haO, qLoss); // 체적 풍량, 출구측, 입구측, 입구측, 출구측, 열손실
+            }
+            // Heat
+            else
+            {
+                qac = AirFormula.GetQacHeat(maDry, AirFormula.GetVd(pb, nozzleInletTemp, lxw), lxw, etd, ltd, qLoss);
+            }
+            qac *= coefCapacity; // Capacity 보정계수 적용
+
+            o["Capacity"].Value = (float)qac;
+
+
+            // ### 2. Rated Capacity
+            //o["Rated Capacity"].Value = ratedCondition.Capacity;
+
+
+            // ### 3. Capacity Ratio (Capacity / Rated Capacity)
+            //o["Capacity Ratio"].Value = qac / ratedCondition.Capacity * 100d;
+
+
+            // ### 8. Drain Weight (Gcw)
+            double gcw = 0d;
+            if (mode == EIndoorMode.Cooling)
+            {
+                double xwI = AirFormula.GetXw(etd, etw, exs);
+                double xwO = AirFormula.GetXw(ltd, ltw, lxs);
+
+                gcw = AirFormula.GetGcw(maDry, xwI, xwO);
+            }
+            // Heat
+            else
+            {
+                gcw = 0;
+            }
+            o["Drain Weight"].Value = (float)gcw;
+
+
+            // ### 5. Latent Heat (Qcc)
+            double qcc = 0d;
+
+            if (mode == EIndoorMode.Cooling)
+            {
+                qcc = AirFormula.GetQcc(qac, gcw);
+            }
+            // Heat
+            else
+            {
+                qcc = 0;
+            }
+            o["Latent Heat"].Value = (float)qcc;
+
+
+            // ### 4. Sensible Heat (Qs)
+            double qs = 0d;
+
+            if (mode == EIndoorMode.Cooling)
+            {
+                qs = qac - qcc;
+            }
+            // Heat
+            else
+            {
+                qs = qac;
+            }
+            o["Sensible Heat"].Value = (float)qs;
+
+
+            // ### 6. Sensible Heat Ratio (SHR)
+            o["Sensible Heat Ratio"].Value = (float)AirFormula.GetShr(qac, qs);
+
+
+            // ### 7. Heat Leakage (Qloss)
+            o["Heat Leakage"].Value = (float)qLoss;
+
+            // ### 14. Leaving RH (상대습도)
+            //o["Leaving RH"].Value = AirFormula.GetRh(pb, lpds, lxw, AirFormula.GetU(lxw, lxs), ltd);
+            o["Leaving RH"].Value = (float)AirFormula.GetRh(pb, lpds, AirFormula.GetXw(ltd, ltw, lxs), AirFormula.GetU(lxw, lxs), ltd);
+
+            // ### 15. Entering Enthalpy (Ha)
+            o["Entering Enthalpy"].Value = (float)AirFormula.GetHa(etd, exw);
+
+            // ### 16. Leaving Enthalpy (Ha)
+            o["Leaving Enthalpy"].Value = (float)AirFormula.GetHa(ltd, lxw);
+
+            // ### 17. Entering Humidity Ratio
+            o["Entering Humidity Ratio"].Value = (float)exw;
+
+            // ### 18. Leaving Humidity Ratio
+            o["Leaving Humidity Ratio"].Value = (float)lxw;
+
+            // ### 19. Leaving Specific Heat
+            o["Leaving Specific Heat"].Value = (float)AirFormula.GetCp(lxw);
+
+            // ### 20. Leaving Specific Volume
+            o["Leaving Specific Volume"].Value = (float)AirFormula.GetVw(AirFormula.GetVd(pb, ltd, lxw), lxw);
+
+            // ### 21. Air Flow[Lev]
+            o["Air Flow [Lev]"].Value = (float)vmDry;
+
+            //var fanpower = 0d;
+            //if (fanPowerUse == UseKind.Use)
+            //    fanpower = ((vmDry / 60 * 1000) * 10e-3 * (Math.Abs(pc) * 9.80661358d)) / 0.3d;
+            //o["Fan Power"].Value = fanpower;
+
+            // ### 22. 냉방 시험 시 입구 절대 습도보다 출구 절대 습도가 높을 때
+            if (mode == EIndoorMode.Cooling && exw <= lxw)
+            {
+                //var capacity = qac - Math.Abs(qcc);
+                //o["Capacity"].Value = capacity;
+                o["Drain Weight"].Value = 0.0f;
+                o["Latent Heat"].Value = 0.0f;
+                o["Sensible Heat"].Value = (float)qac;
+                o["Sensible Heat Ratio"].Value = 100.0f;
+            }
+
+            // ### 열교환기 관련 계산 추가 - 2017.08.19  //* 수정 {{{
+            // ### 1. Capacity (Qac)
+            double qLoss2 = (float)GetQLoss(coefficient, mode, duct, deltaT);
+
+            double qac2 = 0d;
+
+            double pb2 = pb - pc / 13.6d;
+            double lxs2 = AirFormula.GetXs(pb2, lpws);
+            double lxw2 = 0d;
+            if (mode == EIndoorMode.Heating)
+                lxw2 = exw;
+            else
+                lxw2 = AirFormula.GetXw(ltd, ltw, lxs2);
+
+            double nvw2 = AirFormula.GetVw(AirFormula.GetVd(pb2, nozzleInletTemp, lxw2), lxw2);
+            double[] vx2 = AirFormula.GetVx(d, pn, pb2, rho5, nozzleInletTemp, nvw2);
+
+            double vw2 = AirFormula.GetVw(AirFormula.GetVd(pb, etd, exw), exw);
+            double vw3 = AirFormula.GetVw(AirFormula.GetVd(pb2, ltd, lxw2), lxw2);
+            double yex2 = AirFormula.GetYex(nozzleInletTemp, ltw, pn, pc, pb2);
+            double ga2 = AirFormula.GetGa(noz, vx2, d, yex2, pn, AirFormula.GetVd(pb2, nozzleInletTemp, lxw2));
+            ga2 *= coefAirFlow;
+
+            double vmDry2 = AirFormula.GetVmDry(ga2, vw2, nvw2, exw); // 체적 풍량.1
+            double vmDry3 = AirFormula.GetVmDry(ga2, vw3, nvw2, exw); // 체적 풍량.２
+            double maDry2 = AirFormula.GetMaDry(ga2, AirFormula.GetVd(pb2, nozzleInletTemp, lxw2)); // 질량 풍량
+
+            if (mode == EIndoorMode.Cooling)
+            {
+                double haI = AirFormula.GetHa(etd, exw);
+                double haO = AirFormula.GetHa(ltd, lxw2);
+
+                qac2 = AirFormula.GetQacCold(maDry2, AirFormula.GetVd(pb2, nozzleInletTemp, lxw2), exw, haI, haO, qLoss2);
+            }
+            // Heat
+            else
+            {
+                qac2 = AirFormula.GetQacHeat(maDry2, AirFormula.GetVd(pb2, nozzleInletTemp, lxw2), lxw, etd, ltd, qLoss2);
+            }
+            qac2 *= coefCapacity;
+
+            // o["Capacity"].Value = qac2;  //* 확인 필요
+
+
+            // ### 2. Drain Weight (Gcw2)
+            double gcw2 = 0d;
+            if (mode == EIndoorMode.Cooling)
+            {
+                double xwI = AirFormula.GetXw(etd, etw, exs);
+                double xwO = AirFormula.GetXw(ltd, ltw, lxs2);
+
+                gcw2 = AirFormula.GetGcw(maDry2, xwI, xwO);
+            }
+            // Heat
+            else
+            {
+                gcw2 = 0;
+            }
+            //o["Drain Weight"].Value = gcw2;  //* 확인 필요
+
+
+            // ### 3. Latent Heat (Qcc2)
+            double qcc2 = 0d;
+
+            if (mode == EIndoorMode.Cooling)
+            {
+                qcc2 = AirFormula.GetQcc(qac2, gcw2);
+            }
+            // Heat
+            else
+            {
+                qcc2 = 0;
+            }
+            //o["Latent Heat"].Value = qcc2;  //* 확인 필요
+
+
+            // ### 4. Sensible Heat (Qs2)
+            double qs2 = 0d;
+
+            if (mode == EIndoorMode.Cooling)
+            {
+                qs2 = qac2 - qcc2;
+            }
+            // Heat
+            else
+            {
+                qs2 = qac2;
+            }
+            //o["Sensible Heat"].Value = qs2;  //* 확인 필요
+
+
+            // ### 5. Sensible Heat Ratio (SHR)
+            //o["Sensible Heat Ratio"].Value = AirFormula.GetShr(qac2, qs2);  //* 확인 필요
+
+
+            // ### 14. Leaving RH (상대습도)
+            // o["Leaving RH"].Value = AirFormula.GetRh(pb2, lpds, AirFormula.GetXw(ltd, ltw, lxs2), AirFormula.GetU(lxw2, lxs2), ltd);  //* 확인 필요
+
+
+            // ### 16. Leaving Enthalpy (Ha)
+            // o["Leaving Enthalpy"].Value = AirFormula.GetHa(ltd, lxw2);  //* 확인 필요
+
+
+            // ### 19. Leaving Specific Heat
+            // o["Leaving Specific Heat"].Value = AirFormula.GetCp(lxw2);  //* 확인 필요  //* 수정 }}}
+            if (o.ContainsKey("Air Velocity [Lev]") == true)
+                o["Air Velocity [Lev]"].Value = (float)GetAirVelocity(vx2, noz);  //* 수정
+        }
+
+        private double[] GetNozzleValueList(CoefficientDataRow coefficient, int count)  // 노즐경 리스트
+        {
+            // mm -> m 단위 변환
+            var list = new double[]
+            {
+                (double)coefficient.Nozzle1 / 1000d,
+                (double)coefficient.Nozzle2 / 1000d,
+                (double)coefficient.Nozzle3 / 1000d,
+                (double)coefficient.Nozzle4 / 1000d,
+            };
+
+            var result = new double[count];
+            Array.Copy(list, result, count);
+
+            return result;
+        }
+
+        private double[] GetNozzleCheckedList(Dictionary<string, ValueRow> i, params string[] nozzleNames)  // 노즐 선택 여부 확인
+        {
+            var result = new List<double>();
+
+            for (var idx = 0; idx < nozzleNames.Length; idx++)
+            {
+                var nozzleName = nozzleNames[idx];
+                var value = i[nozzleName];
+
+                if (value == null) continue;
+
+                result.Add(value.Value);
+            }
+
+            return result.ToArray();
+        }
+
+        private double GetAirVelocity(double[] vx2, double[] nozzleOnOffList)
+        {
+            for (var i = 0; i < 4; i++)
+            {
+                vx2[i] *= nozzleOnOffList[i];
+            }
+
+            var count = 0;
+            foreach (var v in nozzleOnOffList)
+            {
+                if (v > 0d) count++;
+            }
+
+            if (count == 0) return 0d;
+
+            var sum = vx2.Sum();
+            return sum / count;
+        }
+
+        private double GetQLoss(CoefficientDataRow coefficient, EIndoorMode mode, EIndoorDuct duct, double deltaT)
+        {
+            double[] hlks;
+            var count = 0;
+
+            if (duct == EIndoorDuct.NotUsed)
+                count = 1;
+            else
+                count = (int)duct + 1 + 1;
+
+            var result = 0d;
+
+            if (mode == EIndoorMode.Cooling)
+            {
+                hlks = new double[]
+                {
+                    (double)coefficient.Cooling_HLK,
+                    (double)coefficient.Cooling_HLK_Duct1,
+                    (double)coefficient.Cooling_HLK_Duct2,
+                    (double)coefficient.Cooling_HLK_Duct3,
+                    (double)coefficient.Cooling_HLK_Duct4,
+                    (double)coefficient.Cooling_HLK_Duct5
+                };
+            }
+            else
+            {
+                hlks = new double[]
+                {
+                    (double)coefficient.Heating_HLK,
+                    (double)coefficient.Heating_HLK_Duct1,
+                    (double)coefficient.Heating_HLK_Duct2,
+                    (double)coefficient.Heating_HLK_Duct3,
+                    (double)coefficient.Heating_HLK_Duct4,
+                    (double)coefficient.Heating_HLK_Duct5
+                };
+            }
+
+            for (var i = 0; i < count; i++)
+                result += AirFormula.GetQLoss(hlks[i], deltaT);
+
+            return result;
+        }
+
+        private void InitializeCalc()
+        {
+            SetFixedAtmPressure();
+        }
+
+        private void FinalizeCalc()
+        {
+            try
+            {
+                Value.Calcurated["Total.Capacity.Ratio"].Value =
+                    Value.Const["Total.Rated.Capacity"].Raw / Value.Calcurated["Total.Capacity"].Raw * 100f;
+            }
+            catch
+            {
+                Value.Calcurated["Total.Capacity.Ratio"].Value = 0;
+            }
+
+            try
+            {
+                Value.Calcurated["Total.Power.Ratio"].Value =
+                    Value.Const["Total.Rated.Power"].Raw / Value.Calcurated["Total.Power"].Raw * 100f;
+            }
+            catch
+            {
+                Value.Calcurated["Total.Power.Ratio"].Value = 0;
+            }
+
+            try
+            {
+                Value.Calcurated["Total.EER_COP.Ratio"].Value =
+                    Value.Const["Total.Rated.EER_COP"].Raw / Value.Calcurated["Total.EER_COP"].Raw * 100f;
+            }
+            catch
+            {
+                Value.Calcurated["Total.EER_COP.Ratio"].Value = 0;
+            }
+
+            try
+            {
+                Value.Calcurated["Total.Current.Ratio"].Value =
+                    Value.Const["Total.Rated.Current"].Raw / Value.Calcurated["Total.Current"].Raw * 100f;
+            }
+            catch
+            {
+                Value.Calcurated["Total.Current.Ratio"].Value = 0;
+            }
+        }
+
+        private void SetFixedAtmPressure()
+        {
+            if (Resource.Settings.Options.FixedAtmPressure == true)
+            {
+                Value.Measured["ID1.Atm.Pressure"].Value = (float)AirFormula.Pb;
+                Value.Measured["ID2.Atm.Pressure"].Value = (float)AirFormula.Pb;
+            }
+        }
+
+        private void SetPowerMeterValues(int index)
+        {
+            EIndoorMode mode;
+            EConditionRated rated;
+            float totalPower = 0;
+            float totalCurrent = 0;
+            ConditionSchedule sch = Condition.Schedules[index];
+
+            if (sch.Indoor1Use == EIndoorUse.NotUsed)
+            {
+                Value.Calcurated["ID1.IDU.Power"].Value = 0;
+                Value.Calcurated["ID1.IDU.Voltage"].Value = 0;
+                Value.Calcurated["ID1.IDU.Current"].Value = 0;
+                Value.Calcurated["ID1.IDU.Frequency"].Value = 0;
+                Value.Calcurated["ID1.IDU.Power.Factor"].Value = 0;
+                Value.Calcurated["ID1.IDU.Integ.Power"].Value = 0;
+                Value.Calcurated["ID1.IDU.Integ.Time"].Value = 0;
+
+                Value.Calcurated["ID1.ODU.Power"].Value = 0;
+                Value.Calcurated["ID1.ODU.Voltage"].Value = 0;
+                Value.Calcurated["ID1.ODU.Current"].Value = 0;
+                Value.Calcurated["ID1.ODU.Frequency"].Value = 0;
+                Value.Calcurated["ID1.ODU.Power.Factor"].Value = 0;
+                Value.Calcurated["ID1.ODU.Integ.Power"].Value = 0;
+                Value.Calcurated["ID1.ODU.Integ.Time"].Value = 0;
+            }
+            else
+            {
+                if (sch.Indoor1Mode1 != EIndoorMode.NotUsed)
+                {
+                    mode = sch.Indoor1Mode1;
+                    rated = EConditionRated.ID11;
+                }
+                else if (sch.Indoor1Mode2 != EIndoorMode.NotUsed)
+                {
+                    mode = sch.Indoor1Mode2;
+                    rated = EConditionRated.ID12;
+                }
+                else
+                {
+                    mode = EIndoorMode.Cooling;
+                    rated = EConditionRated.ID11;
+                }
+
+                string iduHead = GetHeadIDU(rated, mode);
+                string oduHead = GetHeadODU(rated, mode);
+
+                if (iduHead == "None")
+                {
+                    Value.Calcurated["ID1.IDU.Power"].Value = 0;
+                    Value.Calcurated["ID1.IDU.Voltage"].Value = 0;
+                    Value.Calcurated["ID1.IDU.Current"].Value = 0;
+                    Value.Calcurated["ID1.IDU.Frequency"].Value = 0;
+                    Value.Calcurated["ID1.IDU.Power.Factor"].Value = 0;
+                    Value.Calcurated["ID1.IDU.Integ.Power"].Value = 0;
+                    Value.Calcurated["ID1.IDU.Integ.Time"].Value = 0;
+                }
+                else
+                {
+                    Value.Calcurated["ID1.IDU.Power"].Value = Value.Measured[iduHead + "R.W"].Value;
+                    Value.Calcurated["ID1.IDU.Voltage"].Value = Value.Measured[iduHead + "R.V"].Value;
+                    Value.Calcurated["ID1.IDU.Current"].Value = Value.Measured[iduHead + "R.A"].Value;
+                    Value.Calcurated["ID1.IDU.Frequency"].Value = Value.Measured[iduHead + "R.Hz"].Value;
+                    Value.Calcurated["ID1.IDU.Power.Factor"].Value = Value.Measured[iduHead + "R.PF"].Value * 100.0f;
+                    Value.Calcurated["ID1.IDU.Integ.Power"].Value = Value.Measured[iduHead + "R.Wh"].Value;
+                    Value.Calcurated["ID1.IDU.Integ.Time"].Value = Value.Measured[iduHead + "Time"].Value;
+                }
+
+                if (oduHead == "None")
+                {
+                    Value.Calcurated["ID1.ODU.Power"].Value = 0;
+                    Value.Calcurated["ID1.ODU.Voltage"].Value = 0;
+                    Value.Calcurated["ID1.ODU.Current"].Value = 0;
+                    Value.Calcurated["ID1.ODU.Frequency"].Value = 0;
+                    Value.Calcurated["ID1.ODU.Power.Factor"].Value = 0;
+                    Value.Calcurated["ID1.ODU.Integ.Power"].Value = 0;
+                    Value.Calcurated["ID1.ODU.Integ.Time"].Value = 0;
+                }
+                else
+                {
+                    switch (GetWiringODU(rated, mode))
+                    {
+                        case EWT330Wiring.P1W3:
+                            Value.Calcurated["ID1.ODU.Power"].Value = Value.Measured[oduHead + "R.W"].Value;
+                            Value.Calcurated["ID1.ODU.Voltage"].Value = Value.Measured[oduHead + "R.V"].Value;
+                            Value.Calcurated["ID1.ODU.Current"].Value = Value.Measured[oduHead + "R.A"].Value;
+                            Value.Calcurated["ID1.ODU.Frequency"].Value = Value.Measured[oduHead + "R.Hz"].Value;
+                            Value.Calcurated["ID1.ODU.Power.Factor"].Value = Value.Measured[oduHead + "R.PF"].Value * 100.0f;
+                            Value.Calcurated["ID1.ODU.Integ.Power"].Value = Value.Measured[oduHead + "R.Wh"].Value;
+                            Value.Calcurated["ID1.ODU.Integ.Time"].Value = Value.Measured[oduHead + "Time"].Value;
+                            break;
+
+                        case EWT330Wiring.P3W3:
+                            Value.Calcurated["ID1.ODU.Power"].Value = Value.Measured[oduHead + "Sigma.W"].Value;
+                            Value.Calcurated["ID1.ODU.Voltage"].Value = Value.Measured[oduHead + "Sigma.V"].Value;
+                            Value.Calcurated["ID1.ODU.Current"].Value = Value.Measured[oduHead + "Sigma.A"].Value;
+                            Value.Calcurated["ID1.ODU.Frequency"].Value = Value.Measured[oduHead + "Sigma.Hz"].Value;
+                            Value.Calcurated["ID1.ODU.Power.Factor"].Value = Value.Measured[oduHead + "Sigma.PF"].Value * 100.0f;
+                            Value.Calcurated["ID1.ODU.Integ.Power"].Value = Value.Measured[oduHead + "Sigma.Wh"].Value;
+                            Value.Calcurated["ID1.ODU.Integ.Time"].Value = Value.Measured[oduHead + "Time"].Value;
+                            break;
+
+                        case EWT330Wiring.P3W4:
+                            Value.Calcurated["ID1.ODU.Power"].Value = Value.Measured[oduHead + "Sigma.W"].Value;
+                            Value.Calcurated["ID1.ODU.Voltage"].Value = Value.Measured[oduHead + "Sigma.V"].Value;
+                            Value.Calcurated["ID1.ODU.Current"].Value = Value.Measured[oduHead + "Sigma.A"].Value;
+                            Value.Calcurated["ID1.ODU.Frequency"].Value = Value.Measured[oduHead + "Sigma.Hz"].Value;
+                            Value.Calcurated["ID1.ODU.Power.Factor"].Value = Value.Measured[oduHead + "Sigma.PF"].Value * 100.0f;
+                            Value.Calcurated["ID1.ODU.Integ.Power"].Value = Value.Measured[oduHead + "Sigma.Wh"].Value;
+                            Value.Calcurated["ID1.ODU.Integ.Time"].Value = Value.Measured[oduHead + "Time"].Value;
+                            break;
+                    }
+                }
+
+                totalPower += Value.Calcurated["ID1.IDU.Power"].Raw;
+                totalPower += Value.Calcurated["ID1.ODU.Power"].Raw;
+
+                totalCurrent += Value.Calcurated["ID1.IDU.Current"].Raw;
+                totalCurrent += Value.Calcurated["ID1.ODU.Current"].Raw;
+            }
+
+            if (sch.Indoor2Use == EIndoorUse.NotUsed)
+            {
+                Value.Calcurated["ID2.IDU.Power"].Value = 0;
+                Value.Calcurated["ID2.IDU.Voltage"].Value = 0;
+                Value.Calcurated["ID2.IDU.Current"].Value = 0;
+                Value.Calcurated["ID2.IDU.Frequency"].Value = 0;
+                Value.Calcurated["ID2.IDU.Power.Factor"].Value = 0;
+                Value.Calcurated["ID2.IDU.Integ.Power"].Value = 0;
+                Value.Calcurated["ID2.IDU.Integ.Time"].Value = 0;
+
+                Value.Calcurated["ID2.ODU.Power"].Value = 0;
+                Value.Calcurated["ID2.ODU.Voltage"].Value = 0;
+                Value.Calcurated["ID2.ODU.Current"].Value = 0;
+                Value.Calcurated["ID2.ODU.Frequency"].Value = 0;
+                Value.Calcurated["ID2.ODU.Power.Factor"].Value = 0;
+                Value.Calcurated["ID2.ODU.Integ.Power"].Value = 0;
+                Value.Calcurated["ID2.ODU.Integ.Time"].Value = 0;
+            }
+            else
+            {
+                if (sch.Indoor2Mode1 != EIndoorMode.NotUsed)
+                {
+                    mode = sch.Indoor2Mode1;
+                    rated = EConditionRated.ID21;
+                }
+                else if (sch.Indoor2Mode2 != EIndoorMode.NotUsed)
+                {
+                    mode = sch.Indoor2Mode2;
+                    rated = EConditionRated.ID22;
+                }
+                else
+                {
+                    mode = EIndoorMode.Cooling;
+                    rated = EConditionRated.ID21;
+                }
+
+                string iduHead = GetHeadIDU(rated, mode);
+                string oduHead = GetHeadODU(rated, mode);
+
+                if (iduHead == "None")
+                {
+                    Value.Calcurated["ID2.IDU.Power"].Value = 0;
+                    Value.Calcurated["ID2.IDU.Voltage"].Value = 0;
+                    Value.Calcurated["ID2.IDU.Current"].Value = 0;
+                    Value.Calcurated["ID2.IDU.Frequency"].Value = 0;
+                    Value.Calcurated["ID2.IDU.Power.Factor"].Value = 0;
+                    Value.Calcurated["ID2.IDU.Integ.Power"].Value = 0;
+                    Value.Calcurated["ID2.IDU.Integ.Time"].Value = 0;
+                }
+                else
+                {
+                    Value.Calcurated["ID2.IDU.Power"].Value = Value.Measured[iduHead + "R.W"].Value;
+                    Value.Calcurated["ID2.IDU.Voltage"].Value = Value.Measured[iduHead + "R.V"].Value;
+                    Value.Calcurated["ID2.IDU.Current"].Value = Value.Measured[iduHead + "R.A"].Value;
+                    Value.Calcurated["ID2.IDU.Frequency"].Value = Value.Measured[iduHead + "R.Hz"].Value;
+                    Value.Calcurated["ID2.IDU.Power.Factor"].Value = Value.Measured[iduHead + "R.PF"].Value * 100.0f;
+                    Value.Calcurated["ID2.IDU.Integ.Power"].Value = Value.Measured[iduHead + "R.Wh"].Value;
+                    Value.Calcurated["ID2.IDU.Integ.Time"].Value = Value.Measured[iduHead + "Time"].Value;
+                }
+
+                if (oduHead == "None")
+                {
+                    Value.Calcurated["ID2.ODU.Power"].Value = 0;
+                    Value.Calcurated["ID2.ODU.Voltage"].Value = 0;
+                    Value.Calcurated["ID2.ODU.Current"].Value = 0;
+                    Value.Calcurated["ID2.ODU.Frequency"].Value = 0;
+                    Value.Calcurated["ID2.ODU.Power.Factor"].Value = 0;
+                    Value.Calcurated["ID2.ODU.Integ.Power"].Value = 0;
+                    Value.Calcurated["ID2.ODU.Integ.Time"].Value = 0;
+                }
+                else
+                {
+                    switch (GetWiringODU(rated, mode))
+                    {
+                        case EWT330Wiring.P1W3:
+                            Value.Calcurated["ID2.ODU.Power"].Value = Value.Measured[oduHead + "R.W"].Value;
+                            Value.Calcurated["ID2.ODU.Voltage"].Value = Value.Measured[oduHead + "R.V"].Value;
+                            Value.Calcurated["ID2.ODU.Current"].Value = Value.Measured[oduHead + "R.A"].Value;
+                            Value.Calcurated["ID2.ODU.Frequency"].Value = Value.Measured[oduHead + "R.Hz"].Value;
+                            Value.Calcurated["ID2.ODU.Power.Factor"].Value = Value.Measured[oduHead + "R.PF"].Value * 100.0f;
+                            Value.Calcurated["ID2.ODU.Integ.Power"].Value = Value.Measured[oduHead + "R.Wh"].Value;
+                            Value.Calcurated["ID2.ODU.Integ.Time"].Value = Value.Measured[oduHead + "Time"].Value;
+                            break;
+
+                        case EWT330Wiring.P3W3:
+                            Value.Calcurated["ID2.ODU.Power"].Value = Value.Measured[oduHead + "Sigma.W"].Value;
+                            Value.Calcurated["ID2.ODU.Voltage"].Value = Value.Measured[oduHead + "Sigma.V"].Value;
+                            Value.Calcurated["ID2.ODU.Current"].Value = Value.Measured[oduHead + "Sigma.A"].Value;
+                            Value.Calcurated["ID2.ODU.Frequency"].Value = Value.Measured[oduHead + "Sigma.Hz"].Value;
+                            Value.Calcurated["ID2.ODU.Power.Factor"].Value = Value.Measured[oduHead + "Sigma.PF"].Value * 100.0f;
+                            Value.Calcurated["ID2.ODU.Integ.Power"].Value = Value.Measured[oduHead + "Sigma.Wh"].Value;
+                            Value.Calcurated["ID2.ODU.Integ.Time"].Value = Value.Measured[oduHead + "Time"].Value;
+                            break;
+
+                        case EWT330Wiring.P3W4:
+                            Value.Calcurated["ID2.ODU.Power"].Value = Value.Measured[oduHead + "Sigma.W"].Value;
+                            Value.Calcurated["ID2.ODU.Voltage"].Value = Value.Measured[oduHead + "Sigma.V"].Value;
+                            Value.Calcurated["ID2.ODU.Current"].Value = Value.Measured[oduHead + "Sigma.A"].Value;
+                            Value.Calcurated["ID2.ODU.Frequency"].Value = Value.Measured[oduHead + "Sigma.Hz"].Value;
+                            Value.Calcurated["ID2.ODU.Power.Factor"].Value = Value.Measured[oduHead + "Sigma.PF"].Value * 100.0f;
+                            Value.Calcurated["ID2.ODU.Integ.Power"].Value = Value.Measured[oduHead + "Sigma.Wh"].Value;
+                            Value.Calcurated["ID2.ODU.Integ.Time"].Value = Value.Measured[oduHead + "Time"].Value;
+                            break;
+                    }
+                }
+
+                totalPower += Value.Calcurated["ID2.IDU.Power"].Raw;
+                totalPower += Value.Calcurated["ID2.ODU.Power"].Raw;
+
+                totalCurrent += Value.Calcurated["ID2.IDU.Current"].Raw;
+                totalCurrent += Value.Calcurated["ID2.ODU.Current"].Raw;
+            }
+
+            Value.Calcurated["Total.Power"].Value = totalPower;
+            Value.Calcurated["Total.Current"].Value = totalCurrent;
+        }
+
+        private string GetHeadIDU(EConditionRated rated, EIndoorMode mode)
+        {
+            int i = 0;
+            int j = 0;
+            int pmNo = Condition.Rateds[rated][(int)mode].PM_IDU;
+            string sRet = "None";
+
+            foreach (PowerMeterRow<float> row in Resource.Client.Devices.PowerMeter.Rows)
+            {
+                if (row.Phase == EWT330Phase.P1)
+                {
+                    if (j == pmNo)
+                    {
+                        sRet = $"PM{i + 1}.";
+                        break;
+                    }
+                    else
+                    {
+                        j++;
+                    }
+                }
+
+                i++;
+            }
+
+            return sRet;
+        }
+
+        private string GetHeadODU(EConditionRated rated, EIndoorMode mode)
+        {
+            int i = 0;
+            int j = 0;
+            int pmNo = Condition.Rateds[rated][(int)mode].PM_ODU;
+            string sRet = "None";
+
+            foreach (PowerMeterRow<float> row in Resource.Client.Devices.PowerMeter.Rows)
+            {
+                if (row.Phase == EWT330Phase.P3)
+                {
+                    if (j == pmNo)
+                    {
+                        sRet = $"PM{i + 1}.";
+                        break;
+                    }
+                    else
+                    {
+                        j++;
+                    }
+                }
+
+                i++;
+            }
+
+            return sRet;
+        }
+
+        private EWT330Wiring GetWiringODU(EConditionRated rated, EIndoorMode mode)
+        {
+            return Condition.Rateds[rated][(int)mode].Wiring;
+        }
+
+        private string GetNameIDU(int index)
+        {
+            int i = 0;
+            int j = 0;
+            string sRet = "None";
+
+            foreach (PowerMeterRow<float> row in Resource.Client.Devices.PowerMeter.Rows)
+            {
+                if (row.Phase == EWT330Phase.P1)
+                {
+                    if (j == index)
+                    {
+                        sRet = row.Name;
+                        break;
+                    }
+                    else
+                    {
+                        j++;
+                    }
+                }
+
+                i++;
+            }
+
+            return sRet;
+        }
+
+        private string GetNameODU(int index)
+        {
+            int i = 0;
+            int j = 0;
+            string sRet = "None";
+
+            foreach (PowerMeterRow<float> row in Resource.Client.Devices.PowerMeter.Rows)
+            {
+                if (row.Phase == EWT330Phase.P3)
+                {
+                    if (j == index)
+                    {
+                        sRet = row.Name;
+                        break;
+                    }
+                    else
+                    {
+                        j++;
+                    }
+                }
+
+                i++;
+            }
+
+            return sRet;
+        }
+
+        protected override void Execute()
+        {
+            long ticks;
+
+            Yield(50);
+            while (Terminated == false)
+            {
+                ticks = ElapsedMilliseconds;
+
+                if (IsTimeoutMilliseconds(prevTicks, invalidTicks) == true)
+                {
+                    prevTicks = ticks;
+                    LoadMeasuredValues();
+                    Calcurate(0);
+                }
+
+                Yield();
+            }
+        }
+
+        private void LoadMeasuredValues()
+        {
+            int i = 0;
+            int j = 0;
+
+            Value.Lock();
+            Resource.Client.Listener.Lock();
+
+            try
+            {
+                foreach (KeyValuePair<string, ValueRow> row in Value.Measured)
+                {
+                    if (i < Resource.Client.Listener.FValues.Length)
+                    {
+                        row.Value.Value = Resource.Client.Listener.FValues[i++];
+                    }
+                    else
+                    {
+                        row.Value.Value = Resource.Client.Listener.NValues[j++];
+                    }
+
+                    if (row.Value.Unit.Type == EUnitType.Temperature)
+                    {
+                        if (row.Value.Value < csLimitedTemp)
+                        {
+                            row.Value.Value = csMinimumTemp;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                Value.Unlock();
+                Resource.Client.Listener.Unlock();
+            }
+        }
+    }
+    #endregion
+
+    #region TestCondition
+    public class TestCondition
+    {
+        public TestCondition(TestValue value)
+        {
+            Control = null;
+
+            Schedules = new List<ConditionSchedule>();
+            Method = new ConditionMethod();
+            Note = new ConditionNote();
+
+            Rateds = new Dictionary<EConditionRated, List<ConditionRated>>();
+            
+            Rateds.Add(EConditionRated.Total, new List<ConditionRated>() { new ConditionRated(), new ConditionRated() });
+            Rateds.Add(EConditionRated.ID11, new List<ConditionRated>() { new ConditionRated(), new ConditionRated() });
+            Rateds.Add(EConditionRated.ID12, new List<ConditionRated>() { new ConditionRated(), new ConditionRated() });
+            Rateds.Add(EConditionRated.ID21, new List<ConditionRated>() { new ConditionRated(), new ConditionRated() });
+            Rateds.Add(EConditionRated.ID22, new List<ConditionRated>() { new ConditionRated(), new ConditionRated() });
+
+            ThermocoupleDic = new Dictionary<string, string>();
+            PressureDic = new Dictionary<string, string>();
+
+            Pressures = new List<MeasureRow>();
+            for (int i = 0; i < Resource.Client.Devices.Recorder.PressureLength; i++)
+            {
+                Pressures.Add(new MeasureRow(null, "none", $"Pressure.{i + 1}", i+1));
+            }
+
+            TC1 = new List<MeasureRow>();
+            TC2 = new List<MeasureRow>();
+            TC3 = new List<MeasureRow>();
+
+            for (int i = 0; i < Resource.Client.Devices.Recorder.ThermocoupleLength/3; i++)
+            {
+                TC1.Add(new MeasureRow(null, "none", $"ID1.TC.{i + 1:d3}", i + 1));
+                TC2.Add(new MeasureRow(null, "none", $"ID2.TC.{i + 1:d3}", i + 1));
+                TC3.Add(new MeasureRow(null, "none", $"OD.TC.{i + 1:d3}", i + 1));
+            }
+        }
+
+        public CtrlTestCondition Control { get; set; }
+        public List<ConditionSchedule> Schedules { get; set; }
+        public ConditionMethod Method { get; set; }
+        public ConditionNote Note { get; set; }
+        public Dictionary<EConditionRated, List<ConditionRated>> Rateds { get; set; }
+        public Dictionary<string, string> ThermocoupleDic { get; set; }
+        public Dictionary<string, string> PressureDic { get; set; }
+        public List<MeasureRow> Pressures { get; set; }
+        public List<MeasureRow> TC1 { get; set; }
+        public List<MeasureRow> TC2 { get; set; }
+        public List<MeasureRow> TC3 { get; set; }
+    }
+
+    #region ConditionSchedule
+    public class ConditionSchedule
+    {
+        public ConditionSchedule(int no)
+        {
+            No = no;
+            Standard = "";
+            Name = "";
+            NoOfSteady = 1;
+            PreRun = 120;
+            Judge = 60;
+            Repeat = 1;
+            Indoor1DB = 27;
+            Indoor1DBAvg = 0;
+            Indoor1DBDev = 0;
+            Indoor1WB = 19;
+            Indoor1WBAvg = 0;
+            Indoor1WBDev = 0;
+            Indoor1LDB1Dev = 0;
+            Indoor1LWB1Dev = 0;
+            Indoor1AirFlow1Dev = 0;
+            Indoor1LDB2Dev = 0;
+            Indoor1LWB2Dev = 0;
+            Indoor1AirFlow2Dev = 0;
+            Indoor1CP1 = 0;
+            Indoor1CP1Avg = 0;
+            Indoor1CP1Dev = 0;
+            Indoor1CP2 = 0;
+            Indoor1CP2Avg = 0;
+            Indoor1CP2Dev = 0;
+            Indoor2DB = 27;
+            Indoor2DBAvg = 0;
+            Indoor2DBDev = 0;
+            Indoor2WB = 19;
+            Indoor2WBAvg = 0;
+            Indoor2WBDev = 0;
+            Indoor2LDB1Dev = 0;
+            Indoor2LWB1Dev = 0;
+            Indoor2AirFlow1Dev = 0;
+            Indoor2LDB2Dev = 0;
+            Indoor2LWB2Dev = 0;
+            Indoor2AirFlow2Dev = 0;
+            Indoor2CP1 = 0;
+            Indoor2CP1Avg = 0;
+            Indoor2CP1Dev = 0;
+            Indoor2CP2 = 0;
+            Indoor2CP2Avg = 0;
+            Indoor2CP2Dev = 0;
+            OutdoorDB = 35;
+            OutdoorDBAvg = 0;
+            OutdoorDBDev = 0;
+            OutdoorWB = 24;
+            OutdoorWBAvg = 0;
+            OutdoorWBDev = 0;
+            OutdoorDP = 10;
+            OutdoorDPAvg = 0;
+            OutdoorDPDev = 0;
+            OutdoorVolt1 = 220;
+            OutdoorVolt1Avg = 0;
+            OutdoorVolt1Dev = 0;
+            OutdoorVolt2 = 220;
+            OutdoorVolt2Avg = 0;
+            OutdoorVolt2Dev = 0;
+            Indoor1Use = EIndoorUse.Indoor;
+            Indoor1Mode1 = EIndoorMode.Cooling;
+            Indoor1Duct1 = EIndoorDuct.NotUsed;
+            Indoor1Mode2 = EIndoorMode.Cooling;
+            Indoor1Duct2 = EIndoorDuct.NotUsed;
+            Indoor2Use = EIndoorUse.Indoor;
+            Indoor2Mode1 = EIndoorMode.Cooling;
+            Indoor2Duct1 = EIndoorDuct.NotUsed;
+            Indoor2Mode2 = EIndoorMode.Cooling;
+            Indoor2Duct2 = EIndoorDuct.NotUsed;
+            OutdoorUse = EOutdoorUse.Outdoor;
+            OutdoorDpSensor = EEtcUse.NotUsed;
+            OutdoorAutoVolt = EEtcUse.NotUsed;
+        }
+
+        public int No { get; set; }
+        public string Standard { get; set; }
+        public string Name { get; set; }
+        public int NoOfSteady { get; set; }
+        public int PreRun { get; set; }
+        public int Judge { get; set; }
+        public int Repeat { get; set; }
+        public float Indoor1DB { get; set; }
+        public float Indoor1DBAvg { get; set; }
+        public float Indoor1DBDev { get; set; }
+        public float Indoor1WB { get; set; }
+        public float Indoor1WBAvg { get; set; }
+        public float Indoor1WBDev { get; set; }
+        public float Indoor1LDB1Dev { get; set; }
+        public float Indoor1LWB1Dev { get; set; }
+        public float Indoor1AirFlow1Dev { get; set; }
+        public float Indoor1LDB2Dev { get; set; }
+        public float Indoor1LWB2Dev { get; set; }
+        public float Indoor1AirFlow2Dev { get; set; }
+        public float Indoor1CP1 { get; set; }
+        public float Indoor1CP1Avg { get; set; }
+        public float Indoor1CP1Dev { get; set; }
+        public float Indoor1CP2 { get; set; }
+        public float Indoor1CP2Avg { get; set; }
+        public float Indoor1CP2Dev { get; set; }
+        public float Indoor2DB { get; set; }
+        public float Indoor2DBAvg { get; set; }
+        public float Indoor2DBDev { get; set; }
+        public float Indoor2WB { get; set; }
+        public float Indoor2WBAvg { get; set; }
+        public float Indoor2WBDev { get; set; }
+        public float Indoor2LDB1Dev { get; set; }
+        public float Indoor2LWB1Dev { get; set; }
+        public float Indoor2AirFlow1Dev { get; set; }
+        public float Indoor2LDB2Dev { get; set; }
+        public float Indoor2LWB2Dev { get; set; }
+        public float Indoor2AirFlow2Dev { get; set; }
+        public float Indoor2CP1 { get; set; }
+        public float Indoor2CP1Avg { get; set; }
+        public float Indoor2CP1Dev { get; set; }
+        public float Indoor2CP2 { get; set; }
+        public float Indoor2CP2Avg { get; set; }
+        public float Indoor2CP2Dev { get; set; }
+        public float OutdoorDB { get; set; }
+        public float OutdoorDBAvg { get; set; }
+        public float OutdoorDBDev { get; set; }
+        public float OutdoorWB { get; set; }
+        public float OutdoorWBAvg { get; set; }
+        public float OutdoorWBDev { get; set; }
+        public float OutdoorDP { get; set; }
+        public float OutdoorDPAvg { get; set; }
+        public float OutdoorDPDev { get; set; }
+        public float OutdoorVolt1 { get; set; }
+        public float OutdoorVolt1Avg { get; set; }
+        public float OutdoorVolt1Dev { get; set; }
+        public float OutdoorVolt2 { get; set; }
+        public float OutdoorVolt2Avg { get; set; }
+        public float OutdoorVolt2Dev { get; set; }
+        public EIndoorUse Indoor1Use { get; set; }
+        public EIndoorMode Indoor1Mode1 { get; set; }
+        public EIndoorDuct Indoor1Duct1 { get; set; }
+        public EIndoorMode Indoor1Mode2 { get; set; }
+        public EIndoorDuct Indoor1Duct2 { get; set; }
+        public EIndoorUse Indoor2Use { get; set; }
+        public EIndoorMode Indoor2Mode1 { get; set; }
+        public EIndoorDuct Indoor2Duct1 { get; set; }
+        public EIndoorMode Indoor2Mode2 { get; set; }
+        public EIndoorDuct Indoor2Duct2 { get; set; }
+        public EOutdoorUse OutdoorUse { get; set; }
+        public EEtcUse OutdoorDpSensor { get; set; }
+        public EEtcUse OutdoorAutoVolt { get; set; }
+
+        public EIndoorMode IndoorMode
+        {
+            get
+            {
+                EIndoorMode mode = EIndoorMode.NotUsed;
+
+                if ((Indoor1Use == EIndoorUse.NotUsed) &&
+                    (Indoor2Use == EIndoorUse.NotUsed)) return mode;
+
+                if ((Indoor1Mode1 == EIndoorMode.NotUsed) &&
+                    (Indoor1Mode2 == EIndoorMode.NotUsed) &&
+                    (Indoor2Mode1 == EIndoorMode.NotUsed) &&
+                    (Indoor1Mode1 == EIndoorMode.NotUsed)) return EIndoorMode.Cooling;
+
+                if (Indoor1Use == EIndoorUse.Indoor)
+                {
+                    if (Indoor1Mode1 != EIndoorMode.NotUsed)
+                    {
+                        mode = Indoor1Mode1;
+                    }
+                    else if (Indoor1Mode2 != EIndoorMode.NotUsed)
+                    {
+                        mode = Indoor1Mode2;
+                    }
+                    else if (Indoor2Use == EIndoorUse.Indoor)
+                    {
+                        if (Indoor2Mode1 != EIndoorMode.NotUsed)
+                        {
+                            mode = Indoor2Mode1;
+                        }
+                        else if (Indoor2Mode2 != EIndoorMode.NotUsed)
+                        {
+                            mode = Indoor2Mode2;
+                        }
+                    }
+                }
+                else if (Indoor2Use == EIndoorUse.Indoor)
+                {
+                    if (Indoor2Mode1 != EIndoorMode.NotUsed)
+                    {
+                        mode = Indoor2Mode1;
+                    }
+                    else if (Indoor2Mode2 != EIndoorMode.NotUsed)
+                    {
+                        mode = Indoor2Mode2;
+                    }
+                }
+
+                return mode;
+            }
+        }
+
+        public EIndoorMode Indoor1Mode
+        {
+            get
+            {
+                EIndoorMode mode = EIndoorMode.NotUsed;
+
+                if (Indoor1Use == EIndoorUse.NotUsed) return mode;
+
+                if ((Indoor1Mode1 == EIndoorMode.NotUsed) &&
+                    (Indoor1Mode2 == EIndoorMode.NotUsed)) return mode;
+
+                if (Indoor1Mode1 != EIndoorMode.NotUsed)
+                    mode = Indoor1Mode1;
+                else
+                    mode = Indoor1Mode2;
+
+                return mode;
+            }
+        }
+
+        public EIndoorMode Indoor2Mode
+        {
+            get
+            {
+                EIndoorMode mode = EIndoorMode.NotUsed;
+
+                if (Indoor2Use == EIndoorUse.NotUsed) return mode;
+
+                if ((Indoor2Mode1 == EIndoorMode.NotUsed) &&
+                    (Indoor2Mode2 == EIndoorMode.NotUsed)) return mode;
+
+                if (Indoor2Mode1 != EIndoorMode.NotUsed)
+                    mode = Indoor2Mode1;
+                else
+                    mode = Indoor2Mode2;
+
+                return mode;
+            }
+        }
+    }
+    #endregion
+
+    #region ConditionMethod
+    public class ConditionMethod
+    {
+        public ConditionMethod()
+        {
+            Mode = ETestMode.Cooling;
+            IntegralCount = 1;
+            IntegralTime = 1;
+            ScanTime = 1;
+            CoolingCapacity = EUnitCapacity.W;
+            HeatingCapacity = EUnitCapacity.W;
+            AirFlow = EUnitAirFlow.CMM;
+            Enthalpy = EUnitEnthalpy.W;
+            Pressure = EUnitPressure.Bar;
+            DiffPressure = EUnitDiffPressure.mmAq;
+            AtmPressure = EUnitAtmPressure.mmAq;
+            AutoControllerSetting = false;
+            UsePowerMeterIntegral = false;
+        }
+
+        public ETestMode Mode { get; set; }
+        public int IntegralCount { get; set; }
+        public int IntegralTime { get; set; }
+        public int ScanTime { get; set; }
+        public EUnitCapacity CoolingCapacity { get; set; }
+        public EUnitCapacity HeatingCapacity { get; set; }
+        public EUnitAirFlow AirFlow { get; set; }
+        public EUnitEnthalpy Enthalpy { get; set; }
+        public EUnitPressure Pressure { get; set; }
+        public EUnitDiffPressure DiffPressure { get; set; }
+        public EUnitAtmPressure AtmPressure { get; set; }
+        public EUnitTemperature Temperature { get; set; }
+        public bool AutoControllerSetting { get; set; }
+        public bool UsePowerMeterIntegral { get; set; }
+    }
+    #endregion
+
+    #region ConditionNote
+    public class ConditionNote
+    {
+        public ConditionNote()
+        {
+            Company = "";
+            Name = "";
+            No = "";
+            Observer = "";
+            Maker = "";
+            Model1 = "";
+            Serial1 = "";
+            Model2 = "";
+            Serial2 = "";
+            Model3 = "";
+            Serial3 = "";
+            ExpDevice = "";
+            Refrigerant = "";
+            RefCharge = "";
+            Memo = "";
+        }
+
+        public string Company { get; set; }
+        public string Name { get; set; }
+        public string No { get; set; }
+        public string Observer { get; set; }
+        public string Maker { get; set; }
+        public string Model1 { get; set; }
+        public string Serial1 { get; set; }
+        public string Model2 { get; set; }
+        public string Serial2 { get; set; }
+        public string Model3 { get; set; }
+        public string Serial3 { get; set; }
+        public string ExpDevice { get; set; }
+        public string Refrigerant { get; set; }
+        public string RefCharge { get; set; }
+        public string Memo { get; set; }
+    }
+    #endregion
+
+    #region ConditionRated
+    public enum EConditionRated { Total, ID11, ID12, ID21, ID22 }
+
+    public class ConditionRated
+    {
+        public ConditionRated()
+        {
+        }
+
+        public float Capacity { get; set; }
+        public float PowerInput { get; set; }
+        public float EER_COP { get; set; }
+        public float Voltage { get; set; }
+        public float Current { get; set; }
+        public string Frequency { get; set; }
+        public int PM_IDU { get; set; }
+        public int PM_ODU { get; set; }
+        public EWT330Wiring Wiring { get; set; }
+    }
+    #endregion
+    #endregion
+
+    #region TestMeasure
+    public class TestMeasure
+    {
+        public TestMeasure(TestValue value)
+        {
+            Control = null;
+
+            TotalRateds = new List<MeasureRow>();
+            TotalRateds.Add(new MeasureRow(value.Calcurated["Total.Capacity"], "Total Capacity"));
+            TotalRateds.Add(new MeasureRow(value.Calcurated["Total.Power"], "Total Power Input"));
+            TotalRateds.Add(new MeasureRow(value.Calcurated["Total.EER_COP"], "EER/COP"));
+            TotalRateds.Add(new MeasureRow(null));
+            TotalRateds.Add(new MeasureRow(null, "Rated Capacity"));
+            TotalRateds.Add(new MeasureRow(null, "Capacity Ratio"));
+            TotalRateds.Add(new MeasureRow(null, "Rated Power Input"));
+            TotalRateds.Add(new MeasureRow(null, "Power Input Ratio"));
+            TotalRateds.Add(new MeasureRow(null, "Rated EER/COP"));
+            TotalRateds.Add(new MeasureRow(null, "EER/COP Ratio"));
+            TotalRateds.Add(new MeasureRow(null, "Rated Current"));
+            TotalRateds.Add(new MeasureRow(null, "Current Ratio"));
+            TotalRateds.Add(new MeasureRow(null));
+            TotalRateds.Add(new MeasureRow(null, "Power Input(IDU)"));
+            TotalRateds.Add(new MeasureRow(null, "Voltage(IDU)"));
+            TotalRateds.Add(new MeasureRow(null, "Current(IDU)"));
+            TotalRateds.Add(new MeasureRow(null, "Frequency(IDU)"));
+            TotalRateds.Add(new MeasureRow(null, "Power Factor(IDU)"));
+            TotalRateds.Add(new MeasureRow(null));
+            TotalRateds.Add(new MeasureRow(null, "Power Input(ODU)"));
+            TotalRateds.Add(new MeasureRow(null, "Voltage(ODU)"));
+            TotalRateds.Add(new MeasureRow(null, "Current(ODU)"));
+            TotalRateds.Add(new MeasureRow(null, "Frequency(ODU)"));
+            TotalRateds.Add(new MeasureRow(null, "Power Factor(ODU)"));
+
+            RunStates = new List<MeasureRow>();
+            RunStates.Add(new MeasureRow(null, "Condition"));
+            RunStates.Add(new MeasureRow(null, "Running Step"));
+            RunStates.Add(new MeasureRow(null, "Elapsed Time"));
+            RunStates.Add(new MeasureRow(null, "Total Elapsed"));
+            RunStates.Add(new MeasureRow(null));
+            RunStates.Add(new MeasureRow(null, "Preparation", "00:00:00:00 / 00:00:00:00"));
+            RunStates.Add(new MeasureRow(null, "Judgement", "00:00:00:00 / 00:00:00:00"));
+            RunStates.Add(new MeasureRow(null, "Integration", "00:00:00:00 / 00:00:00:00"));
+            RunStates.Add(new MeasureRow(null));
+            RunStates.Add(new MeasureRow(null, "No of Steady"));
+            RunStates.Add(new MeasureRow(null, "Repeat"));
+            RunStates.Add(new MeasureRow(null, "Schedule"));
+
+            AirSides = new List<MeasureAirSideRow>();
+            AirSides.Add(new MeasureAirSideRow("Capacity", value.Calcurated["ID11.Capacity"], value.Calcurated["ID12.Capacity"], value.Calcurated["ID21.Capacity"], value.Calcurated["ID22.Capacity"]));
+            AirSides.Add(new MeasureAirSideRow("Capacity Ratio", value.Calcurated["ID11.Capacity.Ratio"], value.Calcurated["ID12.Capacity.Ratio"], value.Calcurated["ID21.Capacity.Ratio"], value.Calcurated["ID22.Capacity.Ratio"]));
+            AirSides.Add(new MeasureAirSideRow("Sensible Heat", value.Calcurated["ID11.Sensible.Heat"], value.Calcurated["ID12.Sensible.Heat"], value.Calcurated["ID21.Sensible.Heat"], value.Calcurated["ID22.Sensible.Heat"]));
+            AirSides.Add(new MeasureAirSideRow("Latent Heat", value.Calcurated["ID11.Latent.Heat"], value.Calcurated["ID12.Latent.Heat"], value.Calcurated["ID21.Latent.Heat"], value.Calcurated["ID22.Latent.Heat"]));
+            AirSides.Add(new MeasureAirSideRow("Sensible Heat Ratio", value.Calcurated["ID11.Sensible.Heat.Ratio"], value.Calcurated["ID12.Sensible.Heat.Ratio"], value.Calcurated["ID21.Sensible.Heat.Ratio"], value.Calcurated["ID22.Sensible.Heat.Ratio"]));
+            AirSides.Add(new MeasureAirSideRow("Heat Leakage", value.Calcurated["ID11.Heat.Leakage"], value.Calcurated["ID12.Heat.Leakage"], value.Calcurated["ID21.Heat.Leakage"], value.Calcurated["ID22.Heat.Leakage"]));
+            AirSides.Add(new MeasureAirSideRow("Drain Weight", value.Calcurated["ID11.Drain.Weight"], value.Calcurated["ID12.Drain.Weight"], value.Calcurated["ID21.Drain.Weight"], value.Calcurated["ID22.Drain.Weight"]));
+            AirSides.Add(new MeasureAirSideRow("", null, null, null, null, true));
+            AirSides.Add(new MeasureAirSideRow("Entering DB", value.Measured["ID11.Entering.DB"], value.Measured["ID12.Entering.DB"], value.Measured["ID21.Entering.DB"], value.Measured["ID22.Entering.DB"]));
+            AirSides.Add(new MeasureAirSideRow("Entering WB", value.Measured["ID11.Entering.WB"], value.Measured["ID12.Entering.WB"], value.Measured["ID21.Entering.WB"], value.Measured["ID22.Entering.WB"]));
+            AirSides.Add(new MeasureAirSideRow("Entering RH", value.Calcurated["ID11.Entering.RH"], value.Calcurated["ID12.Entering.RH"], value.Calcurated["ID21.Entering.RH"], value.Calcurated["ID22.Entering.RH"]));
+            AirSides.Add(new MeasureAirSideRow("Leaving DB", value.Measured["ID11.Leaving.DB"], value.Measured["ID12.Leaving.DB"], value.Measured["ID21.Leaving.DB"], value.Measured["ID22.Leaving.DB"]));
+            AirSides.Add(new MeasureAirSideRow("Leaving WB", value.Measured["ID11.Leaving.WB"], value.Measured["ID12.Leaving.WB"], value.Measured["ID21.Leaving.WB"], value.Measured["ID22.Leaving.WB"]));
+            AirSides.Add(new MeasureAirSideRow("Leaving RH", value.Calcurated["ID11.Leaving.RH"], value.Calcurated["ID12.Leaving.RH"], value.Calcurated["ID21.Leaving.RH"], value.Calcurated["ID22.Leaving.RH"]));
+            AirSides.Add(new MeasureAirSideRow("", null, null, null, null, true));
+            AirSides.Add(new MeasureAirSideRow("Entering Enthalpy", value.Calcurated["ID11.Entering.Enthalpy"], value.Calcurated["ID12.Entering.Enthalpy"], value.Calcurated["ID21.Entering.Enthalpy"], value.Calcurated["ID22.Entering.Enthalpy"]));
+            AirSides.Add(new MeasureAirSideRow("Leaving Enthalpy", value.Calcurated["ID11.Leaving.Enthalpy"], value.Calcurated["ID12.Leaving.Enthalpy"], value.Calcurated["ID21.Leaving.Enthalpy"], value.Calcurated["ID22.Leaving.Enthalpy"]));
+            AirSides.Add(new MeasureAirSideRow("Entering Humidity Ratio", value.Calcurated["ID11.Entering.Humidity.Ratio"], value.Calcurated["ID12.Entering.Humidity.Ratio"], value.Calcurated["ID21.Entering.Humidity.Ratio"], value.Calcurated["ID22.Entering.Humidity.Ratio"]));
+            AirSides.Add(new MeasureAirSideRow("Leaving Humidity Ratio", value.Calcurated["ID11.Leaving.Humidity.Ratio"], value.Calcurated["ID12.Leaving.Humidity.Ratio"], value.Calcurated["ID21.Leaving.Humidity.Ratio"], value.Calcurated["ID22.Leaving.Humidity.Ratio"]));
+            AirSides.Add(new MeasureAirSideRow("Leaving Specific Heat", value.Calcurated["ID11.Leaving.Specific.Heat"], value.Calcurated["ID12.Leaving.Specific.Heat"], value.Calcurated["ID21.Leaving.Specific.Heat"], value.Calcurated["ID22.Leaving.Specific.Heat"]));
+            AirSides.Add(new MeasureAirSideRow("Leaving Specific Volume", value.Calcurated["ID11.Leaving.Specific.Volume"], value.Calcurated["ID12.Leaving.Specific.Volume"], value.Calcurated["ID21.Leaving.Specific.Volume"], value.Calcurated["ID22.Leaving.Specific.Volume"]));
+            AirSides.Add(new MeasureAirSideRow("", null, null, null, null, true));
+            AirSides.Add(new MeasureAirSideRow("Air Flow [Lev]", value.Calcurated["ID11.Air.Flow.Lev"], value.Calcurated["ID12.Air.Flow.Lev"], value.Calcurated["ID21.Air.Flow.Lev"], value.Calcurated["ID22.Air.Flow.Lev"]));
+            AirSides.Add(new MeasureAirSideRow("Air Velocity [Lev]", value.Calcurated["ID11.Air.Velocity.Lev"], value.Calcurated["ID12.Air.Velocity.Lev"], value.Calcurated["ID21.Air.Velocity.Lev"], value.Calcurated["ID22.Air.Velocity.Lev"]));
+            AirSides.Add(new MeasureAirSideRow("Static Pressure", value.Measured["ID11.Static.Pressure"], value.Measured["ID12.Static.Pressure"], value.Measured["ID21.Static.Pressure"], value.Measured["ID22.Static.Pressure"]));
+            AirSides.Add(new MeasureAirSideRow("Nozzle Diff. Pressure", value.Measured["ID11.Nozzle.Diff.Pressure"], value.Measured["ID12.Nozzle.Diff.Pressure"], value.Measured["ID21.Nozzle.Diff.Pressure"], value.Measured["ID22.Nozzle.Diff.Pressure"]));
+            AirSides.Add(new MeasureAirSideRow("Atmospheric Pressure", value.Measured["ID1.Atm.Pressure"], value.Measured["ID1.Atm.Pressure"], value.Measured["ID2.Atm.Pressure"], value.Measured["ID2.Atm.Pressure"]));
+            AirSides.Add(new MeasureAirSideRow("Nozzle Inlet Temp.", value.Measured["ID11.Nozzle.Inlet.Temp"], value.Measured["ID12.Nozzle.Inlet.Temp"], value.Measured["ID21.Nozzle.Inlet.Temp"], value.Measured["ID22.Nozzle.Inlet.Temp"]));
+
+            List<CoefficientDataRow> coeffs = Resource.Settings.Coefficients;
+            Nozzles = new List<MeasureNozzleRow>();
+            Nozzles.Add(new MeasureNozzleRow("Nozzle 1", coeffs[0].Nozzle1, value.Measured["ID11.Nozzle1"], coeffs[0].Nozzle2, value.Measured["ID11.Nozzle2"], coeffs[0].Nozzle3, value.Measured["ID11.Nozzle3"], coeffs[0].Nozzle4, value.Measured["ID11.Nozzle4"]));
+            Nozzles.Add(new MeasureNozzleRow("Nozzle 2", coeffs[1].Nozzle1, value.Measured["ID12.Nozzle1"], coeffs[1].Nozzle2, value.Measured["ID12.Nozzle2"], coeffs[1].Nozzle3, value.Measured["ID12.Nozzle3"], coeffs[1].Nozzle4, value.Measured["ID12.Nozzle4"]));
+            Nozzles.Add(new MeasureNozzleRow("Nozzle 3", coeffs[2].Nozzle1, value.Measured["ID21.Nozzle1"], coeffs[2].Nozzle2, value.Measured["ID21.Nozzle2"], coeffs[2].Nozzle3, value.Measured["ID21.Nozzle3"], coeffs[2].Nozzle4, value.Measured["ID21.Nozzle4"]));
+            Nozzles.Add(new MeasureNozzleRow("Nozzle 4", coeffs[3].Nozzle1, value.Measured["ID22.Nozzle1"], coeffs[3].Nozzle2, value.Measured["ID22.Nozzle2"], coeffs[3].Nozzle3, value.Measured["ID22.Nozzle3"], coeffs[3].Nozzle4, value.Measured["ID22.Nozzle4"]));
+
+            Outsides = new List<MeasureRow>();
+            Outsides.Add(new MeasureRow(value.Measured["OD.Entering.DB"], "Entering DB"));
+            Outsides.Add(new MeasureRow(value.Measured["OD.Entering.WB"], "Entering WB"));
+            Outsides.Add(new MeasureRow(value.Calcurated["OD.Entering.RH"], "Entering RH"));
+            Outsides.Add(new MeasureRow(value.Measured["OD.Entering.DP"], "Entering DP"));
+            Outsides.Add(new MeasureRow(null));
+            Outsides.Add(new MeasureRow(value.Calcurated["OD.Sat.Dis.Temp1"], "Sat. Dis. Temp(1)"));
+            Outsides.Add(new MeasureRow(value.Calcurated["OD.Sat.Suc.Temp1"], "Sat. Suc. Temp(1)"));
+            Outsides.Add(new MeasureRow(value.Calcurated["OD.Sub.Cooling1"], "Sub-Cooling(1)"));
+            Outsides.Add(new MeasureRow(value.Calcurated["OD.Super.Heat1"], "Superheat(1)"));
+            Outsides.Add(new MeasureRow(value.Calcurated["OD.Sat.Dis.Temp2"], "Sat. Dis. Temp(2)"));
+            Outsides.Add(new MeasureRow(value.Calcurated["OD.Sat.Suc.Temp2"], "Sat. Suc. Temp(2)"));
+            Outsides.Add(new MeasureRow(value.Calcurated["OD.Sub.Cooling2"], "Sub-Cooling(2)"));
+            Outsides.Add(new MeasureRow(value.Calcurated["OD.Super.Heat2"], "Superheat(2)"));
+
+            Methods = new List<MeasureRow>();
+            Methods.Add(new MeasureRow(null, "Method", "3min * 3times"));
+            Methods.Add(new MeasureRow(null, "Scan Time", "3 sec"));
+
+            Notes = new List<MeasureRow>();
+            Notes.Add(new MeasureRow(null, "Company"));
+            Notes.Add(new MeasureRow(null, "Test Name"));
+            Notes.Add(new MeasureRow(null, "Test No"));
+            Notes.Add(new MeasureRow(null, "Observer"));
+            Notes.Add(new MeasureRow(null));
+            Notes.Add(new MeasureRow(null, "Maker"));
+            Notes.Add(new MeasureRow(null, "Model(1)"));
+            Notes.Add(new MeasureRow(null, "Serial No(1)"));
+            Notes.Add(new MeasureRow(null, "Model(2)"));
+            Notes.Add(new MeasureRow(null, "Serial No(2)"));
+            Notes.Add(new MeasureRow(null, "Model(3)"));
+            Notes.Add(new MeasureRow(null, "Serial No(3)"));
+            Notes.Add(new MeasureRow(null, "Exp. Device"));
+            Notes.Add(new MeasureRow(null, "Refrigerant"));
+            Notes.Add(new MeasureRow(null, "Ref. Charge"));
+            Notes.Add(new MeasureRow(null, "Memo"));
+
+            Rateds = new List<MeasureRow>();
+            Rateds.Add(new MeasureRow(null, "Rated Capacity"));
+            Rateds.Add(new MeasureRow(null, "Rated Power Input"));
+            Rateds.Add(new MeasureRow(null, "Rated EER/COP"));
+            Rateds.Add(new MeasureRow(null));
+            Rateds.Add(new MeasureRow(null, "Voltage"));
+            Rateds.Add(new MeasureRow(null, "Current"));
+            Rateds.Add(new MeasureRow(null, "Frequency"));
+            Rateds.Add(new MeasureRow(null, "Selected PM(IDU)"));
+            Rateds.Add(new MeasureRow(null, "Selected PM(ODU)"));
+            Rateds.Add(new MeasureRow(null, "Phase(ODU)"));
+
+            Indoors11 = new List<MeasureRow>();
+            Indoors11.Add(new MeasureRow(null, "Use", "Indoor"));
+            Indoors11.Add(new MeasureRow(null, "Mode", "Use"));
+            Indoors11.Add(new MeasureRow(null, "Duct", "Use"));
+            Indoors11.Add(new MeasureRow(null, "DB", "0.0"));
+            Indoors11.Add(new MeasureRow(null, "WB", "0.0"));
+
+            Indoors12 = new List<MeasureRow>();
+            Indoors12.Add(new MeasureRow(null, "Use", "Indoor"));
+            Indoors12.Add(new MeasureRow(null, "Mode", "Use"));
+            Indoors12.Add(new MeasureRow(null, "Duct", "Use"));
+            Indoors12.Add(new MeasureRow(null, "DB", "0.0"));
+            Indoors12.Add(new MeasureRow(null, "WB", "0.0"));
+
+            Indoors21 = new List<MeasureRow>();
+            Indoors21.Add(new MeasureRow(null, "Use", "Indoor"));
+            Indoors21.Add(new MeasureRow(null, "Mode", "Use"));
+            Indoors21.Add(new MeasureRow(null, "Duct", "Use"));
+            Indoors21.Add(new MeasureRow(null, "DB", "0.0"));
+            Indoors21.Add(new MeasureRow(null, "WB", "0.0"));
+
+            Indoors22 = new List<MeasureRow>();
+            Indoors22.Add(new MeasureRow(null, "Use", "Indoor"));
+            Indoors22.Add(new MeasureRow(null, "Mode", "Use"));
+            Indoors22.Add(new MeasureRow(null, "Duct", "Use"));
+            Indoors22.Add(new MeasureRow(null, "DB", "0.0"));
+            Indoors22.Add(new MeasureRow(null, "WB", "0.0"));
+
+            Outdoors = new List<MeasureRow>();
+            Outdoors.Add(new MeasureRow(null, "Use", "Outdoor"));
+            Outdoors.Add(new MeasureRow(null, "DP Sensor", "Use"));
+            Outdoors.Add(new MeasureRow(null, "Auto Voltage", "Use"));
+            Outdoors.Add(new MeasureRow(null, "DB", "0.0"));
+            Outdoors.Add(new MeasureRow(null, "WB", "0.0"));
+
+            Pressures = new List<MeasureRow>();
+            for (int i=0; i < Resource.Client.Devices.Recorder.PressureLength; i++)
+            {
+                Pressures.Add(new MeasureRow(value.Measured[$"Pressure.{i + 1}"], "", "", i + 1));
+            }
+
+            int count = Resource.Client.Devices.Recorder.ThermocoupleLength / 3;
+
+            IndoorTC1 = new List<MeasureRow>();
+            for (int i = 0; i < count; i++)
+            {
+                IndoorTC1.Add(new MeasureRow(value.Measured[$"ID1.TC.{i + 1:d3}"], "", "", i + 1));
+            }
+
+            IndoorTC2 = new List<MeasureRow>();
+            for (int i = 0; i < count; i++)
+            {
+                IndoorTC2.Add(new MeasureRow(value.Measured[$"ID2.TC.{i + 1:d3}"], "", "", i + 1));
+            }
+
+            OutdoorTC = new List<MeasureRow>();
+            for (int i = 0; i < count; i++)
+            {
+                OutdoorTC.Add(new MeasureRow(value.Measured[$"OD.TC.{i + 1:d3}"], "", "", i + 1));
+            }
+        }
+
+        public CtrlTestMeas Control { get; set; }
+        public List<MeasureRow> TotalRateds { get; set; }
+        public List<MeasureRow> RunStates { get; set; }
+        public List<MeasureAirSideRow> AirSides { get; set; }
+        public List<MeasureNozzleRow> Nozzles { get; set; }
+        public List<MeasureRow> Outsides { get; set; }
+        public List<MeasureRow> Methods { get; set; }
+        public List<MeasureRow> Notes { get; set; }
+        public List<MeasureRow> Rateds { get; set; }
+        public List<MeasureRow> Indoors11 { get; set; }
+        public List<MeasureRow> Indoors12 { get; set; }
+        public List<MeasureRow> Indoors21 { get; set; }
+        public List<MeasureRow> Indoors22 { get; set; }
+        public List<MeasureRow> Outdoors { get; set; }
+        public List<MeasureRow> IndoorTC1 { get; set; }
+        public List<MeasureRow> IndoorTC2 { get; set; }
+        public List<MeasureRow> OutdoorTC { get; set; }
+        public List<MeasureRow> Pressures { get; set; }
+    }
+    #endregion
+
+    #region MeasureRow
+    public class MeasureRow
+    {
+        public MeasureRow(ValueRow row, string head="", string strValue="", int no=0, int recNo=0)
+        {
+            this.Row = row;
+            this.head = head;
+            this.strValue = strValue;
+            this.No = no;
+            this.RecNo = recNo;
+        }
+
+        private string head;
+
+        public int RecNo { get; set; }
+
+        public int No { get; }
+
+        public ValueRow Row { get; set; }
+
+        public string Name
+        {
+            get
+            {
+                if (head.ToLower() != "none") return head;
+                if (Row == null) return string.Empty;
+
+                return Row?.Name;
+            }
+            set
+            {
+                head = value;
+            }
+        }
+
+        private string strValue;
+        public string Value
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(strValue) == false) return strValue;
+                if (Row == null) return string.Empty;
+
+                return Row.StringValue;
+            }
+            set
+            {
+                strValue = value;
+            }
+        }
+
+        public string Format
+        {
+            get
+            {
+                return Row?.Format;
+            }
+        }
+
+        private string unit;
+        public string Unit
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(unit) == false) return unit;
+                if (Row == null) return string.Empty;
+
+                return Row.Unit.ToDescription;
+            }
+            set
+            {
+                unit = value;
+            }
+        }
+
+        public EValueState State
+        { get { return (Row == null) ? EValueState.None : Row.State; } }
+    }
+    #endregion
+
+    #region MeasureAirSideRow
+    public class MeasureAirSideRow
+    {
+        public MeasureAirSideRow(string name, ValueRow id11Row, 
+            ValueRow id12Row, ValueRow id21Row, ValueRow id22Row, bool empty = false)
+        {
+            this.Name = name;
+            this.ID11Row = id11Row;
+            this.ID12Row = id12Row;
+            this.ID21Row = id21Row;
+            this.ID22Row = id22Row;
+            this.empty = empty;
+
+            this.Indoor11Enabled = true;
+            this.Indoor12Enabled = true;
+            this.Indoor21Enabled = true;
+            this.Indoor22Enabled = true;
+        }
+
+        private bool empty;
+
+        private string name;
+        public string Name
+        {
+            get
+            {
+                if (empty == true) return "";
+                return name;
+            }
+            private set
+            {
+                name = value;
+            }
+        }
+
+        public ValueRow ID11Row;
+        public string Indoor11
+        {
+            get
+            {
+                if (empty == true) return "";
+                if (ID11Row == null) return "-";
+                if (Indoor11Enabled == false) return "-";
+
+                return ID11Row.StringValue;
+            }
+        }
+
+        public EValueState Indoor11State
+        { get { return (ID11Row == null) ? EValueState.None : ID11Row.State; } }
+
+        public bool Indoor11Enabled { get; set; }
+
+        public ValueRow ID12Row;
+        public string Indoor12
+        {
+            get
+            {
+                if (empty == true) return "";
+                if (ID12Row == null) return "-";
+                if (Indoor12Enabled == false) return "-";
+
+                return ID12Row.StringValue;
+            }
+        }
+
+        public EValueState Indoor12State
+        { get { return (ID12Row == null) ? EValueState.None : ID12Row.State; } }
+
+        public bool Indoor12Enabled { get; set; }
+
+        public ValueRow ID21Row;
+        public string Indoor21
+        {
+            get
+            {
+                if (empty == true) return "";
+                if (ID21Row == null) return "-";
+                if (Indoor21Enabled == false) return "-";
+
+                return ID21Row.StringValue;
+            }
+        }
+
+        public EValueState Indoor21State
+        { get { return (ID21Row == null) ? EValueState.None : ID21Row.State; } }
+
+        public bool Indoor21Enabled { get; set; }
+
+        public ValueRow ID22Row;
+        public string Indoor22
+        {
+            get
+            {
+                if (empty == true) return "";
+                if (ID22Row == null) return "-";
+                if (Indoor22Enabled == false) return "-";
+
+                return ID22Row.StringValue;
+            }
+        }
+
+        public EValueState Indoor22State
+        { get { return (ID22Row == null) ? EValueState.None : ID22Row.State; } }
+
+        public bool Indoor22Enabled { get; set; }
+
+        public string Format
+        {
+            get
+            {
+                if (empty == true) return "";
+                return ID11Row.Format;
+            }
+        }
+
+        public string Unit
+        {
+            get
+            {
+                if (empty == true) return "";
+
+                string unit = "-";
+                if (ID11Row != null) unit = ID11Row.Unit.ToDescription;
+                else if (ID12Row != null) unit = ID12Row.Unit.ToDescription;
+                else if (ID21Row != null) unit = ID21Row.Unit.ToDescription;
+                else if (ID22Row != null) unit = ID22Row.Unit.ToDescription;
+
+                return unit;
+            }
+        }
+    }
+    #endregion
+
+    #region MeasureNozzleRow
+    public class MeasureNozzleRow
+    {
+        public MeasureNozzleRow(string name, 
+            float id11Diameter, ValueRow id11Row, 
+            float id12Diameter, ValueRow id12Row, 
+            float id21Diameter, ValueRow id21Row, 
+            float id22Diameter, ValueRow id22Row)
+        {
+            Name = name;
+
+            this.id11Diameter = id11Diameter;
+            this.id12Diameter = id12Diameter;
+            this.id21Diameter = id21Diameter;
+            this.id22Diameter = id22Diameter;
+
+            this.ID11Row = id11Row;
+            this.ID12Row = id12Row;
+            this.ID21Row = id21Row;
+            this.ID22Row = id22Row;
+
+            this.ID11Enabled = true;
+            this.ID12Enabled = true;
+            this.ID21Enabled = true;
+            this.ID22Enabled = true;
+        }
+
+        public string Name { get; set; }
+
+        private float id11Diameter;
+        public string ID11Diameter
+        {
+            get
+            {
+                if (ID11Enabled == false) return "-";
+
+                return $"{id11Diameter}mm";
+            }
+        }
+        public ValueRow ID11Row { get; set; }
+        public int ID11State
+        {
+            get
+            {
+                if (ID11Enabled == false) return -1;
+
+                return (ID11Row.Raw < 0.1) ? 0 : 1;
+            }
+        }
+        public bool ID11Enabled { get; set; }
+
+        private float id12Diameter;
+        public string ID12Diameter
+        {
+            get
+            {
+                if (ID12Enabled == false) return "-";
+
+                return $"{id12Diameter}mm";
+            }
+        }
+        public ValueRow ID12Row { get; set; }
+        public int ID12State
+        {
+            get
+            {
+                if (ID12Enabled == false) return -1;
+
+                return (ID12Row.Raw < 0.1) ? 0 : 1;
+            }
+        }
+        public bool ID12Enabled { get; set; }
+
+        private float id21Diameter;
+        public string ID21Diameter
+        {
+            get
+            {
+                if (ID21Enabled == false) return "-";
+
+                return $"{id21Diameter}mm";
+            }
+        }
+        public ValueRow ID21Row { get; set; }
+        public int ID21State
+        {
+            get
+            {
+                if (ID21Enabled == false) return -1;
+
+                return (ID21Row.Raw < 0.1) ? 0 : 1;
+            }
+        }
+        public bool ID21Enabled { get; set; }
+
+        private float id22Diameter;
+        public string ID22Diameter
+        {
+            get
+            {
+                if (ID22Enabled == false) return "-";
+
+                return $"{id22Diameter}mm";
+            }
+        }
+        public ValueRow ID22Row { get; set; }
+        public int ID22State
+        {
+            get
+            {
+                if (ID22Enabled == false) return -1;
+
+                return (ID22Row.Raw < 0.1) ? 0 : 1;
+            }
+        }
+        public bool ID22Enabled { get; set; }
+    }
+    #endregion
+
+    #region TestValue
+    public class TestValue
+    {
+        public TestValue()
+        {
+            saving = false;
+            Const = new Dictionary<string, ValueRow>();
+            Calcurated = new Dictionary<string, ValueRow>();
+            Measured = new Dictionary<string, ValueRow>();
+
+            Initialize();
+        }
+
+        public Dictionary<string, ValueRow> Const { get; set; }
+        public Dictionary<string, ValueRow> Calcurated { get; set; }
+        public Dictionary<string, ValueRow> Measured { get; set; }
+
+        private void Initialize()
+        {
+            // Load constant variables
+            int i = 1;
+            string key = $"CH{i}";
+            string param = Resource.Ini.GetString("Constant.Channel", key);
+            Const.Clear();
+
+            while (string.IsNullOrWhiteSpace(param) == false)
+            {
+                string[] @params = param.Split(new[] { ',' }, StringSplitOptions.None);
+
+                EUnitType type = (EUnitType)Enum.Parse(typeof(EUnitType), @params[1]);
+                int unitNo = GetUnitNo(type, @params[2]);
+                UnitConvert unit = new UnitConvert(type, unitNo, unitNo);
+                ValueRow row = new ValueRow(i - 1, @params[0], 0f, @params[3], unit);
+
+                Const.Add(@params[0], row);
+
+                i++;
+                key = $"CH{i}";
+                param = Resource.Ini.GetString("Constant.Channel", key);
+            }
+
+            // Load calculated variables
+            i = 1;
+            key = $"CH{i}";
+            param = Resource.Ini.GetString("Calculated.Channel", key);
+            Calcurated.Clear();
+
+            while (string.IsNullOrWhiteSpace(param) == false)
+            {
+                string[] @params = param.Split(new[] { ',' }, StringSplitOptions.None);
+
+                EUnitType type = (EUnitType)Enum.Parse(typeof(EUnitType), @params[1]);
+                int unitNo = GetUnitNo(type, @params[2]);
+                UnitConvert unit = new UnitConvert(type, unitNo, unitNo);
+                ValueRow row = new ValueRow(i - 1, @params[0], 0f, @params[3], unit, type, true, true);
+
+                Calcurated.Add(@params[0], row);
+
+                i++;
+                key = $"CH{i}";
+                param = Resource.Ini.GetString("Calculated.Channel", key);
+            }
+
+            // Load measured variables
+            i = 1;
+            key = $"CH{i}";
+            param = Resource.Ini.GetString("Measured.Channel", key);
+            Measured.Clear();
+
+            while (string.IsNullOrWhiteSpace(param) == false)
+            {
+                string[] @params = param.Split(new[] { ',' }, StringSplitOptions.None);
+
+                EUnitType type = (EUnitType)Enum.Parse(typeof(EUnitType), @params[1]);
+                int unitNo = GetUnitNo(type, @params[2]);
+                UnitConvert unit = new UnitConvert(type, unitNo, unitNo);
+                ValueRow row = new ValueRow(i - 1, @params[0], 0f, @params[3], unit, type, true, true);
+
+                Measured.Add(@params[0], row);
+
+                i++;
+                key = $"CH{i}";
+                param = Resource.Ini.GetString("Measured.Channel", key);
+            }
+        }
+
+        public void Lock()
+        {
+            Monitor.Enter(Const);
+            Monitor.Enter(Calcurated);
+            Monitor.Enter(Measured);
+        }
+
+        public void Unlock()
+        {
+            Monitor.Exit(Const);
+            Monitor.Exit(Calcurated);
+            Monitor.Exit(Measured);
+        }
+
+        private bool saving;
+        public bool Saving
+        {
+            get { return saving; }
+            set
+            {
+                Lock();
+
+                try
+                {
+                    foreach (KeyValuePair<string, ValueRow> row in Const)
+                    {
+                        if (row.Value.Save == true)
+                        {
+                            row.Value.Storage.Saving = value;
+                            if (value == true) row.Value.Storage.Reset();
+                        }
+                    }
+
+                    foreach (KeyValuePair<string, ValueRow> row in Calcurated)
+                    {
+                        if (row.Value.Save == true)
+                        {
+                            row.Value.Storage.Saving = value;
+                            if (value == true) row.Value.Storage.Reset();
+                        }
+                    }
+
+                    foreach (KeyValuePair<string, ValueRow> row in Measured)
+                    {
+                        if (row.Value.Save == true)
+                        {
+                            row.Value.Storage.Saving = value;
+                            if (value == true) row.Value.Storage.Reset();
+                        }
+                    }
+                }
+                finally
+                {
+                    Unlock();
+                }
+            }
+        }
+
+        private int GetUnitNo(EUnitType type, string name)
+        {
+            int no;
+
+            switch (type)
+            {
+                case EUnitType.Current:
+                case EUnitType.Voltage:
+                case EUnitType.Frequency:
+                case EUnitType.Flux:
+                case EUnitType.Ratio:
+                case EUnitType.HumidityRatio:
+                case EUnitType.Power:
+                case EUnitType.PowerComsumption:
+                case EUnitType.Velocity:
+                case EUnitType.Volume:
+                case EUnitType.Time:
+                    no = (int)Enum.Parse(typeof(EUnitSingle), name);
+                    break;
+
+                case EUnitType.AirFlow:
+                    no = (int)Enum.Parse(typeof(EUnitAirFlow), name);
+                    break;
+
+                case EUnitType.Capacity:
+                    no = (int)Enum.Parse(typeof(EUnitCapacity), name);
+                    break;
+
+                case EUnitType.Enthalpy:
+                    no = (int)Enum.Parse(typeof(EUnitEnthalpy), name);
+                    break;
+
+                case EUnitType.Heat:
+                    no = (int)Enum.Parse(typeof(EUnitHeat), name);
+                    break;
+
+                case EUnitType.EER_COP:
+                    no = (int)Enum.Parse(typeof(EUnitEER_COP), name);
+                    break;
+
+                case EUnitType.Temperature:
+                    no = (int)Enum.Parse(typeof(EUnitTemperature), name);
+                    break;
+
+                case EUnitType.Pressure:
+                    no = (int)Enum.Parse(typeof(EUnitPressure), name);
+                    break;
+
+                case EUnitType.DiffPressure:
+                    no = (int)Enum.Parse(typeof(EUnitDiffPressure), name);
+                    break;
+
+                case EUnitType.AtmPressure:
+                    no = (int)Enum.Parse(typeof(EUnitAtmPressure), name);
+                    break;
+
+                default:
+                    no = 0;
+                    break;
+            }
+
+            return no;
+        }
+
+        public void SetUnitTo(EUnitType type, int unit)
+        {
+            Lock();
+
+            try
+            {
+                foreach (KeyValuePair<string, ValueRow> row in Const)
+                {
+                    if (row.Value.Unit.Type == type)
+                    {
+                        row.Value.Unit.To = unit;
+                    }
+                }
+
+                foreach (KeyValuePair<string, ValueRow> row in Calcurated)
+                {
+                    if (row.Value.Unit.Type == type)
+                    {
+                        row.Value.Unit.To = unit;
+                    }
+                }
+
+                foreach (KeyValuePair<string, ValueRow> row in Measured)
+                {
+                    if (row.Value.Unit.Type == type)
+                    {
+                        row.Value.Unit.To = unit;
+                    }
+                }
+            }
+            finally
+            {
+                Unlock();
+            }
+        }
+    }
+
+    public class ValueRow
+    {
+        public ValueRow(
+            int index, string name, float value, string format, UnitConvert unit, 
+            EUnitType yAxis=EUnitType.None, bool chart=false, bool save=false)
+        {
+            Index = index;
+            Name = name;
+            Value = value;
+            Format = format;
+            Unit = unit;
+            State = EValueState.None;
+            YAxis = yAxis;
+            Chart = chart;
+            Save = save;
+            Storage = (Save == true) ? new ValueStorage(csLength) : null;
+        }
+
+        public const int csLength = 600;
+
+        public int Index { get; set; }
+        public string Name { get; set; }
+
+        private float fValue;
+        public float Value
+        {
+            get
+            {
+                return (float)Unit.Convert(fValue);
+            }
+            set
+            {
+                fValue = value;
+
+                if ((float.IsInfinity(fValue) == true) || (float.IsNaN(fValue) == true))
+                {
+                    fValue = 0.0f;
+                }
+
+                Storage?.Add(fValue);
+            }     
+        }
+
+        public float Raw
+        {
+            get { return fValue; }
+        }
+
+        public string StringValue
+        { get { return Value.ToString(Format); } }
+
+        public float Convert(int to)
+        {
+            return (float)Unit.Convert(fValue, to);
+        }
+
+        public string Format { get; set; }
+        public UnitConvert Unit { get; set; }
+        public EUnitType YAxis { get; set; }
+        public EValueState State { get; set; }
+        public bool Chart { get; set; }
+        public bool Save { get; set; }
+        public ValueStorage Storage { get; set; }
+    }
+
+    public class ValueStorage
+    {
+        public ValueStorage(int length)
+        {
+            i = 0;
+            j = 0;
+            HalfFull = false;
+            Saving = false;
+            this.length = length;
+
+            values = new float[2][];
+            for (int k = 0; k < 2; k++)
+            {
+                values[k] = new float[length];
+            }
+        }
+
+        private int i;
+        private int j;
+        private int length;
+
+        private float[][] values;
+        public float[] GetValues
+        {
+            get
+            {
+                HalfFull = false;
+                return values[i];
+            }
+        }
+
+        public bool HalfFull { get; private set; }
+
+        public bool Saving { get; set; }
+
+        public void Add(float value)
+        {
+            if (Saving == false) return;
+
+            values[i][j++] = value;
+
+            if ((j%length) == 0)
+            {
+                if (HalfFull == true)
+                {
+                    throw new Exception("Occured value storage overflow in ValueStorage.Add");
+                }
+
+                j = 0;
+                i = (i == 0) ? 1 : 0;
+                HalfFull = true;
+            }
+        }
+
+        public void Reset()
+        {
+            i = 0;
+            j = 0;
+            HalfFull = false;
+        }
+    }
+    #endregion
+}

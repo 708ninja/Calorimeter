@@ -1,0 +1,286 @@
+﻿namespace Hnc.Calorimeter.Server
+{
+    partial class CtrlViewClient
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.clientGrid = new DevExpress.XtraGrid.GridControl();
+            this.clientGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.cgNoColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.cgConnectedTimeColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.cgIpColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.cgPortColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.cgStateColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.cgScanTimeColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.bgPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.clientGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.clientGridView)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.Controls.Add(this.clientGrid);
+            this.bgPanel.Size = new System.Drawing.Size(904, 645);
+            // 
+            // clientGrid
+            // 
+            this.clientGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.clientGrid.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clientGrid.Location = new System.Drawing.Point(0, 0);
+            this.clientGrid.MainView = this.clientGridView;
+            this.clientGrid.Name = "clientGrid";
+            this.clientGrid.Size = new System.Drawing.Size(904, 645);
+            this.clientGrid.TabIndex = 2;
+            this.clientGrid.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.clientGridView});
+            // 
+            // clientGridView
+            // 
+            this.clientGridView.Appearance.EvenRow.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clientGridView.Appearance.EvenRow.Options.UseFont = true;
+            this.clientGridView.Appearance.FixedLine.Font = new System.Drawing.Font("Arial", 9F);
+            this.clientGridView.Appearance.FixedLine.Options.UseFont = true;
+            this.clientGridView.Appearance.FocusedCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clientGridView.Appearance.FocusedCell.Options.UseFont = true;
+            this.clientGridView.Appearance.FocusedRow.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clientGridView.Appearance.FocusedRow.Options.UseFont = true;
+            this.clientGridView.Appearance.HeaderPanel.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clientGridView.Appearance.HeaderPanel.Options.UseFont = true;
+            this.clientGridView.Appearance.HideSelectionRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.clientGridView.Appearance.HideSelectionRow.Options.UseFont = true;
+            this.clientGridView.Appearance.OddRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.clientGridView.Appearance.OddRow.Options.UseFont = true;
+            this.clientGridView.Appearance.Preview.Font = new System.Drawing.Font("Arial", 9F);
+            this.clientGridView.Appearance.Preview.Options.UseFont = true;
+            this.clientGridView.Appearance.Row.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clientGridView.Appearance.Row.Options.UseFont = true;
+            this.clientGridView.Appearance.SelectedRow.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clientGridView.Appearance.SelectedRow.Options.UseFont = true;
+            this.clientGridView.Appearance.ViewCaption.Font = new System.Drawing.Font("Arial", 9F);
+            this.clientGridView.Appearance.ViewCaption.Options.UseFont = true;
+            this.clientGridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.cgNoColumn,
+            this.cgConnectedTimeColumn,
+            this.cgIpColumn,
+            this.cgPortColumn,
+            this.cgStateColumn,
+            this.cgScanTimeColumn});
+            this.clientGridView.CustomizationFormBounds = new System.Drawing.Rectangle(2884, 580, 210, 186);
+            this.clientGridView.GridControl = this.clientGrid;
+            this.clientGridView.IndicatorWidth = 40;
+            this.clientGridView.Name = "clientGridView";
+            this.clientGridView.OptionsView.ColumnAutoWidth = false;
+            this.clientGridView.OptionsView.ShowGroupPanel = false;
+            this.clientGridView.OptionsView.ShowIndicator = false;
+            // 
+            // cgNoColumn
+            // 
+            this.cgNoColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cgNoColumn.AppearanceCell.Options.UseFont = true;
+            this.cgNoColumn.AppearanceCell.Options.UseTextOptions = true;
+            this.cgNoColumn.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.cgNoColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cgNoColumn.AppearanceHeader.Options.UseFont = true;
+            this.cgNoColumn.AppearanceHeader.Options.UseTextOptions = true;
+            this.cgNoColumn.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.cgNoColumn.Caption = "No";
+            this.cgNoColumn.DisplayFormat.FormatString = "{0:d2}";
+            this.cgNoColumn.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.cgNoColumn.FieldName = "Index";
+            this.cgNoColumn.Name = "cgNoColumn";
+            this.cgNoColumn.OptionsColumn.AllowEdit = false;
+            this.cgNoColumn.OptionsColumn.AllowFocus = false;
+            this.cgNoColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.cgNoColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.cgNoColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.cgNoColumn.OptionsColumn.AllowMove = false;
+            this.cgNoColumn.OptionsColumn.AllowShowHide = false;
+            this.cgNoColumn.OptionsColumn.AllowSize = false;
+            this.cgNoColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.cgNoColumn.OptionsColumn.FixedWidth = true;
+            this.cgNoColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.cgNoColumn.OptionsColumn.ReadOnly = true;
+            this.cgNoColumn.OptionsColumn.TabStop = false;
+            this.cgNoColumn.Visible = true;
+            this.cgNoColumn.VisibleIndex = 0;
+            this.cgNoColumn.Width = 32;
+            // 
+            // cgConnectedTimeColumn
+            // 
+            this.cgConnectedTimeColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cgConnectedTimeColumn.AppearanceCell.Options.UseFont = true;
+            this.cgConnectedTimeColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cgConnectedTimeColumn.AppearanceHeader.Options.UseFont = true;
+            this.cgConnectedTimeColumn.Caption = "Connected Time";
+            this.cgConnectedTimeColumn.DisplayFormat.FormatString = "yyyy-MM-dd HH:mm:ss";
+            this.cgConnectedTimeColumn.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.cgConnectedTimeColumn.FieldName = "ConnectedTime";
+            this.cgConnectedTimeColumn.Name = "cgConnectedTimeColumn";
+            this.cgConnectedTimeColumn.OptionsColumn.AllowEdit = false;
+            this.cgConnectedTimeColumn.OptionsColumn.AllowFocus = false;
+            this.cgConnectedTimeColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.cgConnectedTimeColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.cgConnectedTimeColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.cgConnectedTimeColumn.OptionsColumn.AllowMove = false;
+            this.cgConnectedTimeColumn.OptionsColumn.AllowShowHide = false;
+            this.cgConnectedTimeColumn.OptionsColumn.AllowSize = false;
+            this.cgConnectedTimeColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.cgConnectedTimeColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.cgConnectedTimeColumn.OptionsColumn.ReadOnly = true;
+            this.cgConnectedTimeColumn.OptionsColumn.TabStop = false;
+            this.cgConnectedTimeColumn.Visible = true;
+            this.cgConnectedTimeColumn.VisibleIndex = 1;
+            this.cgConnectedTimeColumn.Width = 148;
+            // 
+            // cgIpColumn
+            // 
+            this.cgIpColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cgIpColumn.AppearanceCell.Options.UseFont = true;
+            this.cgIpColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cgIpColumn.AppearanceHeader.Options.UseFont = true;
+            this.cgIpColumn.Caption = "IP";
+            this.cgIpColumn.FieldName = "Ip";
+            this.cgIpColumn.Name = "cgIpColumn";
+            this.cgIpColumn.OptionsColumn.AllowEdit = false;
+            this.cgIpColumn.OptionsColumn.AllowFocus = false;
+            this.cgIpColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.cgIpColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.cgIpColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.cgIpColumn.OptionsColumn.AllowMove = false;
+            this.cgIpColumn.OptionsColumn.AllowShowHide = false;
+            this.cgIpColumn.OptionsColumn.AllowSize = false;
+            this.cgIpColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.cgIpColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.cgIpColumn.OptionsColumn.ReadOnly = true;
+            this.cgIpColumn.OptionsColumn.TabStop = false;
+            this.cgIpColumn.Visible = true;
+            this.cgIpColumn.VisibleIndex = 2;
+            this.cgIpColumn.Width = 128;
+            // 
+            // cgPortColumn
+            // 
+            this.cgPortColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cgPortColumn.AppearanceCell.Options.UseFont = true;
+            this.cgPortColumn.AppearanceCell.Options.UseTextOptions = true;
+            this.cgPortColumn.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            this.cgPortColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cgPortColumn.AppearanceHeader.Options.UseFont = true;
+            this.cgPortColumn.Caption = "Port";
+            this.cgPortColumn.FieldName = "Port";
+            this.cgPortColumn.Name = "cgPortColumn";
+            this.cgPortColumn.OptionsColumn.AllowEdit = false;
+            this.cgPortColumn.OptionsColumn.AllowFocus = false;
+            this.cgPortColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.cgPortColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.cgPortColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.cgPortColumn.OptionsColumn.AllowMove = false;
+            this.cgPortColumn.OptionsColumn.AllowShowHide = false;
+            this.cgPortColumn.OptionsColumn.AllowSize = false;
+            this.cgPortColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.cgPortColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.cgPortColumn.OptionsColumn.ReadOnly = true;
+            this.cgPortColumn.OptionsColumn.TabStop = false;
+            this.cgPortColumn.Visible = true;
+            this.cgPortColumn.VisibleIndex = 3;
+            this.cgPortColumn.Width = 64;
+            // 
+            // cgStateColumn
+            // 
+            this.cgStateColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cgStateColumn.AppearanceCell.Options.UseFont = true;
+            this.cgStateColumn.AppearanceCell.Options.UseTextOptions = true;
+            this.cgStateColumn.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.cgStateColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cgStateColumn.AppearanceHeader.Options.UseFont = true;
+            this.cgStateColumn.AppearanceHeader.Options.UseTextOptions = true;
+            this.cgStateColumn.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.cgStateColumn.Caption = "State";
+            this.cgStateColumn.FieldName = "State";
+            this.cgStateColumn.Name = "cgStateColumn";
+            this.cgStateColumn.OptionsColumn.AllowEdit = false;
+            this.cgStateColumn.OptionsColumn.AllowFocus = false;
+            this.cgStateColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.cgStateColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.cgStateColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.cgStateColumn.OptionsColumn.AllowMove = false;
+            this.cgStateColumn.OptionsColumn.AllowSize = false;
+            this.cgStateColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.cgStateColumn.OptionsColumn.ReadOnly = true;
+            this.cgStateColumn.Visible = true;
+            this.cgStateColumn.VisibleIndex = 4;
+            this.cgStateColumn.Width = 80;
+            // 
+            // cgScanTimeColumn
+            // 
+            this.cgScanTimeColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cgScanTimeColumn.AppearanceCell.Options.UseFont = true;
+            this.cgScanTimeColumn.AppearanceCell.Options.UseTextOptions = true;
+            this.cgScanTimeColumn.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            this.cgScanTimeColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cgScanTimeColumn.AppearanceHeader.Options.UseFont = true;
+            this.cgScanTimeColumn.Caption = "Scan Time";
+            this.cgScanTimeColumn.FieldName = "ScanTime";
+            this.cgScanTimeColumn.Name = "cgScanTimeColumn";
+            this.cgScanTimeColumn.OptionsColumn.AllowEdit = false;
+            this.cgScanTimeColumn.OptionsColumn.AllowFocus = false;
+            this.cgScanTimeColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.cgScanTimeColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.cgScanTimeColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.cgScanTimeColumn.OptionsColumn.AllowMove = false;
+            this.cgScanTimeColumn.OptionsColumn.AllowSize = false;
+            this.cgScanTimeColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.cgScanTimeColumn.OptionsColumn.ReadOnly = true;
+            this.cgScanTimeColumn.Visible = true;
+            this.cgScanTimeColumn.VisibleIndex = 5;
+            this.cgScanTimeColumn.Width = 72;
+            // 
+            // CtrlViewClient
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlViewClient";
+            this.Size = new System.Drawing.Size(904, 645);
+            this.Enter += new System.EventHandler(this.CtrlViewClient_Enter);
+            this.bgPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.clientGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.clientGridView)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+        private DevExpress.XtraGrid.GridControl clientGrid;
+        private DevExpress.XtraGrid.Views.Grid.GridView clientGridView;
+        private DevExpress.XtraGrid.Columns.GridColumn cgConnectedTimeColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn cgIpColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn cgPortColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn cgStateColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn cgScanTimeColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn cgNoColumn;
+    }
+}

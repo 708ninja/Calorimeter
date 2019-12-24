@@ -1,0 +1,627 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class FormGraphSeriesEdit
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGraphSeriesEdit));
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions2 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
+            this.okButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.yAxesGrid = new DevExpress.XtraGrid.GridControl();
+            this.yAxesGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.yaCheckedColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.yaAlignColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.yaNameColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.yaMinColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.yaMaxColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.plotSeriesGrid = new DevExpress.XtraGrid.GridControl();
+            this.plotSeriesGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.psCheckedColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.psNameColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.psColorColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.psColorEdit = new DevExpress.XtraEditors.Repository.RepositoryItemColorEdit();
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
+            this.yaAlignLookUp = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
+            this.bgPanel.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.yAxesGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.yAxesGridView)).BeginInit();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.plotSeriesGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.plotSeriesGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.psColorEdit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.yaAlignLookUp)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.Controls.Add(this.groupBox2);
+            this.bgPanel.Controls.Add(this.groupBox1);
+            this.bgPanel.Controls.Add(this.okButton);
+            this.bgPanel.Controls.Add(this.cancelButton);
+            this.bgPanel.Size = new System.Drawing.Size(824, 601);
+            // 
+            // okButton
+            // 
+            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.okButton.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.okButton.Image = ((System.Drawing.Image)(resources.GetObject("okButton.Image")));
+            this.okButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.okButton.Location = new System.Drawing.Point(614, 562);
+            this.okButton.Name = "okButton";
+            this.okButton.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.okButton.Size = new System.Drawing.Size(100, 32);
+            this.okButton.TabIndex = 7;
+            this.okButton.Text = "Ok";
+            this.okButton.UseVisualStyleBackColor = true;
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cancelButton.Image = ((System.Drawing.Image)(resources.GetObject("cancelButton.Image")));
+            this.cancelButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.cancelButton.Location = new System.Drawing.Point(716, 562);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.cancelButton.Size = new System.Drawing.Size(100, 32);
+            this.cancelButton.TabIndex = 8;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.yAxesGrid);
+            this.groupBox1.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.Location = new System.Drawing.Point(8, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(400, 544);
+            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = " Y-Axes ";
+            // 
+            // yAxesGrid
+            // 
+            this.yAxesGrid.Location = new System.Drawing.Point(8, 24);
+            this.yAxesGrid.MainView = this.yAxesGridView;
+            this.yAxesGrid.Name = "yAxesGrid";
+            this.yAxesGrid.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.yaAlignLookUp});
+            this.yAxesGrid.Size = new System.Drawing.Size(384, 510);
+            this.yAxesGrid.TabIndex = 1;
+            this.yAxesGrid.Tag = "0";
+            this.yAxesGrid.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.yAxesGridView});
+            // 
+            // yAxesGridView
+            // 
+            this.yAxesGridView.ActiveFilterEnabled = false;
+            this.yAxesGridView.Appearance.FixedLine.Font = new System.Drawing.Font("Arial", 9F);
+            this.yAxesGridView.Appearance.FixedLine.Options.UseFont = true;
+            this.yAxesGridView.Appearance.FocusedCell.Font = new System.Drawing.Font("Arial", 9F);
+            this.yAxesGridView.Appearance.FocusedCell.Options.UseFont = true;
+            this.yAxesGridView.Appearance.FocusedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.yAxesGridView.Appearance.FocusedRow.Options.UseFont = true;
+            this.yAxesGridView.Appearance.HeaderPanel.Font = new System.Drawing.Font("Arial", 9F);
+            this.yAxesGridView.Appearance.HeaderPanel.Options.UseFont = true;
+            this.yAxesGridView.Appearance.HideSelectionRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.yAxesGridView.Appearance.HideSelectionRow.Options.UseFont = true;
+            this.yAxesGridView.Appearance.OddRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.yAxesGridView.Appearance.OddRow.Options.UseFont = true;
+            this.yAxesGridView.Appearance.Preview.Font = new System.Drawing.Font("Arial", 9F);
+            this.yAxesGridView.Appearance.Preview.Options.UseFont = true;
+            this.yAxesGridView.Appearance.Row.Font = new System.Drawing.Font("Arial", 9F);
+            this.yAxesGridView.Appearance.Row.Options.UseFont = true;
+            this.yAxesGridView.Appearance.SelectedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.yAxesGridView.Appearance.SelectedRow.Options.UseFont = true;
+            this.yAxesGridView.Appearance.ViewCaption.Font = new System.Drawing.Font("Arial", 9F);
+            this.yAxesGridView.Appearance.ViewCaption.Options.UseFont = true;
+            this.yAxesGridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.yaCheckedColumn,
+            this.yaAlignColumn,
+            this.yaNameColumn,
+            this.yaMinColumn,
+            this.yaMaxColumn});
+            this.yAxesGridView.CustomizationFormBounds = new System.Drawing.Rectangle(2884, 580, 210, 186);
+            this.yAxesGridView.GridControl = this.yAxesGrid;
+            this.yAxesGridView.HorzScrollVisibility = DevExpress.XtraGrid.Views.Base.ScrollVisibility.Never;
+            this.yAxesGridView.Name = "yAxesGridView";
+            this.yAxesGridView.OptionsCustomization.AllowColumnMoving = false;
+            this.yAxesGridView.OptionsCustomization.AllowColumnResizing = false;
+            this.yAxesGridView.OptionsCustomization.AllowFilter = false;
+            this.yAxesGridView.OptionsCustomization.AllowGroup = false;
+            this.yAxesGridView.OptionsCustomization.AllowMergedGrouping = DevExpress.Utils.DefaultBoolean.False;
+            this.yAxesGridView.OptionsCustomization.AllowQuickHideColumns = false;
+            this.yAxesGridView.OptionsCustomization.AllowSort = false;
+            this.yAxesGridView.OptionsFilter.AllowAutoFilterConditionChange = DevExpress.Utils.DefaultBoolean.False;
+            this.yAxesGridView.OptionsFilter.AllowColumnMRUFilterList = false;
+            this.yAxesGridView.OptionsFilter.AllowFilterEditor = false;
+            this.yAxesGridView.OptionsFilter.AllowFilterIncrementalSearch = false;
+            this.yAxesGridView.OptionsFilter.AllowMRUFilterList = false;
+            this.yAxesGridView.OptionsFilter.AllowMultiSelectInCheckedFilterPopup = false;
+            this.yAxesGridView.OptionsFilter.ShowAllTableValuesInCheckedFilterPopup = false;
+            this.yAxesGridView.OptionsLayout.Columns.AddNewColumns = false;
+            this.yAxesGridView.OptionsLayout.Columns.RemoveOldColumns = false;
+            this.yAxesGridView.OptionsLayout.StoreAllOptions = true;
+            this.yAxesGridView.OptionsView.ColumnAutoWidth = false;
+            this.yAxesGridView.OptionsView.ShowGroupPanel = false;
+            this.yAxesGridView.OptionsView.ShowIndicator = false;
+            this.yAxesGridView.Tag = 0;
+            this.yAxesGridView.CustomDrawColumnHeader += new DevExpress.XtraGrid.Views.Grid.ColumnHeaderCustomDrawEventHandler(this.yAxesGridView_CustomDrawColumnHeader);
+            this.yAxesGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.yAxesGridView_MouseDown);
+            // 
+            // yaCheckedColumn
+            // 
+            this.yaCheckedColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.yaCheckedColumn.AppearanceCell.Options.UseFont = true;
+            this.yaCheckedColumn.AppearanceCell.Options.UseTextOptions = true;
+            this.yaCheckedColumn.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.yaCheckedColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.yaCheckedColumn.AppearanceHeader.Options.UseFont = true;
+            this.yaCheckedColumn.AppearanceHeader.Options.UseTextOptions = true;
+            this.yaCheckedColumn.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.yaCheckedColumn.Caption = "Checked";
+            this.yaCheckedColumn.FieldName = "Checked";
+            this.yaCheckedColumn.ImageOptions.Alignment = System.Drawing.StringAlignment.Center;
+            this.yaCheckedColumn.ImageOptions.Image = global::Hnc.Calorimeter.Client.Properties.Resources.Unchecked;
+            this.yaCheckedColumn.ImageOptions.ImageIndex = 0;
+            this.yaCheckedColumn.Name = "yaCheckedColumn";
+            this.yaCheckedColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.yaCheckedColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.yaCheckedColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.yaCheckedColumn.OptionsColumn.AllowMove = false;
+            this.yaCheckedColumn.OptionsColumn.AllowShowHide = false;
+            this.yaCheckedColumn.OptionsColumn.AllowSize = false;
+            this.yaCheckedColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.yaCheckedColumn.OptionsColumn.FixedWidth = true;
+            this.yaCheckedColumn.OptionsColumn.ShowCaption = false;
+            this.yaCheckedColumn.Visible = true;
+            this.yaCheckedColumn.VisibleIndex = 0;
+            this.yaCheckedColumn.Width = 22;
+            // 
+            // yaAlignColumn
+            // 
+            this.yaAlignColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F);
+            this.yaAlignColumn.AppearanceCell.Options.UseFont = true;
+            this.yaAlignColumn.AppearanceCell.Options.UseTextOptions = true;
+            this.yaAlignColumn.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.yaAlignColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F);
+            this.yaAlignColumn.AppearanceHeader.Options.UseFont = true;
+            this.yaAlignColumn.AppearanceHeader.Options.UseTextOptions = true;
+            this.yaAlignColumn.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.yaAlignColumn.Caption = "Align";
+            this.yaAlignColumn.ColumnEdit = this.yaAlignLookUp;
+            this.yaAlignColumn.FieldName = "Align";
+            this.yaAlignColumn.Name = "yaAlignColumn";
+            this.yaAlignColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.yaAlignColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.yaAlignColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.yaAlignColumn.OptionsColumn.AllowMove = false;
+            this.yaAlignColumn.OptionsColumn.AllowShowHide = false;
+            this.yaAlignColumn.OptionsColumn.AllowSize = false;
+            this.yaAlignColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.yaAlignColumn.OptionsColumn.FixedWidth = true;
+            this.yaAlignColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.yaAlignColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.yaAlignColumn.OptionsColumn.TabStop = false;
+            this.yaAlignColumn.OptionsFilter.AllowAutoFilter = false;
+            this.yaAlignColumn.OptionsFilter.AllowFilter = false;
+            this.yaAlignColumn.OptionsFilter.AllowFilterModeChanging = DevExpress.Utils.DefaultBoolean.False;
+            this.yaAlignColumn.OptionsFilter.FilterBySortField = DevExpress.Utils.DefaultBoolean.False;
+            this.yaAlignColumn.OptionsFilter.ImmediateUpdateAutoFilter = false;
+            this.yaAlignColumn.OptionsFilter.ImmediateUpdatePopupDateFilterOnCheck = DevExpress.Utils.DefaultBoolean.False;
+            this.yaAlignColumn.OptionsFilter.ImmediateUpdatePopupDateFilterOnDateChange = DevExpress.Utils.DefaultBoolean.False;
+            this.yaAlignColumn.OptionsFilter.ImmediateUpdatePopupExcelFilter = DevExpress.Utils.DefaultBoolean.False;
+            this.yaAlignColumn.OptionsFilter.ShowEmptyDateFilter = false;
+            this.yaAlignColumn.Visible = true;
+            this.yaAlignColumn.VisibleIndex = 1;
+            this.yaAlignColumn.Width = 59;
+            // 
+            // yaNameColumn
+            // 
+            this.yaNameColumn.Caption = "Name";
+            this.yaNameColumn.FieldName = "Name";
+            this.yaNameColumn.Name = "yaNameColumn";
+            this.yaNameColumn.OptionsColumn.AllowEdit = false;
+            this.yaNameColumn.OptionsColumn.AllowFocus = false;
+            this.yaNameColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.yaNameColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.yaNameColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.yaNameColumn.OptionsColumn.AllowMove = false;
+            this.yaNameColumn.OptionsColumn.AllowShowHide = false;
+            this.yaNameColumn.OptionsColumn.AllowSize = false;
+            this.yaNameColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.yaNameColumn.OptionsColumn.FixedWidth = true;
+            this.yaNameColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.yaNameColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.yaNameColumn.OptionsColumn.ReadOnly = true;
+            this.yaNameColumn.OptionsFilter.AllowAutoFilter = false;
+            this.yaNameColumn.OptionsFilter.AllowFilter = false;
+            this.yaNameColumn.OptionsFilter.ImmediateUpdateAutoFilter = false;
+            this.yaNameColumn.OptionsFilter.ShowEmptyDateFilter = false;
+            this.yaNameColumn.Visible = true;
+            this.yaNameColumn.VisibleIndex = 2;
+            this.yaNameColumn.Width = 192;
+            // 
+            // yaMinColumn
+            // 
+            this.yaMinColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.yaMinColumn.AppearanceCell.Options.UseFont = true;
+            this.yaMinColumn.AppearanceCell.Options.UseTextOptions = true;
+            this.yaMinColumn.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.yaMinColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.yaMinColumn.AppearanceHeader.Options.UseFont = true;
+            this.yaMinColumn.AppearanceHeader.Options.UseTextOptions = true;
+            this.yaMinColumn.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.yaMinColumn.Caption = "Min";
+            this.yaMinColumn.DisplayFormat.FormatString = "f0";
+            this.yaMinColumn.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.yaMinColumn.FieldName = "Min";
+            this.yaMinColumn.Name = "yaMinColumn";
+            this.yaMinColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.yaMinColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.yaMinColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.yaMinColumn.OptionsColumn.AllowMove = false;
+            this.yaMinColumn.OptionsColumn.AllowShowHide = false;
+            this.yaMinColumn.OptionsColumn.AllowSize = false;
+            this.yaMinColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.yaMinColumn.OptionsColumn.FixedWidth = true;
+            this.yaMinColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.yaMinColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.yaMinColumn.OptionsFilter.AllowAutoFilter = false;
+            this.yaMinColumn.OptionsFilter.AllowFilter = false;
+            this.yaMinColumn.Visible = true;
+            this.yaMinColumn.VisibleIndex = 3;
+            this.yaMinColumn.Width = 54;
+            // 
+            // yaMaxColumn
+            // 
+            this.yaMaxColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.yaMaxColumn.AppearanceCell.Options.UseFont = true;
+            this.yaMaxColumn.AppearanceCell.Options.UseTextOptions = true;
+            this.yaMaxColumn.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.yaMaxColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.yaMaxColumn.AppearanceHeader.Options.UseFont = true;
+            this.yaMaxColumn.AppearanceHeader.Options.UseTextOptions = true;
+            this.yaMaxColumn.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.yaMaxColumn.Caption = "Max";
+            this.yaMaxColumn.DisplayFormat.FormatString = "f0";
+            this.yaMaxColumn.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.yaMaxColumn.FieldName = "Max";
+            this.yaMaxColumn.Name = "yaMaxColumn";
+            this.yaMaxColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.yaMaxColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.yaMaxColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.yaMaxColumn.OptionsColumn.AllowMove = false;
+            this.yaMaxColumn.OptionsColumn.AllowShowHide = false;
+            this.yaMaxColumn.OptionsColumn.AllowSize = false;
+            this.yaMaxColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.yaMaxColumn.OptionsColumn.FixedWidth = true;
+            this.yaMaxColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.yaMaxColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.yaMaxColumn.OptionsFilter.AllowAutoFilter = false;
+            this.yaMaxColumn.OptionsFilter.AllowFilter = false;
+            this.yaMaxColumn.Visible = true;
+            this.yaMaxColumn.VisibleIndex = 4;
+            this.yaMaxColumn.Width = 54;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.plotSeriesGrid);
+            this.groupBox2.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox2.Location = new System.Drawing.Point(416, 12);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(400, 544);
+            this.groupBox2.TabIndex = 10;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = " Plot Series ";
+            // 
+            // plotSeriesGrid
+            // 
+            this.plotSeriesGrid.Location = new System.Drawing.Point(8, 24);
+            this.plotSeriesGrid.MainView = this.plotSeriesGridView;
+            this.plotSeriesGrid.Name = "plotSeriesGrid";
+            this.plotSeriesGrid.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.psColorEdit});
+            this.plotSeriesGrid.Size = new System.Drawing.Size(384, 510);
+            this.plotSeriesGrid.TabIndex = 2;
+            this.plotSeriesGrid.Tag = "1";
+            this.plotSeriesGrid.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.plotSeriesGridView});
+            // 
+            // plotSeriesGridView
+            // 
+            this.plotSeriesGridView.ActiveFilterEnabled = false;
+            this.plotSeriesGridView.Appearance.FixedLine.Font = new System.Drawing.Font("Arial", 9F);
+            this.plotSeriesGridView.Appearance.FixedLine.Options.UseFont = true;
+            this.plotSeriesGridView.Appearance.FocusedCell.Font = new System.Drawing.Font("Arial", 9F);
+            this.plotSeriesGridView.Appearance.FocusedCell.Options.UseFont = true;
+            this.plotSeriesGridView.Appearance.FocusedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.plotSeriesGridView.Appearance.FocusedRow.Options.UseFont = true;
+            this.plotSeriesGridView.Appearance.HeaderPanel.Font = new System.Drawing.Font("Arial", 9F);
+            this.plotSeriesGridView.Appearance.HeaderPanel.Options.UseFont = true;
+            this.plotSeriesGridView.Appearance.HideSelectionRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.plotSeriesGridView.Appearance.HideSelectionRow.Options.UseFont = true;
+            this.plotSeriesGridView.Appearance.OddRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.plotSeriesGridView.Appearance.OddRow.Options.UseFont = true;
+            this.plotSeriesGridView.Appearance.Preview.Font = new System.Drawing.Font("Arial", 9F);
+            this.plotSeriesGridView.Appearance.Preview.Options.UseFont = true;
+            this.plotSeriesGridView.Appearance.Row.Font = new System.Drawing.Font("Arial", 9F);
+            this.plotSeriesGridView.Appearance.Row.Options.UseFont = true;
+            this.plotSeriesGridView.Appearance.SelectedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.plotSeriesGridView.Appearance.SelectedRow.Options.UseFont = true;
+            this.plotSeriesGridView.Appearance.ViewCaption.Font = new System.Drawing.Font("Arial", 9F);
+            this.plotSeriesGridView.Appearance.ViewCaption.Options.UseFont = true;
+            this.plotSeriesGridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.psCheckedColumn,
+            this.psNameColumn,
+            this.psColorColumn});
+            this.plotSeriesGridView.CustomizationFormBounds = new System.Drawing.Rectangle(2884, 580, 210, 186);
+            this.plotSeriesGridView.GridControl = this.plotSeriesGrid;
+            this.plotSeriesGridView.HorzScrollVisibility = DevExpress.XtraGrid.Views.Base.ScrollVisibility.Never;
+            this.plotSeriesGridView.Name = "plotSeriesGridView";
+            this.plotSeriesGridView.OptionsCustomization.AllowColumnMoving = false;
+            this.plotSeriesGridView.OptionsCustomization.AllowColumnResizing = false;
+            this.plotSeriesGridView.OptionsCustomization.AllowFilter = false;
+            this.plotSeriesGridView.OptionsCustomization.AllowGroup = false;
+            this.plotSeriesGridView.OptionsCustomization.AllowMergedGrouping = DevExpress.Utils.DefaultBoolean.False;
+            this.plotSeriesGridView.OptionsCustomization.AllowQuickHideColumns = false;
+            this.plotSeriesGridView.OptionsCustomization.AllowSort = false;
+            this.plotSeriesGridView.OptionsFilter.AllowAutoFilterConditionChange = DevExpress.Utils.DefaultBoolean.False;
+            this.plotSeriesGridView.OptionsFilter.AllowColumnMRUFilterList = false;
+            this.plotSeriesGridView.OptionsFilter.AllowFilterEditor = false;
+            this.plotSeriesGridView.OptionsFilter.AllowFilterIncrementalSearch = false;
+            this.plotSeriesGridView.OptionsFilter.AllowMRUFilterList = false;
+            this.plotSeriesGridView.OptionsFilter.AllowMultiSelectInCheckedFilterPopup = false;
+            this.plotSeriesGridView.OptionsFilter.ShowAllTableValuesInCheckedFilterPopup = false;
+            this.plotSeriesGridView.OptionsLayout.Columns.AddNewColumns = false;
+            this.plotSeriesGridView.OptionsLayout.Columns.RemoveOldColumns = false;
+            this.plotSeriesGridView.OptionsLayout.StoreAllOptions = true;
+            this.plotSeriesGridView.OptionsView.ColumnAutoWidth = false;
+            this.plotSeriesGridView.OptionsView.ShowGroupPanel = false;
+            this.plotSeriesGridView.OptionsView.ShowIndicator = false;
+            this.plotSeriesGridView.Tag = 1;
+            this.plotSeriesGridView.CustomDrawColumnHeader += new DevExpress.XtraGrid.Views.Grid.ColumnHeaderCustomDrawEventHandler(this.plotSeriesGridView_CustomDrawColumnHeader);
+            this.plotSeriesGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.plotSeriesGridView_MouseDown);
+            // 
+            // psCheckedColumn
+            // 
+            this.psCheckedColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F);
+            this.psCheckedColumn.AppearanceCell.Options.UseFont = true;
+            this.psCheckedColumn.AppearanceCell.Options.UseTextOptions = true;
+            this.psCheckedColumn.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.psCheckedColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F);
+            this.psCheckedColumn.AppearanceHeader.Options.UseFont = true;
+            this.psCheckedColumn.AppearanceHeader.Options.UseTextOptions = true;
+            this.psCheckedColumn.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.psCheckedColumn.Caption = "Checked";
+            this.psCheckedColumn.FieldName = "Checked";
+            this.psCheckedColumn.ImageOptions.Alignment = System.Drawing.StringAlignment.Center;
+            this.psCheckedColumn.ImageOptions.Image = global::Hnc.Calorimeter.Client.Properties.Resources.Unchecked;
+            this.psCheckedColumn.ImageOptions.ImageIndex = 0;
+            this.psCheckedColumn.Name = "psCheckedColumn";
+            this.psCheckedColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.psCheckedColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.psCheckedColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.psCheckedColumn.OptionsColumn.AllowMove = false;
+            this.psCheckedColumn.OptionsColumn.AllowShowHide = false;
+            this.psCheckedColumn.OptionsColumn.AllowSize = false;
+            this.psCheckedColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.psCheckedColumn.OptionsColumn.FixedWidth = true;
+            this.psCheckedColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.psCheckedColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.psCheckedColumn.OptionsColumn.ShowCaption = false;
+            this.psCheckedColumn.OptionsColumn.TabStop = false;
+            this.psCheckedColumn.OptionsFilter.AllowAutoFilter = false;
+            this.psCheckedColumn.OptionsFilter.AllowFilter = false;
+            this.psCheckedColumn.OptionsFilter.AllowFilterModeChanging = DevExpress.Utils.DefaultBoolean.False;
+            this.psCheckedColumn.OptionsFilter.FilterBySortField = DevExpress.Utils.DefaultBoolean.False;
+            this.psCheckedColumn.OptionsFilter.ImmediateUpdateAutoFilter = false;
+            this.psCheckedColumn.OptionsFilter.ImmediateUpdatePopupDateFilterOnCheck = DevExpress.Utils.DefaultBoolean.False;
+            this.psCheckedColumn.OptionsFilter.ImmediateUpdatePopupDateFilterOnDateChange = DevExpress.Utils.DefaultBoolean.False;
+            this.psCheckedColumn.OptionsFilter.ImmediateUpdatePopupExcelFilter = DevExpress.Utils.DefaultBoolean.False;
+            this.psCheckedColumn.OptionsFilter.ShowEmptyDateFilter = false;
+            this.psCheckedColumn.Visible = true;
+            this.psCheckedColumn.VisibleIndex = 0;
+            this.psCheckedColumn.Width = 22;
+            // 
+            // psNameColumn
+            // 
+            this.psNameColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.psNameColumn.AppearanceCell.Options.UseFont = true;
+            this.psNameColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.psNameColumn.AppearanceHeader.Options.UseFont = true;
+            this.psNameColumn.Caption = "Name";
+            this.psNameColumn.FieldName = "Name";
+            this.psNameColumn.Name = "psNameColumn";
+            this.psNameColumn.OptionsColumn.AllowEdit = false;
+            this.psNameColumn.OptionsColumn.AllowFocus = false;
+            this.psNameColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.psNameColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.psNameColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.psNameColumn.OptionsColumn.AllowMove = false;
+            this.psNameColumn.OptionsColumn.AllowShowHide = false;
+            this.psNameColumn.OptionsColumn.AllowSize = false;
+            this.psNameColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.psNameColumn.OptionsColumn.FixedWidth = true;
+            this.psNameColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.psNameColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.psNameColumn.OptionsColumn.ReadOnly = true;
+            this.psNameColumn.OptionsFilter.AllowAutoFilter = false;
+            this.psNameColumn.OptionsFilter.AllowFilter = false;
+            this.psNameColumn.OptionsFilter.ImmediateUpdateAutoFilter = false;
+            this.psNameColumn.OptionsFilter.ShowEmptyDateFilter = false;
+            this.psNameColumn.Visible = true;
+            this.psNameColumn.VisibleIndex = 1;
+            this.psNameColumn.Width = 290;
+            // 
+            // psColorColumn
+            // 
+            this.psColorColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.psColorColumn.AppearanceCell.Options.UseFont = true;
+            this.psColorColumn.AppearanceCell.Options.UseTextOptions = true;
+            this.psColorColumn.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.psColorColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.psColorColumn.AppearanceHeader.Options.UseBackColor = true;
+            this.psColorColumn.AppearanceHeader.Options.UseFont = true;
+            this.psColorColumn.AppearanceHeader.Options.UseTextOptions = true;
+            this.psColorColumn.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.psColorColumn.Caption = "Color";
+            this.psColorColumn.ColumnEdit = this.psColorEdit;
+            this.psColorColumn.FieldName = "Color";
+            this.psColorColumn.Name = "psColorColumn";
+            this.psColorColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.psColorColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.psColorColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.psColorColumn.OptionsColumn.AllowMove = false;
+            this.psColorColumn.OptionsColumn.AllowShowHide = false;
+            this.psColorColumn.OptionsColumn.AllowSize = false;
+            this.psColorColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.psColorColumn.OptionsColumn.FixedWidth = true;
+            this.psColorColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.psColorColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.psColorColumn.OptionsFilter.AllowAutoFilter = false;
+            this.psColorColumn.OptionsFilter.AllowFilter = false;
+            this.psColorColumn.Visible = true;
+            this.psColorColumn.VisibleIndex = 2;
+            this.psColorColumn.Width = 50;
+            // 
+            // psColorEdit
+            // 
+            this.psColorEdit.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.psColorEdit.Appearance.Options.UseFont = true;
+            this.psColorEdit.Appearance.Options.UseTextOptions = true;
+            this.psColorEdit.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.psColorEdit.AppearanceDropDown.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.psColorEdit.AppearanceDropDown.Options.UseFont = true;
+            this.psColorEdit.AppearanceDropDown.Options.UseTextOptions = true;
+            this.psColorEdit.AppearanceDropDown.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.psColorEdit.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.psColorEdit.AppearanceFocused.Options.UseFont = true;
+            this.psColorEdit.AppearanceFocused.Options.UseTextOptions = true;
+            this.psColorEdit.AppearanceFocused.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.psColorEdit.AutoHeight = false;
+            serializableAppearanceObject5.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            serializableAppearanceObject5.Options.UseFont = true;
+            serializableAppearanceObject5.Options.UseTextOptions = true;
+            serializableAppearanceObject5.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.psColorEdit.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
+            this.psColorEdit.ColorAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.psColorEdit.Name = "psColorEdit";
+            // 
+            // imageList
+            // 
+            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList.Images.SetKeyName(0, "Unchecked.png");
+            this.imageList.Images.SetKeyName(1, "Checked.png");
+            // 
+            // yaAlignLookUp
+            // 
+            this.yaAlignLookUp.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.yaAlignLookUp.Appearance.Options.UseFont = true;
+            this.yaAlignLookUp.Appearance.Options.UseTextOptions = true;
+            this.yaAlignLookUp.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.yaAlignLookUp.AppearanceDropDown.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.yaAlignLookUp.AppearanceDropDown.Options.UseFont = true;
+            this.yaAlignLookUp.AppearanceDropDown.Options.UseTextOptions = true;
+            this.yaAlignLookUp.AppearanceDropDown.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.yaAlignLookUp.AppearanceDropDownHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.yaAlignLookUp.AppearanceDropDownHeader.Options.UseFont = true;
+            this.yaAlignLookUp.AppearanceDropDownHeader.Options.UseTextOptions = true;
+            this.yaAlignLookUp.AppearanceDropDownHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.yaAlignLookUp.AppearanceFocused.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.yaAlignLookUp.AppearanceFocused.Options.UseFont = true;
+            this.yaAlignLookUp.AppearanceFocused.Options.UseTextOptions = true;
+            this.yaAlignLookUp.AppearanceFocused.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.yaAlignLookUp.AutoHeight = false;
+            this.yaAlignLookUp.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.yaAlignLookUp.DropDownRows = 2;
+            this.yaAlignLookUp.Name = "yaAlignLookUp";
+            this.yaAlignLookUp.ShowFooter = false;
+            this.yaAlignLookUp.ShowHeader = false;
+            // 
+            // FormGraphSeriesEdit
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.ClientSize = new System.Drawing.Size(824, 601);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.KeyPreview = true;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormGraphSeriesEdit";
+            this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Setting Graph";
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.FormGraphSeriesEdit_KeyPress);
+            this.bgPanel.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.yAxesGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.yAxesGridView)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.plotSeriesGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.plotSeriesGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.psColorEdit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.yaAlignLookUp)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private DevExpress.XtraGrid.GridControl plotSeriesGrid;
+        private DevExpress.XtraGrid.Views.Grid.GridView plotSeriesGridView;
+        private DevExpress.XtraGrid.Columns.GridColumn psCheckedColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn psNameColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn psColorColumn;
+        private DevExpress.XtraGrid.GridControl yAxesGrid;
+        private DevExpress.XtraGrid.Views.Grid.GridView yAxesGridView;
+        private DevExpress.XtraGrid.Columns.GridColumn yaAlignColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn yaNameColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn yaMinColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn yaMaxColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn yaCheckedColumn;
+        private System.Windows.Forms.ImageList imageList;
+        private DevExpress.XtraEditors.Repository.RepositoryItemColorEdit psColorEdit;
+        private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit yaAlignLookUp;
+    }
+}

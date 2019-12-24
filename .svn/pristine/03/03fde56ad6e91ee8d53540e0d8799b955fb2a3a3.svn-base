@@ -1,0 +1,353 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class FormControllerEdit
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormControllerEdit));
+            this.okButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.svEdit = new DevExpress.XtraEditors.TextEdit();
+            this.iEdit = new DevExpress.XtraEditors.TextEdit();
+            this.pEdit = new DevExpress.XtraEditors.TextEdit();
+            this.dEdit = new DevExpress.XtraEditors.TextEdit();
+            this.outEdit = new DevExpress.XtraEditors.TextEdit();
+            this.modeCombo = new System.Windows.Forms.ComboBox();
+            this.flEdit = new DevExpress.XtraEditors.TextEdit();
+            this.svCheck = new System.Windows.Forms.CheckBox();
+            this.outCheck = new System.Windows.Forms.CheckBox();
+            this.modeCheck = new System.Windows.Forms.CheckBox();
+            this.flCheck = new System.Windows.Forms.CheckBox();
+            this.dCheck = new System.Windows.Forms.CheckBox();
+            this.iCheck = new System.Windows.Forms.CheckBox();
+            this.pCheck = new System.Windows.Forms.CheckBox();
+            this.bgPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.svEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.flEdit.Properties)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.Controls.Add(this.flCheck);
+            this.bgPanel.Controls.Add(this.dCheck);
+            this.bgPanel.Controls.Add(this.iCheck);
+            this.bgPanel.Controls.Add(this.pCheck);
+            this.bgPanel.Controls.Add(this.modeCheck);
+            this.bgPanel.Controls.Add(this.outCheck);
+            this.bgPanel.Controls.Add(this.svCheck);
+            this.bgPanel.Controls.Add(this.flEdit);
+            this.bgPanel.Controls.Add(this.modeCombo);
+            this.bgPanel.Controls.Add(this.dEdit);
+            this.bgPanel.Controls.Add(this.outEdit);
+            this.bgPanel.Controls.Add(this.iEdit);
+            this.bgPanel.Controls.Add(this.pEdit);
+            this.bgPanel.Controls.Add(this.svEdit);
+            this.bgPanel.Controls.Add(this.okButton);
+            this.bgPanel.Controls.Add(this.cancelButton);
+            this.bgPanel.Size = new System.Drawing.Size(362, 190);
+            // 
+            // okButton
+            // 
+            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.okButton.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.okButton.Image = ((System.Drawing.Image)(resources.GetObject("okButton.Image")));
+            this.okButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.okButton.Location = new System.Drawing.Point(144, 144);
+            this.okButton.Name = "okButton";
+            this.okButton.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.okButton.Size = new System.Drawing.Size(100, 32);
+            this.okButton.TabIndex = 16;
+            this.okButton.Text = "Ok";
+            this.okButton.UseVisualStyleBackColor = true;
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cancelButton.Image = ((System.Drawing.Image)(resources.GetObject("cancelButton.Image")));
+            this.cancelButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.cancelButton.Location = new System.Drawing.Point(246, 144);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.cancelButton.Size = new System.Drawing.Size(100, 32);
+            this.cancelButton.TabIndex = 17;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            // 
+            // svEdit
+            // 
+            this.svEdit.EditValue = "0.0";
+            this.svEdit.Location = new System.Drawing.Point(78, 16);
+            this.svEdit.Name = "svEdit";
+            this.svEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.svEdit.Properties.Appearance.Options.UseFont = true;
+            this.svEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.svEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.svEdit.Properties.EditFormat.FormatString = "f1";
+            this.svEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.svEdit.Properties.Mask.EditMask = "f1";
+            this.svEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.svEdit.Properties.MaxLength = 6;
+            this.svEdit.Size = new System.Drawing.Size(90, 22);
+            this.svEdit.TabIndex = 3;
+            // 
+            // iEdit
+            // 
+            this.iEdit.EditValue = "0.0";
+            this.iEdit.Location = new System.Drawing.Point(256, 48);
+            this.iEdit.Name = "iEdit";
+            this.iEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iEdit.Properties.Appearance.Options.UseFont = true;
+            this.iEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.iEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.iEdit.Properties.EditFormat.FormatString = "f1";
+            this.iEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.iEdit.Properties.Mask.EditMask = "f1";
+            this.iEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.iEdit.Properties.MaxLength = 6;
+            this.iEdit.Size = new System.Drawing.Size(90, 22);
+            this.iEdit.TabIndex = 11;
+            // 
+            // pEdit
+            // 
+            this.pEdit.EditValue = "0.0";
+            this.pEdit.Location = new System.Drawing.Point(256, 16);
+            this.pEdit.Name = "pEdit";
+            this.pEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pEdit.Properties.Appearance.Options.UseFont = true;
+            this.pEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.pEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.pEdit.Properties.EditFormat.FormatString = "f1";
+            this.pEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.pEdit.Properties.Mask.EditMask = "f1";
+            this.pEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.pEdit.Properties.MaxLength = 6;
+            this.pEdit.Size = new System.Drawing.Size(90, 22);
+            this.pEdit.TabIndex = 9;
+            // 
+            // dEdit
+            // 
+            this.dEdit.EditValue = "0.0";
+            this.dEdit.Location = new System.Drawing.Point(256, 80);
+            this.dEdit.Name = "dEdit";
+            this.dEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dEdit.Properties.Appearance.Options.UseFont = true;
+            this.dEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.dEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.dEdit.Properties.EditFormat.FormatString = "f1";
+            this.dEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.dEdit.Properties.Mask.EditMask = "f1";
+            this.dEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.dEdit.Properties.MaxLength = 6;
+            this.dEdit.Size = new System.Drawing.Size(90, 22);
+            this.dEdit.TabIndex = 13;
+            // 
+            // outEdit
+            // 
+            this.outEdit.EditValue = "0.0";
+            this.outEdit.Location = new System.Drawing.Point(78, 48);
+            this.outEdit.Name = "outEdit";
+            this.outEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.outEdit.Properties.Appearance.Options.UseFont = true;
+            this.outEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.outEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.outEdit.Properties.EditFormat.FormatString = "f1";
+            this.outEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.outEdit.Properties.Mask.EditMask = "f1";
+            this.outEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.outEdit.Properties.MaxLength = 6;
+            this.outEdit.Size = new System.Drawing.Size(90, 22);
+            this.outEdit.TabIndex = 5;
+            // 
+            // modeCombo
+            // 
+            this.modeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.modeCombo.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.modeCombo.FormattingEnabled = true;
+            this.modeCombo.Items.AddRange(new object[] {
+            "AUTO",
+            "MANUAL"});
+            this.modeCombo.Location = new System.Drawing.Point(78, 80);
+            this.modeCombo.Name = "modeCombo";
+            this.modeCombo.Size = new System.Drawing.Size(90, 23);
+            this.modeCombo.TabIndex = 7;
+            // 
+            // flEdit
+            // 
+            this.flEdit.EditValue = "0.0";
+            this.flEdit.Location = new System.Drawing.Point(256, 112);
+            this.flEdit.Name = "flEdit";
+            this.flEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flEdit.Properties.Appearance.Options.UseFont = true;
+            this.flEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.flEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.flEdit.Properties.EditFormat.FormatString = "f1";
+            this.flEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.flEdit.Properties.Mask.EditMask = "f1";
+            this.flEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.flEdit.Properties.MaxLength = 6;
+            this.flEdit.Size = new System.Drawing.Size(90, 22);
+            this.flEdit.TabIndex = 15;
+            // 
+            // svCheck
+            // 
+            this.svCheck.AutoSize = true;
+            this.svCheck.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.svCheck.Location = new System.Drawing.Point(16, 18);
+            this.svCheck.Name = "svCheck";
+            this.svCheck.Size = new System.Drawing.Size(41, 19);
+            this.svCheck.TabIndex = 2;
+            this.svCheck.Tag = "1";
+            this.svCheck.Text = "SV";
+            this.svCheck.UseVisualStyleBackColor = true;
+            // 
+            // outCheck
+            // 
+            this.outCheck.AutoSize = true;
+            this.outCheck.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.outCheck.Location = new System.Drawing.Point(16, 50);
+            this.outCheck.Name = "outCheck";
+            this.outCheck.Size = new System.Drawing.Size(51, 19);
+            this.outCheck.TabIndex = 4;
+            this.outCheck.Tag = "2";
+            this.outCheck.Text = "OUT";
+            this.outCheck.UseVisualStyleBackColor = true;
+            // 
+            // modeCheck
+            // 
+            this.modeCheck.AutoSize = true;
+            this.modeCheck.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.modeCheck.Location = new System.Drawing.Point(16, 82);
+            this.modeCheck.Name = "modeCheck";
+            this.modeCheck.Size = new System.Drawing.Size(61, 19);
+            this.modeCheck.TabIndex = 6;
+            this.modeCheck.Tag = "3";
+            this.modeCheck.Text = "MODE";
+            this.modeCheck.UseVisualStyleBackColor = true;
+            // 
+            // flCheck
+            // 
+            this.flCheck.AutoSize = true;
+            this.flCheck.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flCheck.Location = new System.Drawing.Point(194, 114);
+            this.flCheck.Name = "flCheck";
+            this.flCheck.Size = new System.Drawing.Size(40, 19);
+            this.flCheck.TabIndex = 14;
+            this.flCheck.Tag = "10";
+            this.flCheck.Text = "FL";
+            this.flCheck.UseVisualStyleBackColor = true;
+            // 
+            // dCheck
+            // 
+            this.dCheck.AutoSize = true;
+            this.dCheck.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dCheck.Location = new System.Drawing.Point(194, 82);
+            this.dCheck.Name = "dCheck";
+            this.dCheck.Size = new System.Drawing.Size(35, 19);
+            this.dCheck.TabIndex = 12;
+            this.dCheck.Tag = "7";
+            this.dCheck.Text = "D";
+            this.dCheck.UseVisualStyleBackColor = true;
+            // 
+            // iCheck
+            // 
+            this.iCheck.AutoSize = true;
+            this.iCheck.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iCheck.Location = new System.Drawing.Point(194, 50);
+            this.iCheck.Name = "iCheck";
+            this.iCheck.Size = new System.Drawing.Size(29, 19);
+            this.iCheck.TabIndex = 10;
+            this.iCheck.Tag = "6";
+            this.iCheck.Text = "I";
+            this.iCheck.UseVisualStyleBackColor = true;
+            // 
+            // pCheck
+            // 
+            this.pCheck.AutoSize = true;
+            this.pCheck.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pCheck.Location = new System.Drawing.Point(194, 18);
+            this.pCheck.Name = "pCheck";
+            this.pCheck.Size = new System.Drawing.Size(34, 19);
+            this.pCheck.TabIndex = 8;
+            this.pCheck.Tag = "5";
+            this.pCheck.Text = "P";
+            this.pCheck.UseVisualStyleBackColor = true;
+            // 
+            // FormControllerEdit
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(362, 190);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.KeyPreview = true;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormControllerEdit";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "";
+            this.Load += new System.EventHandler(this.FormControllerEdit_Load);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.FormControllerEdit_KeyPress);
+            this.bgPanel.ResumeLayout(false);
+            this.bgPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.svEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.flEdit.Properties)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button cancelButton;
+        public DevExpress.XtraEditors.TextEdit dEdit;
+        public DevExpress.XtraEditors.TextEdit outEdit;
+        public DevExpress.XtraEditors.TextEdit iEdit;
+        public DevExpress.XtraEditors.TextEdit pEdit;
+        public DevExpress.XtraEditors.TextEdit svEdit;
+        public DevExpress.XtraEditors.TextEdit flEdit;
+        public System.Windows.Forms.ComboBox modeCombo;
+        public System.Windows.Forms.CheckBox flCheck;
+        public System.Windows.Forms.CheckBox dCheck;
+        public System.Windows.Forms.CheckBox iCheck;
+        public System.Windows.Forms.CheckBox pCheck;
+        public System.Windows.Forms.CheckBox modeCheck;
+        public System.Windows.Forms.CheckBox outCheck;
+        public System.Windows.Forms.CheckBox svCheck;
+    }
+}

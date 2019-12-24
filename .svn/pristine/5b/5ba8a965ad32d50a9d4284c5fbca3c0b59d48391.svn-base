@@ -1,0 +1,52 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{
+    public enum ETestRatedField
+    {
+        Capacity,
+        Power,
+        EER_COP,
+        Voltage,
+        Current,
+        Phase,
+        Frequency,
+        PowerMeter
+    }
+
+    public partial class CtrlTestRated : UlUserControlEng
+    {
+        public CtrlTestRated()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private List<Label> unitLabels;
+
+        private void Initialize()
+        {
+            unitLabels = new List<Label>();
+            unitLabels.Add(capacityUnitLabel);
+            unitLabels.Add(powerUnitLabel);
+            unitLabels.Add(eER_COPUnitLabel);
+            unitLabels.Add(voltageUnitLabel);
+            unitLabels.Add(currentUnitLabel);
+        }
+
+        public void SetUnit(ETestRatedField index, string unit)
+        {
+            unitLabels[(int)index].Text = unit;
+        }
+    }
+}

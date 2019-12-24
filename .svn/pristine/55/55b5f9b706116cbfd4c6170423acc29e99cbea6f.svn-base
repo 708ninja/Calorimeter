@@ -1,0 +1,510 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class CtrlDeviceController
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.view1Panel = new Ulee.Controls.UlPanel();
+            this.view2Panel = new Ulee.Controls.UlPanel();
+            this.view4Panel = new Ulee.Controls.UlPanel();
+            this.view3Panel = new Ulee.Controls.UlPanel();
+            this.view8Panel = new Ulee.Controls.UlPanel();
+            this.view7Panel = new Ulee.Controls.UlPanel();
+            this.view6Panel = new Ulee.Controls.UlPanel();
+            this.view5Panel = new Ulee.Controls.UlPanel();
+            this.view16Panel = new Ulee.Controls.UlPanel();
+            this.view15Panel = new Ulee.Controls.UlPanel();
+            this.view14Panel = new Ulee.Controls.UlPanel();
+            this.view13Panel = new Ulee.Controls.UlPanel();
+            this.view12Panel = new Ulee.Controls.UlPanel();
+            this.view11Panel = new Ulee.Controls.UlPanel();
+            this.view10Panel = new Ulee.Controls.UlPanel();
+            this.view9Panel = new Ulee.Controls.UlPanel();
+            this.view24Panel = new Ulee.Controls.UlPanel();
+            this.view23Panel = new Ulee.Controls.UlPanel();
+            this.view22Panel = new Ulee.Controls.UlPanel();
+            this.view21Panel = new Ulee.Controls.UlPanel();
+            this.view19Panel = new Ulee.Controls.UlPanel();
+            this.view18Panel = new Ulee.Controls.UlPanel();
+            this.view17Panel = new Ulee.Controls.UlPanel();
+            this.view20Panel = new Ulee.Controls.UlPanel();
+            this.bgPanel.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.bgPanel.Controls.Add(this.view20Panel);
+            this.bgPanel.Controls.Add(this.view24Panel);
+            this.bgPanel.Controls.Add(this.view23Panel);
+            this.bgPanel.Controls.Add(this.view22Panel);
+            this.bgPanel.Controls.Add(this.view21Panel);
+            this.bgPanel.Controls.Add(this.view19Panel);
+            this.bgPanel.Controls.Add(this.view18Panel);
+            this.bgPanel.Controls.Add(this.view17Panel);
+            this.bgPanel.Controls.Add(this.view16Panel);
+            this.bgPanel.Controls.Add(this.view15Panel);
+            this.bgPanel.Controls.Add(this.view14Panel);
+            this.bgPanel.Controls.Add(this.view13Panel);
+            this.bgPanel.Controls.Add(this.view12Panel);
+            this.bgPanel.Controls.Add(this.view11Panel);
+            this.bgPanel.Controls.Add(this.view10Panel);
+            this.bgPanel.Controls.Add(this.view9Panel);
+            this.bgPanel.Controls.Add(this.view8Panel);
+            this.bgPanel.Controls.Add(this.view7Panel);
+            this.bgPanel.Controls.Add(this.view6Panel);
+            this.bgPanel.Controls.Add(this.view5Panel);
+            this.bgPanel.Controls.Add(this.view4Panel);
+            this.bgPanel.Controls.Add(this.view3Panel);
+            this.bgPanel.Controls.Add(this.view2Panel);
+            this.bgPanel.Controls.Add(this.view1Panel);
+            this.bgPanel.Size = new System.Drawing.Size(1816, 915);
+            // 
+            // view1Panel
+            // 
+            this.view1Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view1Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view1Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view1Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view1Panel.Location = new System.Drawing.Point(0, 0);
+            this.view1Panel.Name = "view1Panel";
+            this.view1Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view1Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view1Panel.Size = new System.Drawing.Size(222, 300);
+            this.view1Panel.Spacing = 0;
+            this.view1Panel.TabIndex = 1;
+            this.view1Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view1Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view2Panel
+            // 
+            this.view2Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view2Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view2Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view2Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view2Panel.Location = new System.Drawing.Point(227, 0);
+            this.view2Panel.Name = "view2Panel";
+            this.view2Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view2Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view2Panel.Size = new System.Drawing.Size(222, 300);
+            this.view2Panel.Spacing = 0;
+            this.view2Panel.TabIndex = 2;
+            this.view2Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view2Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view4Panel
+            // 
+            this.view4Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view4Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view4Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view4Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view4Panel.Location = new System.Drawing.Point(683, 0);
+            this.view4Panel.Name = "view4Panel";
+            this.view4Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view4Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view4Panel.Size = new System.Drawing.Size(222, 300);
+            this.view4Panel.Spacing = 0;
+            this.view4Panel.TabIndex = 4;
+            this.view4Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view4Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view3Panel
+            // 
+            this.view3Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view3Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view3Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view3Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view3Panel.Location = new System.Drawing.Point(455, 0);
+            this.view3Panel.Name = "view3Panel";
+            this.view3Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view3Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view3Panel.Size = new System.Drawing.Size(222, 300);
+            this.view3Panel.Spacing = 0;
+            this.view3Panel.TabIndex = 3;
+            this.view3Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view3Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view8Panel
+            // 
+            this.view8Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view8Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view8Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view8Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view8Panel.Location = new System.Drawing.Point(1594, 0);
+            this.view8Panel.Name = "view8Panel";
+            this.view8Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view8Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view8Panel.Size = new System.Drawing.Size(222, 300);
+            this.view8Panel.Spacing = 0;
+            this.view8Panel.TabIndex = 8;
+            this.view8Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view8Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view7Panel
+            // 
+            this.view7Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view7Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view7Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view7Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view7Panel.Location = new System.Drawing.Point(1367, 0);
+            this.view7Panel.Name = "view7Panel";
+            this.view7Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view7Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view7Panel.Size = new System.Drawing.Size(222, 300);
+            this.view7Panel.Spacing = 0;
+            this.view7Panel.TabIndex = 7;
+            this.view7Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view7Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view6Panel
+            // 
+            this.view6Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view6Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view6Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view6Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view6Panel.Location = new System.Drawing.Point(1139, 0);
+            this.view6Panel.Name = "view6Panel";
+            this.view6Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view6Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view6Panel.Size = new System.Drawing.Size(222, 300);
+            this.view6Panel.Spacing = 0;
+            this.view6Panel.TabIndex = 6;
+            this.view6Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view6Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view5Panel
+            // 
+            this.view5Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view5Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view5Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view5Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view5Panel.Location = new System.Drawing.Point(911, 0);
+            this.view5Panel.Name = "view5Panel";
+            this.view5Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view5Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view5Panel.Size = new System.Drawing.Size(222, 300);
+            this.view5Panel.Spacing = 0;
+            this.view5Panel.TabIndex = 5;
+            this.view5Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view5Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view16Panel
+            // 
+            this.view16Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view16Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view16Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view16Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view16Panel.Location = new System.Drawing.Point(1594, 307);
+            this.view16Panel.Name = "view16Panel";
+            this.view16Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view16Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view16Panel.Size = new System.Drawing.Size(222, 300);
+            this.view16Panel.Spacing = 0;
+            this.view16Panel.TabIndex = 16;
+            this.view16Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view16Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view15Panel
+            // 
+            this.view15Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view15Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view15Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view15Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view15Panel.Location = new System.Drawing.Point(1367, 307);
+            this.view15Panel.Name = "view15Panel";
+            this.view15Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view15Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view15Panel.Size = new System.Drawing.Size(222, 300);
+            this.view15Panel.Spacing = 0;
+            this.view15Panel.TabIndex = 15;
+            this.view15Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view15Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view14Panel
+            // 
+            this.view14Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view14Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view14Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view14Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view14Panel.Location = new System.Drawing.Point(1139, 307);
+            this.view14Panel.Name = "view14Panel";
+            this.view14Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view14Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view14Panel.Size = new System.Drawing.Size(222, 300);
+            this.view14Panel.Spacing = 0;
+            this.view14Panel.TabIndex = 14;
+            this.view14Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view14Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view13Panel
+            // 
+            this.view13Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view13Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view13Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view13Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view13Panel.Location = new System.Drawing.Point(911, 307);
+            this.view13Panel.Name = "view13Panel";
+            this.view13Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view13Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view13Panel.Size = new System.Drawing.Size(222, 300);
+            this.view13Panel.Spacing = 0;
+            this.view13Panel.TabIndex = 13;
+            this.view13Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view13Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view12Panel
+            // 
+            this.view12Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view12Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view12Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view12Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view12Panel.Location = new System.Drawing.Point(683, 307);
+            this.view12Panel.Name = "view12Panel";
+            this.view12Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view12Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view12Panel.Size = new System.Drawing.Size(222, 300);
+            this.view12Panel.Spacing = 0;
+            this.view12Panel.TabIndex = 12;
+            this.view12Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view12Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view11Panel
+            // 
+            this.view11Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view11Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view11Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view11Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view11Panel.Location = new System.Drawing.Point(455, 307);
+            this.view11Panel.Name = "view11Panel";
+            this.view11Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view11Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view11Panel.Size = new System.Drawing.Size(222, 300);
+            this.view11Panel.Spacing = 0;
+            this.view11Panel.TabIndex = 11;
+            this.view11Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view11Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view10Panel
+            // 
+            this.view10Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view10Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view10Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view10Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view10Panel.Location = new System.Drawing.Point(227, 307);
+            this.view10Panel.Name = "view10Panel";
+            this.view10Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view10Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view10Panel.Size = new System.Drawing.Size(222, 300);
+            this.view10Panel.Spacing = 0;
+            this.view10Panel.TabIndex = 10;
+            this.view10Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view10Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view9Panel
+            // 
+            this.view9Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view9Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view9Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view9Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view9Panel.Location = new System.Drawing.Point(0, 307);
+            this.view9Panel.Name = "view9Panel";
+            this.view9Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view9Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view9Panel.Size = new System.Drawing.Size(222, 300);
+            this.view9Panel.Spacing = 0;
+            this.view9Panel.TabIndex = 9;
+            this.view9Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view9Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view24Panel
+            // 
+            this.view24Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view24Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view24Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view24Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view24Panel.Location = new System.Drawing.Point(1594, 615);
+            this.view24Panel.Name = "view24Panel";
+            this.view24Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view24Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view24Panel.Size = new System.Drawing.Size(222, 300);
+            this.view24Panel.Spacing = 0;
+            this.view24Panel.TabIndex = 24;
+            this.view24Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view24Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view23Panel
+            // 
+            this.view23Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view23Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view23Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view23Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view23Panel.Location = new System.Drawing.Point(1367, 615);
+            this.view23Panel.Name = "view23Panel";
+            this.view23Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view23Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view23Panel.Size = new System.Drawing.Size(222, 300);
+            this.view23Panel.Spacing = 0;
+            this.view23Panel.TabIndex = 23;
+            this.view23Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view23Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view22Panel
+            // 
+            this.view22Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view22Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view22Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view22Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view22Panel.Location = new System.Drawing.Point(1139, 615);
+            this.view22Panel.Name = "view22Panel";
+            this.view22Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view22Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view22Panel.Size = new System.Drawing.Size(222, 300);
+            this.view22Panel.Spacing = 0;
+            this.view22Panel.TabIndex = 22;
+            this.view22Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view22Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view21Panel
+            // 
+            this.view21Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view21Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view21Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view21Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view21Panel.Location = new System.Drawing.Point(911, 615);
+            this.view21Panel.Name = "view21Panel";
+            this.view21Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view21Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view21Panel.Size = new System.Drawing.Size(222, 300);
+            this.view21Panel.Spacing = 0;
+            this.view21Panel.TabIndex = 21;
+            this.view21Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view21Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view19Panel
+            // 
+            this.view19Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view19Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view19Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view19Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view19Panel.Location = new System.Drawing.Point(455, 615);
+            this.view19Panel.Name = "view19Panel";
+            this.view19Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view19Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view19Panel.Size = new System.Drawing.Size(222, 300);
+            this.view19Panel.Spacing = 0;
+            this.view19Panel.TabIndex = 19;
+            this.view19Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view19Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view18Panel
+            // 
+            this.view18Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view18Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view18Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view18Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view18Panel.Location = new System.Drawing.Point(227, 615);
+            this.view18Panel.Name = "view18Panel";
+            this.view18Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view18Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view18Panel.Size = new System.Drawing.Size(222, 300);
+            this.view18Panel.Spacing = 0;
+            this.view18Panel.TabIndex = 18;
+            this.view18Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view18Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view17Panel
+            // 
+            this.view17Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view17Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view17Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view17Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view17Panel.Location = new System.Drawing.Point(0, 615);
+            this.view17Panel.Name = "view17Panel";
+            this.view17Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view17Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view17Panel.Size = new System.Drawing.Size(222, 300);
+            this.view17Panel.Spacing = 0;
+            this.view17Panel.TabIndex = 17;
+            this.view17Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view17Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // view20Panel
+            // 
+            this.view20Panel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.view20Panel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.view20Panel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view20Panel.InnerColor2 = System.Drawing.Color.White;
+            this.view20Panel.Location = new System.Drawing.Point(683, 615);
+            this.view20Panel.Name = "view20Panel";
+            this.view20Panel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.view20Panel.OuterColor2 = System.Drawing.Color.White;
+            this.view20Panel.Size = new System.Drawing.Size(222, 300);
+            this.view20Panel.Spacing = 0;
+            this.view20Panel.TabIndex = 20;
+            this.view20Panel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.view20Panel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // CtrlDeviceController
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlDeviceController";
+            this.Size = new System.Drawing.Size(1816, 915);
+            this.bgPanel.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private Ulee.Controls.UlPanel view8Panel;
+        private Ulee.Controls.UlPanel view7Panel;
+        private Ulee.Controls.UlPanel view6Panel;
+        private Ulee.Controls.UlPanel view5Panel;
+        private Ulee.Controls.UlPanel view4Panel;
+        private Ulee.Controls.UlPanel view3Panel;
+        private Ulee.Controls.UlPanel view2Panel;
+        private Ulee.Controls.UlPanel view1Panel;
+        private Ulee.Controls.UlPanel view24Panel;
+        private Ulee.Controls.UlPanel view23Panel;
+        private Ulee.Controls.UlPanel view22Panel;
+        private Ulee.Controls.UlPanel view21Panel;
+        private Ulee.Controls.UlPanel view19Panel;
+        private Ulee.Controls.UlPanel view18Panel;
+        private Ulee.Controls.UlPanel view17Panel;
+        private Ulee.Controls.UlPanel view16Panel;
+        private Ulee.Controls.UlPanel view15Panel;
+        private Ulee.Controls.UlPanel view14Panel;
+        private Ulee.Controls.UlPanel view13Panel;
+        private Ulee.Controls.UlPanel view12Panel;
+        private Ulee.Controls.UlPanel view11Panel;
+        private Ulee.Controls.UlPanel view10Panel;
+        private Ulee.Controls.UlPanel view9Panel;
+        private Ulee.Controls.UlPanel view20Panel;
+    }
+}

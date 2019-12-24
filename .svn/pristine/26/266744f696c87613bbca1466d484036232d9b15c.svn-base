@@ -1,0 +1,144 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlConfigCoefficient : UlUserControlEng
+    {
+        public CtrlConfigCoefficient()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private List<ECoefficient> ecoeffs;
+        private List<CoefficientViewRow> coefficients;
+
+        private void Initialize()
+        {
+            ecoeffs = new List<ECoefficient>();
+
+            ecoeffs.Add(ECoefficient.Airflow);
+            ecoeffs.Add(ECoefficient.CoolingCapacity);
+            ecoeffs.Add(ECoefficient.HeatingCapacity);
+            ecoeffs.Add(ECoefficient.Cooling_HLK);
+            ecoeffs.Add(ECoefficient.Heating_HLK);
+            ecoeffs.Add(ECoefficient.Cooling_HLK_Duct1);
+            ecoeffs.Add(ECoefficient.Heating_HLK_Duct1);
+            ecoeffs.Add(ECoefficient.Cooling_HLK_Duct2);
+            ecoeffs.Add(ECoefficient.Heating_HLK_Duct2);
+            ecoeffs.Add(ECoefficient.Cooling_HLK_Duct3);
+            ecoeffs.Add(ECoefficient.Heating_HLK_Duct3);
+            ecoeffs.Add(ECoefficient.Cooling_HLK_Duct4);
+            ecoeffs.Add(ECoefficient.Heating_HLK_Duct4);
+            ecoeffs.Add(ECoefficient.Cooling_HLK_Duct5);
+            ecoeffs.Add(ECoefficient.Heating_HLK_Duct5);
+            ecoeffs.Add(ECoefficient.Nozzle1);
+            ecoeffs.Add(ECoefficient.Nozzle2);
+            ecoeffs.Add(ECoefficient.Nozzle3);
+            ecoeffs.Add(ECoefficient.Nozzle4);
+
+            coefficients = new List<CoefficientViewRow>();
+        }
+
+        private void CtrlConfigCoefficient_Enter(object sender, EventArgs e)
+        {
+            coeffGrid.DataSource = coefficients;
+            coeffGridView.Appearance.EvenRow.BackColor = Color.FromArgb(244, 244, 236);
+            coeffGridView.OptionsView.EnableAppearanceEvenRow = true;
+        }
+
+        private void CtrlConfigCoefficient_Load(object sender, EventArgs e)
+        {
+            LoadCoefficient();
+        }
+
+        private void LoadCoefficient()
+        {
+            string key, name;
+            string section = "Coefficient";
+            UlIniFile ini = Resource.Ini;
+
+            coefficients.Clear();
+            foreach (ECoefficient coeff in ecoeffs)
+            {
+                key = coeff.ToString();
+                name = coeff.ToDescription();
+
+                coefficients.Add(new CoefficientViewRow(name,
+                    (float)ini.GetDouble($"{section}.ID11", key),
+                    (float)ini.GetDouble($"{section}.ID12", key),
+                    (float)ini.GetDouble($"{section}.ID21", key),
+                    (float)ini.GetDouble($"{section}.ID22", key)));
+            }
+            coeffGridView.RefreshData();
+
+            fixedAtmPressureCheck.Checked = ini.GetBoolean("Options", "FixedAtmPressure");
+            forcedIntegCheck.Checked = ini.GetBoolean("Options", "ForcedInteg");
+            excelPathEdit.Text = ini.GetString("Options", "ExcelPath");
+        }
+
+        private void selectFolderButton_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                excelPathEdit.Text = dialog.SelectedPath;
+            }
+        }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Would you like to save current coefficient values?",
+                Resource.Caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                == DialogResult.No)
+            {
+                return;
+            }
+
+            string section;
+            UlIniFile ini = Resource.Ini;
+
+            section = "Coefficient.ID11";
+            foreach (ECoefficient coeff in ecoeffs)
+            {
+                ini.SetDouble(section, coeff.ToString(), coefficients[(int)coeff].ID11);
+            }
+
+            section = "Coefficient.ID12";
+            foreach (ECoefficient coeff in ecoeffs)
+            {
+                ini.SetDouble(section, coeff.ToString(), coefficients[(int)coeff].ID12);
+            }
+
+            section = "Coefficient.ID21";
+            foreach (ECoefficient coeff in ecoeffs)
+            {
+                ini.SetDouble(section, coeff.ToString(), coefficients[(int)coeff].ID21);
+            }
+
+            section = "Coefficient.ID22";
+            foreach (ECoefficient coeff in ecoeffs)
+            {
+                ini.SetDouble(section, coeff.ToString(), coefficients[(int)coeff].ID22);
+            }
+
+            ini.SetBoolean("Options", "FixedAtmPressure", fixedAtmPressureCheck.Checked);
+            ini.SetBoolean("Options", "ForcedInteg", forcedIntegCheck.Checked);
+            ini.SetString("Options", "ExcelPath", excelPathEdit.Text);
+
+            Resource.Settings.Load();
+        }
+    }
+}

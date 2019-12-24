@@ -1,0 +1,80 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{
+    public enum ETestRatedField
+    {
+        Capacity,
+        Power,
+        EER_COP,
+        Voltage,
+        Current,
+        Phase,
+        Frequency,
+        PowerMeter
+    }
+
+    public partial class CtrlTestRated : UlUserControlEng
+    {
+        public CtrlTestRated(EConditionRated index)
+        {
+            InitializeComponent();
+
+            Index = index;
+            Initialize();
+        }
+
+        public EConditionRated Index { get; private set; }
+
+        private List<Label> unitLabels;
+
+        public event EventHandler CalcCapacity;
+
+        private void OnCalcTotalCapacity(object sender, EventArgs args)
+        {
+            CalcCapacity?.Invoke(sender, args);
+        }
+
+        private void Initialize()
+        {
+            unitLabels = new List<Label>();
+            unitLabels.Add(capacityUnitLabel);
+            unitLabels.Add(powerUnitLabel);
+            unitLabels.Add(eER_COPUnitLabel);
+            unitLabels.Add(voltageUnitLabel);
+            unitLabels.Add(currentUnitLabel);
+        }
+
+        public void SetUnit(ETestRatedField index, string unit)
+        {
+            unitLabels[(int)index].Text = unit;
+        }
+
+        public void capacityEdit_Leave(object sender, EventArgs e)
+        {
+            double capacity = double.Parse(capacityEdit.Text);
+            double power = double.Parse(PowerInEdit.Text);
+
+            if (power == 0.0)
+            {
+                eepEdit.EditValue = 0.0;
+            }
+            else
+            {
+                eepEdit.EditValue = capacity / power;
+            }
+
+            OnCalcTotalCapacity(this, null);
+        }
+    }
+}

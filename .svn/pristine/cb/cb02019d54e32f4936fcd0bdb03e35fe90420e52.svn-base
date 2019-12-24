@@ -1,0 +1,245 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+using Ulee.Utils;
+using Ulee.Device.Connection.Yokogawa;
+
+namespace Hnc.Calorimeter.Client
+{
+    public enum ETestRatedField
+    {
+        Capacity,
+        Power,
+        EER_COP,
+        Voltage,
+        Current,
+        Frequency,
+        PM_IDU,
+        PM_ODU,
+        Phase
+    }
+
+    public partial class CtrlTestRated : UlUserControlEng
+    {
+        public CtrlTestRated(EConditionRated index, TestValue values)
+        {
+            InitializeComponent();
+
+            CoolingRecNo = -1;
+            HeatingRecNo = -1;
+            Index = index;
+            Initialize(values);
+        }
+
+        public int CoolingRecNo { get; set; }
+        public int HeatingRecNo { get; set; }
+
+        public EConditionRated Index { get; private set; }
+
+        private List<Label> unitCoolingLabels;
+        private List<Label> unitHeatingLabels;
+
+        public event EventHandler CalcCapacity;
+        private void OnCalcTotalCapacity(object sender, EventArgs args)
+        {
+            CalcCapacity?.Invoke(sender, args);
+        }
+
+        public bool ReadOnly
+        {
+            set
+            {
+                coolingCapacityEdit.ReadOnly = value;
+                coolingCurrentEdit.ReadOnly = value;
+                coolingEepEdit.ReadOnly = value;
+                coolingFreqCombo.ReadOnly = value;
+                coolingVoltEdit.ReadOnly = value;
+                coolingPowerInEdit.ReadOnly = value;
+                coolingPowerMeter1Combo.Enabled = !value;
+                coolingPowerMeter2Combo.Enabled = !value;
+                coolingPhaseCombo.Enabled = !value;
+
+                heatingCapacityEdit.ReadOnly = value;
+                heatingCurrentEdit.ReadOnly = value;
+                heatingEepEdit.ReadOnly = value;
+                heatingFreqCombo.ReadOnly = value;
+                heatingVoltEdit.ReadOnly = value;
+                heatingPowerInEdit.ReadOnly = value;
+                heatingPowerMeter1Combo.Enabled = !value;
+                heatingPowerMeter2Combo.Enabled = !value;
+                heatingPhaseCombo.Enabled = !value;
+            }
+        }
+
+        private void Initialize(TestValue values)
+        {
+            string format, devFormat;
+
+            coolingFreqCombo.SelectedIndex = 1;
+            heatingFreqCombo.SelectedIndex = 1;
+
+            NameValue<EWT330Wiring>[] coolWiring = EnumHelper.GetNameValues<EWT330Wiring>();
+
+            coolingPhaseCombo.DataSource = coolWiring;
+            coolingPhaseCombo.DisplayMember = "Name";
+            coolingPhaseCombo.ValueMember = "Value";
+            coolingPhaseCombo.SelectedValue = EWT330Wiring.P3W4;
+
+            NameValue<EWT330Wiring>[] heatWiring = EnumHelper.GetNameValues<EWT330Wiring>();
+
+            heatingPhaseCombo.DataSource = heatWiring;
+            heatingPhaseCombo.DisplayMember = "Name";
+            heatingPhaseCombo.ValueMember = "Value";
+            heatingPhaseCombo.SelectedValue = EWT330Wiring.P3W4;
+
+            coolingPowerMeter1Combo.Items.Clear();
+            coolingPowerMeter2Combo.Items.Clear();
+
+            heatingPowerMeter1Combo.Items.Clear();
+            heatingPowerMeter2Combo.Items.Clear();
+
+            foreach (PowerMeterRow<float> row in Resource.Client.Devices.PowerMeter.Rows)
+            {
+                if (row.Phase == EWT330Phase.P1)
+                {
+                    coolingPowerMeter1Combo.Items.Add(row.Name);
+                    heatingPowerMeter1Combo.Items.Add(row.Name);
+                }
+                else
+                {
+                    coolingPowerMeter2Combo.Items.Add(row.Name);
+                    heatingPowerMeter2Combo.Items.Add(row.Name);
+                }
+            }
+
+            coolingPowerMeter1Combo.SelectedIndex = 0;
+            coolingPowerMeter2Combo.SelectedIndex = 0;
+
+            heatingPowerMeter1Combo.SelectedIndex = 0;
+            heatingPowerMeter2Combo.SelectedIndex = 0;
+
+            format = values.Calcurated["Total.Capacity"].Format;
+            devFormat = ToDevFormat(format);
+
+            coolingCapacityEdit.Text = format;
+            coolingCapacityEdit.Properties.Mask.EditMask = devFormat;
+            coolingCapacityEdit.Properties.DisplayFormat.FormatString = devFormat;
+            coolingCapacityEdit.Properties.EditFormat.FormatString = devFormat;
+            heatingCapacityEdit.Text = format;
+            heatingCapacityEdit.Properties.Mask.EditMask = devFormat;
+            heatingCapacityEdit.Properties.DisplayFormat.FormatString = devFormat;
+            heatingCapacityEdit.Properties.EditFormat.FormatString = devFormat;
+
+            format = values.Calcurated["Total.Power"].Format;
+            devFormat = ToDevFormat(format);
+
+            coolingPowerInEdit.Text = format;
+            coolingPowerInEdit.Properties.Mask.EditMask = devFormat;
+            coolingPowerInEdit.Properties.DisplayFormat.FormatString = devFormat;
+            coolingPowerInEdit.Properties.EditFormat.FormatString = devFormat;
+            heatingPowerInEdit.Text = format;
+            heatingPowerInEdit.Properties.Mask.EditMask = devFormat;
+            heatingPowerInEdit.Properties.DisplayFormat.FormatString = devFormat;
+            heatingPowerInEdit.Properties.EditFormat.FormatString = devFormat;
+
+            format = values.Calcurated["Total.EER_COP"].Format;
+            devFormat = ToDevFormat(format);
+
+            coolingEepEdit.Text = format;
+            coolingEepEdit.Properties.Mask.EditMask = devFormat;
+            coolingEepEdit.Properties.DisplayFormat.FormatString = devFormat;
+            coolingEepEdit.Properties.EditFormat.FormatString = devFormat;
+            heatingEepEdit.Text = format;
+            heatingEepEdit.Properties.Mask.EditMask = devFormat;
+            heatingEepEdit.Properties.DisplayFormat.FormatString = devFormat;
+            heatingEepEdit.Properties.EditFormat.FormatString = devFormat;
+
+            format = values.Calcurated["PM.Voltage"].Format;
+            devFormat = ToDevFormat(format);
+
+            coolingVoltEdit.Text = format;
+            coolingVoltEdit.Properties.Mask.EditMask = devFormat;
+            coolingVoltEdit.Properties.DisplayFormat.FormatString = devFormat;
+            coolingVoltEdit.Properties.EditFormat.FormatString = devFormat;
+            heatingVoltEdit.Text = format;
+            heatingVoltEdit.Properties.Mask.EditMask = devFormat;
+            heatingVoltEdit.Properties.DisplayFormat.FormatString = devFormat;
+            heatingVoltEdit.Properties.EditFormat.FormatString = devFormat;
+
+            format = values.Calcurated["PM.Current"].Format;
+            devFormat = ToDevFormat(format);
+
+            coolingCurrentEdit.Text = format;
+            coolingCurrentEdit.Properties.Mask.EditMask = devFormat;
+            coolingCurrentEdit.Properties.DisplayFormat.FormatString = devFormat;
+            coolingCurrentEdit.Properties.EditFormat.FormatString = devFormat;
+            heatingCurrentEdit.Text = format;
+            heatingCurrentEdit.Properties.Mask.EditMask = devFormat;
+            heatingCurrentEdit.Properties.DisplayFormat.FormatString = devFormat;
+            heatingCurrentEdit.Properties.EditFormat.FormatString = devFormat;
+
+            unitCoolingLabels = new List<Label>();
+            unitCoolingLabels.Add(coolingCapacityUnitLabel);
+            unitCoolingLabels.Add(coolingPowerUnitLabel);
+            unitCoolingLabels.Add(coolingEER_COPUnitLabel);
+            unitCoolingLabels.Add(coolingVoltageUnitLabel);
+            unitCoolingLabels.Add(coolingCurrentUnitLabel);
+
+            unitHeatingLabels = new List<Label>();
+            unitHeatingLabels.Add(heatingCapacityUnitLabel);
+            unitHeatingLabels.Add(heatingPowerUnitLabel);
+            unitHeatingLabels.Add(heatingEER_COPUnitLabel);
+            unitHeatingLabels.Add(heatingVoltageUnitLabel);
+            unitHeatingLabels.Add(heatingCurrentUnitLabel);
+
+            ReadOnly = false;
+        }
+
+        private string ToDevFormat(string format)
+        {
+            string[] strings = format.Split(new[] { '.' }, StringSplitOptions.None);
+
+            if ((strings == null) || (strings.Length != 2)) return "f0";
+
+            return $"f{strings[1].Length}";
+        }
+
+        public void SetCoolingUnit(ETestRatedField index, string unit)
+        {
+            unitCoolingLabels[(int)index].Text = unit;
+        }
+
+        public void SetHeatingUnit(ETestRatedField index, string unit)
+        {
+            unitHeatingLabels[(int)index].Text = unit;
+        }
+
+        public void capacityEdit_Leave(object sender, EventArgs e)
+        {
+            double coolingCapacity = double.Parse(coolingCapacityEdit.Text);
+            double coolingPower = double.Parse(coolingPowerInEdit.Text);
+            double heatingCapacity = double.Parse(heatingCapacityEdit.Text);
+            double heatingPower = double.Parse(heatingPowerInEdit.Text);
+
+            if (coolingPower == 0.0)
+                coolingEepEdit.EditValue = 0.0;
+            else
+                coolingEepEdit.EditValue = coolingCapacity / coolingPower;
+
+            if (heatingPower == 0.0)
+                heatingEepEdit.EditValue = 0.0;
+            else
+                heatingEepEdit.EditValue = heatingCapacity / heatingPower;
+
+            OnCalcTotalCapacity(this, null);
+        }
+    }
+}

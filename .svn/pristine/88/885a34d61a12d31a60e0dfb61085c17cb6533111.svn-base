@@ -1,0 +1,922 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Ulee.Device.Connection.Yokogawa;
+
+namespace Hnc.Calorimeter.Client
+{
+    #region enums
+    public enum ETestState
+    {
+        Started,
+        Paused,
+        Stopped
+    }
+
+    public enum ETestMode
+    {
+        [Description("Cooling")]
+        Cooling,
+        [Description("Heating")]
+        Heating
+    }
+
+    public enum EIndoorUse
+    {
+        [Description("Indoor")]
+        Indoor,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EIndoorMode
+    {
+        [Description("Cooling")]
+        Cooling,
+        [Description("Heating")]
+        Heating,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EIndoorDuct
+    {
+        [Description("1")]
+        N1,
+        [Description("2")]
+        N2,
+        [Description("3")]
+        N3,
+        [Description("4")]
+        N4,
+        [Description("5")]
+        N5,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EOutdoorUse
+    {
+        [Description("Outdoor")]
+        Outdoor,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EEtcUse
+    {
+        [Description("Use")]
+        Use,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EMeasTotalRated
+    {
+        TotalCapacity,
+        PowerInput,
+        EER_COP,
+        None1,
+        RatedCapacity,
+        CapacityRatio,
+        RatedPowerInput,
+        PowerInputRatio,
+        RatedEER_COP,
+        EER_COPRatio,
+        RatedCurrent,
+        CurrentRatio,
+        None2,
+        Voltage,
+        Current,
+        Frequency,
+        PowerFactor
+    }
+
+    public enum EMeasRunState
+    {
+        Condition,
+        RunningStep,
+        ElapsedTime,
+        TotalElapsed,
+        None1,
+        Preparation,
+        Judgement,
+        Integration,
+        None2,
+        NoOfSteady,
+        Repeat,
+        Schedule
+    }
+
+    public enum EMeasAirSide
+    {
+        Capacity,
+        CapacityRatio,
+        SensibleHeat,
+        LatentHeat,
+        SensibleHeatRatio,
+        HeatLeakage,
+        DrainWeight,
+        None1,
+        EnteringDB,
+        EnteringWB,
+        EnteringRH,
+        LeavingDB,
+        LeavingWB,
+        LeavingRH,
+        None2,
+        EnteringEnthalpy,
+        LeavingEnthalpy,
+        EnteringHumidityRatio,
+        LeavingHumidityRatio,
+        LeavingSpecificHeat,
+        LeavingSpecificVolumn,
+        None3,
+        AirFlowLev,
+        StaticPressure,
+        NozzleDiffPressure,
+        AtmosphericPressure,
+        NozzleInletTemp,
+    }
+
+    public enum EMeasOutside
+    {
+        EnteringDB,
+        EnteringWB,
+        EnteringRH,
+        EnteringDP
+    }
+
+    public enum EMeasMethod
+    {
+        Method,
+        ScanTime
+    }
+
+    public enum EMeasNote
+    {
+        Company,
+        TestName,
+        TestNo,
+        Observer,
+        None1,
+        Maker,
+        Model1,
+        SerialNo1,
+        Model2,
+        SerialNo2,
+        Model3,
+        SerialNo3,
+        ExpDevice,
+        Refrigerant,
+        RefCharge,
+        Memo
+    }
+
+    public enum EMeasRated
+    {
+        Capacity,
+        PowerInput,
+        EER_COP,
+        Voltage,
+        Current,
+        Frequency,
+        Phase,
+        PowerMeter
+    }
+
+    public enum EMeasIndoor
+    {
+        Use,
+        Mode,
+        Duct,
+        DB,
+        WB
+    }
+
+    public enum EMeasOutdoor
+    {
+        Use,
+        DPSensor,
+        AutoVoltage,
+        DB,
+        WB
+    }
+    #endregion
+
+    #region TestContext
+    public class TestContext
+    {
+        public TestContext()
+        {
+            State = ETestState.Stopped;
+            Condition = new TestCondition();
+            Measure = new TestMeasure();
+            Value = new TestValue();
+
+            Initialize();
+        }
+
+        public ETestState State { get; set; }
+        public TestCondition Condition { get; private set; }
+        public TestMeasure Measure { get; private set; }
+        public TestValue Value { get; private set; }
+
+        public void Initialize()
+        {
+            // Load constant variables
+            int i = 1;
+            string key = $"CH{i}";
+            string param = Resource.Ini.GetString("Constant.Channel", key);
+            Value.Const.Clear();
+
+            while (string.IsNullOrWhiteSpace(param) == false)
+            {
+                string[] @params = param.Split(new[] { ',' }, StringSplitOptions.None);
+
+                EUnitType type = (EUnitType)Enum.Parse(typeof(EUnitType), @params[1]);
+                int unitNo = GetUnitNo(type, @params[2]);
+                UnitConvert unit = new UnitConvert(type, unitNo, unitNo);
+                ValueRow row = new ValueRow(i-1, @params[0], 0f, @params[3], unit);
+
+                Value.Const.Add(@params[0], row);
+
+                i++;
+                key = $"CH{i}";
+                param = Resource.Ini.GetString("Constant.Channel", key);
+            }
+
+            // Load calculated variables
+            i = 1;
+            key = $"CH{i}";
+            param = Resource.Ini.GetString("Calculated.Channel", key);
+            Value.Calcurated.Clear();
+
+            while (string.IsNullOrWhiteSpace(param) == false)
+            {
+                string[] @params = param.Split(new[] { ',' }, StringSplitOptions.None);
+
+                EUnitType type = (EUnitType)Enum.Parse(typeof(EUnitType), @params[1]);
+                int unitNo = GetUnitNo(type, @params[2]);
+                UnitConvert unit = new UnitConvert(type, unitNo, unitNo);
+                ValueRow row = new ValueRow(i - 1, @params[0], 0f, @params[3], unit, type, true, true);
+
+                Value.Calcurated.Add(@params[0], row);
+
+                i++;
+                key = $"CH{i}";
+                param = Resource.Ini.GetString("Calculated.Channel", key);
+            }
+
+            // Load measured variables
+            i = 1;
+            key = $"CH{i}";
+            param = Resource.Ini.GetString("Measured.Channel", key);
+            Value.Measured.Clear();
+
+            while (string.IsNullOrWhiteSpace(param) == false)
+            {
+                string[] @params = param.Split(new[] { ',' }, StringSplitOptions.None);
+
+                EUnitType type = (EUnitType)Enum.Parse(typeof(EUnitType), @params[1]);
+                int unitNo = GetUnitNo(type, @params[2]);
+                UnitConvert unit = new UnitConvert(type, unitNo, unitNo);
+                ValueRow row = new ValueRow(i - 1, @params[0], 0f, @params[3], unit, type, true, true);
+
+                Value.Measured.Add(@params[0], row);
+
+                i++;
+                key = $"CH{i}";
+                param = Resource.Ini.GetString("Measured.Channel", key);
+            }
+        }
+
+        private int GetUnitNo(EUnitType type, string name)
+        {
+            int no;
+
+            switch (type)
+            {
+                case EUnitType.Current:
+                case EUnitType.Voltage:
+                case EUnitType.Frequency:
+                case EUnitType.Flux:
+                case EUnitType.Ratio:
+                case EUnitType.HumidityRatio:
+                case EUnitType.Power:
+                case EUnitType.PowerComsumption:
+                case EUnitType.Velocity:
+                case EUnitType.Volumn:
+                case EUnitType.Time:
+                    no = (int)Enum.Parse(typeof(EUnitSingle), name);
+                    break;
+
+                case EUnitType.AirFlow:
+                    no = (int)Enum.Parse(typeof(EUnitAirFlow), name);
+                    break;
+
+                case EUnitType.Capacity:
+                    no = (int)Enum.Parse(typeof(EUnitCapacity), name);
+                    break;
+
+                case EUnitType.Enthalpy:
+                    no = (int)Enum.Parse(typeof(EUnitEnthalpy), name);
+                    break;
+
+                case EUnitType.Heat:
+                    no = (int)Enum.Parse(typeof(EUnitHeat), name);
+                    break;
+
+                case EUnitType.EER_COP:
+                    no = (int)Enum.Parse(typeof(EUnitEER_COP), name);
+                    break;
+
+                case EUnitType.Temperature:
+                    no = (int)Enum.Parse(typeof(EUnitTemperature), name);
+                    break;
+
+                case EUnitType.Pressure:
+                    no = (int)Enum.Parse(typeof(EUnitPressure), name);
+                    break;
+
+                case EUnitType.DiffPressure:
+                    no = (int)Enum.Parse(typeof(EUnitDiffPressure), name);
+                    break;
+
+                case EUnitType.AtmPressure:
+                    no = (int)Enum.Parse(typeof(EUnitAtmPressure), name);
+                    break;
+
+                default:
+                    no = 0;
+                    break;
+            }
+
+            return no;
+        }
+    }
+    #endregion
+
+    #region TestCondition
+    public class TestCondition
+    {
+        public TestCondition()
+        {
+            Control = null;
+
+            List<ConditionSchedule> Schedules = new List<ConditionSchedule>();
+
+            ConditionMethod Method = new ConditionMethod();
+
+            ConditionNote Note = new ConditionNote();
+
+            Dictionary<EConditionRated, ConditionRated> Rated = new Dictionary<EConditionRated, ConditionRated>();
+            Rated.Add(EConditionRated.Total, new ConditionRated());
+            Rated.Add(EConditionRated.ID11, new ConditionRated());
+            Rated.Add(EConditionRated.ID12, new ConditionRated());
+            Rated.Add(EConditionRated.ID21, new ConditionRated());
+            Rated.Add(EConditionRated.ID22, new ConditionRated());
+
+            Dictionary<string, int> Termocouples = new Dictionary<string, int>();
+
+            Dictionary<string, int> Pressures = new Dictionary<string, int>();
+        }
+
+        public CtrlTestCondition Control { get; set; }
+        public List<ConditionSchedule> Schedules { get; set; }
+        public ConditionMethod Method { get; set; }
+        public ConditionNote Note { get; set; }
+        public Dictionary<EConditionRated, ConditionRated> Rateds { get; set; }
+        public Dictionary<string, int> Termocouples { get; set; }
+        public Dictionary<string, int> Pressures { get; set; }
+    }
+
+    #region ConditionSchedule
+    public class ConditionSchedule
+    {
+        public ConditionSchedule(int no)
+        {
+            No = no;
+        }
+
+        public int No { get; set; }
+        public string Name { get; set; }
+        public int PreRun { get; set; }
+        public int Judge { get; set; }
+        public int Repeat { get; set; }
+        public float Indoor1DB { get; set; }
+        public float Indoor1WB { get; set; }
+        public float Indoor1CP1 { get; set; }
+        public float Indoor1CP2 { get; set; }
+        public float Indoor2DB { get; set; }
+        public float Indoor2WB { get; set; }
+        public float Indoor2CP1 { get; set; }
+        public float Indoor2CP2 { get; set; }
+        public float OutdoorDB { get; set; }
+        public float OutdoorWB { get; set; }
+        public float OutdoorDP { get; set; }
+        public float OutdoorVolt1 { get; set; }
+        public float OutdoorVolt2 { get; set; }
+        public EIndoorUse Indoor1Use { get; set; }
+        public EIndoorMode Indoor1Mode1 { get; set; }
+        public EIndoorDuct Indoor1Duct1 { get; set; }
+        public EIndoorMode Indoor1Mode2 { get; set; }
+        public EIndoorDuct Indoor1Duct2 { get; set; }
+        public EIndoorUse Indoor2Use { get; set; }
+        public EIndoorMode Indoor2Mode1 { get; set; }
+        public EIndoorDuct Indoor2Duct1 { get; set; }
+        public EIndoorMode Indoor2Mode2 { get; set; }
+        public EIndoorDuct Indoor2Duct2 { get; set; }
+        public EOutdoorUse OutdoorUse { get; set; }
+        public EEtcUse OutdoorDpSensor { get; set; }
+        public EEtcUse OutdoorAutoVolt { get; set; }
+    }
+    #endregion
+
+    #region ConditionMethod
+    public class ConditionMethod
+    {
+        public ConditionMethod()
+        {
+            Mode = ETestMode.Cooling;
+            IntegralCount = 1;
+            IntegralTime = 1;
+            ScanTime = 1;
+            Capacity = EUnitCapacity.W;
+            AirFlow = EUnitAirFlow.CMM;
+            Enthalpy = EUnitEnthalpy.W;
+            Pressure = EUnitPressure.Bar;
+            DiffPressure = EUnitDiffPressure.mmAq;
+            AtmPressure = EUnitAtmPressure.mmAq;
+            AutoControllerSetting = false;
+            UsePowerMeterIntegral = false;
+        }
+
+        public ETestMode Mode { get; set; }
+        public int IntegralCount { get; set; }
+        public int IntegralTime { get; set; }
+        public int ScanTime { get; set; }
+        public EUnitCapacity Capacity { get; set; }
+        public EUnitAirFlow AirFlow { get; set; }
+        public EUnitEnthalpy Enthalpy { get; set; }
+        public EUnitPressure Pressure { get; set; }
+        public EUnitDiffPressure DiffPressure { get; set; }
+        public EUnitAtmPressure AtmPressure { get; set; }
+        public EUnitTemperature Temperature { get; set; }
+        public bool AutoControllerSetting { get; set; }
+        public bool UsePowerMeterIntegral { get; set; }
+    }
+    #endregion
+
+    #region ConditionNote
+    public class ConditionNote
+    {
+        public ConditionNote()
+        {
+        }
+
+        public string Company { get; set; }
+        public string Name { get; set; }
+        public string No { get; set; }
+        public string Observer { get; set; }
+        public string Maker { get; set; }
+        public string Model1 { get; set; }
+        public string Serial1 { get; set; }
+        public string Model2 { get; set; }
+        public string Serial2 { get; set; }
+        public string Model3 { get; set; }
+        public string Serial3 { get; set; }
+        public string ExpDevice { get; set; }
+        public string Refrigerant { get; set; }
+        public string RefCharge { get; set; }
+        public string Memo { get; set; }
+    }
+    #endregion
+
+    #region ConditionRated
+    public enum EConditionRated { Total, ID11, ID12, ID21, ID22 }
+
+    public class ConditionRated
+    {
+        public ConditionRated()
+        {
+        }
+
+        public float Capacity { get; set; }
+        public float PowerInput { get; set; }
+        public float EER_COP { get; set; }
+        public float Voltage { get; set; }
+        public float Current { get; set; }
+        public EWT330Phase Phase { get; set; }
+        public float Frequency { get; set; }
+        public EWT330Wiring Wiring { get; set; }
+    }
+    #endregion
+    #endregion
+
+    #region TestMeasure
+    public class TestMeasure
+    {
+        public TestMeasure()
+        {
+            Control = null;
+
+            TotalRateds = new List<MeasureRow>();
+            TotalRateds.Add(new MeasureRow("Total Capacity", "", 0, "0.0", "W"));
+            TotalRateds.Add(new MeasureRow("Power Input", "", 0, "0.0", "W"));
+            TotalRateds.Add(new MeasureRow("EER/COP", "", 0, "0.000", "W/W"));
+            TotalRateds.Add(new MeasureRow("", "", 0, "0", "", true));
+            TotalRateds.Add(new MeasureRow("Rated Capacity", "", 0, "0.0", "W"));
+            TotalRateds.Add(new MeasureRow("Capacity Ratio", "", 0, "0.00", "%"));
+            TotalRateds.Add(new MeasureRow("Rated Power Input", "", 0, "0.0", "W"));
+            TotalRateds.Add(new MeasureRow("Power Input Ratio", "", 0, "0.00", "%"));
+            TotalRateds.Add(new MeasureRow("Rated EER/COP", "", 0, "0.000", "W/W"));
+            TotalRateds.Add(new MeasureRow("EER/COP Ratio", "", 0, "0.00", "%"));
+            TotalRateds.Add(new MeasureRow("Rated Current", "", 0, "0.00", "A"));
+            TotalRateds.Add(new MeasureRow("Current Ratio", "", 0, "0.00", "%"));
+            TotalRateds.Add(new MeasureRow("", "", 0, "0", "", true));
+            TotalRateds.Add(new MeasureRow("Voltage", "", 0, "0.0", "V"));
+            TotalRateds.Add(new MeasureRow("Current", "", 0, "0.000", "A"));
+            TotalRateds.Add(new MeasureRow("Frequency", "", 0, "0.0", "Hz"));
+            TotalRateds.Add(new MeasureRow("Power Factor", "", 0, "0.0", "%"));
+
+            RunStates = new List<MeasureRow>();
+            RunStates.Add(new MeasureRow("Condition", "", 0, "", ""));
+            RunStates.Add(new MeasureRow("Running Step", "", 0, "", ""));
+            RunStates.Add(new MeasureRow("Elapsed Time", "", 0, "", ""));
+            RunStates.Add(new MeasureRow("Total Elapsed", "", 0, "", ""));
+            RunStates.Add(new MeasureRow("", "", 0, "0", "", true));
+            RunStates.Add(new MeasureRow("Preparation", "", 0, "", "00:00:00:00 / 00:00:00:00"));
+            RunStates.Add(new MeasureRow("Judgement", "", 0, "", ""));
+            RunStates.Add(new MeasureRow("Integration", "", 0, "", ""));
+            RunStates.Add(new MeasureRow("", "", 0, "0", "", true));
+            RunStates.Add(new MeasureRow("No of Steady", "", 0, "", ""));
+            RunStates.Add(new MeasureRow("Repeat", "", 0, "", ""));
+            RunStates.Add(new MeasureRow("Schedule", "", 0, "", ""));
+
+            AirSides = new List<MeasureAirSideRow>();
+            AirSides.Add(new MeasureAirSideRow("Capacity", 0, 0, 0, 0, "0.0", "W"));
+            AirSides.Add(new MeasureAirSideRow("Capacity Ratio", 0, 0, 0, 0, "0.00", "%"));
+            AirSides.Add(new MeasureAirSideRow("Sensible Heat", 0, 0, 0, 0, "0.0", "W"));
+            AirSides.Add(new MeasureAirSideRow("Latent Heat", 0, 0, 0, 0, "0.0", "W"));
+            AirSides.Add(new MeasureAirSideRow("Sensible Heat Ratio", 0, 0, 0, 0, "0.00", "%"));
+            AirSides.Add(new MeasureAirSideRow("Heat Leakage", 0, 0, 0, 0, "0.0", "W"));
+            AirSides.Add(new MeasureAirSideRow("Drain Weight", 0, 0, 0, 0, "0.00", "kg/h"));
+            AirSides.Add(new MeasureAirSideRow("", 0, 0, 0, 0, "0", "", true));
+            AirSides.Add(new MeasureAirSideRow("Entering DB", 0, 0, 0, 0, "0.00", "℃"));
+            AirSides.Add(new MeasureAirSideRow("Entering WB", 0, 0, 0, 0, "0.00", "℃"));
+            AirSides.Add(new MeasureAirSideRow("Entering RH", 0, 0, 0, 0, "0.00", "%"));
+            AirSides.Add(new MeasureAirSideRow("Leaving DB", 0, 0, 0, 0, "0.00", "℃"));
+            AirSides.Add(new MeasureAirSideRow("Leaving WB", 0, 0, 0, 0, "0.00", "℃"));
+            AirSides.Add(new MeasureAirSideRow("Leaving RH", 0, 0, 0, 0, "0.00", "%"));
+            AirSides.Add(new MeasureAirSideRow("", 0, 0, 0, 0, "0", "", true));
+            AirSides.Add(new MeasureAirSideRow("Entering Enthalpy", 0, 0, 0, 0, "0.000", ""));
+            AirSides.Add(new MeasureAirSideRow("Leaving Enthalpy", 0, 0, 0, 0, "0.000", ""));
+            AirSides.Add(new MeasureAirSideRow("Entering Humidity Ratio", 0, 0, 0, 0, "0.0000", ""));
+            AirSides.Add(new MeasureAirSideRow("Leaving Humidity Ratio", 0, 0, 0, 0, "0.0000", ""));
+            AirSides.Add(new MeasureAirSideRow("Leaving Specific Heat", 0, 0, 0, 0, "0.0000", ""));
+            AirSides.Add(new MeasureAirSideRow("Leaving Specific Volumn", 0, 0, 0, 0, "0.0000", ""));
+            AirSides.Add(new MeasureAirSideRow("", 0, 0, 0, 0, "0", "", true));
+            AirSides.Add(new MeasureAirSideRow("AirFlow[Lev]", 0, 0, 0, 0, "0.00", ""));
+            AirSides.Add(new MeasureAirSideRow("Static Pressure", 0, 0, 0, 0, "0.00", ""));
+            AirSides.Add(new MeasureAirSideRow("Nozzle Diff. Pressure", 0, 0, 0, 0, "0.00", ""));
+            AirSides.Add(new MeasureAirSideRow("Atmospheric Pressure", 0, 0, 0, 0, "0.0", ""));
+            AirSides.Add(new MeasureAirSideRow("Nozzle Inlet Temp.", 0, 0, 0, 0, "0.00", ""));
+
+            Outsides = new List<MeasureRow>();
+            Outsides.Add(new MeasureRow("Entering DB", "", 0, "0.00", "℃"));
+            Outsides.Add(new MeasureRow("Entering WB", "", 0, "0.00", "℃"));
+            Outsides.Add(new MeasureRow("Entering RH", "", 0, "0.00", "%"));
+            Outsides.Add(new MeasureRow("Entering DP", "", 0, "0.00", "%"));
+
+            Methods = new List<MeasureRow>();
+            Methods.Add(new MeasureRow("Method", "3min * 3times", 0, "0.00", "", true));
+            Methods.Add(new MeasureRow("Scan Time", "3 sec", 0, "0.00", "", true));
+
+            Notes = new List<MeasureRow>();
+            Notes.Add(new MeasureRow("Company", "LG", 0, "", "", true));
+            Notes.Add(new MeasureRow("Test Name", "", 0, "", "", true));
+            Notes.Add(new MeasureRow("Test No", "", 0, "", "", true));
+            Notes.Add(new MeasureRow("Observer", "", 0, "", "", true));
+            Notes.Add(new MeasureRow("", "", 0, "0", "", true));
+            Notes.Add(new MeasureRow("Maker", "", 0, "", "", true));
+            Notes.Add(new MeasureRow("Model(1)", "", 0, "", "", true));
+            Notes.Add(new MeasureRow("Serial No(1)", "", 0, "", "", true));
+            Notes.Add(new MeasureRow("Model(2)", "", 0, "", "", true));
+            Notes.Add(new MeasureRow("Serial No(2)", "", 0, "", "", true));
+            Notes.Add(new MeasureRow("Model(3)", "", 0, "", "", true));
+            Notes.Add(new MeasureRow("Serial No(3)", "", 0, "", "", true));
+            Notes.Add(new MeasureRow("Exp. Device", "", 0, "", "", true));
+            Notes.Add(new MeasureRow("Refrigerant", "", 0, "", "", true));
+            Notes.Add(new MeasureRow("Ref. Charge", "", 0, "", "", true));
+            Notes.Add(new MeasureRow("Memo", "", 0, "", "", true));
+
+            Rateds = new List<MeasureRow>();
+            Rateds.Add(new MeasureRow("Capacity", "", 0, "0.0", "W"));
+            Rateds.Add(new MeasureRow("Power Input", "", 0, "0.0", "W"));
+            Rateds.Add(new MeasureRow("EER/COP", "", 0, "0.000", "W/W"));
+            Rateds.Add(new MeasureRow("Voltage", "", 0, "0.0", "V"));
+            Rateds.Add(new MeasureRow("Current", "", 0, "0.00", "A"));
+            Rateds.Add(new MeasureRow("Frequency", "", 0, "0.0", "Hz"));
+            Rateds.Add(new MeasureRow("Phase", "Phase 1", 0, "0", "", true));
+            Rateds.Add(new MeasureRow("Power Meter", "WT333(1P/3P)", 0, "0", "", true));
+
+            Indoors11 = new List<MeasureRow>();
+            Indoors11.Add(new MeasureRow("Use", "Indoor", 0, "0.0", "", true));
+            Indoors11.Add(new MeasureRow("Mode", "Use", 0, "0.0", "", true));
+            Indoors11.Add(new MeasureRow("Duct", "Use", 0, "0.000", "", true));
+            Indoors11.Add(new MeasureRow("DB", "", 0, "0.0", "℃"));
+            Indoors11.Add(new MeasureRow("WB", "", 0, "0.0", "℃"));
+
+            Indoors12 = new List<MeasureRow>();
+            Indoors12.Add(new MeasureRow("Use", "Indoor", 0, "0.0", "", true));
+            Indoors12.Add(new MeasureRow("Mode", "Use", 0, "0.0", "", true));
+            Indoors12.Add(new MeasureRow("Duct", "Use", 0, "0.000", "", true));
+            Indoors12.Add(new MeasureRow("DB", "", 0, "0.0", "℃"));
+            Indoors12.Add(new MeasureRow("WB", "", 0, "0.0", "℃"));
+
+            Indoors21 = new List<MeasureRow>();
+            Indoors21.Add(new MeasureRow("Use", "Indoor", 0, "0.0", "", true));
+            Indoors21.Add(new MeasureRow("Mode", "Use", 0, "0.0", "", true));
+            Indoors21.Add(new MeasureRow("Duct", "Use", 0, "0.000", "", true));
+            Indoors21.Add(new MeasureRow("DB", "", 0, "0.0", "℃"));
+            Indoors21.Add(new MeasureRow("WB", "", 0, "0.0", "℃"));
+
+            Indoors22 = new List<MeasureRow>();
+            Indoors22.Add(new MeasureRow("Use", "Indoor", 0, "0.0", "", true));
+            Indoors22.Add(new MeasureRow("Mode", "Use", 0, "0.0", "", true));
+            Indoors22.Add(new MeasureRow("Duct", "Use", 0, "0.000", "", true));
+            Indoors22.Add(new MeasureRow("DB", "", 0, "0.0", "℃"));
+            Indoors22.Add(new MeasureRow("WB", "", 0, "0.0", "℃"));
+
+            Outdoors = new List<MeasureRow>();
+            Outdoors.Add(new MeasureRow("Use", "Outdoor", 0, "0", "", true));
+            Outdoors.Add(new MeasureRow("DP Sensor", "Use", 0, "0", "", true));
+            Outdoors.Add(new MeasureRow("Auto Voltage", "Use", 0, "0", "", true));
+            Outdoors.Add(new MeasureRow("DB", "", 0, "0.0", "℃"));
+            Outdoors.Add(new MeasureRow("WB", "", 0, "0.0", "℃"));
+        }
+
+
+        public CtrlTestMeas Control { get; set; }
+        public List<MeasureRow> TotalRateds { get; set; }
+        public List<MeasureRow> RunStates { get; set; }
+        public List<MeasureAirSideRow> AirSides { get; set; }
+        public List<MeasureRow> Outsides { get; set; }
+        public List<MeasureRow> Methods { get; set; }
+        public List<MeasureRow> Notes { get; set; }
+        public List<MeasureRow> Rateds { get; set; }
+        public List<MeasureRow> Indoors11 { get; set; }
+        public List<MeasureRow> Indoors12 { get; set; }
+        public List<MeasureRow> Indoors21 { get; set; }
+        public List<MeasureRow> Indoors22 { get; set; }
+        public List<MeasureRow> Outdoors { get; set; }
+    }
+
+    #region MeasureRow
+    public class MeasureRow
+    {
+        public MeasureRow(string name, string sValue, float fValue, string format, string unit, bool @string=false)
+        {
+            Name = name;
+            Value = sValue;
+            FValue = fValue;
+            Format = format;
+            Unit = unit;
+            IsString = @string;
+        }
+
+        public string Name { get; set; }
+
+        private string sValue;
+        public string Value
+        {
+            get
+            {
+                if (IsString == true) return sValue;
+                return FValue.ToString(Format);
+            }
+            set { sValue = value; }
+        }
+        public float FValue { get; set; }
+        public string Format { get; set; }
+        public string Unit { get; set; }
+        public bool IsString { get; set; }
+    }
+    #endregion
+
+    #region MeasureAirSideRow
+    public class MeasureAirSideRow
+    {
+        public MeasureAirSideRow(string name, float indoor11, float indoor12, 
+            float indoor21, float indoor22, string format, string unit, bool empty=false)
+        {
+            Name = name;
+            FIndoor11 = indoor11;
+            FIndoor12 = indoor12;
+            FIndoor21 = indoor21;
+            FIndoor22 = indoor22;
+            Format = format;
+            Unit = unit;
+            Empty = empty;
+        }
+
+        private string name;
+        public string Name
+        {
+            get
+            {
+                if (Empty == true) return "";
+                return name;
+            }
+            set { name = value; }
+        }
+
+        public string Indoor11
+        {
+            get
+            {
+                if (Empty == true) return "";
+                return FIndoor11.ToString(Format);
+            }
+        }
+        public float FIndoor11 { get; set; }
+
+        public string Indoor12
+        {
+            get
+            {
+                if (Empty == true) return "";
+                return FIndoor12.ToString(Format);
+            }
+        }
+        public float FIndoor12 { get; set; }
+
+        public string Indoor21
+        {
+            get
+            {
+                if (Empty == true) return "";
+                return FIndoor21.ToString(Format);
+            }
+        }
+        public float FIndoor21 { get; set; }
+
+        public string Indoor22
+        {
+            get
+            {
+                if (Empty == true) return "";
+                return FIndoor22.ToString(Format);
+            }
+        }
+        public float FIndoor22 { get; set; }
+
+        public string Format { get; set; }
+        public string Unit { get; set; }
+        public bool Empty { get; set; }
+    }
+    #endregion
+    #endregion
+
+    #region TestValue
+    public class TestValue
+    {
+        public TestValue()
+        {
+            Const = new Dictionary<string, ValueRow>();
+            Calcurated = new Dictionary<string, ValueRow>();
+            Measured = new Dictionary<string, ValueRow>();
+        }
+
+        public Dictionary<string, ValueRow> Const { get; set; }
+        public Dictionary<string, ValueRow> Calcurated { get; set; }
+        public Dictionary<string, ValueRow> Measured { get; set; }
+
+        public void SetUnitTo(EUnitType type, int unit)
+        {
+            foreach (KeyValuePair<string, ValueRow> row in Const)
+            {
+                if (row.Value.Unit.Type == type)
+                {
+                    row.Value.Unit.To = unit;
+                }
+            }
+
+            foreach (KeyValuePair<string, ValueRow> row in Calcurated)
+            {
+                if (row.Value.Unit.Type == type)
+                {
+                    row.Value.Unit.To = unit;
+                }
+            }
+
+            foreach (KeyValuePair<string, ValueRow> row in Measured)
+            {
+                if (row.Value.Unit.Type == type)
+                {
+                    row.Value.Unit.To = unit;
+                }
+            }
+        }
+    }
+
+    public class ValueRow
+    {
+        public ValueRow(
+            int index, string name, float value, string format, UnitConvert unit, 
+            EUnitType yAxis=EUnitType.None, bool chart=false, bool save=false)
+        {
+            Index = index;
+            Name = name;
+            Value = value;
+            Format = format;
+            Unit = unit;
+            YAxis = yAxis;
+            Chart = chart;
+            Save = save;
+            Storage = (Save == true) ? new ValueStorage(csLength) : null;
+        }
+
+        public const int csLength = 600;
+
+        public int Index { get; set; }
+        public string Name { get; set; }
+
+        private float fValue;
+        public float Value
+        {
+            get
+            {
+                return (float)Unit.Convert(fValue);
+            }
+            set
+            {
+                fValue = value;
+                Storage?.Add(value);
+            }     
+        }
+
+        public string Format { get; set; }
+        public UnitConvert Unit { get; set; }
+        public EUnitType YAxis { get; set; }
+        public bool Chart { get; set; }
+        public bool Save { get; set; }
+        public ValueStorage Storage { get; set; }
+    }
+
+    public class ValueStorage
+    {
+        public ValueStorage(int length)
+        {
+            i = 0;
+            j = 0;
+            HalfFull = false;
+            this.length = length;
+
+            values = new float[2][];
+            for (int k = 0; k < 2; k++)
+            {
+                values[k] = new float[length];
+            }
+        }
+
+        private int i;
+        private int j;
+        private int length;
+
+        private float[][] values;
+        public float[] GetValues
+        {
+            get
+            {
+                HalfFull = false;
+                return values[i];
+            }
+        }
+
+        public bool HalfFull { get; private set; }
+
+        public void Add(float value)
+        {
+            values[i][j++] = value;
+
+            if ((j%length) == 0)
+            {
+                if (HalfFull == true)
+                {
+                    throw new Exception("Occured value storage overflow in ValueStorage.Add");
+                }
+
+                j = 0;
+                i = (i == 0) ? 1 : 0;
+                HalfFull = true;
+            }
+        }
+    }
+    #endregion
+}

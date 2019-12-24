@@ -1,0 +1,108 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{
+    public enum ETestPanel { Condition, Measurement }
+
+    public partial class CtrlTestRight : UlUserControlEng
+    {
+        public CtrlTestRight()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        public TestContext Context { get; set; }
+
+        private void Initialize()
+        {
+            Context = new TestContext();
+
+            DefMenu = new UlMenu(viewPanel);
+            DefMenu.Add(new CtrlTestCondition(Context), conditionButton);
+            DefMenu.Add(new CtrlTestMeas(Context), measuringButton);
+        }
+
+        private void CtrlTestLine1_Load(object sender, EventArgs e)
+        {
+            DefMenu.Index = 0;
+            SetButtonState(ETestState.Stopped);
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            SetButtonState(ETestState.Started);
+        }
+
+        private void pauseButton_Click(object sender, EventArgs e)
+        {
+            SetButtonState(ETestState.Paused);
+        }
+
+        private void nextButton_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void stopButton_Click(object sender, EventArgs e)
+        {
+            SetButtonState(ETestState.Stopped);
+        }
+
+        private void conditionRepositoryButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void unitRepositoryButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SetButtonState(ETestState state)
+        {
+            Context.State = state;
+
+            switch (state)
+            {
+                case ETestState.Started:
+                    startButton.Enabled = false;
+                    pauseButton.Enabled = true;
+                    nextButton.Enabled = true;
+                    resetButton.Enabled = true;
+                    stopButton.Enabled = true;
+                    break;
+
+                case ETestState.Paused:
+                    startButton.Enabled = true;
+                    pauseButton.Enabled = false;
+                    nextButton.Enabled = false;
+                    resetButton.Enabled = false;
+                    stopButton.Enabled = true;
+                    break;
+
+                case ETestState.Stopped:
+                    startButton.Enabled = true;
+                    pauseButton.Enabled = false;
+                    nextButton.Enabled = false;
+                    resetButton.Enabled = false;
+                    stopButton.Enabled = false;
+                    break;
+            }
+        }
+    }
+}

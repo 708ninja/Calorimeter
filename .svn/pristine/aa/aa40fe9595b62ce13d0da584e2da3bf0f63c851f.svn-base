@@ -1,0 +1,321 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraGrid.Views.Base;
+using DevExpress.XtraGrid.Views.BandedGrid;
+using DevExpress.XtraGrid.Views.BandedGrid.ViewInfo;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Server
+{
+    public partial class CtrlCalibGrid : UlUserControlEng
+    {
+        public CtrlCalibGrid(List<CalibratorRow> rows)
+        {
+            InitializeComponent();
+
+            RefreshView = null;
+            CheckAll = false;
+
+            channelGrid.DataSource = rows;
+            channelGridView.Columns["Checked"].ImageOptions.ImageIndex = 0;
+            channelGridView.Appearance.EvenRow.BackColor = Color.FromArgb(244, 244, 236);
+            channelGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            Length = 2;
+            Index = 0;
+        }
+
+        public bool CheckAll { get; set; }
+
+        private int index;
+        public int Index
+        {
+            get { return index; }
+            set
+            {
+                index = value;
+                SetActiveColumn(Index*2+5);
+            }
+        }
+
+        public int Length { get; set; }
+
+        public event EventHandler RefreshView;
+        private void OnRefreshView(object sender, EventArgs args)
+        {
+            RefreshView?.Invoke(sender, args);
+        }
+
+        private void channelGridView_MouseDown(object sender, MouseEventArgs e)
+        {
+            BandedGridView view = sender as BandedGridView;
+            BandedGridHitInfo hit = channelGridView.CalcHitInfo(e.Location);
+
+            if (hit == null) return;
+
+            switch (hit.HitTest)
+            {
+                case BandedGridHitTest.Band:
+                    if (hit.Band.Index > 1)
+                    {
+                        if (channelGridView.Columns[(hit.Band.Index - 2) * 2 + 5].OptionsColumn.AllowEdit == true)
+                        {
+                            Index = hit.Band.Index - 2;
+                        }
+                    }
+                    break;
+
+                case BandedGridHitTest.Column:
+                    if (hit.Column.FieldName == "Checked")
+                    {
+                        CheckAll = !CheckAll;
+                        SetCheckColumn(view);
+                        OnRefreshView(sender, null);
+                    }
+                    break;
+            }
+        }
+
+        private void channelGridView_CellValueChanged(object sender, CellValueChangedEventArgs e)
+        {
+            BandedGridView view = sender as BandedGridView;
+
+            if (view == null) return;
+
+            OnRefreshView(sender, null);
+        }
+
+        private void SetCheckColumn(BandedGridView view)
+        {
+            if (channelGridView.RowCount < 1) return;
+
+            channelGridView.BeginUpdate();
+
+            try
+            {
+                channelGridView.Columns["Checked"].ImageOptions.ImageIndex = (CheckAll == false) ? 0 : 1;
+
+                for (int i = 0; i < channelGridView.RowCount; i++)
+                {
+                    (channelGridView.GetRow(i) as CalibratorRow).Checked = CheckAll;
+                }
+            }
+            finally
+            {
+                channelGridView.EndUpdate();
+            }
+        }
+
+        private void SetActiveColumn(int index)
+        {
+            ResetAllColumn();
+
+            channelGridView.BeginUpdate();
+
+            try
+            {
+                channelGridView.Columns[index].AppearanceCell.BackColor = Color.Khaki;
+                channelGridView.Columns[index].AppearanceCell.ForeColor = Color.DeepSkyBlue;
+                channelGridView.Columns[index + 1].AppearanceCell.BackColor = Color.Khaki;
+                channelGridView.Columns[index + 1].AppearanceCell.ForeColor = Color.DeepSkyBlue;
+            }
+            finally
+            {
+                channelGridView.EndUpdate();
+            }
+        }
+
+        private void ResetAllColumn()
+        {
+            channelGridView.BeginUpdate();
+
+            try
+            {
+                for (int i = 5; i < channelGridView.Columns.Count; i++)
+                {
+                    if (channelGridView.Columns[i].OptionsColumn.AllowEdit == true)
+                    {
+                        channelGridView.Columns[i].AppearanceCell.ForeColor = Color.Black;
+                        channelGridView.Columns[i].AppearanceCell.BackColor = Color.FloralWhite;
+                    }
+                }
+            }
+            finally
+            {
+                channelGridView.EndUpdate();
+            }
+        }
+
+        private bool IsAllCheckFalse(BandedGridView view)
+        {
+            bool ret = true;
+
+            for (int i=0; i<channelGridView.RowCount; i++)
+            {
+                CalibratorRow row = channelGridView.GetRow(i) as CalibratorRow;
+
+                if (row.Checked == true)
+                {
+                    ret = false;
+                    break;
+                }
+            }
+
+            return ret;
+        }
+
+        public void SetEnableColumn(int length)
+        {
+            channelGridView.BeginUpdate();
+
+            try
+            {
+                for (int i = 0; i < 16; i++)
+                {
+                    if (i < length)
+                    {
+                        channelGridView.Columns[5 + i * 2].AppearanceCell.ForeColor = Color.Black;
+                        channelGridView.Columns[5 + i * 2].AppearanceCell.BackColor = Color.FloralWhite;
+                        channelGridView.Columns[5 + i * 2].OptionsColumn.AllowEdit = true;
+                        channelGridView.Columns[5 + i * 2].OptionsColumn.AllowFocus = true;
+
+                        channelGridView.Columns[6 + i * 2].AppearanceCell.ForeColor = Color.Black;
+                        channelGridView.Columns[6 + i * 2].AppearanceCell.BackColor = Color.FloralWhite;
+                        channelGridView.Columns[6 + i * 2].OptionsColumn.AllowEdit = true;
+                        channelGridView.Columns[6 + i * 2].OptionsColumn.AllowFocus = true;
+                    }
+                    else
+                    {
+                        channelGridView.Columns[5 + i * 2].AppearanceCell.ForeColor = Color.Gray;
+                        channelGridView.Columns[5 + i * 2].AppearanceCell.BackColor = SystemColors.Control;
+                        channelGridView.Columns[5 + i * 2].OptionsColumn.AllowEdit = false;
+                        channelGridView.Columns[5 + i * 2].OptionsColumn.AllowFocus = false;
+
+                        channelGridView.Columns[6 + i * 2].AppearanceCell.ForeColor = Color.Gray;
+                        channelGridView.Columns[6 + i * 2].AppearanceCell.BackColor = SystemColors.Control;
+                        channelGridView.Columns[6 + i * 2].OptionsColumn.AllowEdit = false;
+                        channelGridView.Columns[6 + i * 2].OptionsColumn.AllowFocus = false;
+                    }
+                }
+
+                if (Index < length) Index = index;
+                else Index = length - 1;
+            }
+            finally
+            {
+                channelGridView.EndUpdate();
+            }
+
+            Length = length;
+        }
+
+        void channelGridView_CustomDrawColumnHeader(object sender, ColumnHeaderCustomDrawEventArgs e)
+        {
+            if (e.Column.FieldName == "Checked")
+            {
+                Image image = (CheckAll == true) ? imageList.Images[1] : imageList.Images[0];
+
+                e.DefaultDraw();
+                e.Cache.DrawImage(image, 
+                    new Rectangle(e.Bounds.X + (e.Bounds.Width - image.Size.Width) / 2, 
+                    e.Bounds.Y + (e.Bounds.Height - image.Size.Height) / 2, 
+                    image.Size.Width, image.Size.Height));
+
+                e.Handled = true;
+            }
+        }
+
+        public void SetValueSV(float value)
+        {
+            channelGridView.BeginDataUpdate();
+
+            try
+            {
+                for (int i = 0; i < channelGridView.RowCount; i++)
+                {
+                    CalibratorRow row = channelGridView.GetRow(i) as CalibratorRow;
+
+                    if (row.Checked == true)
+                    {
+                        row.Calibrator.Points[Index].SV = value;
+                    }
+                }
+
+                OnRefreshView(channelGrid, null);
+            }
+            finally
+            {
+                channelGridView.EndDataUpdate();
+            }
+        }
+
+        public void SetValuePV()
+        {
+            channelGridView.BeginDataUpdate();
+
+            try
+            {
+                for (int i = 0; i < channelGridView.RowCount; i++)
+                {
+                    CalibratorRow row = channelGridView.GetRow(i) as CalibratorRow;
+
+                    if (row.Checked == true)
+                    {
+                        row.Calibrator.Points[Index].PV = Resource.Server.Devices.GetRecorderRawValue(row.No);
+                    }
+                }
+
+                OnRefreshView(channelGrid, null);
+            }
+            finally
+            {
+                channelGridView.EndDataUpdate();
+            }
+        }
+
+        public void SetRawRealValue()
+        {
+            channelGridView.BeginDataUpdate();
+
+            try
+            {
+                for (int i = 0; i < channelGridView.RowCount; i++)
+                {
+                    CalibratorRow row = channelGridView.GetRow(i) as CalibratorRow;
+
+                    row.Raw = Resource.Server.Devices.GetRecorderRawValue(row.No);
+                    row.Real = Resource.Server.Devices.GetRecorderRealValue(row.No);
+                }
+
+                OnRefreshView(channelGrid, null);
+            }
+            finally
+            {
+                channelGridView.EndDataUpdate();
+            }
+        }
+
+        public void Calibrate()
+        {
+            for (int i = 0; i < channelGridView.RowCount; i++)
+            {
+                CalibratorRow row = channelGridView.GetRow(i) as CalibratorRow;
+
+                if (row.Checked == true)
+                {
+                    row.Calibrator.CurveFit(Length);
+                }
+            }
+        }
+    }
+}

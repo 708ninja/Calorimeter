@@ -1,0 +1,481 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+using Ulee.DllImport.Win32;
+using Ulee.Threading;
+
+namespace Hnc.Calorimeter.Client
+{
+    public enum ETestMessage
+    {
+        None,
+        Next,
+        Reset
+    }
+
+    public enum ETestStep
+    {
+        None,
+        Preparation,
+        Judgement,
+        Integration
+    }
+
+    public enum EWorkSheet
+    {
+        Title,
+        I1,
+        I2,
+        I3,
+        I4,
+        I5,
+        I6,
+        I7
+    }
+
+    public class TestDescriptionArgs : EventArgs
+    {
+        public TestDescriptionArgs()
+        {
+            Name = "None";
+            Step = ETestStep.None;
+        }
+
+        public string Name { get; set; }
+        public ETestStep Step { get; set; }
+        public long ElapsedTime { get; set; }
+        public long TotalElapsedTime { get; set; }
+        public long PrepareCurTime { get; set; }
+        public long PrepareMaxTime { get; set; }
+        public long JudgeCurTime { get; set; }
+        public long JudgeMaxTime { get; set; }
+        public long IntegCurTime { get; set; }
+        public long IntegMaxTime { get; set; }
+        public int JudgeCount { get; set; }
+        public int JudgeMax { get; set; }
+        public int RepeatCount { get; set; }
+        public int RepeatMax { get; set; }
+        public int ScheduleCount { get; set; }
+        public int ScheduleMax { get; set; }
+    }
+
+    public class TestSpreadSheetArgs : EventArgs
+    {
+        public TestSpreadSheetArgs()
+        {
+            Index = EWorkSheet.Title;
+            SettingAverage = false;
+            Report = null;
+        }
+
+        public EWorkSheet Index { get; set; }
+        public bool SettingAverage { get; set; }
+        public TestReport Report { get; set; }
+    }
+
+    public class CalorimeterTestThread : UlThread
+    {
+        public CalorimeterTestThread(TestContext context) : base(false, true)
+        {
+            this.context = context;
+            this.descArgs = new TestDescriptionArgs();
+            this.sheetArgs = new TestSpreadSheetArgs();
+
+            Priority = ThreadPriority.Highest;
+        }
+
+        private const int csInvalidTime = 1000;
+        private const int csOneMiniteMsec = 60000;
+
+        private TestContext context;
+        private TestDescriptionArgs descArgs;
+        private TestSpreadSheetArgs sheetArgs;
+
+        public event EventHandler ClearSpreadSheet = null;
+        protected void OnClearSpreadSheet()
+        {
+            ClearSpreadSheet?.Invoke(null, null);
+        }
+
+        public event EventHandler SetSpreadSheet = null;
+        protected void OnSetSpreadSheet()
+        {
+            SetSpreadSheet?.Invoke(null, sheetArgs);
+        }
+
+        public event EventHandler DispState = null;
+        protected void OnDispState()
+        {
+            DispState?.Invoke(null, descArgs);
+        }
+
+        protected override void Execute()
+        {
+            TestValue value = context.Value;
+            ConditionMethod method = context.Condition.Method;
+            List<ConditionSchedule> schedules = context.Condition.Schedules;
+
+            try
+            {
+                descArgs.ScheduleCount = 0;
+                descArgs.ScheduleMax = schedules.Count;
+
+                for (int i = 0; i < schedules.Count; i++)
+                {
+                    context.Index = i;
+                    context.Report.Initialize();
+
+                    ConditionSchedule sch = schedules[i];
+                    value.Integral.Initialize(method.ScanTime, method.IntegralTime, sch);
+
+                    descArgs.Name = sch.Name;
+                    descArgs.Step = ETestStep.None;
+                    descArgs.RepeatMax = sch.Repeat;
+                    descArgs.ScheduleCount = i + 1;
+
+                    for (int j = 0; j < sch.Repeat; j++)
+                    {
+                        value.Integral.Clear();
+                        context.Report.Clear();
+
+                        OnClearSpreadSheet();
+
+                        sheetArgs.Index = EWorkSheet.Title;
+                        sheetArgs.Report = context.Report;
+                        OnSetSpreadSheet();
+
+                        descArgs.RepeatCount = j + 1;
+                        descArgs.JudgeMax = sch.NoOfSteady;
+                        descArgs.JudgeCount = 0;
+                        descArgs.JudgeMaxTime = sch.Judge * csOneMiniteMsec;
+                        descArgs.JudgeCurTime = 0;
+                        descArgs.IntegMaxTime = method.IntegralTime * method.IntegralCount * csOneMiniteMsec;
+                        descArgs.IntegCurTime = 0;
+
+                        DoPreparation(sch);
+                        DoJudgement(sch);
+                        DoIntegration(method);
+                    }
+                }
+
+                Win32.PostMessage(context.WndHandle, Resource.WM_TEST_NORMAL_TERMINATED, (IntPtr)0, (IntPtr)0);
+            }
+            catch (UlThreadTerminatedException)
+            {
+                Win32.PostMessage(context.WndHandle, Resource.WM_TEST_ABNORMAL_TERMINATED, (IntPtr)0, (IntPtr)0);
+            }
+        }
+
+        private void DoPreparation(ConditionSchedule sch)
+        {
+            bool repeat = true;
+            descArgs.Step = ETestStep.Preparation;
+
+            while (repeat == true)
+            {
+                try
+                {
+                    descArgs.Step = ETestStep.Preparation;
+                    descArgs.PrepareMaxTime = sch.PreRun * csOneMiniteMsec;
+                    descArgs.PrepareCurTime = 0;
+                    OnDispState();
+
+                    Preparation();
+                    repeat = false;
+                }
+                catch (UlThreadTerminatedException e) 
+                {
+                    switch ((ETestMessage)e.Code)
+                    {
+                        case ETestMessage.None:
+                            throw e;
+
+                        case ETestMessage.Next:
+                            repeat = false;
+                            break;
+
+                        case ETestMessage.Reset:
+                            repeat = true;
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void Preparation()
+        {
+            long ticks;
+            long maxTicks = descArgs.PrepareMaxTime;
+            long prevTicks = ElapsedMilliseconds;
+            long startTicks = prevTicks;
+
+            while (Terminated == false)
+            {
+                ticks = ElapsedMilliseconds;
+
+                if (IsTimeoutMilliseconds(prevTicks, csInvalidTime) == true)
+                {
+                    prevTicks += csInvalidTime;
+                    descArgs.ElapsedTime = ticks - startTicks;
+                    descArgs.TotalElapsedTime = ticks;
+                    descArgs.PrepareCurTime = descArgs.ElapsedTime;
+                    OnDispState();
+
+                    Integrate();
+                }
+
+                if (IsTimeoutMilliseconds(startTicks, maxTicks) == true)
+                {
+                    descArgs.PrepareCurTime = maxTicks;
+                    break;
+                }
+
+                Yield();
+            }
+        }
+
+        private void DoJudgement(ConditionSchedule sch)
+        {
+            bool repeat = true;
+
+            while (repeat == true)
+            {
+                try
+                {
+                    descArgs.Step = ETestStep.Judgement;
+                    descArgs.JudgeMax = sch.NoOfSteady;
+                    descArgs.JudgeCount = 0;
+                    descArgs.JudgeMaxTime = sch.Judge * csOneMiniteMsec;
+                    descArgs.JudgeCurTime = 0;
+                    OnDispState();
+
+                    Judgement();
+                    repeat = false;
+                }
+                catch (UlThreadTerminatedException e)
+                {
+                    switch ((ETestMessage)e.Code)
+                    {
+                        case ETestMessage.None:
+                            throw e;
+
+                        case ETestMessage.Next:
+                            repeat = false;
+                            break;
+
+                        case ETestMessage.Reset:
+                            repeat = true;
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void Judgement()
+        {
+            long ticks;
+            long maxTicks = descArgs.JudgeMaxTime;
+            long prevTicks = ElapsedMilliseconds;
+            long startTicks = prevTicks;
+
+            while (Terminated == false)
+            {
+                ticks = ElapsedMilliseconds;
+
+                if (IsTimeoutMilliseconds(prevTicks, csInvalidTime) == true)
+                {
+                    prevTicks += csInvalidTime;
+                    descArgs.ElapsedTime = ticks - startTicks;
+                    descArgs.TotalElapsedTime = ticks;
+                    descArgs.JudgeCurTime = descArgs.ElapsedTime;
+                    OnDispState();
+
+                    Integrate();
+                    if (IsSteadyAll() == true) descArgs.JudgeCount++;
+                }
+
+                if (descArgs.JudgeCount >= descArgs.JudgeMax) break;
+
+                if (IsTimeoutMilliseconds(startTicks, maxTicks) == true)
+                {
+                    if (Resource.Settings.Options.ForcedInteg == true)
+                    {
+                        descArgs.JudgeCurTime = maxTicks;
+                        break;
+                    }
+                    else
+                    {
+                        throw new UlThreadTerminatedException((int)ETestMessage.Reset);
+                    }
+                }
+
+                Yield();
+            }
+        }
+
+        private bool IsSteadyAll()
+        {
+            IntegralValues values = context.Value.Integral["Judge"];
+
+            foreach (KeyValuePair<string, IntegralValue> row in values.Values)
+            {
+                if (row.Value.State == EValueState.Ng) return false;
+            }
+
+            return true;
+        }
+
+        private void DoIntegration(ConditionMethod method)
+        {
+            bool repeat = true;
+
+            while (repeat == true)
+            {
+                try
+                {
+                    context.Value.Integral.Clear();
+
+                    descArgs.Step = ETestStep.Integration;
+                    descArgs.ElapsedTime = 0;
+                    descArgs.IntegMaxTime = method.IntegralTime * method.IntegralCount * csOneMiniteMsec;
+                    descArgs.IntegCurTime = 0;
+                    OnDispState();
+
+                    Integration(method);
+                    repeat = false;
+                }
+                catch (UlThreadTerminatedException e)
+                {
+                    switch ((ETestMessage)e.Code)
+                    {
+                        case ETestMessage.None:
+                            throw e;
+
+                        case ETestMessage.Next:
+                            repeat = false;
+                            break;
+
+                        case ETestMessage.Reset:
+                            repeat = true;
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void Integration(ConditionMethod method)
+        {
+            long ticks;
+            long maxTicks = descArgs.IntegMaxTime;
+            long prevTicks = ElapsedMilliseconds;
+            long integPrevTicks = prevTicks;
+            long startTicks = prevTicks;
+            long integTime = method.IntegralTime * csOneMiniteMsec;
+            int integCount = 0;
+            int integMaxCount = method.IntegralCount;
+
+            while (Terminated == false)
+            {
+                ticks = ElapsedMilliseconds;
+
+                if (IsTimeoutMilliseconds(prevTicks, csInvalidTime) == true)
+                {
+                    prevTicks += csInvalidTime;
+                    descArgs.ElapsedTime = ticks - startTicks;
+                    descArgs.TotalElapsedTime = ticks;
+                    descArgs.IntegCurTime = descArgs.ElapsedTime;
+                    OnDispState();
+
+                    DispValues(integCount);
+                    Integrate();
+                }
+
+                if (IsTimeoutMilliseconds(integPrevTicks, integTime) == true)
+                {
+                    DispIntegralValues(integCount);
+
+                    integPrevTicks += integTime;
+                    integCount++;
+                }
+
+                if (IsTimeoutMilliseconds(startTicks, maxTicks) == true)
+                {
+                    descArgs.IntegCurTime = maxTicks;
+                    break;
+                }
+
+                Yield();
+            }
+        }
+
+        private void DispValues(int index)
+        {
+            context.Value.Lock();
+
+            try
+            {
+                foreach (KeyValuePair<string, ReportSheet> sheet in sheetArgs.Report.ValueSheets)
+                {
+                    sheet.Value.RefreshData(index);
+                }
+            }
+            finally
+            {
+                context.Value.Unlock();
+            }
+
+            sheetArgs.Index = (EWorkSheet)index + 1;
+            sheetArgs.SettingAverage = false;
+            OnSetSpreadSheet();
+        }
+
+        private void DispIntegralValues(int index)
+        {
+            TestValue value = context.Value;
+            Dictionary<string, ReportSheet> reportSheet = sheetArgs.Report.ValueSheets;
+
+            value.Lock();
+
+            try
+            {
+                foreach (KeyValuePair<string, IntegralValues> integSheet in value.Integral.Sheets)
+                {
+                    if (integSheet.Key == "Judge") continue;
+
+                    foreach (KeyValuePair<string, IntegralValue> integValue in integSheet.Value.Values)
+                    {
+                        reportSheet[integSheet.Key].Rows[integValue.Key].Cells[index].Raw =
+                            integValue.Value.AverageSum;
+                    }
+                }
+            }
+            finally
+            {
+                value.Unlock();
+            }
+
+            sheetArgs.Index = (EWorkSheet)index + 1;
+            sheetArgs.SettingAverage = true;
+            OnSetSpreadSheet();
+        }
+
+        private void Integrate()
+        {
+            TestValue value = context.Value;
+
+            value.Lock();
+            try
+            {
+                value.Integral.Integrate();
+            }
+            finally
+            {
+                value.Unlock();
+            }
+        }
+    }
+}

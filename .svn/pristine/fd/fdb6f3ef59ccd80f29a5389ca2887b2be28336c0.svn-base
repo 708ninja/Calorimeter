@@ -1,0 +1,416 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Ulee.Device.Connection.Yokogawa;
+
+namespace Hnc.Calorimeter.Client
+{
+    #region TestCondition
+    public class TestCondition
+    {
+        public TestCondition(TestValue value)
+        {
+            Control = null;
+
+            Schedules = new List<ConditionSchedule>();
+            Method = new ConditionMethod();
+            Note = new ConditionNote();
+
+            Rateds = new Dictionary<EConditionRated, List<ConditionRated>>();
+
+            Rateds.Add(EConditionRated.Total, new List<ConditionRated>() { new ConditionRated(), new ConditionRated() });
+            Rateds.Add(EConditionRated.ID11, new List<ConditionRated>() { new ConditionRated(), new ConditionRated() });
+            Rateds.Add(EConditionRated.ID12, new List<ConditionRated>() { new ConditionRated(), new ConditionRated() });
+            Rateds.Add(EConditionRated.ID21, new List<ConditionRated>() { new ConditionRated(), new ConditionRated() });
+            Rateds.Add(EConditionRated.ID22, new List<ConditionRated>() { new ConditionRated(), new ConditionRated() });
+
+            ThermocoupleDic = new Dictionary<string, string>();
+            PressureDic = new Dictionary<string, string>();
+
+            Pressures = new List<MeasureRow>();
+            for (int i = 0; i < Resource.Client.Devices.Recorder.PressureLength; i++)
+            {
+                Pressures.Add(new MeasureRow(null, "none", $"Pressure.{i + 1}", i + 1));
+            }
+
+            TC1 = new List<MeasureRow>();
+            TC2 = new List<MeasureRow>();
+            TC3 = new List<MeasureRow>();
+
+            for (int i = 0; i < Resource.Client.Devices.Recorder.ThermocoupleLength / 3; i++)
+            {
+                TC1.Add(new MeasureRow(null, "none", $"ID1.TC.{i + 1:d3}", i + 1));
+                TC2.Add(new MeasureRow(null, "none", $"ID2.TC.{i + 1:d3}", i + 1));
+                TC3.Add(new MeasureRow(null, "none", $"OD.TC.{i + 1:d3}", i + 1));
+            }
+        }
+
+        public CtrlTestCondition Control { get; set; }
+        public List<ConditionSchedule> Schedules { get; set; }
+        public ConditionMethod Method { get; set; }
+        public ConditionNote Note { get; set; }
+        public Dictionary<EConditionRated, List<ConditionRated>> Rateds { get; set; }
+        public Dictionary<string, string> ThermocoupleDic { get; set; }
+        public Dictionary<string, string> PressureDic { get; set; }
+        public List<MeasureRow> Pressures { get; set; }
+        public List<MeasureRow> TC1 { get; set; }
+        public List<MeasureRow> TC2 { get; set; }
+        public List<MeasureRow> TC3 { get; set; }
+    }
+
+    #region ConditionSchedule
+    public class ConditionSchedule
+    {
+        public ConditionSchedule(int no)
+        {
+            No = no;
+            Standard = "";
+            Name = "";
+            NoOfSteady = 1;
+            PreRun = 120;
+            Judge = 60;
+            Repeat = 1;
+            Indoor1DB = 27;
+            Indoor1DBAvg = 0;
+            Indoor1DBDev = 0;
+            Indoor1WB = 19;
+            Indoor1WBAvg = 0;
+            Indoor1WBDev = 0;
+            Indoor1LDB1Dev = 0;
+            Indoor1LWB1Dev = 0;
+            Indoor1AirFlow1Dev = 0;
+            Indoor1LDB2Dev = 0;
+            Indoor1LWB2Dev = 0;
+            Indoor1AirFlow2Dev = 0;
+            Indoor1CP1 = 0;
+            Indoor1CP1Avg = 0;
+            Indoor1CP1Dev = 0;
+            Indoor1CP2 = 0;
+            Indoor1CP2Avg = 0;
+            Indoor1CP2Dev = 0;
+            Indoor2DB = 27;
+            Indoor2DBAvg = 0;
+            Indoor2DBDev = 0;
+            Indoor2WB = 19;
+            Indoor2WBAvg = 0;
+            Indoor2WBDev = 0;
+            Indoor2LDB1Dev = 0;
+            Indoor2LWB1Dev = 0;
+            Indoor2AirFlow1Dev = 0;
+            Indoor2LDB2Dev = 0;
+            Indoor2LWB2Dev = 0;
+            Indoor2AirFlow2Dev = 0;
+            Indoor2CP1 = 0;
+            Indoor2CP1Avg = 0;
+            Indoor2CP1Dev = 0;
+            Indoor2CP2 = 0;
+            Indoor2CP2Avg = 0;
+            Indoor2CP2Dev = 0;
+            OutdoorDB = 35;
+            OutdoorDBAvg = 0;
+            OutdoorDBDev = 0;
+            OutdoorWB = 24;
+            OutdoorWBAvg = 0;
+            OutdoorWBDev = 0;
+            OutdoorDP = 10;
+            OutdoorDPAvg = 0;
+            OutdoorDPDev = 0;
+            OutdoorVolt1 = 220;
+            OutdoorVolt1Avg = 0;
+            OutdoorVolt1Dev = 0;
+            OutdoorVolt2 = 220;
+            OutdoorVolt2Avg = 0;
+            OutdoorVolt2Dev = 0;
+            Indoor1Use = EIndoorUse.Indoor;
+            Indoor1Mode1 = EIndoorMode.Cooling;
+            Indoor1Duct1 = EIndoorDuct.NotUsed;
+            Indoor1Mode2 = EIndoorMode.Cooling;
+            Indoor1Duct2 = EIndoorDuct.NotUsed;
+            Indoor2Use = EIndoorUse.Indoor;
+            Indoor2Mode1 = EIndoorMode.Cooling;
+            Indoor2Duct1 = EIndoorDuct.NotUsed;
+            Indoor2Mode2 = EIndoorMode.Cooling;
+            Indoor2Duct2 = EIndoorDuct.NotUsed;
+            OutdoorUse = EOutdoorUse.Outdoor;
+            OutdoorDpSensor = EEtcUse.NotUsed;
+            OutdoorAutoVolt = EEtcUse.NotUsed;
+        }
+
+        public int No { get; set; }
+        public string Standard { get; set; }
+        public string Name { get; set; }
+        public int NoOfSteady { get; set; }
+        public int PreRun { get; set; }
+        public int Judge { get; set; }
+        public int Repeat { get; set; }
+        public float Indoor1DB { get; set; }
+        public float Indoor1DBAvg { get; set; }
+        public float Indoor1DBDev { get; set; }
+        public float Indoor1WB { get; set; }
+        public float Indoor1WBAvg { get; set; }
+        public float Indoor1WBDev { get; set; }
+        public float Indoor1LDB1Dev { get; set; }
+        public float Indoor1LWB1Dev { get; set; }
+        public float Indoor1AirFlow1Dev { get; set; }
+        public float Indoor1LDB2Dev { get; set; }
+        public float Indoor1LWB2Dev { get; set; }
+        public float Indoor1AirFlow2Dev { get; set; }
+        public float Indoor1CP1 { get; set; }
+        public float Indoor1CP1Avg { get; set; }
+        public float Indoor1CP1Dev { get; set; }
+        public float Indoor1CP2 { get; set; }
+        public float Indoor1CP2Avg { get; set; }
+        public float Indoor1CP2Dev { get; set; }
+        public float Indoor2DB { get; set; }
+        public float Indoor2DBAvg { get; set; }
+        public float Indoor2DBDev { get; set; }
+        public float Indoor2WB { get; set; }
+        public float Indoor2WBAvg { get; set; }
+        public float Indoor2WBDev { get; set; }
+        public float Indoor2LDB1Dev { get; set; }
+        public float Indoor2LWB1Dev { get; set; }
+        public float Indoor2AirFlow1Dev { get; set; }
+        public float Indoor2LDB2Dev { get; set; }
+        public float Indoor2LWB2Dev { get; set; }
+        public float Indoor2AirFlow2Dev { get; set; }
+        public float Indoor2CP1 { get; set; }
+        public float Indoor2CP1Avg { get; set; }
+        public float Indoor2CP1Dev { get; set; }
+        public float Indoor2CP2 { get; set; }
+        public float Indoor2CP2Avg { get; set; }
+        public float Indoor2CP2Dev { get; set; }
+        public float OutdoorDB { get; set; }
+        public float OutdoorDBAvg { get; set; }
+        public float OutdoorDBDev { get; set; }
+        public float OutdoorWB { get; set; }
+        public float OutdoorWBAvg { get; set; }
+        public float OutdoorWBDev { get; set; }
+        public float OutdoorDP { get; set; }
+        public float OutdoorDPAvg { get; set; }
+        public float OutdoorDPDev { get; set; }
+        public float OutdoorVolt1 { get; set; }
+        public float OutdoorVolt1Avg { get; set; }
+        public float OutdoorVolt1Dev { get; set; }
+        public float OutdoorVolt2 { get; set; }
+        public float OutdoorVolt2Avg { get; set; }
+        public float OutdoorVolt2Dev { get; set; }
+        public EIndoorUse Indoor1Use { get; set; }
+        public EIndoorMode Indoor1Mode1 { get; set; }
+        public EIndoorDuct Indoor1Duct1 { get; set; }
+        public EIndoorMode Indoor1Mode2 { get; set; }
+        public EIndoorDuct Indoor1Duct2 { get; set; }
+        public EIndoorUse Indoor2Use { get; set; }
+        public EIndoorMode Indoor2Mode1 { get; set; }
+        public EIndoorDuct Indoor2Duct1 { get; set; }
+        public EIndoorMode Indoor2Mode2 { get; set; }
+        public EIndoorDuct Indoor2Duct2 { get; set; }
+        public EOutdoorUse OutdoorUse { get; set; }
+        public EEtcUse OutdoorDpSensor { get; set; }
+        public EEtcUse OutdoorAutoVolt { get; set; }
+
+        public EIndoorMode IndoorMode
+        {
+            get
+            {
+                EIndoorMode mode = EIndoorMode.NotUsed;
+
+                if ((Indoor1Use == EIndoorUse.NotUsed) &&
+                    (Indoor2Use == EIndoorUse.NotUsed)) return mode;
+
+                if ((Indoor1Mode1 == EIndoorMode.NotUsed) &&
+                    (Indoor1Mode2 == EIndoorMode.NotUsed) &&
+                    (Indoor2Mode1 == EIndoorMode.NotUsed) &&
+                    (Indoor2Mode2 == EIndoorMode.NotUsed)) return EIndoorMode.Cooling;
+
+                if (Indoor1Use == EIndoorUse.Indoor)
+                {
+                    if (Indoor1Mode1 != EIndoorMode.NotUsed)
+                    {
+                        mode = Indoor1Mode1;
+                    }
+                    else if (Indoor1Mode2 != EIndoorMode.NotUsed)
+                    {
+                        mode = Indoor1Mode2;
+                    }
+                    else if (Indoor2Use == EIndoorUse.Indoor)
+                    {
+                        if (Indoor2Mode1 != EIndoorMode.NotUsed)
+                        {
+                            mode = Indoor2Mode1;
+                        }
+                        else if (Indoor2Mode2 != EIndoorMode.NotUsed)
+                        {
+                            mode = Indoor2Mode2;
+                        }
+                    }
+                }
+                else if (Indoor2Use == EIndoorUse.Indoor)
+                {
+                    if (Indoor2Mode1 != EIndoorMode.NotUsed)
+                    {
+                        mode = Indoor2Mode1;
+                    }
+                    else if (Indoor2Mode2 != EIndoorMode.NotUsed)
+                    {
+                        mode = Indoor2Mode2;
+                    }
+                }
+
+                return mode;
+            }
+        }
+
+        public EIndoorMode Indoor1Mode
+        {
+            get
+            {
+                EIndoorMode mode = EIndoorMode.NotUsed;
+
+                if (Indoor1Use == EIndoorUse.NotUsed) return mode;
+
+                if ((Indoor1Mode1 == EIndoorMode.NotUsed) &&
+                    (Indoor1Mode2 == EIndoorMode.NotUsed)) return mode;
+
+                if (Indoor1Mode1 != EIndoorMode.NotUsed)
+                    mode = Indoor1Mode1;
+                else
+                    mode = Indoor1Mode2;
+
+                return mode;
+            }
+        }
+
+        public EIndoorMode Indoor2Mode
+        {
+            get
+            {
+                EIndoorMode mode = EIndoorMode.NotUsed;
+
+                if (Indoor2Use == EIndoorUse.NotUsed) return mode;
+
+                if ((Indoor2Mode1 == EIndoorMode.NotUsed) &&
+                    (Indoor2Mode2 == EIndoorMode.NotUsed)) return mode;
+
+                if (Indoor2Mode1 != EIndoorMode.NotUsed)
+                    mode = Indoor2Mode1;
+                else
+                    mode = Indoor2Mode2;
+
+                return mode;
+            }
+        }
+
+        public bool Use
+        {
+            get
+            {
+                if (Indoor1Use == EIndoorUse.Indoor) return true;
+                if (Indoor2Use == EIndoorUse.Indoor) return true;
+                if (OutdoorUse == EOutdoorUse.Outdoor) return true;
+
+                return false;
+            }
+        }
+    }
+    #endregion
+
+    #region ConditionMethod
+    public class ConditionMethod
+    {
+        public ConditionMethod()
+        {
+            IntegralCount = 1;
+            IntegralTime = 1;
+            ScanTime = 1;
+            CoolingCapacity = EUnitCapacity.W;
+            HeatingCapacity = EUnitCapacity.W;
+            AirFlow = EUnitAirFlow.CMM;
+            Enthalpy = EUnitEnthalpy.W;
+            Pressure = EUnitPressure.Bar;
+            DiffPressure = EUnitDiffPressure.mmAq;
+            AtmPressure = EUnitAtmPressure.mmAq;
+            AutoControllerSetting = false;
+            UsePowerMeterIntegral = false;
+        }
+
+        public int IntegralCount { get; set; }
+        public int IntegralTime { get; set; }
+        public int ScanTime { get; set; }
+        public EUnitCapacity CoolingCapacity { get; set; }
+        public EUnitCapacity HeatingCapacity { get; set; }
+        public EUnitAirFlow AirFlow { get; set; }
+        public EUnitEnthalpy Enthalpy { get; set; }
+        public EUnitPressure Pressure { get; set; }
+        public EUnitDiffPressure DiffPressure { get; set; }
+        public EUnitAtmPressure AtmPressure { get; set; }
+        public EUnitTemperature Temperature { get; set; }
+        public bool AutoControllerSetting { get; set; }
+        public bool UsePowerMeterIntegral { get; set; }
+    }
+    #endregion
+
+    #region ConditionNote
+    public class ConditionNote
+    {
+        public ConditionNote()
+        {
+            Company = "";
+            Name = "";
+            No = "";
+            Observer = "";
+            Maker = "";
+            Model1 = "";
+            Serial1 = "";
+            Model2 = "";
+            Serial2 = "";
+            Model3 = "";
+            Serial3 = "";
+            ExpDevice = "";
+            Refrigerant = "";
+            RefCharge = "";
+            Memo = "";
+        }
+
+        public string Company { get; set; }
+        public string Name { get; set; }
+        public string No { get; set; }
+        public string Observer { get; set; }
+        public string Maker { get; set; }
+        public string Model1 { get; set; }
+        public string Serial1 { get; set; }
+        public string Model2 { get; set; }
+        public string Serial2 { get; set; }
+        public string Model3 { get; set; }
+        public string Serial3 { get; set; }
+        public string ExpDevice { get; set; }
+        public string Refrigerant { get; set; }
+        public string RefCharge { get; set; }
+        public string Memo { get; set; }
+    }
+    #endregion
+
+    #region ConditionRated
+    public enum EConditionRated { Total, ID11, ID12, ID21, ID22 }
+
+    public class ConditionRated
+    {
+        public ConditionRated()
+        {
+        }
+
+        public float Capacity { get; set; }
+        public float PowerInput { get; set; }
+        public float EER_COP { get; set; }
+        public float Voltage { get; set; }
+        public float Current { get; set; }
+        public string Frequency { get; set; }
+        public int PM_IDU { get; set; }
+        public int PM_ODU { get; set; }
+        public EWT330Wiring Wiring { get; set; }
+    }
+    #endregion
+    #endregion
+}

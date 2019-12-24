@@ -1,0 +1,88 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlConfigCoefficient : UlUserControlEng
+    {
+        public CtrlConfigCoefficient()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private List<CoefficientViewRow> coefficients;
+
+        private void Initialize()
+        {
+            coefficients = new List<CoefficientViewRow>();
+        }
+
+        private void CtrlConfigCoefficient_Enter(object sender, EventArgs e)
+        {
+            LoadCoefficient();
+        }
+
+        private void CtrlConfigCoefficient_Load(object sender, EventArgs e)
+        {
+            coeffGrid.DataSource = coefficients;
+            coeffGridView.Appearance.EvenRow.BackColor = Color.FromArgb(244, 244, 236);
+            coeffGridView.OptionsView.EnableAppearanceEvenRow = true;
+        }
+
+        private void LoadCoefficient()
+        {
+            string key;
+            UlIniFile ini = Resource.Ini;
+
+            coefficients.Clear();
+            foreach (ECoefficient coeff in Enum.GetValues(typeof(ECoefficient)))
+            {
+                key = coeff.ToString();
+
+                coefficients.Add(new CoefficientViewRow(
+                    coeff.ToDescription(),
+                    (float)ini.GetDouble("Coefficient.ID11", key),
+                    (float)ini.GetDouble("Coefficient.ID12", key),
+                    (float)ini.GetDouble("Coefficient.ID21", key),
+                    (float)ini.GetDouble("Coefficient.ID22", key)));
+            }
+
+            coeffGridView.RefreshData();
+        }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Would you like to save current coefficient values?",
+                Resource.Caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                == DialogResult.No)
+            {
+                return;
+            }
+
+            UlIniFile ini = Resource.Ini;
+            saveButton.Focus();
+
+            foreach (ECoefficient coeff in Enum.GetValues(typeof(ECoefficient)))
+            {
+                ini.SetDouble("Coefficient.ID11", coeff.ToString(), coefficients[(int)coeff].ID11);
+                ini.SetDouble("Coefficient.ID12", coeff.ToString(), coefficients[(int)coeff].ID12);
+                ini.SetDouble("Coefficient.ID21", coeff.ToString(), coefficients[(int)coeff].ID21);
+                ini.SetDouble("Coefficient.ID22", coeff.ToString(), coefficients[(int)coeff].ID22);
+            }
+
+            Resource.Settings.Load();
+            coeffGridView.Focus();
+        }
+    }
+}

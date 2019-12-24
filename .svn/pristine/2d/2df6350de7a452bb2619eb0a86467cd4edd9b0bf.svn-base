@@ -1,0 +1,181 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.XtraEditors;
+using DevExpress.XtraGrid.Views.BandedGrid;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{ 
+    public partial class CtrlConfigSchedule : UlUserControlEng
+    {
+        private class TestParams
+        {
+            public TestParams()
+            {
+                Indoor1Use = EIndoorUse.Indoor;
+                Indoor1Mode1 = EIndoorMode.Cooling;
+                Indoor1Duct1 = EIndoorDuct.N1;
+                Indoor1Mode2 = EIndoorMode.Cooling;
+                Indoor1Duct2 = EIndoorDuct.N1;
+
+                Indoor2Use = EIndoorUse.Indoor;
+                Indoor2Mode1 = EIndoorMode.Cooling;
+                Indoor2Duct1 = EIndoorDuct.N1;
+                Indoor2Mode2 = EIndoorMode.Cooling;
+                Indoor2Duct2 = EIndoorDuct.N1;
+
+                OutdoorUse = EOutdoorUse.Outdoor;
+                OutdoorDpSensor = EEtcUse.Use;
+                OutdoorAutoVolt = EEtcUse.Use;
+            }
+
+            public EIndoorUse Indoor1Use { get; set; }
+            public EIndoorMode Indoor1Mode1 { get; set; }
+            public EIndoorDuct Indoor1Duct1 { get; set; }
+            public EIndoorMode Indoor1Mode2 { get; set; }
+            public EIndoorDuct Indoor1Duct2 { get; set; }
+            public EIndoorUse Indoor2Use { get; set; }
+            public EIndoorMode Indoor2Mode1 { get; set; }
+            public EIndoorDuct Indoor2Duct1 { get; set; }
+            public EIndoorMode Indoor2Mode2 { get; set; }
+            public EIndoorDuct Indoor2Duct2 { get; set; }
+            public EOutdoorUse OutdoorUse { get; set; }
+            public EEtcUse OutdoorDpSensor { get; set; }
+            public EEtcUse OutdoorAutoVolt { get; set; }
+        }
+
+        public CtrlConfigSchedule()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private List<TextEdit> viewEdits;
+        private List<TextEdit> id1Edits;
+        private List<TextEdit> id2Edits;
+        private List<TextEdit> odEdits;
+        private List<AdvBandedGridView> viewGrids;
+        private List<TestParams> testParams;
+
+        private void Initialize()
+        {
+            viewEdits = new List<TextEdit>();
+            viewEdits.Add(standardEdit);
+            viewEdits.Add(nameEdit);
+            viewEdits.Add(noSteadyEdit);
+            viewEdits.Add(preparationEdit);
+            viewEdits.Add(judgementEdit);
+            viewEdits.Add(repeatEdit);
+
+            id1Edits = new List<TextEdit>();
+            id1Edits.Add(id1EdbSetupEdit);
+            id1Edits.Add(id1EdbAvgEdit);
+            id1Edits.Add(id1EdbDevEdit);
+            id1Edits.Add(id1EwbSetupEdit);
+            id1Edits.Add(id1EwbAvgEdit);
+            id1Edits.Add(id1EwbDevEdit);
+            id1Edits.Add(id1Ldb1DevEdit);
+            id1Edits.Add(id1Lwb1DevEdit);
+            id1Edits.Add(id1Airflow1DevEdit);
+            id1Edits.Add(id1Ldb2DevEdit);
+            id1Edits.Add(id1Lwb2DevEdit);
+            id1Edits.Add(id1Airflow2DevEdit);
+            id1Edits.Add(id1Cdp1SetupEdit);
+            id1Edits.Add(id1Cdp1AvgEdit);
+            id1Edits.Add(id1Cdp1DevEdit);
+            id1Edits.Add(id1Cdp2SetupEdit);
+            id1Edits.Add(id1Cdp2AvgEdit);
+            id1Edits.Add(id1Cdp2DevEdit);
+
+            id2Edits = new List<TextEdit>();
+            id2Edits.Add(id2EdbSetupEdit);
+            id2Edits.Add(id2EdbAvgEdit);
+            id2Edits.Add(id2EdbDevEdit);
+            id2Edits.Add(id2EwbSetupEdit);
+            id2Edits.Add(id2EwbAvgEdit);
+            id2Edits.Add(id2EwbDevEdit);
+            id2Edits.Add(id2Ldb1DevEdit);
+            id2Edits.Add(id2Lwb1DevEdit);
+            id2Edits.Add(id2Airflow1DevEdit);
+            id2Edits.Add(id2Ldb2DevEdit);
+            id2Edits.Add(id2Lwb2DevEdit);
+            id2Edits.Add(id2Airflow2DevEdit);
+            id2Edits.Add(id2Cdp1SetupEdit);
+            id2Edits.Add(id2Cdp1AvgEdit);
+            id2Edits.Add(id2Cdp1DevEdit);
+            id2Edits.Add(id2Cdp2SetupEdit);
+            id2Edits.Add(id2Cdp2AvgEdit);
+            id2Edits.Add(id2Cdp2DevEdit);
+
+            odEdits = new List<TextEdit>();
+            odEdits.Add(odEdbSetupEdit);
+            odEdits.Add(odEdbAvgEdit);
+            odEdits.Add(odEdbDevEdit);
+            odEdits.Add(odEwbSetupEdit);
+            odEdits.Add(odEwbAvgEdit);
+            odEdits.Add(odEwbDevEdit);
+            odEdits.Add(odEdpSetupEdit);
+            odEdits.Add(odEdpAvgEdit);
+            odEdits.Add(odEdpDevEdit);
+            odEdits.Add(odVolt1SetupEdit);
+            odEdits.Add(odVolt1AvgEdit);
+            odEdits.Add(odVolt1DevEdit);
+            odEdits.Add(odVolt2SetupEdit);
+            odEdits.Add(odVolt2AvgEdit);
+            odEdits.Add(odVolt2DevEdit);
+
+            viewGrids = new List<AdvBandedGridView>();
+            viewGrids.Add(indoor1GridView);
+            viewGrids.Add(indoor2GridView);
+            viewGrids.Add(outdoorGridView);
+
+            testParams = new List<TestParams>();
+            testParams.Add(new TestParams());
+
+            indoor1Grid.DataSource = testParams;
+            indoor2Grid.DataSource = testParams;
+            outdoorGrid.DataSource = testParams;
+
+            SetPanelActive(false);
+        }
+
+        private void SetPanelActive(bool active)
+        {
+            viewStatePanel.BackColor = (active == true) ? Color.DeepSkyBlue : Color.Gray;
+
+            foreach (TextEdit edit in id1Edits)
+            {
+                edit.Properties.ReadOnly = active;
+            }
+
+            foreach (TextEdit edit in id2Edits)
+            {
+                edit.Properties.ReadOnly = !active;
+            }
+
+            foreach (TextEdit edit in odEdits)
+            {
+                edit.Properties.ReadOnly = !active;
+            }
+
+            foreach (TextEdit edit in viewEdits)
+            {
+                edit.Properties.ReadOnly = !active;
+            }
+
+            foreach (AdvBandedGridView gridView in viewGrids)
+            {
+                gridView.OptionsBehavior.ReadOnly = !active;
+            }
+        }
+    }
+}

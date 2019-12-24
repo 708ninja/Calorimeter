@@ -1,0 +1,791 @@
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading;
+
+using Ulee.Utils;
+using Ulee.Device.Connection;
+using Ulee.Device.Connection.LG;
+using Ulee.Device.Connection.Yokogawa;
+using Ulee.Threading;
+
+namespace Hnc.Calorimeter.Server
+{
+    public class DeviceCollection
+    {
+        public DeviceCollection(CalorimeterServer server)
+        {
+            this.server = server;
+
+            PowerMeter = new List<UlWT330EthernetClient>();
+            Recorder = new List<UlGM10EthernetClient>();
+            Controller = new List<UlUT55AEthernetClient>();
+            Plc = new List<UlMasterKEthernetClient>();
+
+            PowerMeterValues = new List<DeviceValueRow<float>>();
+            RecorderValues = new List<DeviceValueRow<float>>();
+            ControllerValues = new List<DeviceValueRow<float>>();
+            PlcValues = new List<DeviceValueRow<UInt16>>();
+
+            Calibrators = new CalibratorCollection();
+
+            Initialize();
+
+            RecorderValueType = EValueType.Real;
+
+            int scanTime = server.Ini.GetInteger("DeviceCollection", "scantime");
+
+            if (scanTime > 0)
+            {
+                scaner = new DeviceScanerThread(this, scanTime);
+            }
+            else
+            {
+                scaner = null;
+            }
+        }
+
+        public List<UlWT330EthernetClient> PowerMeter { get; private set; }
+
+        public List<UlGM10EthernetClient> Recorder { get; private set; }
+
+        public List<UlUT55AEthernetClient> Controller { get; private set; }
+
+        public List<UlMasterKEthernetClient> Plc { get; private set; }
+
+        public List<DeviceValueRow<float>> PowerMeterValues { get; private set; }
+
+        public List<DeviceValueRow<float>> RecorderValues { get; private set; }
+
+        public List<DeviceValueRow<float>> ControllerValues { get; private set; }
+
+        public List<DeviceValueRow<UInt16>> PlcValues { get; private set; }
+
+        public CalibratorCollection Calibrators { get; private set; }
+
+        public float[] Values { get; private set; }
+
+        public byte[] Bytes { get; private set; }
+
+        public EValueType RecorderValueType { get; set; }
+
+        private CalorimeterServer server;
+
+        private DeviceScanerThread scaner;
+
+        public int PowerMeterLength
+        {
+            get
+            {
+                int length = 0;
+
+                for (int i = 0; i < PowerMeter.Count; i++)
+                {
+                    length += PowerMeter[i].Values.Length;
+                }
+
+                return length;
+            }
+        }
+
+        public bool PowerMeterConnected
+        {
+            get
+            {
+                bool ret = false;
+
+                for (int i = 0; i < PowerMeter.Count; i++)
+                {
+                    ret = PowerMeter[i].Connected;
+                    if (ret == true) break;
+                }
+
+                return ret;
+            }
+        }
+
+        public int RecorderLength
+        {
+            get
+            {
+                int length = 0;
+
+                for (int i = 0; i < Recorder.Count; i++)
+                {
+                    length += Recorder[i].Values.Length;
+                }
+
+                return length;
+            }
+        }
+
+        public bool RecorderConnected
+        {
+            get
+            {
+                bool ret = false;
+
+                for (int i = 0; i < Recorder.Count; i++)
+                {
+                    ret = Recorder[i].Connected;
+                    if (ret == true) break;
+                }
+
+                return ret;
+            }
+        }
+
+        public int ControllerLength
+        {
+            get
+            {
+                int length = 0;
+
+                for (int i = 0; i < Controller.Count; i++)
+                {
+                    length += Controller[i].Values.Length * 12;
+                }
+
+                return length;
+            }
+        }
+
+        public bool ControllerConnected
+        {
+            get
+            {
+                bool ret = false;
+
+                for (int i = 0; i < Controller.Count; i++)
+                {
+                    ret = Controller[i].Connected;
+                    if (ret == true) break;
+                }
+
+                return ret;
+            }
+        }
+
+        public int PlcLength
+        {
+            get
+            {
+                int length = 0;
+
+                for (int i = 0; i < Plc.Count; i++)
+                {
+                    length += Plc[i].Values.Length;
+                }
+
+                return length;
+            }
+        }
+
+        public bool PlcConnected
+        {
+            get
+            {
+                bool ret = false;
+
+                for (int i = 0; i < Plc.Count; i++)
+                {
+                    ret = Plc[i].Connected;
+                    if (ret == true) break;
+                }
+
+                return ret;
+            }
+        }
+
+        private void Initialize()
+        {
+            int port, scan, count;
+            string name, logPath, logName;
+            EEthernetMode mode;
+            EEthernetLogging logging;
+
+            int i = 1;
+            int length = 0;
+            string section = $"PowerMeter.{i:d2}";
+            string ip = server.Ini.GetString(section, "ip");
+            PowerMeter.Clear();
+            PowerMeterValues.Clear();
+
+            while (ip != "")
+            {
+                name = server.Ini.GetString(section, "name");
+                port = server.Ini.GetInteger(section, "port");
+                scan = server.Ini.GetInteger(section, "scantime");
+                logPath = server.Ini.GetString(section, "logpath");
+                logName = server.Ini.GetString(section, "logfilename");
+                logging = GetEthernetLogging(section);
+                mode = (server.Ini.GetString(section, "mode") == "Real") ? EEthernetMode.Real : EEthernetMode.Virtual;
+
+                EWT330Phase phase = (server.Ini.GetString(section, "phase") == "P1") ? EWT330Phase.P1 : EWT330Phase.P3;
+                if (phase == EWT330Phase.P1) length += 7;
+                else length += 25;
+
+                UlWT330EthernetClient client = new UlWT330EthernetClient(name, phase, ip, port, scan);
+                client.Mode = mode;
+                client.Logging = logging;
+                client.LogPath = logPath;
+                client.LogFName = $"{logName}.{i:d2}";
+                PowerMeter.Add(client);
+
+                CreatePowerMeterValues(i, phase);
+
+                i++;
+                section = $"PowerMeter.{i:d2}";
+                ip = server.Ini.GetString(section, "ip");
+            }
+
+            i = 1;
+            section = $"Recorder.{i:d2}";
+            ip = server.Ini.GetString(section, "ip");
+            Recorder.Clear();
+
+            while (ip != "")
+            {
+                name = server.Ini.GetString(section, "name");
+                port = server.Ini.GetInteger(section, "port");
+                count = server.Ini.GetInteger(section, "length");
+                scan = server.Ini.GetInteger(section, "scantime");
+                logPath = server.Ini.GetString(section, "logpath");
+                logName = server.Ini.GetString(section, "logfilename");
+                logging = GetEthernetLogging(section);
+                mode = (server.Ini.GetString(section, "mode") == "Real") ? EEthernetMode.Real : EEthernetMode.Virtual;
+
+                length += count;
+
+                UlGM10EthernetClient client = new UlGM10EthernetClient(name, ip, port, count, scan);
+                client.Mode = mode;
+                client.Logging = logging;
+                client.LogPath = logPath;
+                client.LogFName = $"{logName}.{i:d2}";
+                Recorder.Add(client);
+
+                CreateRecorderValues(i, count);
+
+                i++;
+                section = $"Recorder.{i:d2}";
+                ip = server.Ini.GetString(section, "ip");
+            }
+
+            i = 1;
+            section = $"Controller.{i:d2}";
+            ip = server.Ini.GetString(section, "ip");
+            Controller.Clear();
+
+            while (ip != "")
+            {
+                name = server.Ini.GetString(section, "name");
+                port = server.Ini.GetInteger(section, "port");
+                scan = server.Ini.GetInteger(section, "scantime");
+                logPath = server.Ini.GetString(section, "logpath");
+                logName = server.Ini.GetString(section, "logfilename");
+                logging = GetEthernetLogging(section);
+                mode = (server.Ini.GetString(section, "mode") == "Real") ? EEthernetMode.Real : EEthernetMode.Virtual;
+
+                int slaveAddr = server.Ini.GetInteger(section, "slaveaddress");
+                int slaveCount = server.Ini.GetInteger(section, "slavecount");
+
+                length += (slaveCount * 12);
+
+                UlUT55AEthernetClient client = new UlUT55AEthernetClient(name, ip, port, slaveAddr, slaveCount, scan);
+                client.Mode = mode;
+                client.Logging = logging;
+                client.LogPath = logPath;
+                client.LogFName = $"{logName}.{i:d2}";
+                Controller.Add(client);
+
+                CreateControllerValues(slaveAddr, slaveCount);
+
+                i++;
+                section = $"Controller.{i:d2}";
+                ip = server.Ini.GetString(section, "ip");
+            }
+
+            Values = new float[length];
+
+            i = 1;
+            section = $"Plc.{i:d2}";
+            ip = server.Ini.GetString(section, "ip");
+            Plc.Clear();
+
+            while (ip != "")
+            {
+                name = server.Ini.GetString(section, "name");
+                port = server.Ini.GetInteger(section, "port");
+                scan = server.Ini.GetInteger(section, "scantime");
+                logPath = server.Ini.GetString(section, "logpath");
+                logName = server.Ini.GetString(section, "logfilename");
+                logging = GetEthernetLogging(section);
+                mode = (server.Ini.GetString(section, "mode") == "Real") ? EEthernetMode.Real : EEthernetMode.Virtual;
+
+                string block = server.Ini.GetString(section, "block");
+                int blockLength = server.Ini.GetInteger(section, "blocklength");
+
+                UlMasterKEthernetClient client = new UlMasterKEthernetClient(name, ip, port, block, blockLength, scan);
+                client.Mode = mode;
+                client.Logging = logging;
+                client.LogPath = logPath;
+                client.LogFName = $"{logName}.{i:d2}";
+                Plc.Add(client);
+
+                CreatePlcValues(i, blockLength);
+
+                i++;
+                section = $"Plc.{i:d2}";
+                ip = server.Ini.GetString(section, "ip");
+            }
+
+            Bytes = new byte[length * 4 + PlcLength * 2];
+        }
+
+        //public void DoAfterException(object sender, EventArgs args)
+        //{
+        //    (sender as UlEthernetClient).Close();
+        //}
+
+        private void CreatePowerMeterValues(int index, EWT330Phase phase)
+        {
+            switch (phase)
+            {
+                case EWT330Phase.P1:
+             		for (int i=0; i<7; i++)
+                    {
+                        PowerMeterValues.Add(
+                            new DeviceValueRow<float>($"{index:d2} " + ((EWT330P1Series)i).ToString(), 0));
+                    }
+             		break;
+
+             	case EWT330Phase.P3:
+                    for (int i = 0; i < 25; i++)
+                    {
+                        PowerMeterValues.Add(
+                            new DeviceValueRow<float>($"{index:d2} " + ((EWT330P3Series)i).ToString(), 0));
+                    }
+                    break;
+            }
+        }
+
+        private void CreateRecorderValues(int index, int length)
+        {
+            for (int i=0; i<length; i++)
+            {
+                RecorderValues.Add(new DeviceValueRow<float>($"{index:d2} CH{i + 1:d3}", 0));
+            }
+        }
+
+        private void CreateControllerValues(int addr, int count)
+        {
+            for (int i=0; i<count; i++)
+            {
+                for (int j=0; j<12; j++)
+                {
+                    ControllerValues.Add(new DeviceValueRow<float>($"{addr + i:d2} " + ((EUT55ARegisterSeries)j).ToString(), 0));
+                }
+            }
+        }
+
+        private void CreatePlcValues(int index, int length)
+        {
+            for (int i=0; i<length; i++)
+            {
+                PlcValues.Add(new DeviceValueRow<UInt16>($"{index:d2} CH{i + 1:d2}", 0));
+            }
+        }
+
+        private EEthernetLogging GetEthernetLogging(string section)
+        {
+            EEthernetLogging ret;
+
+            switch (server.Ini.GetString(section, "logging").ToLower())
+            {
+                case "none":
+                    ret = EEthernetLogging.None;
+                    break;
+
+                case "event":
+                    ret = EEthernetLogging.Event;
+                    break;
+
+                case "all":
+                    ret = EEthernetLogging.All;
+                    break;
+
+                default:
+                    ret = EEthernetLogging.Event;
+                    break;
+            }
+
+            return ret;
+        }
+
+        public void Lock()
+        {
+            Monitor.Enter(Values);
+        }
+
+        public void Unlock()
+        {
+            Monitor.Exit(Values);
+        }
+
+        public void Read()
+        {
+            int i, j, k;
+
+            i = k = 0;
+            lock (Values)
+            {
+                foreach (UlWT330EthernetClient client in PowerMeter)
+                {
+                    client.Lock();
+
+                    try
+                    {
+                        Buffer.BlockCopy(client.Values, 0, Values, i, client.Values.Length * sizeof(float));
+                        i += client.Values.Length * sizeof(float);
+
+                        for (j = 0; j < client.Values.Length; j++)
+                        {
+                            PowerMeterValues[j + k].Value = client.Values[j];
+                        }
+
+                        k += client.Values.Length;
+                    }
+                    finally
+                    {
+                        client.Unlock();
+                    }
+                }
+
+                k = 0;
+                foreach (UlUT55AEthernetClient client in Controller)
+                {
+                    client.Lock();
+
+                    try
+                    {
+                        foreach (float[] src in client.Values)
+                        {
+                            Buffer.BlockCopy(src, 0, Values, i, src.Length * sizeof(float));
+                            i += src.Length * sizeof(float);
+
+                            for (j = 0; j < src.Length; j++)
+                            {
+                                ControllerValues[j + k].Value = src[j];
+                            }
+
+                            k += src.Length;
+                        }
+                    }
+                    finally
+                    {
+                        client.Unlock();
+                    }
+                }
+
+                foreach (UlGM10EthernetClient client in Recorder)
+                {
+                    client.Lock();
+
+                    try
+                    {
+                        Buffer.BlockCopy(client.Values, 0, Values, i, client.Values.Length * sizeof(float));
+                        i += client.Values.Length * sizeof(float);
+                    }
+                    finally
+                    {
+                        client.Unlock();
+                    }
+                }
+
+                // Calibrate Recorder values
+                CalibratorRow row;
+                Dictionary<int, CalibratorRow> dicCalib = Calibrators["All"];
+                k = PowerMeterLength + ControllerLength;
+
+                for (j=0; j<RecorderLength; j++)
+                {
+                    if (RecorderValueType == EValueType.Real)
+                    {
+                        if (dicCalib.TryGetValue(j, out row) == true)
+                        {
+                            Values[k + j] = row.Calibrator.Execute(Values[k + j]);
+                        }
+                    }
+
+                    RecorderValues[j].Value = Values[k + j];
+                }
+
+                Buffer.BlockCopy(Values, 0, Bytes, 0, Values.Length * sizeof(float));
+
+                i = Values.Length * sizeof(float);
+                foreach (UlMasterKEthernetClient client in Plc)
+                {
+                    client.Lock();
+
+                    try
+                    {
+                        Buffer.BlockCopy(client.Values, 0, Bytes, i, client.Values.Length * sizeof(UInt16));
+                        i += client.Values.Length * sizeof(UInt16);
+                    }
+                    finally
+                    {
+                        client.Unlock();
+                    }
+                }
+
+                i = Values.Length * sizeof(float);
+                for (j = 0; j < Bytes.Length - i; j+= sizeof(UInt16))
+                {
+                    PlcValues[j/2].Value = (UInt16)((UInt16)Bytes[i + j] | ((UInt16)Bytes[i + j + 1] << 8));
+                }
+            }
+        }
+
+        public float GetRecorderRawValue(int index)
+        {
+            int i = 0;
+            float value = 0;
+
+            foreach (UlGM10EthernetClient client in Recorder)
+            {
+                if (index < (i + client.Length))
+                {
+                    client.Lock();
+
+                    try
+                    {
+                        value = client.Values[index - i];
+                    }
+                    finally
+                    {
+                        client.Unlock();
+                    }
+
+                    break;
+                }
+
+                i += client.Length;
+            }
+
+            return value;
+        }
+
+        public float GetRecorderRealValue(int index)
+        {
+            float value = 0;
+
+            lock (Values)
+            {
+                value = Values[PowerMeterLength + ControllerLength + index];
+            }
+
+            return value;
+        }
+
+        public void Connect()
+        {
+            foreach (UlWT330EthernetClient client in PowerMeter)
+            {
+                if (client.Mode == EEthernetMode.Real)
+                {
+                    client.Connect();
+                }
+            }
+
+            foreach (UlUT55AEthernetClient client in Controller)
+            {
+                if (client.Mode == EEthernetMode.Real)
+                {
+                    client.Connect();
+                }
+            }
+
+            foreach (UlMasterKEthernetClient client in Plc)
+            {
+                if (client.Mode == EEthernetMode.Real)
+                {
+                    client.Connect();
+                }
+            }
+
+            foreach (UlGM10EthernetClient client in Recorder)
+            {
+                if (client.Mode == EEthernetMode.Real)
+                {
+                    client.Connect();
+                }
+            }
+        }
+
+        public void Close()
+        {
+            foreach (UlWT330EthernetClient client in PowerMeter)
+            {
+                if (client.Mode == EEthernetMode.Real)
+                {
+                    client.Close();
+                }
+            }
+
+            foreach (UlUT55AEthernetClient client in Controller)
+            {
+                if (client.Mode == EEthernetMode.Real)
+                {
+                    client.Close();
+                }
+            }
+
+            foreach (UlMasterKEthernetClient client in Plc)
+            {
+                if (client.Mode == EEthernetMode.Real)
+                {
+                    client.Close();
+                }
+            }
+
+            foreach (UlGM10EthernetClient client in Recorder)
+            {
+                if (client.Mode == EEthernetMode.Real)
+                {
+                    client.Close();
+                }
+            }
+        }
+
+        public void Resume()
+        {
+            foreach (UlWT330EthernetClient client in PowerMeter)
+            {
+                client.Resume();
+            }
+
+            foreach (UlUT55AEthernetClient client in Controller)
+            {
+                client.Resume();
+            }
+
+            foreach (UlMasterKEthernetClient client in Plc)
+            {
+                client.Resume();
+            }
+
+            foreach (UlGM10EthernetClient client in Recorder)
+            {
+                client.Resume();
+            }
+
+            scaner?.Resume();
+        }
+
+        public void Suspend()
+        {
+            foreach (UlWT330EthernetClient client in PowerMeter)
+            {
+                client.Suspend();
+            }
+
+            foreach (UlUT55AEthernetClient client in Controller)
+            {
+                client.Suspend();
+            }
+
+            foreach (UlMasterKEthernetClient client in Plc)
+            {
+                client.Suspend();
+            }
+
+            foreach (UlGM10EthernetClient client in Recorder)
+            {
+                client.Suspend();
+            }
+
+            scaner?.Suspend();
+        }
+
+        public void Terminate()
+        {
+            foreach (UlWT330EthernetClient client in PowerMeter)
+            {
+                client.Terminate();
+                client.Close();
+            }
+
+            foreach (UlUT55AEthernetClient client in Controller)
+            {
+                client.Terminate();
+                client.Close();
+            }
+
+            foreach (UlMasterKEthernetClient client in Plc)
+            {
+                client.Terminate();
+                client.Close();
+            }
+
+            foreach (UlGM10EthernetClient client in Recorder)
+            {
+                client.Terminate();
+                client.Close();
+            }
+
+            scaner?.Terminate();
+        }
+    }
+
+    public class DeviceScanerThread : UlThread
+    {
+        public DeviceScanerThread(
+            DeviceCollection devices,
+            long time,
+            bool start = true,
+            bool terminateException = false)
+            : base(start, terminateException)
+        {
+            this.devices = devices;
+            scanTime = time;
+        }
+
+        private long scanTime;
+
+        private DeviceCollection devices;
+
+        protected override void Execute()
+        {
+            long beginTime = ElapsedMilliseconds;
+
+            // Thread 종료 신호가 들어올때 까지 루프
+            while (Terminated == false)
+            {
+                // 지정된 시간이 초과 되었는가?
+                if (IsTimeoutMilliseconds(beginTime, scanTime) == true)
+                {
+                    // Timer 초기화
+                    beginTime = ElapsedMilliseconds;
+
+                    devices.Read();
+                }
+
+                // 제어권 양보
+                Yield();
+            }
+        }
+    }
+
+    public class DeviceValueRow<T>
+    {
+        public DeviceValueRow(string name, T value)
+        {
+            Name = name;
+            Value = value;
+        }
+
+        public string Name { get; private set; }
+
+        public T Value { get; set; }
+    }
+}

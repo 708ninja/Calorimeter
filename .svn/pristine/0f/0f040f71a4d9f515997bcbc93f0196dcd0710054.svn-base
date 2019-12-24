@@ -1,0 +1,140 @@
+﻿namespace Hnc.Calorimeter.ClientTest
+{
+    partial class FormClientTest
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.PlcEdit = new System.Windows.Forms.TextBox();
+            this.ControllerEdit = new System.Windows.Forms.TextBox();
+            this.RecorderEdit = new System.Windows.Forms.TextBox();
+            this.PowerMeterEdit = new System.Windows.Forms.TextBox();
+            this.refreshTimer = new System.Windows.Forms.Timer();
+            this.stateCombo = new System.Windows.Forms.ComboBox();
+            this.stateLabel = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // PlcEdit
+            // 
+            this.PlcEdit.Location = new System.Drawing.Point(754, 12);
+            this.PlcEdit.Multiline = true;
+            this.PlcEdit.Name = "PlcEdit";
+            this.PlcEdit.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.PlcEdit.Size = new System.Drawing.Size(238, 668);
+            this.PlcEdit.TabIndex = 7;
+            // 
+            // ControllerEdit
+            // 
+            this.ControllerEdit.Location = new System.Drawing.Point(508, 12);
+            this.ControllerEdit.Multiline = true;
+            this.ControllerEdit.Name = "ControllerEdit";
+            this.ControllerEdit.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.ControllerEdit.Size = new System.Drawing.Size(238, 705);
+            this.ControllerEdit.TabIndex = 6;
+            // 
+            // RecorderEdit
+            // 
+            this.RecorderEdit.Location = new System.Drawing.Point(262, 12);
+            this.RecorderEdit.Multiline = true;
+            this.RecorderEdit.Name = "RecorderEdit";
+            this.RecorderEdit.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.RecorderEdit.Size = new System.Drawing.Size(238, 705);
+            this.RecorderEdit.TabIndex = 5;
+            // 
+            // PowerMeterEdit
+            // 
+            this.PowerMeterEdit.Location = new System.Drawing.Point(16, 12);
+            this.PowerMeterEdit.Multiline = true;
+            this.PowerMeterEdit.Name = "PowerMeterEdit";
+            this.PowerMeterEdit.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.PowerMeterEdit.Size = new System.Drawing.Size(238, 705);
+            this.PowerMeterEdit.TabIndex = 4;
+            // 
+            // refreshTimer
+            // 
+            this.refreshTimer.Enabled = true;
+            this.refreshTimer.Interval = 1000;
+            this.refreshTimer.Tick += new System.EventHandler(this.refreshTimer_Tick);
+            // 
+            // stateCombo
+            // 
+            this.stateCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.stateCombo.FormattingEnabled = true;
+            this.stateCombo.Items.AddRange(new object[] {
+            "Observation",
+            "Idle",
+            "Preparation",
+            "Stabilization",
+            "Integration"});
+            this.stateCombo.Location = new System.Drawing.Point(791, 697);
+            this.stateCombo.Name = "stateCombo";
+            this.stateCombo.Size = new System.Drawing.Size(201, 20);
+            this.stateCombo.TabIndex = 8;
+            this.stateCombo.SelectedIndexChanged += new System.EventHandler(this.stateCombo_SelectedIndexChanged);
+            // 
+            // stateLabel
+            // 
+            this.stateLabel.AutoSize = true;
+            this.stateLabel.Location = new System.Drawing.Point(752, 700);
+            this.stateLabel.Name = "stateLabel";
+            this.stateLabel.Size = new System.Drawing.Size(33, 12);
+            this.stateLabel.TabIndex = 9;
+            this.stateLabel.Text = "State";
+            // 
+            // FormClientTest
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.Controls.Add(this.stateLabel);
+            this.Controls.Add(this.stateCombo);
+            this.Controls.Add(this.PlcEdit);
+            this.Controls.Add(this.ControllerEdit);
+            this.Controls.Add(this.RecorderEdit);
+            this.Controls.Add(this.PowerMeterEdit);
+            this.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Name = "FormClientTest";
+            this.Text = "H&C System Calorimeter Client Test";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormClientTest_FormClosed);
+            this.Load += new System.EventHandler(this.FormClientTest_Load);
+            this.Shown += new System.EventHandler(this.FormClientTest_Shown);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.TextBox PlcEdit;
+        private System.Windows.Forms.TextBox ControllerEdit;
+        private System.Windows.Forms.TextBox RecorderEdit;
+        private System.Windows.Forms.TextBox PowerMeterEdit;
+        private System.Windows.Forms.Timer refreshTimer;
+        private System.Windows.Forms.ComboBox stateCombo;
+        private System.Windows.Forms.Label stateLabel;
+    }
+}
+

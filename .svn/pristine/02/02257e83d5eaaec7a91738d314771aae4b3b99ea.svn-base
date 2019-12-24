@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Hnc.Calorimeter.Client
+{
+    public enum EClientState
+    { Observation, Idle, Preparation, Stabilization, Integration }
+
+    public enum EUserAuthority
+    { Maker, Admin, Operator, Viewer }
+
+    public enum EValueType
+    { Raw, Real }
+
+    public enum ELogItem
+    { Note, Error, Exception }
+
+    public enum ETerminateCode
+    { None, ReceivedTerminateCommand, NonAcknowledgement }
+
+    public enum EDataSetMode
+    { View, New, Modify }
+}

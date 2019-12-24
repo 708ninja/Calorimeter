@@ -1,0 +1,457 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.XtraGrid.Views.Grid;
+
+using Ulee.Controls;
+using Ulee.Device.Connection.Yokogawa;
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlTestMeas : UlUserControlEng
+    {
+        public CtrlTestMeas(TestContext context)
+        {
+            InitializeComponent();
+
+            this.context = context;
+            Initialize();
+        }
+
+        private TestContext context;
+
+        public event EventHandler Activated;
+        private void OnActivated(object sender, EventArgs args)
+        {
+            Activated?.Invoke(sender, args);
+        }
+
+        private void Initialize()
+        {
+            Color evenColor = Color.FromArgb(244, 244, 236);
+
+            totalRatedGrid.DataSource = context.Measure.TotalRateds;
+            totalRatedGridView.Appearance.EvenRow.BackColor = evenColor;
+            totalRatedGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            runStateGrid.DataSource = context.Measure.RunStates;
+            runStateGridView.Appearance.EvenRow.BackColor = evenColor;
+            runStateGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            airSideGrid.DataSource = context.Measure.AirSides;
+            airSideGridView.Appearance.EvenRow.BackColor = evenColor;
+            airSideGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            asNozzleGrid.DataSource = null;
+            asNozzleGridView.Appearance.EvenRow.BackColor = evenColor;
+            asNozzleGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            outsideGrid.DataSource = context.Measure.Outsides;
+            outsideGridView.Appearance.EvenRow.BackColor = evenColor;
+            outsideGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            methodGrid.DataSource = context.Measure.Methods;
+            methodGridView.Appearance.EvenRow.BackColor = evenColor;
+            methodGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            noteGrid.DataSource = context.Measure.Notes;
+            noteGridView.Appearance.EvenRow.BackColor = evenColor;
+            noteGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            ratedGrid.DataSource = context.Measure.Rateds;
+            ratedGridView.Appearance.EvenRow.BackColor = evenColor;
+            ratedGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor11Grid.DataSource = context.Measure.Indoors11;
+            indoor11GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor11GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor12Grid.DataSource = context.Measure.Indoors12;
+            indoor12GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor12GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor21Grid.DataSource = context.Measure.Indoors21;
+            indoor21GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor21GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor22Grid.DataSource = context.Measure.Indoors22;
+            indoor22GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor22GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            outdoorGrid.DataSource = context.Measure.Outdoors;
+            outdoorGridView.Appearance.EvenRow.BackColor = evenColor;
+            outdoorGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            tc1Grid.DataSource = context.Measure.IndoorTC1;
+            tc1GridView.Appearance.EvenRow.BackColor = evenColor;
+            tc1GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            tc2Grid.DataSource = context.Measure.IndoorTC2;
+            tc2GridView.Appearance.EvenRow.BackColor = evenColor;
+            tc2GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            tc3Grid.DataSource = context.Measure.OutdoorTC;
+            tc3GridView.Appearance.EvenRow.BackColor = evenColor;
+            tc3GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            pressureGrid.DataSource = context.Measure.Pressures;
+            pressureGridView.Appearance.EvenRow.BackColor = evenColor;
+            pressureGridView.OptionsView.EnableAppearanceEvenRow = true;
+        }
+
+        public override void InvalidControl(object sender, EventArgs e)
+        {
+            if (this.InvokeRequired == true)
+            {
+                EventHandler func = new EventHandler(InvalidControl);
+                this.BeginInvoke(func, new object[] { sender, e });
+            }
+            else
+            {
+                totalRatedGridView.RefreshData();
+                runStateGridView.RefreshData();
+                airSideGridView.RefreshData();
+                asNozzleGridView.RefreshData();
+                outsideGridView.RefreshData();
+                methodGridView.RefreshData();
+                noteGridView.RefreshData();
+                ratedGridView.RefreshData();
+                indoor11GridView.RefreshData();
+                indoor12GridView.RefreshData();
+                indoor21GridView.RefreshData();
+                indoor22GridView.RefreshData();
+                outdoorGridView.RefreshData();
+                tc1GridView.RefreshData();
+                tc2GridView.RefreshData();
+                tc3GridView.RefreshData();
+                pressureGridView.RefreshData();
+            }
+        }
+
+        private void CtrlTestMeas_Enter(object sender, EventArgs e)
+        {
+            TestMeasure meas = context.Measure;
+            TestCondition cond = context.Condition;
+            TestValue value = context.Value;
+
+            OnActivated(this, null);
+
+            EIndoorMode mode = GetIndoorMode(0);
+            if (mode == EIndoorMode.NotUsed)
+            {
+                meas.TotalRateds[(int)EMeasTotalRated.IDU_PowerInput].Row = null;
+                meas.TotalRateds[(int)EMeasTotalRated.IDU_Voltage].Row = null;
+                meas.TotalRateds[(int)EMeasTotalRated.IDU_Current].Row = null;
+                meas.TotalRateds[(int)EMeasTotalRated.IDU_Frequency].Row = null;
+                meas.TotalRateds[(int)EMeasTotalRated.IDU_PowerFactor].Row = null;
+
+                meas.TotalRateds[(int)EMeasTotalRated.ODU_PowerInput].Row = null;
+                meas.TotalRateds[(int)EMeasTotalRated.ODU_Voltage].Row = null;
+                meas.TotalRateds[(int)EMeasTotalRated.ODU_Current].Row = null;
+                meas.TotalRateds[(int)EMeasTotalRated.ODU_Frequency].Row = null;
+                meas.TotalRateds[(int)EMeasTotalRated.ODU_PowerFactor].Row = null;
+            }
+            else
+            {
+                string iduHeader = GetIndoorPM(0, (int)mode);
+                if (iduHeader != "None")
+                {
+                    meas.TotalRateds[(int)EMeasTotalRated.IDU_PowerInput].Row = value.Measured[iduHeader + "R.W"];
+                    meas.TotalRateds[(int)EMeasTotalRated.IDU_Voltage].Row = value.Measured[iduHeader + "R.V"];
+                    meas.TotalRateds[(int)EMeasTotalRated.IDU_Current].Row = value.Measured[iduHeader + "R.A"];
+                    meas.TotalRateds[(int)EMeasTotalRated.IDU_Frequency].Row = value.Measured[iduHeader + "R.Hz"];
+                    meas.TotalRateds[(int)EMeasTotalRated.IDU_PowerFactor].Row = value.Measured[iduHeader + "R.PF"];
+                }
+
+                string oduHeader = GetOutdoorPM(0, (int)mode);
+                if (oduHeader != "None")
+                {
+                    meas.TotalRateds[(int)EMeasTotalRated.ODU_PowerInput].Row = value.Measured[oduHeader + "R.W"];
+                    meas.TotalRateds[(int)EMeasTotalRated.ODU_Voltage].Row = value.Measured[oduHeader + "R.V"];
+                    meas.TotalRateds[(int)EMeasTotalRated.ODU_Current].Row = value.Measured[oduHeader + "R.A"];
+                    meas.TotalRateds[(int)EMeasTotalRated.ODU_Frequency].Row = value.Measured[oduHeader + "R.Hz"];
+                    meas.TotalRateds[(int)EMeasTotalRated.ODU_PowerFactor].Row = value.Measured[oduHeader + "R.PF"];
+                }
+            }
+
+            if (mode == EIndoorMode.NotUsed)
+            {
+                meas.Rateds[(int)EMeasRated.TatoalCapacity].Row = null;
+                meas.Rateds[(int)EMeasRated.TaotalPowerInput].Row = null;
+                meas.Rateds[(int)EMeasRated.EER_COP].Row = null;
+                meas.Rateds[(int)EMeasRated.IDU_Voltage].Row = null;
+                meas.Rateds[(int)EMeasRated.IDU_Current].Row = null;
+                meas.Rateds[(int)EMeasRated.IDU_Frequency].Row = null;
+                meas.Rateds[(int)EMeasRated.IDU_SelectedPM].Row = null;
+                meas.Rateds[(int)EMeasRated.ODU_SelectedPM].Row = null;
+                meas.Rateds[(int)EMeasRated.ODU_Phase].Row = null;
+            }
+            else
+            {
+                List<ConditionRated> rateds = cond.Rateds[EConditionRated.Total];
+                value.Const["Rated.Total.Capacity"].Value = rateds[(int)mode].Capacity;
+                value.Const["Rated.Total.Power"].Value = rateds[(int)mode].PowerInput;
+                value.Const["Rated.Total.EER_COP"].Value = rateds[(int)mode].EER_COP;
+                value.Const["Rated.Total.Voltage"].Value = rateds[(int)mode].Voltage;
+                value.Const["Rated.Total.Current"].Value = rateds[(int)mode].Current;
+                try
+                {
+                    value.Const["Rated.Total.Frequency"].Value = float.Parse(rateds[(int)mode].Frequency);
+                }
+                catch
+                {
+                    value.Const["Rated.Total.Frequency"].Value = 0;
+                }
+
+                meas.Rateds[(int)EMeasRated.TatoalCapacity].Row = value.Const["Rated.Total.Capacity"];
+                meas.Rateds[(int)EMeasRated.TaotalPowerInput].Row = value.Const["Rated.Total.Power"];
+                meas.Rateds[(int)EMeasRated.EER_COP].Row = value.Const["Rated.Total.EER_COP"];
+                meas.Rateds[(int)EMeasRated.IDU_Voltage].Row = value.Const["Rated.Total.Voltage"];
+                meas.Rateds[(int)EMeasRated.IDU_Current].Row = value.Const["Rated.Total.Current"];
+                meas.Rateds[(int)EMeasRated.IDU_Frequency].Row = value.Const["Rated.Total.Frequency"];
+                meas.Rateds[(int)EMeasRated.IDU_SelectedPM].Value = GetNameIDU(rateds[(int)mode].PM_IDU);
+                meas.Rateds[(int)EMeasRated.ODU_SelectedPM].Value = GetNameODU(rateds[(int)mode].PM_ODU);
+                meas.Rateds[(int)EMeasRated.ODU_Phase].Value = EnumHelper.GetNames<EWT330Wiring>()[(int)rateds[(int)mode].Wiring];
+            }
+
+            // Note
+            meas.Notes[(int)EMeasNote.Company].Value = cond.Note.Company;
+            meas.Notes[(int)EMeasNote.TestName].Value = cond.Note.Name;
+            meas.Notes[(int)EMeasNote.TestNo].Value = cond.Note.No;
+            meas.Notes[(int)EMeasNote.Observer].Value = cond.Note.Observer;
+            meas.Notes[(int)EMeasNote.Maker].Value = cond.Note.Maker;
+            meas.Notes[(int)EMeasNote.Model1].Value = cond.Note.Model1;
+            meas.Notes[(int)EMeasNote.SerialNo1].Value = cond.Note.Serial1;
+            meas.Notes[(int)EMeasNote.Model2].Value = cond.Note.Model2;
+            meas.Notes[(int)EMeasNote.SerialNo2].Value = cond.Note.Serial2;
+            meas.Notes[(int)EMeasNote.Model3].Value = cond.Note.Model3;
+            meas.Notes[(int)EMeasNote.SerialNo3].Value = cond.Note.Serial3;
+            meas.Notes[(int)EMeasNote.ExpDevice].Value = cond.Note.ExpDevice;
+            meas.Notes[(int)EMeasNote.Refrigerant].Value = cond.Note.Refrigerant;
+            meas.Notes[(int)EMeasNote.RefCharge].Value = cond.Note.RefCharge;
+            meas.Notes[(int)EMeasNote.Memo].Value = cond.Note.Memo;
+
+            // Method
+            meas.Methods[(int)EMeasMethod.Method].Value = $"{cond.Method.IntegralTime}min / {cond.Method.IntegralCount}times";
+            meas.Methods[(int)EMeasMethod.ScanTime].Value = $"{cond.Method.ScanTime} sec";
+
+            //Indoor1 #1
+            meas.Indoors11[(int)EMeasIndoor.Use].Value = EnumHelper.GetNames<EIndoorUse>()[(int)cond.Schedules[0].Indoor1Use];
+            meas.Indoors11[(int)EMeasIndoor.Mode].Value = EnumHelper.GetNames<EIndoorMode>()[(int)cond.Schedules[0].Indoor1Mode1];
+            meas.Indoors11[(int)EMeasIndoor.Duct].Value = EnumHelper.GetNames<EIndoorDuct>()[(int)cond.Schedules[0].Indoor1Duct1];
+
+            //Indoor1 #2
+            meas.Indoors12[(int)EMeasIndoor.Use].Value = EnumHelper.GetNames<EIndoorUse>()[(int)cond.Schedules[0].Indoor1Use];
+            meas.Indoors12[(int)EMeasIndoor.Mode].Value = EnumHelper.GetNames<EIndoorMode>()[(int)cond.Schedules[0].Indoor1Mode2];
+            meas.Indoors12[(int)EMeasIndoor.Duct].Value = EnumHelper.GetNames<EIndoorDuct>()[(int)cond.Schedules[0].Indoor1Duct2];
+
+            //Indoor2 #1
+            meas.Indoors21[(int)EMeasIndoor.Use].Value = EnumHelper.GetNames<EIndoorUse>()[(int)cond.Schedules[0].Indoor2Use];
+            meas.Indoors21[(int)EMeasIndoor.Mode].Value = EnumHelper.GetNames<EIndoorMode>()[(int)cond.Schedules[0].Indoor2Mode1];
+            meas.Indoors21[(int)EMeasIndoor.Duct].Value = EnumHelper.GetNames<EIndoorDuct>()[(int)cond.Schedules[0].Indoor2Duct1];
+
+            //Indoor2 #2
+            meas.Indoors22[(int)EMeasIndoor.Use].Value = EnumHelper.GetNames<EIndoorUse>()[(int)cond.Schedules[0].Indoor2Use];
+            meas.Indoors22[(int)EMeasIndoor.Mode].Value = EnumHelper.GetNames<EIndoorMode>()[(int)cond.Schedules[0].Indoor2Mode2];
+            meas.Indoors22[(int)EMeasIndoor.Duct].Value = EnumHelper.GetNames<EIndoorDuct>()[(int)cond.Schedules[0].Indoor2Duct2];
+
+            //Outdoor
+            meas.Outdoors[(int)EMeasOutdoor.Use].Value = EnumHelper.GetNames<EOutdoorUse>()[(int)cond.Schedules[0].OutdoorUse];
+            meas.Outdoors[(int)EMeasOutdoor.DPSensor].Value = EnumHelper.GetNames<EEtcUse>()[(int)cond.Schedules[0].OutdoorDpSensor];
+            meas.Outdoors[(int)EMeasOutdoor.AutoVoltage].Value = EnumHelper.GetNames<EEtcUse>()[(int)cond.Schedules[0].OutdoorAutoVolt];
+
+            for (int i=0; i<cond.TC1.Count; i++)
+            {
+                meas.IndoorTC1[i].Name = cond.TC1[i].Name.Trim();
+            }
+
+            for (int i=0; i<cond.TC2.Count; i++)
+            {
+                meas.IndoorTC2[i].Name = cond.TC2[i].Name.Trim();
+            }
+
+            for (int i=0; i<cond.TC3.Count; i++)
+            {
+                meas.OutdoorTC[i].Name = cond.TC3[i].Name.Trim();
+            }
+
+            for (int i=0; i<cond.Pressures.Count; i++)
+            {
+                meas.Pressures[i].Name = cond.Pressures[i].Name.Trim();
+            }
+        }
+
+        private EIndoorMode GetIndoorMode(int index)
+        {
+            EIndoorMode mode = EIndoorMode.NotUsed;
+            ConditionSchedule sch = context.Condition.Schedules[index];
+
+            if ((sch.Indoor1Use == EIndoorUse.NotUsed) &&
+                (sch.Indoor2Use == EIndoorUse.NotUsed)) return mode;
+
+            if ((sch.Indoor1Mode1 == EIndoorMode.NotUsed) &&
+                (sch.Indoor1Mode2 == EIndoorMode.NotUsed) &&
+                (sch.Indoor2Mode1 == EIndoorMode.NotUsed) &&
+                (sch.Indoor1Mode1 == EIndoorMode.NotUsed)) return mode;
+
+            if (sch.Indoor1Use == EIndoorUse.Indoor)
+            {
+                if (sch.Indoor1Mode1 != EIndoorMode.NotUsed)
+                {
+                    mode = sch.Indoor1Mode1;
+                }
+                else if (sch.Indoor1Mode2 != EIndoorMode.NotUsed)
+                {
+                    mode = sch.Indoor1Mode2;
+                }
+                else if (sch.Indoor2Use == EIndoorUse.Indoor)
+                {
+                    if (sch.Indoor2Mode1 != EIndoorMode.NotUsed)
+                    {
+                        mode = sch.Indoor2Mode1;
+                    }
+                    else if (sch.Indoor2Mode2 != EIndoorMode.NotUsed)
+                    {
+                        mode = sch.Indoor2Mode2;
+                    }
+                }
+            }
+            else if (sch.Indoor2Use == EIndoorUse.Indoor)
+            {
+                if (sch.Indoor2Mode1 != EIndoorMode.NotUsed)
+                {
+                    mode = sch.Indoor2Mode1;
+                }
+                else if (sch.Indoor2Mode2 != EIndoorMode.NotUsed)
+                {
+                    mode = sch.Indoor2Mode2;
+                }
+            }
+
+            return mode;
+        }
+
+        private string GetIndoorPM(int index, int mode)
+        {
+            int i = 0;
+            int j = 0;
+            int pmNo = context.Condition.Rateds[EConditionRated.Total][(int)mode].PM_IDU;
+            string sRet = "None";
+
+            foreach (PowerMeterRow<float> row in Resource.Client.Devices.PowerMeter.Rows)
+            {
+                if (row.Phase == EWT330Phase.P1)
+                {
+                    if (j == pmNo)
+                    {
+                        sRet = $"PM{i + 1}.";
+                        break;
+                    }
+                    else
+                    {
+                        j++;
+                    }
+                }
+
+                i++;
+            }
+
+            return sRet;
+        }
+
+        private string GetOutdoorPM(int index, int mode)
+        {
+            int i = 0;
+            int j = 0;
+            int pmNo = context.Condition.Rateds[EConditionRated.Total][(int)mode].PM_ODU;
+            string sRet = "None";
+
+            foreach (PowerMeterRow<float> row in Resource.Client.Devices.PowerMeter.Rows)
+            {
+                if (row.Phase == EWT330Phase.P3)
+                {
+                    if (j == pmNo)
+                    {
+                        sRet = $"PM{i + 1}.";
+                        break;
+                    }
+                    else
+                    {
+                        j++;
+                    }
+                }
+
+                i++;
+            }
+
+            return sRet;
+        }
+
+        private string GetNameIDU(int index)
+        {
+            int i = 0;
+            int j = 0;
+            string sRet = "None";
+
+            foreach (PowerMeterRow<float> row in Resource.Client.Devices.PowerMeter.Rows)
+            {
+                if (row.Phase == EWT330Phase.P1)
+                {
+                    if (j == index)
+                    {
+                        sRet = row.Name;
+                        break;
+                    }
+                    else
+                    {
+                        j++;
+                    }
+                }
+
+                i++;
+            }
+
+            return sRet;
+        }
+
+        private string GetNameODU(int index)
+        {
+            int i = 0;
+            int j = 0;
+            string sRet = "None";
+
+            foreach (PowerMeterRow<float> row in Resource.Client.Devices.PowerMeter.Rows)
+            {
+                if (row.Phase == EWT330Phase.P3)
+                {
+                    if (j == index)
+                    {
+                        sRet = row.Name;
+                        break;
+                    }
+                    else
+                    {
+                        j++;
+                    }
+                }
+
+                i++;
+            }
+
+            return sRet;
+        }
+
+        public void SetAllGridData()
+        {
+
+        }
+    }
+}

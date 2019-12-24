@@ -1,0 +1,246 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.XtraGrid.Views.Base;
+using DevExpress.XtraGrid.Views.Grid;
+
+using Ulee.Controls;
+using Ulee.Device.Connection.Yokogawa;
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlTestMeas : UlUserControlEng
+    {
+        public CtrlTestMeas(TestContext context)
+        {
+            InitializeComponent();
+
+            this.context = context;
+            Initialize();
+        }
+
+        private TestContext context;
+
+        public event EventHandler Activated;
+        private void OnActivated(object sender, EventArgs args)
+        {
+            Activated?.Invoke(sender, args);
+        }
+
+        private void Initialize()
+        {
+            Color evenColor = Color.FromArgb(244, 244, 236);
+
+            totalRatedGrid.DataSource = context.Measure.TotalRateds;
+            totalRatedGridView.Appearance.EvenRow.BackColor = evenColor;
+            totalRatedGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            runStateGrid.DataSource = context.Measure.RunStates;
+            runStateGridView.Appearance.EvenRow.BackColor = evenColor;
+            runStateGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            airSideGrid.DataSource = context.Measure.AirSides;
+            airSideGridView.Appearance.EvenRow.BackColor = evenColor;
+            airSideGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            asNozzleGrid.DataSource = null;
+            asNozzleGridView.Appearance.EvenRow.BackColor = evenColor;
+            asNozzleGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            outsideGrid.DataSource = context.Measure.Outsides;
+            outsideGridView.Appearance.EvenRow.BackColor = evenColor;
+            outsideGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            methodGrid.DataSource = context.Measure.Methods;
+            methodGridView.Appearance.EvenRow.BackColor = evenColor;
+            methodGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            noteGrid.DataSource = context.Measure.Notes;
+            noteGridView.Appearance.EvenRow.BackColor = evenColor;
+            noteGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            ratedGrid.DataSource = context.Measure.Rateds;
+            ratedGridView.Appearance.EvenRow.BackColor = evenColor;
+            ratedGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor11Grid.DataSource = context.Measure.Indoors11;
+            indoor11GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor11GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor12Grid.DataSource = context.Measure.Indoors12;
+            indoor12GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor12GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor21Grid.DataSource = context.Measure.Indoors21;
+            indoor21GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor21GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor22Grid.DataSource = context.Measure.Indoors22;
+            indoor22GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor22GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            outdoorGrid.DataSource = context.Measure.Outdoors;
+            outdoorGridView.Appearance.EvenRow.BackColor = evenColor;
+            outdoorGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            tc1Grid.DataSource = context.Measure.IndoorTC1;
+            tc1GridView.Appearance.EvenRow.BackColor = evenColor;
+            tc1GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            tc2Grid.DataSource = context.Measure.IndoorTC2;
+            tc2GridView.Appearance.EvenRow.BackColor = evenColor;
+            tc2GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            tc3Grid.DataSource = context.Measure.OutdoorTC;
+            tc3GridView.Appearance.EvenRow.BackColor = evenColor;
+            tc3GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            pressureGrid.DataSource = context.Measure.Pressures;
+            pressureGridView.Appearance.EvenRow.BackColor = evenColor;
+            pressureGridView.OptionsView.EnableAppearanceEvenRow = true;
+        }
+
+        public override void InvalidControl(object sender, EventArgs e)
+        {
+            if (this.InvokeRequired == true)
+            {
+                EventHandler func = new EventHandler(InvalidControl);
+                this.BeginInvoke(func, new object[] { sender, e });
+            }
+            else
+            {
+                totalRatedGridView.RefreshData();
+                runStateGridView.RefreshData();
+                airSideGridView.RefreshData();
+                asNozzleGridView.RefreshData();
+                outsideGridView.RefreshData();
+                methodGridView.RefreshData();
+                noteGridView.RefreshData();
+                ratedGridView.RefreshData();
+                indoor11GridView.RefreshData();
+                indoor12GridView.RefreshData();
+                indoor21GridView.RefreshData();
+                indoor22GridView.RefreshData();
+                outdoorGridView.RefreshData();
+                tc1GridView.RefreshData();
+                tc2GridView.RefreshData();
+                tc3GridView.RefreshData();
+                pressureGridView.RefreshData();
+            }
+        }
+
+        private void CtrlTestMeas_Enter(object sender, EventArgs e)
+        {
+            OnActivated(this, null);
+            context.Initialize(0);
+        }
+
+        private void totalRatedGridView_CustomDrawCell(object sender, RowCellCustomDrawEventArgs e)
+        {
+            if (e.DisplayText == "") return;
+
+            Color[] fgColors = { Color.Black, Color.Yellow, Color.White };
+            Color[] bgColors = { SystemColors.Control, Color.LimeGreen, Color.DeepPink };
+
+            bgColors[0] = (e.RowHandle % 2 == 1) ? totalRatedGridView.Appearance.EvenRow.BackColor : Color.White;
+
+            int state = 0;
+
+            switch (e.Column.FieldName)
+            {
+                case "Name":
+                case "Unit":
+                    state = 0;
+                    break;
+
+                case "Value":
+                    state = (int)context.Measure.TotalRateds[e.RowHandle].State;
+                    break;
+
+            }
+
+            e.Appearance.ForeColor = fgColors[state];
+            e.Appearance.BackColor = bgColors[state];
+        }
+
+        private void outsideGridView_CustomDrawCell(object sender, RowCellCustomDrawEventArgs e)
+        {
+            if (e.DisplayText == "") return;
+
+            Color[] fgColors = { Color.Black, Color.Yellow, Color.White };
+            Color[] bgColors = { SystemColors.Control, Color.LimeGreen, Color.DeepPink };
+
+            bgColors[0] = (e.RowHandle % 2 == 1) ? outsideGridView.Appearance.EvenRow.BackColor : Color.White;
+
+            int state = 0;
+
+            switch (e.Column.FieldName)
+            {
+                case "Name":
+                case "Unit":
+                    state = 0;
+                    break;
+
+                case "Value":
+                    state = (int)context.Measure.Outsides[e.RowHandle].State;
+                    break;
+
+            }
+
+            e.Appearance.ForeColor = fgColors[state];
+            e.Appearance.BackColor = bgColors[state];
+        }
+
+        private void airSideGridView_CustomDrawCell(object sender, RowCellCustomDrawEventArgs e)
+        {
+            if (e.DisplayText == "") return;
+
+            Color[] fgColors = { Color.Black, Color.Yellow, Color.White };
+            Color[] bgColors = { SystemColors.Control, Color.LimeGreen, Color.DeepPink };
+
+            bgColors[0] = (e.RowHandle % 2 == 1) ? airSideGridView.Appearance.EvenRow.BackColor : Color.White;
+
+            int state = 0;
+
+            switch (e.Column.FieldName)
+            {
+                case "Name":
+                case "Unit":
+                    state = 0;
+                    break;
+
+                case "Indoor11":
+                    state = (int)context.Measure.AirSides[e.RowHandle].Indoor11State;
+                    break;
+
+                case "Indoor12":
+                    state = (int)context.Measure.AirSides[e.RowHandle].Indoor12State;
+                    break;
+
+                case "Indoor21":
+                    state = (int)context.Measure.AirSides[e.RowHandle].Indoor21State;
+                    break;
+
+                case "Indoor22":
+                    state = (int)context.Measure.AirSides[e.RowHandle].Indoor22State;
+                    break;
+            }
+
+            e.Appearance.ForeColor = fgColors[state];
+            e.Appearance.BackColor = bgColors[state];
+        }
+
+        public void SetAllGridData()
+        {
+
+        }
+    }
+}

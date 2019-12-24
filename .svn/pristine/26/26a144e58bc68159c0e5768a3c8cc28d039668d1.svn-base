@@ -1,0 +1,783 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.XtraGrid.Views.BandedGrid;
+
+using Ulee.Controls;
+using Ulee.DllImport.Win32;
+
+namespace Hnc.Calorimeter.Client
+{
+    public enum ETestPanel { Condition, Measurement }
+
+    public partial class CtrlTestRight : UlUserControlEng
+    {
+        public CtrlTestRight(int index)
+        {
+            InitializeComponent();
+            Initialize(index);
+        }
+
+        public TestContext Context { get; set; }
+
+        private void Initialize(int index)
+        {
+            Context = new TestContext(index, this.Handle);
+
+            Context.Condition.Control = new CtrlTestCondition(Context);
+            Context.Condition.Control.Activated += DoActivatedCondition;
+            Context.Condition.Control.OpenSchedule += DoOpenSchedule;
+
+            Context.Measure.Control = new CtrlTestMeas(Context);
+            Context.Measure.Control.Activated += DoActivatedMeasure;
+
+            DefMenu = new UlMenu(viewPanel);
+            DefMenu.Add(Context.Condition.Control, conditionButton);
+            DefMenu.Add(Context.Measure.Control, measuringButton);
+
+            DefMenu.Index = 0;
+            DefMenu.Enabled = false;
+
+            Context.Index = 0;
+            Context.Initialize();
+            Context.Value.Saving = false;
+
+            SetButtonState(ETestButtonState.Stopped);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
+                case Resource.WM_TEST_NORMAL_TERMINATED:
+                    TestNormalTerminated();
+                    break;
+
+                case Resource.WM_TEST_ABNORMAL_TERMINATED:
+                    TestNormalTerminated();
+                    break;
+            }
+
+            base.WndProc(ref m);
+        }
+
+        private void TestNormalTerminated()
+        {
+            Context.TestReset();
+            DefMenu.Index = 0;
+            SetButtonState(ETestButtonState.Stopped);
+        }
+
+        private void TestAbnormalTerminated()
+        {
+            Context.TestReset();
+            DefMenu.Index = 0;
+            SetButtonState(ETestButtonState.Stopped);
+        }
+
+        private void CtrlTestLine1_Load(object sender, EventArgs e)
+        {
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            CtrlTestMeas meas = Context.Measure.Control;
+            CalorimeterTestThread thread = Context.TestCreate();
+
+            thread.LoadSpreadSheet += meas.DoLoadSpreadSheet;
+            thread.SetSpreadSheet += meas.DoSetSpreadSheet;
+            thread.DispState += meas.DoDispState;
+            Context.TestStart();
+
+            SetButtonState(ETestButtonState.Started);
+        }
+
+        private void pauseButton_Click(object sender, EventArgs e)
+        {
+            Context.TestSuspend();
+            SetButtonState(ETestButtonState.Paused);
+        }
+
+        private void nextButton_Click(object sender, EventArgs e)
+        {
+            Context.TestTerminate(ETestMessage.Next);
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            Context.TestTerminate(ETestMessage.Reset);
+        }
+
+        private void stopButton_Click(object sender, EventArgs e)
+        {
+            
+            Context.TestTerminate(ETestMessage.None);
+            SetButtonState(ETestButtonState.Stopped);
+        }
+
+        private void openScheduleButton_Click(object sender, EventArgs e)
+        {
+            OpenScheduleDialog();
+        }
+
+        private void openConditionButton_Click(object sender, EventArgs e)
+        {
+            OpenConditionDialog();
+        }
+
+        private void openAllParamButton_Click(object sender, EventArgs e)
+        {
+            FormOpenAllParam form = new FormOpenAllParam();
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                if (form.ParamGridView.FocusedRowHandle >= 0)
+                {
+                    LoadSchedule(Resource.Db.AllParamSet.RecNo);
+                    LoadCondition(Resource.Db.AllParamSet.RecNo);
+                }
+            }
+        }
+
+        private void saveAllParamButton_Click(object sender, EventArgs e)
+        {
+            FormAllParamEdit form = new FormAllParamEdit();
+            form.UserNameEdit.Text = Resource.Db.UserSet.GetName(Resource.UserNo);
+            form.DateTimeEdit.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            form.MemoEdit.Text = "";
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                Resource.Db.AllParamSet.RecNo = (int)Resource.Db.GetGenNo("GN_ALLPARAM");
+                Resource.Db.AllParamSet.UserNo = Resource.UserNo;
+                Resource.Db.AllParamSet.RegTime = form.DateTimeEdit.Text;
+                Resource.Db.AllParamSet.Memo = form.MemoEdit.Text;
+                Context.Condition.Control.RefreshContext();
+                InsertAllParam();
+            }
+        }
+
+        private void resetConditionButton_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Would you like to reset all parameters?",
+                Resource.Caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                == DialogResult.No)
+            {
+                return;
+            }
+
+            Context.Condition.Control.ResetAllParam();
+        }
+
+        private void SetButtonState(ETestButtonState state)
+        {
+            Context.State = state;
+
+            switch (state)
+            {
+                case ETestButtonState.Started:
+                    startButton.Enabled = false;
+                    pauseButton.Enabled = true;
+                    nextButton.Enabled = true;
+                    resetButton.Enabled = true;
+                    stopButton.Enabled = true;
+                    DefMenu.Enabled = true;
+                    DefMenu.Index = 1;
+                    break;
+
+                case ETestButtonState.Paused:
+                    startButton.Enabled = true;
+                    pauseButton.Enabled = false;
+                    nextButton.Enabled = false;
+                    resetButton.Enabled = false;
+                    stopButton.Enabled = true;
+                    break;
+
+                case ETestButtonState.Stopped:
+                    startButton.Enabled = true;
+                    pauseButton.Enabled = false;
+                    nextButton.Enabled = false;
+                    resetButton.Enabled = false;
+                    stopButton.Enabled = false;
+                    DefMenu.Index = 0;
+                    DefMenu.Enabled = false;
+                    break;
+            }
+        }
+
+        public void DoActivatedCondition(object sender, EventArgs e)
+        {
+            openScheduleButton.Enabled = true;
+            openConditionButton.Enabled = true;
+            openAllParamButton.Enabled = true;
+            saveAllParamButton.Enabled = true;
+            resetAllParamButton.Enabled = true;
+        }
+
+        public void DoOpenSchedule(object sender, EventArgs e)
+        {
+            OpenScheduleDialog();
+        }
+
+        public void DoActivatedMeasure(object sender, EventArgs e)
+        {
+            openScheduleButton.Enabled = false;
+            openConditionButton.Enabled = false;
+            openAllParamButton.Enabled = false;
+            saveAllParamButton.Enabled = false;
+            resetAllParamButton.Enabled = false;
+        }
+
+        private void OpenScheduleDialog()
+        {
+            FormOpenSchedule form = new FormOpenSchedule();
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                if (form.ScheduleGridView.FocusedRowHandle >= 0)
+                {
+                    AdvBandedGridView view = Context.Condition.Control.ScheduleGridView;
+                    ConditionSchedule row = Context.Condition.Schedules[view.FocusedRowHandle];
+
+                    form.standardEdit.Focus();
+                    SetScheduleByForm(row, form);
+
+                    view.RefreshData();
+                    Context.Condition.Control.noteCompanyEdit.Focus();
+                    view.Focus();
+                }
+            }
+        }
+
+        private void OpenConditionDialog()
+        {
+            FormOpenCondition form = new FormOpenCondition();
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                if (form.RecNo >= 0)
+                {
+                    Resource.Db.NoteParamSet.SelectRecNo(form.RecNo);
+                    Resource.Db.NoteParamSet.Fetch();
+                    Context.Condition.Control.SetEditFromDataSet();
+                }
+            }
+        }
+
+        private void InsertAllParam()
+        {
+            Resource.Db.BeginTrans();
+
+            try
+            {
+                int paramNo = Resource.Db.AllParamSet.RecNo;
+
+                Resource.Db.AllParamSet.Insert(Resource.Db.Trans);
+                InsertSchedule(paramNo);
+                InsertCondition(paramNo);
+
+                Resource.Db.CommitTrans();
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+                Resource.Db.RollbackTrans();
+            }
+        }
+
+        private void InsertSchedule(int paramNo)
+        {
+            foreach (ConditionSchedule sch in Context.Condition.Schedules)
+            {
+                ScheduleParamDataSet schSet = Resource.Db.ScheduleParamSet;
+
+                schSet.RecNo = (int)Resource.Db.GetGenNo("GN_SCHEDULEPARAM");
+                schSet.ParamNo = paramNo;
+                schSet.Standard = sch.Standard;
+                schSet.Name = sch.Name;
+                schSet.NoOfSteady = sch.NoOfSteady;
+                schSet.Preparation = sch.PreRun;
+                schSet.Judgement = sch.Judge;
+                schSet.Repeat = sch.Repeat;
+                schSet.ID1Use = sch.Indoor1Use;
+                schSet.ID1Mode1 = sch.Indoor1Mode1;
+                schSet.ID1Duct1 = sch.Indoor1Duct1;
+                schSet.ID1Mode2 = sch.Indoor1Mode2;
+                schSet.ID1Duct2 = sch.Indoor1Duct2;
+                schSet.ID1EdbSetup = sch.Indoor1DB;
+                schSet.ID1EdbAvg = sch.Indoor1DBAvg;
+                schSet.ID1EdbDev = sch.Indoor1DBDev;
+                schSet.ID1EwbSetup = sch.Indoor1WB;
+                schSet.ID1EwbAvg = sch.Indoor1WBAvg;
+                schSet.ID1EwbDev = sch.Indoor1WBDev;
+                schSet.ID1Ldb1Dev = sch.Indoor1LDB1Dev;
+                schSet.ID1Lwb1Dev = sch.Indoor1LWB1Dev;
+                schSet.ID1Af1Dev = sch.Indoor1AirFlow1Dev;
+                schSet.ID1Ldb2Dev = sch.Indoor1LDB2Dev;
+                schSet.ID1Lwb2Dev = sch.Indoor1LWB2Dev;
+                schSet.ID1Af2Dev = sch.Indoor1AirFlow2Dev;
+                schSet.ID1Cdp1Setup = sch.Indoor1CP1;
+                schSet.ID1Cdp1Avg = sch.Indoor1CP1Avg;
+                schSet.ID1Cdp1Dev = sch.Indoor1CP1Dev;
+                schSet.ID1Cdp2Setup = sch.Indoor1CP2;
+                schSet.ID1Cdp2Avg = sch.Indoor1CP2Avg;
+                schSet.ID1Cdp2Dev = sch.Indoor1CP2Dev;
+                schSet.ID2Use = sch.Indoor2Use;
+                schSet.ID2Mode1 = sch.Indoor2Mode1;
+                schSet.ID2Duct1 = sch.Indoor2Duct1;
+                schSet.ID2Mode2 = sch.Indoor2Mode2;
+                schSet.ID2Duct2 = sch.Indoor2Duct2;
+                schSet.ID2EdbSetup = sch.Indoor2DB;
+                schSet.ID2EdbAvg = sch.Indoor2DBAvg;
+                schSet.ID2EdbDev = sch.Indoor2DBDev;
+                schSet.ID2EwbSetup = sch.Indoor2WB;
+                schSet.ID2EwbAvg = sch.Indoor2WBAvg;
+                schSet.ID2EwbDev = sch.Indoor2WBDev;
+                schSet.ID2Ldb1Dev = sch.Indoor2LDB1Dev;
+                schSet.ID2Lwb1Dev = sch.Indoor2LWB1Dev;
+                schSet.ID2Af1Dev = sch.Indoor2AirFlow1Dev;
+                schSet.ID2Ldb2Dev = sch.Indoor2LDB2Dev;
+                schSet.ID2Lwb2Dev = sch.Indoor2LWB2Dev;
+                schSet.ID2Af2Dev = sch.Indoor2AirFlow2Dev;
+                schSet.ID2Cdp1Setup = sch.Indoor2CP1;
+                schSet.ID2Cdp1Avg = sch.Indoor2CP1Avg;
+                schSet.ID2Cdp1Dev = sch.Indoor2CP1Dev;
+                schSet.ID2Cdp2Setup = sch.Indoor2CP2;
+                schSet.ID2Cdp2Avg = sch.Indoor2CP2Avg;
+                schSet.ID2Cdp2Dev = sch.Indoor2CP2Dev;
+                schSet.ODUse = sch.OutdoorUse;
+                schSet.ODDp = sch.OutdoorDpSensor;
+                schSet.ODAutoVolt = sch.OutdoorAutoVolt;
+                schSet.ODEdbSetup = sch.OutdoorDB;
+                schSet.ODEdbAvg = sch.OutdoorDBAvg;
+                schSet.ODEdbDev = sch.OutdoorDBDev;
+                schSet.ODEwbSetup = sch.OutdoorWB;
+                schSet.ODEwbAvg = sch.OutdoorWBAvg;
+                schSet.ODEwbDev = sch.OutdoorWBDev;
+                schSet.ODEdpSetup = sch.OutdoorDP;
+                schSet.ODEdpAvg = sch.OutdoorDPAvg;
+                schSet.ODEdpDev = sch.OutdoorDPDev;
+                schSet.ODVolt1Setup = sch.OutdoorVolt1;
+                schSet.ODVolt1Avg = sch.OutdoorVolt1Avg;
+                schSet.ODVolt1Dev = sch.OutdoorVolt1Dev;
+                schSet.ODVolt2Setup = sch.OutdoorVolt2;
+                schSet.ODVolt2Avg = sch.OutdoorVolt2Avg;
+                schSet.ODVolt2Dev = sch.OutdoorVolt2Dev;
+
+                schSet.Insert(Resource.Db.Trans);
+            }
+        }
+
+        private void InsertCondition(int paramNo)
+        {
+            NoteParamDataSet noteSet = Resource.Db.NoteParamSet;
+            noteSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_NOTEPARAM");
+            noteSet.ParamNo = paramNo;
+            noteSet.Company = Context.Condition.Note.Company;
+            noteSet.TestName = Context.Condition.Note.Name;
+            noteSet.TestNo = Context.Condition.Note.No;
+            noteSet.Observer = Context.Condition.Note.Observer;
+            noteSet.Maker = Context.Condition.Note.Maker;
+            noteSet.Model1 = Context.Condition.Note.Model1;
+            noteSet.Serial1 = Context.Condition.Note.Serial1;
+            noteSet.Model2 = Context.Condition.Note.Model2;
+            noteSet.Serial2 = Context.Condition.Note.Serial2;
+            noteSet.Model3 = Context.Condition.Note.Model3;
+            noteSet.Serial3 = Context.Condition.Note.Serial3;
+            noteSet.ExpDevice = Context.Condition.Note.ExpDevice;
+            noteSet.Refrig = Context.Condition.Note.Refrigerant;
+            noteSet.RefCharge = Context.Condition.Note.RefCharge;
+            noteSet.Memo = Context.Condition.Note.Memo;
+            noteSet.CoolUnit = Context.Condition.Method.CoolingCapacity;
+            noteSet.HeatUnit = Context.Condition.Method.HeatingCapacity;
+            noteSet.Insert(Resource.Db.Trans);
+
+            MethodParamDataSet methodSet = Resource.Db.MethodParamSet;
+            methodSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_METHODPARAM");
+            methodSet.NoteNo = noteSet.RecNo;
+            methodSet.IntegCount = Context.Condition.Method.IntegralCount;
+            methodSet.IntegTime = Context.Condition.Method.IntegralTime;
+            methodSet.ScanTime = Context.Condition.Method.ScanTime;
+            methodSet.CoolCapacityUnit = Context.Condition.Method.CoolingCapacity;
+            methodSet.HeatCapacityUnit = Context.Condition.Method.HeatingCapacity;
+            methodSet.AirFlowUnit = Context.Condition.Method.AirFlow;
+            methodSet.EnthalpyUnit = Context.Condition.Method.Enthalpy;
+            methodSet.PressureUnit = Context.Condition.Method.Pressure;
+            methodSet.TemperatureUnit = Context.Condition.Method.Temperature;
+            methodSet.DiffPressureUnit = Context.Condition.Method.DiffPressure;
+            methodSet.AtmPressureUnit = Context.Condition.Method.AtmPressure;
+            methodSet.AutoSetController = Context.Condition.Method.AutoControllerSetting;
+            methodSet.UsePowerMeter = Context.Condition.Method.UsePowerMeterIntegral;
+            methodSet.Insert(Resource.Db.Trans);
+
+
+            RatedParamDataSet ratedSet = Resource.Db.RatedParamSet;
+            foreach (KeyValuePair<EConditionRated, List<ConditionRated>> rated in Context.Condition.Rateds)
+            {
+                ratedSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_RATEDPARAM");
+                ratedSet.NoteNo = noteSet.RecNo;
+                ratedSet.PageNo = rated.Key;
+                ratedSet.Mode = ETestMode.Cooling;
+                ratedSet.Capacity = rated.Value[(int)ETestMode.Cooling].Capacity;
+                ratedSet.Power = rated.Value[(int)ETestMode.Cooling].PowerInput;
+                ratedSet.EER_COP = rated.Value[(int)ETestMode.Cooling].EER_COP;
+                ratedSet.Volt = rated.Value[(int)ETestMode.Cooling].Voltage;
+                ratedSet.Amp = rated.Value[(int)ETestMode.Cooling].Current;
+                ratedSet.Freq = rated.Value[(int)ETestMode.Cooling].Frequency;
+                ratedSet.PM_IDU = rated.Value[(int)ETestMode.Cooling].PM_IDU;
+                ratedSet.PM_ODU = rated.Value[(int)ETestMode.Cooling].PM_ODU;
+                ratedSet.Phase = rated.Value[(int)ETestMode.Cooling].Wiring;
+                ratedSet.Insert(Resource.Db.Trans);
+
+                ratedSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_RATEDPARAM");
+                ratedSet.NoteNo = noteSet.RecNo;
+                ratedSet.PageNo = rated.Key;
+                ratedSet.Mode = ETestMode.Heating;
+                ratedSet.Capacity = rated.Value[(int)ETestMode.Heating].Capacity;
+                ratedSet.Power = rated.Value[(int)ETestMode.Heating].PowerInput;
+                ratedSet.EER_COP = rated.Value[(int)ETestMode.Heating].EER_COP;
+                ratedSet.Volt = rated.Value[(int)ETestMode.Heating].Voltage;
+                ratedSet.Amp = rated.Value[(int)ETestMode.Heating].Current;
+                ratedSet.Freq = rated.Value[(int)ETestMode.Heating].Frequency;
+                ratedSet.PM_IDU = rated.Value[(int)ETestMode.Heating].PM_IDU;
+                ratedSet.PM_ODU = rated.Value[(int)ETestMode.Heating].PM_ODU;
+                ratedSet.Phase = rated.Value[(int)ETestMode.Heating].Wiring;
+                ratedSet.Insert(Resource.Db.Trans);
+            }
+
+            ThermoPressParamDataSet tcSet = Resource.Db.ThermoPressParamSet;
+            foreach (MeasureRow row in Context.Condition.TC1)
+            {
+                tcSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_THERMOPRESSPARAM");
+                tcSet.NoteNo = noteSet.RecNo;
+                tcSet.ChType = 0;
+                tcSet.ChNo = row.No;
+                tcSet.Name = row.Name;
+                tcSet.Insert(Resource.Db.Trans);
+            }
+
+            foreach (MeasureRow row in Context.Condition.TC2)
+            {
+                tcSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_THERMOPRESSPARAM");
+                tcSet.NoteNo = noteSet.RecNo;
+                tcSet.ChType = 1;
+                tcSet.ChNo = row.No;
+                tcSet.Name = row.Name;
+                tcSet.Insert(Resource.Db.Trans);
+            }
+
+            foreach (MeasureRow row in Context.Condition.TC3)
+            {
+                tcSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_THERMOPRESSPARAM");
+                tcSet.NoteNo = noteSet.RecNo;
+                tcSet.ChType = 2;
+                tcSet.ChNo = row.No;
+                tcSet.Name = row.Name;
+                tcSet.Insert(Resource.Db.Trans);
+            }
+
+            foreach (MeasureRow row in Context.Condition.Pressures)
+            {
+                tcSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_THERMOPRESSPARAM");
+                tcSet.NoteNo = noteSet.RecNo;
+                tcSet.ChType = 3;
+                tcSet.ChNo = row.No;
+                tcSet.Name = row.Name;
+                tcSet.Insert(Resource.Db.Trans);
+            }
+        }
+
+        private void LoadSchedule(int paramNo)
+        {
+            ScheduleParamDataSet schSet = Resource.Db.ScheduleParamSet;
+            schSet.Select(paramNo);
+            Context.Condition.Schedules.Clear();
+
+            for (int i=0; i<schSet.GetRowCount(); i++)
+            {
+                ConditionSchedule sch = new ConditionSchedule(Context.Condition.Schedules.Count + 1);
+                schSet.Fetch(i);
+                SetSchedule(sch, schSet);
+                Context.Condition.Schedules.Add(sch);
+            }
+        }
+
+        private void LoadCondition(int paramNo)
+        {
+            NoteParamDataSet noteSet = Resource.Db.NoteParamSet;
+            noteSet.Select(paramNo);
+            noteSet.Fetch();
+            int noteNo = noteSet.RecNo;
+
+            CtrlTestCondition ctrl = Context.Condition.Control;
+            ctrl.noteCompanyEdit.Text = noteSet.Company;
+            ctrl.noteTestNameEdit.Text = noteSet.TestName;
+            ctrl.noteTestNoEdit.Text = noteSet.TestNo;
+            ctrl.noteObserverEdit.Text = noteSet.Observer;
+            ctrl.noteMakerCombo.Text = noteSet.Maker;
+            ctrl.noteModel1Combo.Text = noteSet.Model1;
+            ctrl.noteSerial1Combo.Text = noteSet.Serial1;
+            ctrl.noteModel2Edit.Text = noteSet.Model2;
+            ctrl.noteSerial2Edit.Text = noteSet.Serial2;
+            ctrl.noteModel3Edit.Text = noteSet.Model3;
+            ctrl.noteSerial3Edit.Text = noteSet.Serial3;
+            ctrl.noteExpDeviceEdit.Text = noteSet.ExpDevice;
+            ctrl.noteRefrigerantCombo.Text = noteSet.Refrig;
+            ctrl.noteMemoEdit.Text = noteSet.Memo;
+
+            MethodParamDataSet methodSet = Resource.Db.MethodParamSet;
+            methodSet.Select(noteNo);
+            methodSet.Fetch();
+
+            ctrl.methodIntegralCountEdit.Value = methodSet.IntegCount;
+            ctrl.methodIntegralTimeEdit.Value = methodSet.IntegTime;
+            ctrl.methodScanTimeCombo.Text = methodSet.ScanTime.ToString();
+            ctrl.methodCapaCoolingUnitCombo.SelectedValue = methodSet.CoolCapacityUnit;
+            ctrl.methodCapaHeatingUnitCombo.SelectedValue = methodSet.HeatCapacityUnit;
+            ctrl.methodAirFlowUnitCombo.SelectedValue = methodSet.AirFlowUnit;
+            ctrl.methodEnthalpyUnitCombo.SelectedValue = methodSet.EnthalpyUnit;
+            ctrl.methodPressureUnitCombo.SelectedValue = methodSet.PressureUnit;
+            ctrl.methodTempUnitCombo.SelectedValue = methodSet.TemperatureUnit;
+            ctrl.methodDiffPressureUnitCombo.SelectedValue = methodSet.DiffPressureUnit;
+            ctrl.methodAtmPressureUnitCombo.SelectedValue = methodSet.AtmPressureUnit;
+            ctrl.methodAutoCtrlSetCheck.Checked = methodSet.AutoSetController;
+            ctrl.methodUsePmIntegCheck.Checked = methodSet.UsePowerMeter;
+
+            foreach (TabPage page in Context.Condition.Control.ratedTab.TabPages)
+            {
+                CtrlTestRated rated = page.Controls[0] as CtrlTestRated;
+
+                RatedParamDataSet ratedSet = Resource.Db.RatedParamSet;
+                ratedSet.Select(noteNo, rated.Index);
+
+                if (ratedSet.GetRowCount() == 2)
+                {
+                    ratedSet.Fetch(0);
+                    rated.CoolingRecNo = ratedSet.RecNo;
+                    rated.coolingCapacityEdit.EditValue = ratedSet.Capacity;
+                    rated.coolingPowerInEdit.EditValue = ratedSet.Power;
+                    rated.coolingEepEdit.EditValue = ratedSet.EER_COP;
+                    rated.coolingVoltEdit.EditValue = ratedSet.Volt;
+                    rated.coolingCurrentEdit.EditValue = ratedSet.Amp;
+                    rated.coolingFreqCombo.Text = ratedSet.Freq;
+                    rated.coolingPowerMeter1Combo.SelectedIndex = ratedSet.PM_IDU;
+                    rated.coolingPowerMeter2Combo.SelectedIndex = ratedSet.PM_ODU;
+                    rated.coolingPhaseCombo.SelectedValue = ratedSet.Phase;
+
+                    ratedSet.Fetch(1);
+                    rated.HeatingRecNo = ratedSet.RecNo;
+                    rated.heatingCapacityEdit.EditValue = ratedSet.Capacity;
+                    rated.heatingPowerInEdit.EditValue = ratedSet.Power;
+                    rated.heatingEepEdit.EditValue = ratedSet.EER_COP;
+                    rated.heatingVoltEdit.EditValue = ratedSet.Volt;
+                    rated.heatingCurrentEdit.EditValue = ratedSet.Amp;
+                    rated.heatingFreqCombo.Text = ratedSet.Freq;
+                    rated.heatingPowerMeter1Combo.SelectedIndex = ratedSet.PM_IDU;
+                    rated.heatingPowerMeter2Combo.SelectedIndex = ratedSet.PM_ODU;
+                    rated.heatingPhaseCombo.SelectedValue = ratedSet.Phase;
+                }
+            }
+
+            ThermoPressParamDataSet tcSet = Resource.Db.ThermoPressParamSet;
+
+            tcSet.Select(noteNo, 0);
+            for (int i=0; i<tcSet.GetRowCount(); i++)
+            {
+                MeasureRow row = Context.Condition.TC1[i];
+
+                tcSet.Fetch(i);
+                row.Name = tcSet.Name;
+            }
+
+            tcSet.Select(noteNo, 1);
+            for (int i = 0; i < tcSet.GetRowCount(); i++)
+            {
+                MeasureRow row = Context.Condition.TC2[i];
+
+                tcSet.Fetch(i);
+                row.Name = tcSet.Name;
+            }
+
+            tcSet.Select(noteNo, 2);
+            for (int i = 0; i < tcSet.GetRowCount(); i++)
+            {
+                MeasureRow row = Context.Condition.TC3[i];
+
+                tcSet.Fetch(i);
+                row.Name = tcSet.Name;
+            }
+
+            tcSet.Select(noteNo, 3);
+            for (int i = 0; i < tcSet.GetRowCount(); i++)
+            {
+                MeasureRow row = Context.Condition.Pressures[i];
+
+                tcSet.Fetch(i);
+                row.Name = tcSet.Name;
+            }
+
+            Context.Condition.Control.RefreshData();
+        }
+
+        private void SetSchedule(ConditionSchedule sch, ScheduleParamDataSet schSet)
+        {
+            sch.Standard = schSet.Standard;
+            sch.Name = schSet.Name;
+            sch.NoOfSteady = schSet.NoOfSteady;
+            sch.PreRun = schSet.Preparation;
+            sch.Judge = schSet.Judgement;
+            sch.Repeat = schSet.Repeat;
+
+            sch.Indoor1Use = schSet.ID1Use;
+            sch.Indoor1Mode1 = schSet.ID1Mode1;
+            sch.Indoor1Duct1 = schSet.ID1Duct1;
+            sch.Indoor1Mode2 = schSet.ID1Mode2;
+            sch.Indoor1Duct2 = schSet.ID1Duct2;
+            sch.Indoor1DB = schSet.ID1EdbSetup;
+            sch.Indoor1DBAvg = schSet.ID1EdbAvg;
+            sch.Indoor1DBDev = schSet.ID1EdbDev;
+            sch.Indoor1WB = schSet.ID1EwbSetup;
+            sch.Indoor1WBAvg = schSet.ID1EwbAvg;
+            sch.Indoor1WBDev = schSet.ID1EwbDev;
+            sch.Indoor1LDB1Dev = schSet.ID1Ldb1Dev;
+            sch.Indoor1LWB1Dev = schSet.ID1Lwb1Dev; ;
+            sch.Indoor1AirFlow1Dev = schSet.ID1Af1Dev;
+            sch.Indoor1LDB2Dev = schSet.ID1Ldb2Dev;
+            sch.Indoor1LWB2Dev = schSet.ID1Lwb2Dev; ;
+            sch.Indoor1AirFlow2Dev = schSet.ID1Af2Dev;
+            sch.Indoor1CP1 = schSet.ID1Cdp1Setup;
+            sch.Indoor1CP1Avg = schSet.ID1Cdp1Avg;
+            sch.Indoor1CP1Dev = schSet.ID1Cdp1Dev;
+            sch.Indoor1CP2 = schSet.ID1Cdp2Setup;
+            sch.Indoor1CP2Avg = schSet.ID1Cdp2Avg;
+            sch.Indoor1CP2Dev = schSet.ID1Cdp2Dev;
+
+            sch.Indoor2Use = schSet.ID2Use;
+            sch.Indoor2Mode1 = schSet.ID2Mode1;
+            sch.Indoor2Duct1 = schSet.ID2Duct1;
+            sch.Indoor2Mode2 = schSet.ID2Mode2;
+            sch.Indoor2Duct2 = schSet.ID2Duct2;
+            sch.Indoor2DB = schSet.ID2EdbSetup;
+            sch.Indoor2DBAvg = schSet.ID2EdbAvg;
+            sch.Indoor2DBDev = schSet.ID2EdbDev;
+            sch.Indoor2WB = schSet.ID2EwbSetup;
+            sch.Indoor2WBAvg = schSet.ID2EwbAvg;
+            sch.Indoor2WBDev = schSet.ID2EwbDev;
+            sch.Indoor2LDB1Dev = schSet.ID2Ldb1Dev;
+            sch.Indoor2LWB1Dev = schSet.ID2Lwb1Dev; ;
+            sch.Indoor2AirFlow1Dev = schSet.ID2Af1Dev;
+            sch.Indoor2LDB2Dev = schSet.ID2Ldb2Dev;
+            sch.Indoor2LWB2Dev = schSet.ID2Lwb2Dev; ;
+            sch.Indoor2AirFlow2Dev = schSet.ID2Af2Dev;
+            sch.Indoor2CP1 = schSet.ID2Cdp1Setup;
+            sch.Indoor2CP1Avg = schSet.ID2Cdp1Avg;
+            sch.Indoor2CP1Dev = schSet.ID2Cdp1Dev;
+            sch.Indoor2CP2 = schSet.ID2Cdp2Setup;
+            sch.Indoor2CP2Avg = schSet.ID2Cdp2Avg;
+            sch.Indoor2CP2Dev = schSet.ID2Cdp2Dev;
+
+            sch.OutdoorUse = schSet.ODUse;
+            sch.OutdoorDpSensor = schSet.ODDp;
+            sch.OutdoorAutoVolt = schSet.ODAutoVolt;
+            sch.OutdoorDB = schSet.ODEdbSetup;
+            sch.OutdoorDBAvg = schSet.ODEdbAvg;
+            sch.OutdoorDBDev = schSet.ODEdbDev;
+            sch.OutdoorWB = schSet.ODEwbSetup;
+            sch.OutdoorWBAvg = schSet.ODEwbAvg;
+            sch.OutdoorWBDev = schSet.ODEwbDev;
+            sch.OutdoorDP = schSet.ODEdpSetup;
+            sch.OutdoorDPAvg = schSet.ODEdpAvg;
+            sch.OutdoorDPDev = schSet.ODEdpDev;
+            sch.OutdoorVolt1 = schSet.ODVolt1Setup;
+            sch.OutdoorVolt1Avg = schSet.ODVolt1Avg;
+            sch.OutdoorVolt1Dev = schSet.ODVolt1Dev;
+            sch.OutdoorVolt2 = schSet.ODVolt2Setup;
+            sch.OutdoorVolt2Avg = schSet.ODVolt2Avg;
+            sch.OutdoorVolt2Dev = schSet.ODVolt2Dev;
+        }
+
+        private void SetScheduleByForm(ConditionSchedule sch, FormOpenSchedule form)
+        {
+            sch.Standard = form.standardEdit.Text;
+            sch.Name = form.nameEdit.Text;
+            sch.NoOfSteady = int.Parse(form.noSteadyEdit.Text);
+            sch.PreRun = int.Parse(form.preparationEdit.Text);
+            sch.Judge = int.Parse(form.judgementEdit.Text);
+            sch.Repeat = int.Parse(form.repeatEdit.Text);
+
+            sch.Indoor1Use = form.Chambers[0].Indoor1Use;
+            sch.Indoor1Mode1 = form.Chambers[0].Indoor1Mode1;
+            sch.Indoor1Duct1 = form.Chambers[0].Indoor1Duct1;
+            sch.Indoor1Mode2 = form.Chambers[0].Indoor1Mode2;
+            sch.Indoor1Duct2 = form.Chambers[0].Indoor1Duct2;
+            sch.Indoor1DB = float.Parse(form.id1EdbSetupEdit.Text);
+            sch.Indoor1DBAvg = float.Parse(form.id1EdbAvgEdit.Text);
+            sch.Indoor1DBDev = float.Parse(form.id1EdbDevEdit.Text);
+            sch.Indoor1WB = float.Parse(form.id1EwbSetupEdit.Text);
+            sch.Indoor1WBAvg = float.Parse(form.id1EwbAvgEdit.Text);
+            sch.Indoor1WBDev = float.Parse(form.id1EwbDevEdit.Text);
+            sch.Indoor1LDB1Dev = float.Parse(form.id1Ldb1DevEdit.Text);
+            sch.Indoor1LWB1Dev = float.Parse(form.id1Lwb1DevEdit.Text);
+            sch.Indoor1AirFlow1Dev = float.Parse(form.id1Airflow1DevEdit.Text);
+            sch.Indoor1LDB2Dev = float.Parse(form.id1Ldb2DevEdit.Text);
+            sch.Indoor1LWB2Dev = float.Parse(form.id1Lwb2DevEdit.Text);
+            sch.Indoor1AirFlow2Dev = float.Parse(form.id1Airflow2DevEdit.Text);
+            sch.Indoor1CP1 = float.Parse(form.id1Cdp1SetupEdit.Text);
+            sch.Indoor1CP1Avg = float.Parse(form.id1Cdp1AvgEdit.Text);
+            sch.Indoor1CP1Dev = float.Parse(form.id1Cdp1DevEdit.Text);
+            sch.Indoor1CP2 = float.Parse(form.id1Cdp2SetupEdit.Text);
+            sch.Indoor1CP2Avg = float.Parse(form.id1Cdp2AvgEdit.Text);
+            sch.Indoor1CP2Dev = float.Parse(form.id1Cdp2DevEdit.Text);
+
+            sch.Indoor2Use = form.Chambers[0].Indoor2Use;
+            sch.Indoor2Mode1 = form.Chambers[0].Indoor2Mode1;
+            sch.Indoor2Duct1 = form.Chambers[0].Indoor2Duct1;
+            sch.Indoor2Mode2 = form.Chambers[0].Indoor2Mode2;
+            sch.Indoor2Duct2 = form.Chambers[0].Indoor2Duct2;
+            sch.Indoor2DB = float.Parse(form.id2EdbSetupEdit.Text);
+            sch.Indoor2DBAvg = float.Parse(form.id2EdbAvgEdit.Text);
+            sch.Indoor2DBDev = float.Parse(form.id2EdbDevEdit.Text);
+            sch.Indoor2WB = float.Parse(form.id2EwbSetupEdit.Text);
+            sch.Indoor2WBAvg = float.Parse(form.id2EwbAvgEdit.Text);
+            sch.Indoor2WBDev = float.Parse(form.id2EwbDevEdit.Text);
+            sch.Indoor2LDB1Dev = float.Parse(form.id2Ldb1DevEdit.Text);
+            sch.Indoor2LWB1Dev = float.Parse(form.id2Lwb1DevEdit.Text);
+            sch.Indoor2AirFlow1Dev = float.Parse(form.id2Airflow1DevEdit.Text);
+            sch.Indoor2LDB2Dev = float.Parse(form.id2Ldb2DevEdit.Text);
+            sch.Indoor2LWB2Dev = float.Parse(form.id2Lwb2DevEdit.Text);
+            sch.Indoor2AirFlow2Dev = float.Parse(form.id2Airflow2DevEdit.Text);
+            sch.Indoor2CP1 = float.Parse(form.id2Cdp1SetupEdit.Text);
+            sch.Indoor2CP1Avg = float.Parse(form.id2Cdp1AvgEdit.Text);
+            sch.Indoor2CP1Dev = float.Parse(form.id2Cdp1DevEdit.Text);
+            sch.Indoor2CP2 = float.Parse(form.id2Cdp2SetupEdit.Text);
+            sch.Indoor2CP2Avg = float.Parse(form.id2Cdp2AvgEdit.Text);
+            sch.Indoor2CP2Dev = float.Parse(form.id2Cdp2DevEdit.Text);
+
+            sch.OutdoorUse = form.Chambers[0].OutdoorUse;
+            sch.OutdoorDpSensor = form.Chambers[0].OutdoorDpSensor;
+            sch.OutdoorAutoVolt = form.Chambers[0].OutdoorAutoVolt;
+            sch.OutdoorDB = float.Parse(form.odEdbSetupEdit.Text);
+            sch.OutdoorDBAvg = float.Parse(form.odEdbAvgEdit.Text);
+            sch.OutdoorDBDev = float.Parse(form.odEdbDevEdit.Text);
+            sch.OutdoorWB = float.Parse(form.odEwbSetupEdit.Text);
+            sch.OutdoorWBAvg = float.Parse(form.odEwbAvgEdit.Text);
+            sch.OutdoorWBDev = float.Parse(form.odEdpDevEdit.Text);
+            sch.OutdoorDP = float.Parse(form.odEdpSetupEdit.Text);
+            sch.OutdoorDPAvg = float.Parse(form.odEdpAvgEdit.Text);
+            sch.OutdoorDPDev = float.Parse(form.odEdpDevEdit.Text);
+            sch.OutdoorVolt1 = float.Parse(form.odVolt1SetupEdit.Text);
+            sch.OutdoorVolt1Avg = float.Parse(form.odVolt1AvgEdit.Text);
+            sch.OutdoorVolt1Dev = float.Parse(form.odVolt1DevEdit.Text);
+            sch.OutdoorVolt2 = float.Parse(form.odVolt2SetupEdit.Text);
+            sch.OutdoorVolt2Avg = float.Parse(form.odVolt2AvgEdit.Text);
+            sch.OutdoorVolt2Dev = float.Parse(form.odVolt2DevEdit.Text);
+        }
+    }
+}

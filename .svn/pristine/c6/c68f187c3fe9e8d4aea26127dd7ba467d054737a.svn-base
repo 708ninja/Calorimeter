@@ -1,0 +1,242 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class CtrlLogLeft
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.allLogPanel = new Ulee.Controls.UlPanel();
+            this.allLogEdit = new System.Windows.Forms.TextBox();
+            this.ulPanel6 = new Ulee.Controls.UlPanel();
+            this.ulPanel1 = new Ulee.Controls.UlPanel();
+            this.networkLogEdit = new System.Windows.Forms.TextBox();
+            this.ulPanel2 = new Ulee.Controls.UlPanel();
+            this.ulPanel3 = new Ulee.Controls.UlPanel();
+            this.alarmLogEdit = new System.Windows.Forms.TextBox();
+            this.ulPanel4 = new Ulee.Controls.UlPanel();
+            this.bgPanel.SuspendLayout();
+            this.allLogPanel.SuspendLayout();
+            this.ulPanel1.SuspendLayout();
+            this.ulPanel3.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.bgPanel.Controls.Add(this.ulPanel3);
+            this.bgPanel.Controls.Add(this.ulPanel1);
+            this.bgPanel.Controls.Add(this.allLogPanel);
+            this.bgPanel.Size = new System.Drawing.Size(1904, 915);
+            // 
+            // allLogPanel
+            // 
+            this.allLogPanel.BevelInner = Ulee.Controls.EUlBevelStyle.Raised;
+            this.allLogPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.allLogPanel.Controls.Add(this.allLogEdit);
+            this.allLogPanel.Controls.Add(this.ulPanel6);
+            this.allLogPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.allLogPanel.InnerColor2 = System.Drawing.Color.White;
+            this.allLogPanel.Location = new System.Drawing.Point(0, 0);
+            this.allLogPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.allLogPanel.Name = "allLogPanel";
+            this.allLogPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.allLogPanel.OuterColor2 = System.Drawing.Color.White;
+            this.allLogPanel.Size = new System.Drawing.Size(630, 915);
+            this.allLogPanel.Spacing = 0;
+            this.allLogPanel.TabIndex = 4;
+            this.allLogPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.allLogPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // allLogEdit
+            // 
+            this.allLogEdit.BackColor = System.Drawing.Color.FloralWhite;
+            this.allLogEdit.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.allLogEdit.Location = new System.Drawing.Point(6, 40);
+            this.allLogEdit.MaxLength = 131071;
+            this.allLogEdit.Multiline = true;
+            this.allLogEdit.Name = "allLogEdit";
+            this.allLogEdit.ReadOnly = true;
+            this.allLogEdit.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.allLogEdit.Size = new System.Drawing.Size(618, 869);
+            this.allLogEdit.TabIndex = 8;
+            this.allLogEdit.TabStop = false;
+            // 
+            // ulPanel6
+            // 
+            this.ulPanel6.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.ulPanel6.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel6.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel6.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel6.ForeColor = System.Drawing.Color.White;
+            this.ulPanel6.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel6.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel6.Location = new System.Drawing.Point(6, 6);
+            this.ulPanel6.Name = "ulPanel6";
+            this.ulPanel6.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel6.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel6.Size = new System.Drawing.Size(618, 28);
+            this.ulPanel6.Spacing = 0;
+            this.ulPanel6.TabIndex = 7;
+            this.ulPanel6.Text = "ALL";
+            this.ulPanel6.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel6.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel1
+            // 
+            this.ulPanel1.BevelInner = Ulee.Controls.EUlBevelStyle.Raised;
+            this.ulPanel1.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel1.Controls.Add(this.networkLogEdit);
+            this.ulPanel1.Controls.Add(this.ulPanel2);
+            this.ulPanel1.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Location = new System.Drawing.Point(637, 0);
+            this.ulPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.ulPanel1.Name = "ulPanel1";
+            this.ulPanel1.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Size = new System.Drawing.Size(631, 915);
+            this.ulPanel1.Spacing = 0;
+            this.ulPanel1.TabIndex = 5;
+            this.ulPanel1.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel1.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // networkLogEdit
+            // 
+            this.networkLogEdit.BackColor = System.Drawing.Color.FloralWhite;
+            this.networkLogEdit.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.networkLogEdit.Location = new System.Drawing.Point(6, 40);
+            this.networkLogEdit.MaxLength = 131071;
+            this.networkLogEdit.Multiline = true;
+            this.networkLogEdit.Name = "networkLogEdit";
+            this.networkLogEdit.ReadOnly = true;
+            this.networkLogEdit.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.networkLogEdit.Size = new System.Drawing.Size(619, 869);
+            this.networkLogEdit.TabIndex = 8;
+            this.networkLogEdit.TabStop = false;
+            // 
+            // ulPanel2
+            // 
+            this.ulPanel2.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.ulPanel2.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel2.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel2.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel2.ForeColor = System.Drawing.Color.White;
+            this.ulPanel2.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel2.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel2.Location = new System.Drawing.Point(6, 6);
+            this.ulPanel2.Name = "ulPanel2";
+            this.ulPanel2.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel2.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel2.Size = new System.Drawing.Size(619, 28);
+            this.ulPanel2.Spacing = 0;
+            this.ulPanel2.TabIndex = 7;
+            this.ulPanel2.Text = "NETWORK";
+            this.ulPanel2.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel2.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel3
+            // 
+            this.ulPanel3.BevelInner = Ulee.Controls.EUlBevelStyle.Raised;
+            this.ulPanel3.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel3.Controls.Add(this.alarmLogEdit);
+            this.ulPanel3.Controls.Add(this.ulPanel4);
+            this.ulPanel3.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel3.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel3.Location = new System.Drawing.Point(1274, 0);
+            this.ulPanel3.Margin = new System.Windows.Forms.Padding(0);
+            this.ulPanel3.Name = "ulPanel3";
+            this.ulPanel3.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel3.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel3.Size = new System.Drawing.Size(630, 915);
+            this.ulPanel3.Spacing = 0;
+            this.ulPanel3.TabIndex = 6;
+            this.ulPanel3.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel3.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // alarmLogEdit
+            // 
+            this.alarmLogEdit.BackColor = System.Drawing.Color.FloralWhite;
+            this.alarmLogEdit.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.alarmLogEdit.Location = new System.Drawing.Point(6, 40);
+            this.alarmLogEdit.MaxLength = 131071;
+            this.alarmLogEdit.Multiline = true;
+            this.alarmLogEdit.Name = "alarmLogEdit";
+            this.alarmLogEdit.ReadOnly = true;
+            this.alarmLogEdit.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.alarmLogEdit.Size = new System.Drawing.Size(618, 869);
+            this.alarmLogEdit.TabIndex = 8;
+            this.alarmLogEdit.TabStop = false;
+            // 
+            // ulPanel4
+            // 
+            this.ulPanel4.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.ulPanel4.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel4.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel4.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel4.ForeColor = System.Drawing.Color.White;
+            this.ulPanel4.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel4.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel4.Location = new System.Drawing.Point(6, 6);
+            this.ulPanel4.Name = "ulPanel4";
+            this.ulPanel4.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel4.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel4.Size = new System.Drawing.Size(618, 28);
+            this.ulPanel4.Spacing = 0;
+            this.ulPanel4.TabIndex = 7;
+            this.ulPanel4.Text = "ALARM";
+            this.ulPanel4.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel4.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // CtrlLogLeft
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlLogLeft";
+            this.Size = new System.Drawing.Size(1904, 915);
+            this.bgPanel.ResumeLayout(false);
+            this.allLogPanel.ResumeLayout(false);
+            this.allLogPanel.PerformLayout();
+            this.ulPanel1.ResumeLayout(false);
+            this.ulPanel1.PerformLayout();
+            this.ulPanel3.ResumeLayout(false);
+            this.ulPanel3.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+        private Ulee.Controls.UlPanel allLogPanel;
+        private Ulee.Controls.UlPanel ulPanel6;
+        private System.Windows.Forms.TextBox allLogEdit;
+        private Ulee.Controls.UlPanel ulPanel3;
+        private System.Windows.Forms.TextBox alarmLogEdit;
+        private Ulee.Controls.UlPanel ulPanel4;
+        private Ulee.Controls.UlPanel ulPanel1;
+        private System.Windows.Forms.TextBox networkLogEdit;
+        private Ulee.Controls.UlPanel ulPanel2;
+    }
+}

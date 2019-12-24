@@ -1,0 +1,388 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+
+using Ulee.Utils;
+using Ulee.Threading;
+using Ulee.Device.Connection.Yokogawa;
+
+namespace Hnc.Calorimeter.Server
+{
+    public enum EListenerLogging
+    { None, Event, All }
+
+    public enum EListenerLogItem
+    { Send, Receive, Note, Exception }
+
+    public class ServerListener : UlThread
+    {
+        public ServerListener(CalorimeterServer server) : base(false)
+        {
+            this.server = server;
+            packet = new ServerReceivePacket(64);
+            ChangedClients = null;
+
+            logger = new UlLogger();
+            logger.Active = true;
+            logger.Path = server.Ini.GetString("Listener", "LogPath");
+            logger.FName = server.Ini.GetString("Listener", "LogFileName");
+            logger.AddHead("CLIENT->SERVER");
+            logger.AddHead("CLIENT<-SERVER");
+            logger.AddHead("NOTE");
+            logger.AddHead("EXCEPTION");
+
+            Logging = GetLogging();
+        }
+
+        private CalorimeterServer server;
+
+        private ServerReceivePacket packet;
+
+        private UlLogger logger;
+
+        public event EventHandler ChangedClients;
+        public void OnChangedClients(object sender, EventArgs args)
+        {
+            ChangedClients?.Invoke(sender, args);
+        }
+    
+        // Log 파일기록여부
+        public EListenerLogging Logging { get; private set; }
+
+        // Log 파일경로
+        public string LogPath
+        { get { return logger.Path; } set { logger.Path = value; } }
+
+        // Log 파일명
+        public string LogFName
+        { get { return logger.FName; } set { logger.FName = value; } }
+
+        // Log 파일명
+        public string LogExt
+        { get { return logger.Ext; } set { logger.Ext = value; } }
+
+        // Log 파일 Encoding 
+        public Encoding LogFEncoding
+        { get { return logger.FEncoding; } set { logger.FEncoding = value; } }
+
+        // Log 파일 분리 기준 - Min, Hour, Day
+        public EUlLogFileSeperation LogFSeperation
+        { get { return logger.FSeperation; } set { logger.FSeperation = value; } }
+
+        private EListenerLogging GetLogging()
+        {
+            EListenerLogging ret;
+
+            switch (server.Ini.GetString("listener", "logging").ToLower())
+            {
+                case "none":
+                    ret = EListenerLogging.None;
+                    break;
+
+                case "event":
+                    ret = EListenerLogging.Event;
+                    break;
+
+                case "all":
+                    ret = EListenerLogging.All;
+                    break;
+
+                default:
+                    ret = EListenerLogging.Event;
+                    break;
+            }
+
+            return ret;
+        }
+
+        protected override void Execute()
+        {
+            byte[] bytes = null;
+            IPEndPoint ipPoint = new IPEndPoint(IPAddress.Any, 0);
+
+            // Thread 종료 신호가 들어올때 까지 루프
+            while (Terminated == false)
+            {
+                try
+                {
+                    lock (server.Udp)
+                    {
+                        if (server.Udp.Available > 0)
+                        {
+                            bytes = server.Udp.Receive(ref ipPoint);
+                        }
+                        else
+                        {
+                            bytes = null;
+                        }
+                    }
+
+                    if (bytes != null)
+                    {
+                        packet.Clear();
+                        Array.Copy(bytes, 0, packet.Bytes, 0, bytes.Length);
+
+                        CommandExecute(ipPoint);
+                    }
+                }
+                catch (Exception e)
+                {
+                    logger.Log((int)EListenerLogItem.Exception, e.ToString());
+                }
+
+                // 제어권 양보
+                Yield();
+            }
+        }
+
+        private void AddClient(ClientRow client)
+        {
+            server.Clients.Add(client.IpPort, client);
+            server.ClientList.Add(client);
+            ResetClientIndex();
+        }
+
+        private void RemoveClient(ClientRow client)
+        {
+            server.ClientList.Remove(client);
+            server.Clients.Remove(client.IpPort);
+            ResetClientIndex();
+        }
+
+        private void ResetClientIndex()
+        {
+            List<ClientRow> clientList = server.ClientList;
+
+            for (int i=0; i<clientList.Count; i++)
+            {
+                clientList[i].Index = i + 1;
+            }
+        }
+
+        private void CommandExecute(IPEndPoint ipPoint)
+        {
+            logger.Log((int)EListenerLogItem.Note,
+                "Received a Command({0}) - IArg1 : {1}, IArg2 : {2}, IArg3 : {3}, IArg1 : {4:F2} from {5}",
+                packet.Command.ToString(), packet.IArg1, packet.IArg2, packet.IArg3, packet.FArg1, ipPoint.ToString());
+
+            switch (packet.Command)
+            {
+                case EClientCommand.ConnectClient:
+                    ConnectClient(ipPoint);
+                    break;
+
+                case EClientCommand.DisconnectClient:
+                    DisconnectClient(ipPoint);
+                    break;
+
+                case EClientCommand.GetClientList:
+                    GetClientList();
+                    break;
+
+                case EClientCommand.SetClientState:
+                    SetClientState(ipPoint);
+                    break;
+
+                case EClientCommand.SetController:
+                    SetController();
+                    break;
+
+                case EClientCommand.SetPlc:
+                    SetPlc();
+                    break;
+
+                case EClientCommand.StartIntegrationPM:
+                    StartIntegrationPM();
+                    break;
+
+                case EClientCommand.StopIntegrationPM:
+                    StopIntegrationPM();
+                    break;
+
+                case EClientCommand.ResetIntegrationPM:
+                    ResetIntegrationPM();
+                    break;
+
+                case EClientCommand.SetWiringPM:
+                    SetWiringPM();
+                    break;
+            }
+
+            server.Sender.Acknowledge(ipPoint);
+        }
+
+        // IArg1 : Device data value scanning time(msec)
+        private void ConnectClient(IPEndPoint ipPoint)
+        {
+            lock (server.Clients)
+            {
+                if (server.Clients.ContainsKey(ipPoint.ToString()) == true)
+                {
+                    logger.Log((int)EListenerLogItem.Note,
+                        "Found a client({0}) already existed in Client Dictionary",
+                        ipPoint.ToString());
+
+                    server.Clients.Remove(ipPoint.ToString());
+
+                    logger.Log((int)EListenerLogItem.Note,
+                        "Removed a client({0}) in Client Dictionary",
+                        ipPoint.ToString());
+                }
+
+                logger.Log((int)EListenerLogItem.Note,
+                    "Added a client({0}) in Client Dictionary",
+                    ipPoint.ToString());
+
+                AddClient(new ClientRow(ipPoint, packet.IArg1));
+            }
+
+            OnChangedClients(this, null);
+        }
+
+        private void DisconnectClient(IPEndPoint ipPoint)
+        {
+            lock (server.Clients)
+            {
+                logger.Log((int)EListenerLogItem.Note,
+                    "Removed a client({0}) in Client Dictionary",
+                    ipPoint.ToString());
+
+                RemoveClient(server.Clients[ipPoint.ToString()]);
+            }
+
+            OnChangedClients(this, null);
+        }
+
+        private void GetClientList()
+        {
+
+        }
+
+        private void SetClientState(IPEndPoint ipPoint)
+        {
+            lock (server.Clients)
+            {
+
+                if (server.Clients.ContainsKey(ipPoint.ToString()) == false)
+                {
+                    logger.Log((int)EListenerLogItem.Note,
+                        "Can't find a client({0}) in Client Dictionary",
+                        ipPoint.ToString());
+                    return;
+                }
+
+                ClientRow client = server.Clients[ipPoint.ToString()];
+                EClientState state = (EClientState)packet.IArg1;
+                client.State = state;
+
+                logger.Log((int)EListenerLogItem.Note,
+                    "Changed client({0}) to {1}",
+                    ipPoint.ToString(), state.ToString());
+            }
+
+            OnChangedClients(this, null);
+        }
+
+        private void SetController()
+        {
+            int networkNo = packet.IArg1;
+            int controllerNo = packet.IArg2;
+            EUT55ARegisterAddress regAddr = (EUT55ARegisterAddress)packet.IArg3;
+            float value = packet.FArg1;
+            UlUT55AEthernetClient device = server.Devices.Controller[networkNo];
+
+            logger.Log((int)EListenerLogItem.Note,
+                "Changed PID Controller (IP : {0}, Port : {1}, Address : {2}, Register : {3}) to {4:F2}",
+                device.Ip, device.Port, device.SlaveAddr + controllerNo, regAddr.ToString(), value);
+
+            device.Write(device.SlaveAddr + controllerNo, regAddr, value);
+        }
+
+        private void SetPlc()
+        {
+
+        }
+
+        private void StartIntegrationPM()
+        {
+            int index = packet.IArg1;
+            UlWT330EthernetClient device = server.Devices.PowerMeter[index];
+
+            logger.Log((int)EListenerLogItem.Note,
+                "Start integration on Power Meter({0})",
+                device.IpPoint.ToString());
+
+            device.StartIntegration();
+        }
+
+        private void StopIntegrationPM()
+        {
+            int index = packet.IArg1;
+            UlWT330EthernetClient device = server.Devices.PowerMeter[index];
+
+            logger.Log((int)EListenerLogItem.Note,
+                "Stop integration on Power Meter({0})",
+                device.IpPoint.ToString());
+
+            device.StopIntegration();
+        }
+
+        private void ResetIntegrationPM()
+        {
+            int index = packet.IArg1;
+            UlWT330EthernetClient device = server.Devices.PowerMeter[index];
+
+            logger.Log((int)EListenerLogItem.Note,
+                "Reset integration on Power Meter({0})",
+                device.IpPoint.ToString());
+
+            device.ResetIntegration();
+        }
+
+        private void SetWiringPM()
+        {
+            int index = packet.IArg1;
+            EWT330Wiring wiring = (EWT330Wiring)packet.IArg2;
+            UlWT330EthernetClient device = server.Devices.PowerMeter[index];
+
+            logger.Log((int)EListenerLogItem.Note,
+                "Changed wiring on Power Meter({0}) to {2}",
+                device.IpPoint.ToString(), wiring.ToString());
+
+            device.SetWiring(wiring);
+        }
+    }
+
+    public class ServerReceivePacket
+    {
+        public ServerReceivePacket(int length)
+        {
+            packet = new UlBinSets(length);
+        }
+
+        public EClientCommand Command { get { return (EClientCommand)packet.Byte(0); } }
+
+        public int IArg1 { get { return (int)packet.DWord(1); } }
+
+        public int IArg2 { get { return (int)packet.DWord(5); } }
+
+        public int IArg3 { get { return (int)packet.DWord(9); } }
+
+        public float FArg1 { get { return BitConverter.ToSingle(packet.Bytes, 12); } }
+
+        private UlBinSets packet;
+
+        public void Clear()
+        {
+            packet.Clear();
+        }
+
+        public byte[] Bytes
+        { get { return packet.Bytes; } }
+
+        public int Length
+        { get { return packet.Count; } }
+    }
+}

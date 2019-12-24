@@ -1,0 +1,92 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlTestMeas : UlUserControlEng
+    {
+        public CtrlTestMeas()
+        {
+            InitializeComponent();
+        }
+
+        private void label70_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void airSideTotalEERCOPID12Edit_EditValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void airSideCapacityRatioID11Edit_EditValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void airSideAtmosphericPressureID21Edit_EditValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label134_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void measCurrentRatioEdit_EditValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void airSideLeavingSpecificRatioID12Edit_EditValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void airSideLeavingWBID11Edit_EditValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void airSideLatentHeatID12Edit_EditValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void airSideLatentHeatLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label80_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void airSideDrainWeightLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ulPanel4_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+    }
+}

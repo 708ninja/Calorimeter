@@ -1,0 +1,111 @@
+[Database]
+FileName = D:\Database\Hnc\Firebird.2.5\Calorimeter.3R\Hnc.Calorimeter.3R.FDB
+
+[System]
+LogoffTime = 60
+CalibrationNo=4
+
+[Log]
+TotalPath = ..\..\Log\Total
+TotalFileName = Hnc.Calorimeter.Total
+AlarmlPath = ..\..\Log\Alarm
+AlarmFileName = Hnc.Calorimeter.Alarm
+
+[Server]
+port = 54321
+
+[Listener]
+LogPath = ..\..\Log\Listener
+LogFileName = Hnc.Calorimeter.Listener
+Logging = Event
+
+[Sender]
+LogPath = ..\..\Log\Sender
+LogFileName = Hnc.Calorimeter.Sender
+Logging = All
+
+[Device]
+scantime = 250
+
+[PowerMeter.01]
+Name = WT333-01
+Mode = Virtual
+ip = 192.168.1.101
+port = 4003
+scantime = 250
+phase = P3
+LogPath = ..\..\Log\Device\PowerMeter
+LogFileName = Hnc.Calorimeter.WT330
+Logging = Event
+
+[PowerMeter.02]
+Name = WT333-02
+Mode = Virtual
+ip = 192.168.1.101
+port = 4004
+scantime = 250
+phase = P1
+LogPath = ..\..\Log\Device\PowerMeter
+LogFileName = Hnc.Calorimeter.WT330
+Logging = Event
+
+[PowerMeter.03]
+Name = WT333-03
+Mode = Virtual
+ip = 192.168.1.101
+port = 4005
+scantime = 250
+phase = P1
+LogPath = ..\..\Log\Device\PowerMeter
+LogFileName = Hnc.Calorimeter.WT330
+Logging = Event
+
+[PowerMeter.04]
+Name = WT333-04
+Mode = Virtual
+ip = 192.168.1.101
+port = 4006
+scantime = 250
+phase = P1
+LogPath = ..\..\Log\Device\PowerMeter
+LogFileName = Hnc.Calorimeter.WT330
+Logging = Event
+
+[Recorder.01]
+Name = GM10-01
+Mode = Virtual
+ip = 192.168.1.102
+port = 34434
+scantime = 500
+length = 240
+LogPath = ..\..\Log\Device\Recorder
+LogFileName = Hnc.Calorimeter.GM10
+Logging = Event
+
+[Controller.01]
+Name = UT55A-01
+Mode = Virtual
+ip = 192.168.1.101
+port = 4001
+scantime = 1000
+slaveaddress = 1
+slavecount = 1
+LogPath = ..\..\Log\Device\Controller
+LogFileName = Hnc.Calorimeter.UT55A
+Logging = Event
+
+
+[Plc.01]
+Name = MasterK-01
+Mode = Virtual
+ip = 192.168.1.101
+port = 4002
+scantime = 500
+LogPath = ..\..\Log\Device\Plc
+LogFileName = Hnc.Calorimeter.MasterK
+Logging = Event
+Block = 07%MW002007%MW0021
+BlockLength = 2
+
+[Calibrator]
+CalibrationNo=1

@@ -1,0 +1,905 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.Utils;
+using DevExpress.Utils.DragDrop;
+using DevExpress.XtraEditors;
+using DevExpress.XtraGrid.Views.Base;
+using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraGrid.Views.Grid.ViewInfo;
+
+using Ulee.Controls;
+using Ulee.Device.Connection.Yokogawa;
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlConfigCondition : UlUserControlEng
+    {
+        public CtrlConfigCondition()
+        {
+            Initialized = false;
+
+            InitializeComponent();
+            Initialize();
+
+            Initialized = true;
+        }
+
+        private bool Initialized;
+
+        private EDataSetMode mode;
+        private GridBookmark bookmark;
+
+        private List<MeasureRow> id1TCs;
+        private List<MeasureRow> id2TCs;
+        private List<MeasureRow> odTCs;
+        private List<MeasureRow> presses;
+
+        private List<TextEdit> noteEdits;
+        private List<GridView> gridViews;
+
+        private void Initialize()
+        {
+            Color evenColor = Color.FromArgb(244, 244, 236);
+
+            mode = EDataSetMode.View;
+            bookmark = new GridBookmark(conditionGridView);
+
+            int length = Resource.Tag.ThermoLength / 3;
+
+            id1TCs = new List<MeasureRow>();
+            id2TCs = new List<MeasureRow>();
+            odTCs = new List<MeasureRow>();
+
+            for (int i = 0; i < length; i++)
+            {
+                id1TCs.Add(new MeasureRow(null, "", "", i + 1));
+                id2TCs.Add(new MeasureRow(null, "", "", i + length + 1));
+                odTCs.Add(new MeasureRow(null, "", "", i + length * 2 + 1));
+            }
+
+            presses = new List<MeasureRow>();
+
+            for (int i = 0; i < Resource.Tag.PressLength; i++)
+            {
+                presses.Add(new MeasureRow(null, "", "", i + 1));
+            }
+
+            thermo1Grid.DataSource = id1TCs;
+            thermo1GridView.Appearance.EvenRow.BackColor = evenColor;
+            thermo1GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            thermo2Grid.DataSource = id2TCs;
+            thermo2GridView.Appearance.EvenRow.BackColor = evenColor;
+            thermo2GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            thermo3Grid.DataSource = odTCs;
+            thermo3GridView.Appearance.EvenRow.BackColor = evenColor;
+            thermo3GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            thermoTagGrid.DataSource = Resource.Tag.Thermos;
+            thermoTagGridView.Appearance.EvenRow.BackColor = evenColor;
+            thermoTagGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            pressureGrid.DataSource = presses;
+            pressureGridView.Appearance.EvenRow.BackColor = evenColor;
+            pressureGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            pressureTagGrid.DataSource = Resource.Tag.Presses;
+            pressureTagGridView.Appearance.EvenRow.BackColor = evenColor;
+            pressureTagGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            methodCapaCoolingUnitCombo.DisplayMember = "Name";
+            methodCapaCoolingUnitCombo.ValueMember = "Value";
+            methodCapaCoolingUnitCombo.DataSource = EnumHelper.GetNameValues<EUnitCapacity>();
+
+            methodCapaHeatingUnitCombo.DisplayMember = "Name";
+            methodCapaHeatingUnitCombo.ValueMember = "Value";
+            methodCapaHeatingUnitCombo.DataSource = EnumHelper.GetNameValues<EUnitCapacity>();
+
+            foreach (TabPage page in ratedTab.TabPages)
+            {
+                EConditionRated index = (EConditionRated)int.Parse(page.Tag.ToString());
+                CtrlTestRated ctrl = new CtrlTestRated(index, Resource.Variables);
+                page.Controls.Add(ctrl);
+            }
+
+            noteEdits = new List<TextEdit>();
+            noteEdits.Add(noteCompanyEdit);
+            noteEdits.Add(noteTestNameEdit);
+            noteEdits.Add(noteTestNoEdit);
+            noteEdits.Add(noteObserverEdit);
+            noteEdits.Add(noteMakerEdit);
+            noteEdits.Add(noteModel1Edit);
+            noteEdits.Add(noteSerial1Edit);
+            noteEdits.Add(noteModel2Edit);
+            noteEdits.Add(noteSerial2Edit);
+            noteEdits.Add(noteModel3Edit);
+            noteEdits.Add(noteSerial3Edit);
+            noteEdits.Add(noteExpDeviceEdit);
+            noteEdits.Add(noteRefChargeEdit);
+            noteEdits.Add(noteMemoEdit);
+
+            gridViews = new List<GridView>();
+            gridViews.Add(thermo1GridView);
+            gridViews.Add(thermo2GridView);
+            gridViews.Add(thermo3GridView);
+            gridViews.Add(thermoTagGridView);
+            gridViews.Add(pressureGridView);
+            gridViews.Add(pressureTagGridView);
+
+            SetPanelActive(true);
+        }
+
+        private void CtrlConfigCondition_Load(object sender, EventArgs e)
+        {
+            Resource.Db.NoteParamSet.Select();
+
+            conditionGrid.DataSource = Resource.Db.NoteParamSet.DataSet.Tables[0];
+            conditionGridView.Appearance.EvenRow.BackColor = Color.FromArgb(244, 244, 236);
+            conditionGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            SetDataSetMode(EDataSetMode.View);
+        }
+
+        private void searchButton_Click(object sender, EventArgs e)
+        {
+            if (mode != EDataSetMode.View) return;
+
+            bookmark.Get();
+
+            if (string.IsNullOrWhiteSpace(makerEdit.Text) == true)
+                Resource.Db.NoteParamSet.Select();
+            else
+                Resource.Db.NoteParamSet.Select(makerEdit.Text.Trim());
+
+            bookmark.Goto();
+            conditionGrid.Focus();
+        }
+
+        private void newButton_Click(object sender, EventArgs e)
+        {
+            if (mode != EDataSetMode.View) return;
+
+            SetDataSetMode(EDataSetMode.New);
+            ResetEdit();
+            noteCompanyEdit.Focus();
+        }
+
+        private void modifyButton_Click(object sender, EventArgs e)
+        {
+            if (mode != EDataSetMode.View) return;
+            if (conditionGridView.FocusedRowHandle < 0) return;
+
+            SetDataSetMode(EDataSetMode.Modify);
+            SetEditFromDataSet();
+            noteCompanyEdit.Focus();
+        }
+
+        private void copyButton_Click(object sender, EventArgs e)
+        {
+            if (mode != EDataSetMode.View) return;
+            if (conditionGridView.FocusedRowHandle < 0) return;
+
+            if (MessageBox.Show("Would you like to copy a record focused?",
+                Resource.Caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                == DialogResult.No)
+            {
+                return;
+            }
+
+            noteCompanyEdit.Focus();
+            InsertNote();
+
+            searchButton.PerformClick();
+        }
+
+        private void deleteButton_Click(object sender, EventArgs e)
+        {
+            if (mode != EDataSetMode.View) return;
+            if (conditionGridView.FocusedRowHandle < 0) return;
+
+            if (MessageBox.Show("Would you like to delete a record focused?",
+                Resource.Caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                == DialogResult.No)
+            {
+                return;
+            }
+
+            Resource.Db.DeleteNoteParam();
+            searchButton.PerformClick();
+        }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            string maker = noteMakerEdit.Text.Trim();
+            string model = noteModel1Edit.Text.Trim();
+            string serial = noteSerial1Edit.Text.Trim();
+
+            if ((maker == "") || (model == "") || (serial == ""))
+            {
+                MessageBox.Show("You must fill Maker, Model(1) and Serial(1) fields!",
+                    Resource.Caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                noteMakerEdit.Focus();
+                return;
+            }
+
+            noteCompanyEdit.Focus();
+
+            if (mode == EDataSetMode.New)
+            {
+                InsertNote();
+            }
+            else
+            {
+                UpdateNote();
+            }
+
+            SetDataSetMode(EDataSetMode.View);
+            searchButton.PerformClick();
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            SetDataSetMode(EDataSetMode.View);
+            searchButton.PerformClick();
+        }
+
+        private void conditionGrid_DoubleClick(object sender, EventArgs e)
+        {
+            if (mode != EDataSetMode.View) return;
+
+            modifyButton.PerformClick();
+        }
+
+        private void conditionGridView_FocusedRowChanged(object sender, FocusedRowChangedEventArgs e)
+        {
+            if (e.FocusedRowHandle < 0) return;
+            if (mode != EDataSetMode.View) return;
+
+            DataRow row = conditionGridView.GetDataRow(e.FocusedRowHandle);
+            Resource.Db.NoteParamSet.Fetch(row);
+            SetEditFromDataSet();
+        }
+
+        private void methodCapaCoolingUnitCombo_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (Initialized == false) return;
+
+            int nUnit = (int)methodCapaCoolingUnitCombo.SelectedValue;
+            string sUnit = methodCapaCoolingUnitCombo.Text;
+
+            SetRatedConditionCoolingUnit(ETestRatedField.Capacity, sUnit);
+            SetRatedConditionCoolingUnit(ETestRatedField.EER_COP, EnumHelper.GetNames<EUnitEER_COP>()[nUnit]);
+        }
+
+        private void methodCapaHeatingUnitCombo_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (Initialized == false) return;
+
+            int nUnit = (int)methodCapaHeatingUnitCombo.SelectedValue;
+            string sUnit = methodCapaHeatingUnitCombo.Text;
+
+            SetRatedConditionHeatingUnit(ETestRatedField.Capacity, sUnit);
+            SetRatedConditionHeatingUnit(ETestRatedField.EER_COP, EnumHelper.GetNames<EUnitEER_COP>()[nUnit]);
+        }
+
+        private void thermoTagGridView_CustomDrawColumnHeader(object sender, ColumnHeaderCustomDrawEventArgs e)
+        {
+            if (e.Column == null) return;
+
+            if (e.Column.AppearanceHeader.BackColor != Color.Empty)
+            {
+                e.Info.AllowColoring = true;
+            }
+        }
+
+        #region Grid drag and drop events
+        private void thermo1GriddragDropEvents_DragDrop(object sender, DragDropEventArgs e)
+        {
+            if (mode == EDataSetMode.View) return;
+
+            int sourceRow = ((int[])e.Data)[0];
+
+            GridView sourceView = e.Source as GridView;
+            GridView targetView = e.Target as GridView;
+
+            GridHitInfo hit = targetView.CalcHitInfo(
+                targetView.GridControl.PointToClient(new Point(e.Location.X, e.Location.Y)));
+
+            if (hit.InRowCell == true)
+            {
+                if (sourceView.Name == thermoTagGridView.Name)
+                {
+                    targetView.SetRowCellValue(hit.RowHandle, targetView.Columns["Value"],
+                        sourceView.GetRowCellValue(sourceRow, sourceView.Columns["Value"]).ToString());
+                }
+            }
+
+            e.Handled = true;
+        }
+
+        private void thermo1GriddragDropEvents_DragOver(object sender, DragOverEventArgs e)
+        {
+            if (mode == EDataSetMode.View) return;
+
+            GridView sourceView = e.Source as GridView;
+
+            if (sourceView.Name == thermoTagGridView.Name)
+            {
+                DragOverGridEventArgs args = DragOverGridEventArgs.GetDragOverGridEventArgs(e);
+                e.Cursor = DragAndDropCursors.CopyEffectCursor;
+                args.Handled = true;
+            }
+        }
+
+        private void thermo2GridDragDropEvents_DragDrop(object sender, DragDropEventArgs e)
+        {
+            thermo1GriddragDropEvents_DragDrop(sender, e);
+        }
+
+        private void thermo2GridDragDropEvents_DragOver(object sender, DragOverEventArgs e)
+        {
+            thermo1GriddragDropEvents_DragOver(sender, e);
+        }
+
+        private void thermo3GridDragDropEvents_DragDrop(object sender, DragDropEventArgs e)
+        {
+            thermo1GriddragDropEvents_DragDrop(sender, e);
+        }
+
+        private void thermo3GridDragDropEvents_DragOver(object sender, DragOverEventArgs e)
+        {
+            thermo1GriddragDropEvents_DragOver(sender, e);
+        }
+
+        private void pressureGridDragDropEvents_DragDrop(object sender, DragDropEventArgs e)
+        {
+            if (mode == EDataSetMode.View) return;
+
+            int sourceRow = ((int[])e.Data)[0];
+
+            GridView sourceView = e.Source as GridView;
+            GridView targetView = e.Target as GridView;
+
+            GridHitInfo hit = targetView.CalcHitInfo(
+                targetView.GridControl.PointToClient(new Point(e.Location.X, e.Location.Y)));
+
+            if (hit.InRowCell == true)
+            {
+                if (sourceView.Name == pressureTagGridView.Name)
+                {
+                    targetView.SetRowCellValue(hit.RowHandle, targetView.Columns["Value"],
+                        sourceView.GetRowCellValue(sourceRow, sourceView.Columns["Value"]).ToString());
+                }
+            }
+
+            e.Handled = true;
+        }
+
+        private void pressureGridDragDropEvents_DragOver(object sender, DragOverEventArgs e)
+        {
+            if (mode == EDataSetMode.View) return;
+
+            GridView sourceView = e.Source as GridView;
+
+            if (sourceView.Name == pressureTagGridView.Name)
+            {
+                DragOverGridEventArgs args = DragOverGridEventArgs.GetDragOverGridEventArgs(e);
+                e.Cursor = DragAndDropCursors.CopyEffectCursor;
+                args.Handled = true;
+            }
+        }
+        #endregion
+
+        private void SetRatedConditionCoolingUnit(ETestRatedField index, string unit)
+        {
+            foreach (TabPage page in ratedTab.TabPages)
+            {
+                CtrlTestRated ctrl = (CtrlTestRated)page.Controls[0];
+                ctrl.SetCoolingUnit(index, unit);
+            }
+        }
+
+        private void SetRatedConditionHeatingUnit(ETestRatedField index, string unit)
+        {
+            foreach (TabPage page in ratedTab.TabPages)
+            {
+                CtrlTestRated ctrl = (CtrlTestRated)page.Controls[0];
+                ctrl.SetHeatingUnit(index, unit);
+            }
+        }
+
+        private void SetDataSetMode(EDataSetMode mode)
+        {
+            this.mode = mode;
+            string strMode = mode.ToString().ToUpper();
+
+            noteTitlePanel.Text = $"NOTE({strMode})";
+            thermoTitlePanel.Text = $"THERMOCOUPLE({strMode})";
+            pressureTitlePanel.Text = $"PRESSURE({strMode})";
+            ratedTitlePanel.Text = $"RATED CONDITION({strMode})";
+
+            switch (mode)
+            {
+                case EDataSetMode.View:
+                    saveButton.Enabled = false;
+                    cancelButton.Enabled = false;
+                    noteTitlePanel.BackColor = Color.Gray;
+                    thermoTitlePanel.BackColor = Color.Gray;
+                    pressureTitlePanel.BackColor = Color.Gray;
+                    ratedTitlePanel.BackColor = Color.Gray;
+                    SetEditReadOnly(true);
+                    break;
+
+                case EDataSetMode.New:
+                    saveButton.Enabled = true;
+                    cancelButton.Enabled = true;
+                    noteTitlePanel.BackColor = Color.DeepSkyBlue;
+                    thermoTitlePanel.BackColor = Color.DeepSkyBlue;
+                    pressureTitlePanel.BackColor = Color.DeepSkyBlue;
+                    ratedTitlePanel.BackColor = Color.DeepSkyBlue;
+                    SetEditReadOnly(false);
+                    break;
+
+                case EDataSetMode.Modify:
+                    saveButton.Enabled = true;
+                    cancelButton.Enabled = true;
+                    noteTitlePanel.BackColor = Color.DeepSkyBlue;
+                    thermoTitlePanel.BackColor = Color.DeepSkyBlue;
+                    pressureTitlePanel.BackColor = Color.DeepSkyBlue;
+                    ratedTitlePanel.BackColor = Color.DeepSkyBlue;
+                    SetEditReadOnly(false);
+                    break;
+            }
+        }
+
+        private void SetPanelActive(bool active)
+        {
+            Color bkColor = (active == true) ? Color.DeepSkyBlue : Color.Gray;
+
+            noteTitlePanel.BackColor = bkColor;
+            thermoTitlePanel.BackColor = bkColor;
+            pressureTitlePanel.BackColor = bkColor;
+            ratedTitlePanel.BackColor = bkColor;
+        }
+
+        private void SetEditReadOnly(bool active)
+        {
+            searchPanel.Enabled = active;
+            methodCapaCoolingUnitCombo.Enabled = !active;
+            methodCapaHeatingUnitCombo.Enabled = !active;
+
+            noteRefrigerantCombo.Properties.ReadOnly = active;
+
+            foreach (TextEdit edit in noteEdits)
+            {
+                edit.Properties.ReadOnly = active;
+                edit.EnterMoveNextControl = true;
+            }
+
+            foreach (GridView gridView in gridViews)
+            {
+                gridView.OptionsBehavior.ReadOnly = active;
+            }
+
+            foreach (TabPage page in ratedTab.TabPages)
+            {
+                (page.Controls[0] as CtrlTestRated).ReadOnly = active;
+            }
+        }
+
+        private void SetEditData(EDataSetMode mode)
+        {
+            switch (mode)
+            {
+                case EDataSetMode.View:
+                case EDataSetMode.Modify:
+                    SetEditFromDataSet();
+                    break;
+
+                case EDataSetMode.New:
+                    ResetEdit();
+                    break;
+            }
+        }
+
+        private void SetEditFromDataSet()
+        {
+            NoteParamDataSet set = Resource.Db.NoteParamSet;
+
+            noteCompanyEdit.Text = set.Company;
+            noteTestNameEdit.Text = set.TestName;
+            noteTestNoEdit.Text = set.TestNo;
+            noteObserverEdit.Text = set.Observer;
+            noteMakerEdit.Text = set.Maker;
+            noteModel1Edit.Text = set.Model1;
+            noteSerial1Edit.Text = set.Serial1;
+            noteModel2Edit.Text = set.Model2;
+            noteSerial2Edit.Text = set.Serial2;
+            noteModel3Edit.Text = set.Model3;
+            noteSerial3Edit.Text = set.Serial3;
+            noteExpDeviceEdit.Text = set.ExpDevice;
+            noteRefrigerantCombo.Text = set.Refrig;
+            noteRefChargeEdit.Text = set.RefCharge;
+            noteMemoEdit.Text = set.Memo;
+
+            foreach (TabPage page in ratedTab.TabPages)
+            {
+                CtrlTestRated ctrl = page.Controls[0] as CtrlTestRated;
+
+                RatedParamDataSet ratedSet = Resource.Db.RatedParamSet;
+                ratedSet.Select(set.RecNo, ctrl.Index);
+
+                if (ratedSet.GetRowCount() == 2)
+                {
+                    ratedSet.Fetch(0);
+                    ctrl.CoolingRecNo = ratedSet.RecNo;
+                    ctrl.coolingCapacityEdit.EditValue = ratedSet.Capacity;
+                    ctrl.coolingPowerInEdit.EditValue = ratedSet.Power;
+                    ctrl.coolingEepEdit.EditValue = ratedSet.EER_COP;
+                    ctrl.coolingVoltEdit.EditValue = ratedSet.Volt;
+                    ctrl.coolingCurrentEdit.EditValue = ratedSet.Amp;
+                    ctrl.coolingFreqCombo.Text = ratedSet.Freq;
+                    ctrl.coolingPowerMeter1Combo.SelectedIndex = ratedSet.PM_IDU;
+                    ctrl.coolingPowerMeter2Combo.SelectedIndex = ratedSet.PM_ODU;
+                    ctrl.coolingPhaseCombo.SelectedValue = ratedSet.Phase;
+
+                    ratedSet.Fetch(1);
+                    ctrl.HeatingRecNo = ratedSet.RecNo;
+                    ctrl.heatingCapacityEdit.EditValue = ratedSet.Capacity;
+                    ctrl.heatingPowerInEdit.EditValue = ratedSet.Power;
+                    ctrl.heatingEepEdit.EditValue = ratedSet.EER_COP;
+                    ctrl.heatingVoltEdit.EditValue = ratedSet.Volt;
+                    ctrl.heatingCurrentEdit.EditValue = ratedSet.Amp;
+                    ctrl.heatingFreqCombo.Text = ratedSet.Freq;
+                    ctrl.heatingPowerMeter1Combo.SelectedIndex = ratedSet.PM_IDU;
+                    ctrl.heatingPowerMeter2Combo.SelectedIndex = ratedSet.PM_ODU;
+                    ctrl.heatingPhaseCombo.SelectedValue = ratedSet.Phase;
+                }
+            }
+
+            methodCapaCoolingUnitCombo.SelectedValue = set.CoolUnit;
+            methodCapaHeatingUnitCombo.SelectedValue = set.HeatUnit;
+
+            ThermoPressParamDataSet thermoPressSet = Resource.Db.ThermoPressParamSet;
+
+            thermoPressSet.Select(set.RecNo, 0);
+            if (id1TCs.Count == thermoPressSet.GetRowCount())
+            {
+                for (int i = 0; i < thermoPressSet.GetRowCount(); i++)
+                {
+                    thermoPressSet.Fetch(i);
+                    id1TCs[i].RecNo = thermoPressSet.RecNo;
+                    id1TCs[i].Value = thermoPressSet.Name;
+                }
+            }
+
+            thermoPressSet.Select(set.RecNo, 1);
+            if (id2TCs.Count == thermoPressSet.GetRowCount())
+            {
+                for (int i = 0; i < thermoPressSet.GetRowCount(); i++)
+                {
+                    thermoPressSet.Fetch(i);
+                    id2TCs[i].RecNo = thermoPressSet.RecNo;
+                    id2TCs[i].Value = thermoPressSet.Name;
+                }
+            }
+
+            thermoPressSet.Select(set.RecNo, 2);
+            if (odTCs.Count == thermoPressSet.GetRowCount())
+            {
+                for (int i = 0; i < thermoPressSet.GetRowCount(); i++)
+                {
+                    thermoPressSet.Fetch(i);
+                    odTCs[i].RecNo = thermoPressSet.RecNo;
+                    odTCs[i].Value = thermoPressSet.Name;
+                }
+            }
+
+            thermoPressSet.Select(set.RecNo, 3);
+            if (presses.Count == thermoPressSet.GetRowCount())
+            {
+                for (int i = 0; i < thermoPressSet.GetRowCount(); i++)
+                {
+                    thermoPressSet.Fetch(i);
+                    presses[i].RecNo = thermoPressSet.RecNo;
+                    presses[i].Value = thermoPressSet.Name;
+                }
+            }
+
+            foreach (GridView gridView in gridViews)
+            {
+                gridView.RefreshData();
+            }
+        }
+
+        private void InsertNote()
+        {
+            Resource.Db.BeginTrans();
+
+            try
+            {
+                NoteParamDataSet noteSet = Resource.Db.NoteParamSet;
+                noteSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_NOTEPARAM");
+                noteSet.ParamNo = -1;
+                noteSet.Company = noteCompanyEdit.Text;
+                noteSet.TestName = noteTestNameEdit.Text;
+                noteSet.TestNo = noteTestNoEdit.Text;
+                noteSet.Observer = noteObserverEdit.Text;
+                noteSet.Maker = noteMakerEdit.Text;
+                noteSet.Model1 = noteModel1Edit.Text;
+                noteSet.Serial1 = noteSerial1Edit.Text;
+                noteSet.Model2 = noteModel2Edit.Text;
+                noteSet.Serial2 = noteSerial2Edit.Text;
+                noteSet.Model3 = noteModel3Edit.Text;
+                noteSet.Serial3 = noteSerial3Edit.Text;
+                noteSet.ExpDevice = noteExpDeviceEdit.Text;
+                noteSet.Refrig = noteRefrigerantCombo.Text;
+                noteSet.RefCharge = noteRefChargeEdit.Text;
+                noteSet.Memo = noteMemoEdit.Text;
+                noteSet.CoolUnit = (EUnitCapacity)methodCapaCoolingUnitCombo.SelectedValue;
+                noteSet.HeatUnit = (EUnitCapacity)methodCapaHeatingUnitCombo.SelectedValue;
+                noteSet.Insert(Resource.Db.Trans);
+
+                RatedParamDataSet ratedSet = Resource.Db.RatedParamSet;
+                foreach (TabPage page in ratedTab.TabPages)
+                {
+                    CtrlTestRated ctrl = page.Controls[0] as CtrlTestRated;
+
+                    ratedSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_RATEDPARAM");
+                    ratedSet.NoteNo = noteSet.RecNo;
+                    ratedSet.PageNo = ctrl.Index;
+                    ratedSet.Mode = ETestMode.Cooling;
+                    ratedSet.Capacity = float.Parse(ctrl.coolingCapacityEdit.Text);
+                    ratedSet.Power = float.Parse(ctrl.coolingPowerInEdit.Text);
+                    ratedSet.EER_COP = float.Parse(ctrl.coolingEepEdit.Text);
+                    ratedSet.Volt = float.Parse(ctrl.coolingVoltEdit.Text);
+                    ratedSet.Amp = float.Parse(ctrl.coolingCurrentEdit.Text);
+                    ratedSet.Freq = ctrl.coolingFreqCombo.Text;
+                    ratedSet.PM_IDU = ctrl.coolingPowerMeter1Combo.SelectedIndex;
+                    ratedSet.PM_ODU = ctrl.coolingPowerMeter2Combo.SelectedIndex;
+                    ratedSet.Phase = (EWT330Wiring)ctrl.coolingPhaseCombo.SelectedValue;
+                    ratedSet.Insert(Resource.Db.Trans);
+
+                    ratedSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_RATEDPARAM");
+                    ratedSet.NoteNo = noteSet.RecNo;
+                    ratedSet.PageNo = ctrl.Index;
+                    ratedSet.Mode = ETestMode.Heating;
+                    ratedSet.Capacity = float.Parse(ctrl.heatingCapacityEdit.Text);
+                    ratedSet.Power = float.Parse(ctrl.heatingPowerInEdit.Text);
+                    ratedSet.EER_COP = float.Parse(ctrl.heatingEepEdit.Text);
+                    ratedSet.Volt = float.Parse(ctrl.heatingVoltEdit.Text);
+                    ratedSet.Amp = float.Parse(ctrl.heatingCurrentEdit.Text);
+                    ratedSet.Freq = ctrl.heatingFreqCombo.Text;
+                    ratedSet.PM_IDU = ctrl.heatingPowerMeter1Combo.SelectedIndex;
+                    ratedSet.PM_ODU = ctrl.heatingPowerMeter2Combo.SelectedIndex;
+                    ratedSet.Phase = (EWT330Wiring)ctrl.heatingPhaseCombo.SelectedValue;
+                    ratedSet.Insert(Resource.Db.Trans);
+                }
+
+                ThermoPressParamDataSet tcSet = Resource.Db.ThermoPressParamSet;
+                foreach (MeasureRow row in id1TCs)
+                {
+                    tcSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_THERMOPRESSPARAM");
+                    tcSet.NoteNo = noteSet.RecNo;
+                    tcSet.ChType = 0;
+                    tcSet.ChNo = row.No;
+                    tcSet.Name = row.Value;
+                    tcSet.Insert(Resource.Db.Trans);
+                }
+
+                foreach (MeasureRow row in id2TCs)
+                {
+                    tcSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_THERMOPRESSPARAM");
+                    tcSet.NoteNo = noteSet.RecNo;
+                    tcSet.ChType = 1;
+                    tcSet.ChNo = row.No;
+                    tcSet.Name = row.Value;
+                    tcSet.Insert(Resource.Db.Trans);
+                }
+
+                foreach (MeasureRow row in odTCs)
+                {
+                    tcSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_THERMOPRESSPARAM");
+                    tcSet.NoteNo = noteSet.RecNo;
+                    tcSet.ChType = 2;
+                    tcSet.ChNo = row.No;
+                    tcSet.Name = row.Value;
+                    tcSet.Insert(Resource.Db.Trans);
+                }
+
+                foreach (MeasureRow row in presses)
+                {
+                    tcSet.RecNo = (int)Resource.Db.GetGenNo("GN_CONDITION_THERMOPRESSPARAM");
+                    tcSet.NoteNo = noteSet.RecNo;
+                    tcSet.ChType = 3;
+                    tcSet.ChNo = row.No;
+                    tcSet.Name = row.Value;
+                    tcSet.Insert(Resource.Db.Trans);
+                }
+
+                Resource.Db.CommitTrans();
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+                Resource.Db.RollbackTrans();
+            }
+        }
+
+        private void UpdateNote()
+        {
+            Resource.Db.BeginTrans();
+
+            try
+            {
+                NoteParamDataSet noteSet = Resource.Db.NoteParamSet;
+                noteSet.Company = noteCompanyEdit.Text;
+                noteSet.TestName = noteTestNameEdit.Text;
+                noteSet.TestNo = noteTestNoEdit.Text;
+                noteSet.Observer = noteObserverEdit.Text;
+                noteSet.Maker = noteMakerEdit.Text;
+                noteSet.Model1 = noteModel1Edit.Text;
+                noteSet.Serial1 = noteSerial1Edit.Text;
+                noteSet.Model2 = noteModel2Edit.Text;
+                noteSet.Serial2 = noteSerial2Edit.Text;
+                noteSet.Model3 = noteModel3Edit.Text;
+                noteSet.Serial3 = noteSerial3Edit.Text;
+                noteSet.ExpDevice = noteExpDeviceEdit.Text;
+                noteSet.Refrig = noteRefrigerantCombo.Text;
+                noteSet.RefCharge = noteRefChargeEdit.Text;
+                noteSet.Memo = noteMemoEdit.Text;
+                noteSet.CoolUnit = (EUnitCapacity)methodCapaCoolingUnitCombo.SelectedValue;
+                noteSet.HeatUnit = (EUnitCapacity)methodCapaHeatingUnitCombo.SelectedValue;
+                noteSet.Update(Resource.Db.Trans);
+
+                RatedParamDataSet ratedSet = Resource.Db.RatedParamSet;
+                foreach (TabPage page in ratedTab.TabPages)
+                {
+                    CtrlTestRated ctrl = page.Controls[0] as CtrlTestRated;
+
+                    ratedSet.RecNo = ctrl.CoolingRecNo;
+                    ratedSet.Capacity = float.Parse(ctrl.coolingCapacityEdit.Text);
+                    ratedSet.Power = float.Parse(ctrl.coolingPowerInEdit.Text);
+                    ratedSet.EER_COP = float.Parse(ctrl.coolingEepEdit.Text);
+                    ratedSet.Volt = float.Parse(ctrl.coolingVoltEdit.Text);
+                    ratedSet.Amp = float.Parse(ctrl.coolingCurrentEdit.Text);
+                    ratedSet.Freq = ctrl.coolingFreqCombo.Text;
+                    ratedSet.PM_IDU = ctrl.coolingPowerMeter1Combo.SelectedIndex;
+                    ratedSet.PM_ODU = ctrl.coolingPowerMeter2Combo.SelectedIndex;
+                    ratedSet.Phase = (EWT330Wiring)ctrl.coolingPhaseCombo.SelectedValue;
+                    ratedSet.Update(Resource.Db.Trans);
+
+                    ratedSet.RecNo = ctrl.HeatingRecNo;
+                    ratedSet.Capacity = float.Parse(ctrl.heatingCapacityEdit.Text);
+                    ratedSet.Power = float.Parse(ctrl.heatingPowerInEdit.Text);
+                    ratedSet.EER_COP = float.Parse(ctrl.heatingEepEdit.Text);
+                    ratedSet.Volt = float.Parse(ctrl.heatingVoltEdit.Text);
+                    ratedSet.Amp = float.Parse(ctrl.heatingCurrentEdit.Text);
+                    ratedSet.Freq = ctrl.heatingFreqCombo.Text;
+                    ratedSet.PM_IDU = ctrl.heatingPowerMeter1Combo.SelectedIndex;
+                    ratedSet.PM_ODU = ctrl.heatingPowerMeter2Combo.SelectedIndex;
+                    ratedSet.Phase = (EWT330Wiring)ctrl.heatingPhaseCombo.SelectedValue;
+                    ratedSet.Update(Resource.Db.Trans);
+                }
+
+                ThermoPressParamDataSet tcSet = Resource.Db.ThermoPressParamSet;
+                foreach (MeasureRow row in id1TCs)
+                {
+                    tcSet.RecNo = row.RecNo;
+                    tcSet.Name = row.Value;
+                    tcSet.Update(Resource.Db.Trans);
+                }
+
+                foreach (MeasureRow row in id2TCs)
+                {
+                    tcSet.RecNo = row.RecNo;
+                    tcSet.Name = row.Value;
+                    tcSet.Update(Resource.Db.Trans);
+                }
+
+                foreach (MeasureRow row in odTCs)
+                {
+                    tcSet.RecNo = row.RecNo;
+                    tcSet.Name = row.Value;
+                    tcSet.Update(Resource.Db.Trans);
+                }
+
+                foreach (MeasureRow row in presses)
+                {
+                    tcSet.RecNo = row.RecNo;
+                    tcSet.Name = row.Value;
+                    tcSet.Update(Resource.Db.Trans);
+                }
+
+                Resource.Db.CommitTrans();
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+                Resource.Db.RollbackTrans();
+            }
+        }
+
+        private void ResetEdit()
+        {
+            noteCompanyEdit.Text = "";
+            noteTestNameEdit.Text = "";
+            noteTestNoEdit.Text = "";
+            noteObserverEdit.Text = "";
+            noteMakerEdit.Text = "";
+            noteModel1Edit.Text = "";
+            noteSerial1Edit.Text = "";
+            noteModel2Edit.Text = "";
+            noteSerial2Edit.Text = "";
+            noteModel3Edit.Text = "";
+            noteSerial3Edit.Text = "";
+            noteExpDeviceEdit.Text = "";
+            noteRefrigerantCombo.SelectedIndex = 0;
+            noteRefChargeEdit.Text = "";
+            noteMemoEdit.Text = "";
+
+            methodCapaCoolingUnitCombo.SelectedValue = EUnitCapacity.kcal;
+            methodCapaHeatingUnitCombo.SelectedValue = EUnitCapacity.Btu;
+
+            foreach (TabPage page in ratedTab.TabPages)
+            {
+                CtrlTestRated ctrl = page.Controls[0] as CtrlTestRated;
+
+                ctrl.coolingCapacityEdit.EditValue = 0;
+                ctrl.coolingPowerInEdit.EditValue = 0;
+                ctrl.coolingEepEdit.EditValue = 0;
+                ctrl.coolingVoltEdit.EditValue = 0;
+                ctrl.coolingCurrentEdit.EditValue = 0;
+                ctrl.coolingFreqCombo.Text = "";
+                ctrl.coolingPowerMeter1Combo.SelectedIndex = 0;
+                ctrl.coolingPowerMeter2Combo.SelectedIndex = 0;
+                ctrl.coolingPhaseCombo.SelectedValue = EWT330Wiring.P3W4;
+
+                ctrl.heatingCapacityEdit.EditValue = 0;
+                ctrl.heatingPowerInEdit.EditValue = 0;
+                ctrl.heatingEepEdit.EditValue = 0;
+                ctrl.heatingVoltEdit.EditValue = 0;
+                ctrl.heatingCurrentEdit.EditValue = 0;
+                ctrl.heatingFreqCombo.Text = "";
+                ctrl.heatingPowerMeter1Combo.SelectedIndex = 0;
+                ctrl.heatingPowerMeter2Combo.SelectedIndex = 0;
+                ctrl.heatingPhaseCombo.SelectedValue = EWT330Wiring.P3W4;
+            }
+
+            foreach (MeasureRow row in id1TCs)
+            {
+                row.Value = "";
+            }
+
+            foreach (MeasureRow row in id2TCs)
+            {
+                row.Value = "";
+            }
+
+            foreach (MeasureRow row in odTCs)
+            {
+                row.Value = "";
+            }
+
+            foreach (MeasureRow row in presses)
+            {
+                row.Value = "";
+            }
+
+            foreach (GridView gridView in gridViews)
+            {
+                gridView.RefreshData();
+            }
+        }
+    }
+}

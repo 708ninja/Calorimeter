@@ -1,0 +1,279 @@
+﻿//------------------------------------------------------------------------------
+// Copyright (C) 2018 by Seong-Ho, Lee All Rights Reserved.
+//------------------------------------------------------------------------------
+// Author      : Seong-Ho, Lee
+// E-Mail      : 708ninja@naver.com
+// Tab Size    : 4 Column
+// Date        : 2018/03/28
+// Language    : Visual Studio 2017 C# for .NET 4.6.1
+// Description : Thread Class
+//------------------------------------------------------------------------------
+using System;
+using System.Diagnostics;
+using System.Threading;
+
+using Ulee.DllImport.Win32;
+
+//------------------------------------------------------------------------------
+namespace Ulee.Threading
+{
+    //--------------------------------------------------------------------------
+    public enum EUlYieldType
+    {
+        Sleep,
+        SpinWait,
+        SwitchToThread
+    }
+
+    //--------------------------------------------------------------------------
+    public class UlThreadTerminatedException : ApplicationException
+    {
+        public UlThreadTerminatedException()
+            : base("Occurred Terminated Exception!")
+        {
+        }
+
+        public UlThreadTerminatedException(string aMsg)
+            : base(aMsg)
+        {
+        }
+    }
+
+    //--------------------------------------------------------------------------
+    public abstract class UlThread
+    {
+        private volatile bool suspended;
+        private volatile bool terminated;
+        private EUlYieldType yieldType;
+        private bool terminateException;
+
+        protected Thread thread;
+        protected Stopwatch watch;
+
+        protected abstract void Execute();
+
+        //----------------------------------------------------------------------
+        protected UlThread(bool start=true, bool terminateException=false)
+        {
+            this.thread = null;
+            this.suspended = false;
+            this.terminated = false;
+            this.yieldType = EUlYieldType.Sleep;
+            this.terminateException = terminateException;
+
+            watch = new Stopwatch();
+            thread = new Thread(Execute);
+
+            Start(start);
+        }
+
+        //----------------------------------------------------------------------
+        public bool IsAlive
+        {
+            get { return thread.IsAlive; }
+        }
+
+        public bool Suspended
+        {
+            get { return suspended; }
+        }
+
+        //----------------------------------------------------------------------
+        protected bool Terminated
+        {
+            get { return terminated; }
+        }
+
+        //----------------------------------------------------------------------
+        public EUlYieldType YieldType
+        {
+            get { return yieldType; }
+            set { yieldType = value; }
+        }
+
+        //----------------------------------------------------------------------
+        public ThreadPriority Priority
+        {
+            get { return thread.Priority; }
+            set { thread.Priority = value; }
+        }
+
+        //----------------------------------------------------------------------
+        public long Frequency
+        {
+            get { return Stopwatch.Frequency; }
+        }
+
+        //----------------------------------------------------------------------
+        public long MillisecondTicks
+        {
+            get { return Stopwatch.Frequency / 1000; }
+        }
+
+        //----------------------------------------------------------------------
+        public long MicrosecondTicks
+        {
+            get { return Stopwatch.Frequency / 1000000; }
+        }
+
+        //----------------------------------------------------------------------
+        public long NanosecondTicks
+        {
+            get { return Stopwatch.Frequency / 1000000000; }
+        }
+
+        //----------------------------------------------------------------------
+        public TimeSpan Elapsed
+        {
+            get { return watch.Elapsed; }
+        }
+
+        //----------------------------------------------------------------------
+        public long ElapsedTicks
+        {
+            get { return watch.ElapsedTicks; }
+        }
+
+        //----------------------------------------------------------------------
+        public long ElapsedMilliseconds
+        {
+            get { return watch.ElapsedMilliseconds; }
+        }
+
+        //----------------------------------------------------------------------
+        public bool IsTimerefTicks(long ABeginTicks, long ADelayTicks)
+        {
+            if ((watch.ElapsedTicks - ABeginTicks) > ADelayTicks)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        //----------------------------------------------------------------------
+        public bool IsTimeoutMilliseconds(long ABeginTime, long ADelayTime)
+        {
+            if ((watch.ElapsedMilliseconds - ABeginTime) > ADelayTime)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        //----------------------------------------------------------------------
+        public void Start(bool start = true)
+        {
+            if (IsAlive == false)
+            {
+                watch.Reset();
+                watch.Start();
+                thread.Start();
+
+                while (thread.IsAlive == false)
+                {
+                    Yield(1);
+                }
+
+                if (start == false)
+                {
+                    Suspend();
+                }
+            }
+        }
+
+        //----------------------------------------------------------------------
+        public void Suspend()
+        {
+            if (suspended == false)
+            {
+                suspended = true;
+            }
+        }
+
+        //----------------------------------------------------------------------
+        public void Resume()
+        {
+            if (suspended == true)
+            {
+                suspended = false;
+            }
+        }
+
+        //----------------------------------------------------------------------
+        public void Terminate(bool aWaitTermination = true)
+        {
+            Resume();
+
+            if (aWaitTermination == true)
+            {
+                terminated = true;
+                WaitFor();
+            }
+            else
+            {
+                terminated = true;
+            }
+        }
+
+        //----------------------------------------------------------------------
+        public void WaitFor()
+        {
+            thread.Join();
+        }
+
+        //----------------------------------------------------------------------
+        protected void Sleep(int AValue)
+        {
+            switch (yieldType)
+            {
+                case EUlYieldType.Sleep:
+                    Thread.Sleep(AValue);
+                    break;
+
+                case EUlYieldType.SpinWait:
+                    Thread.SpinWait(AValue);
+                    break;
+
+                case EUlYieldType.SwitchToThread:
+                    Win32.SwitchToThread();
+                    break;
+            }
+        }
+
+        //----------------------------------------------------------------------
+        protected void Yield(int AValue = 1)
+        {
+            long beginTime = ElapsedMilliseconds;
+
+            if (suspended == true)
+            {
+                while (suspended == true)
+                {
+                    Thread.Sleep(1);
+                }
+            }
+            else
+            {
+                while (IsTimeoutMilliseconds(beginTime, AValue) == false)
+                {
+                    if (terminated == true)
+                    {
+                        if (terminateException == true)
+                        {
+                            throw new UlThreadTerminatedException();
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+
+                    Sleep(1);
+                }
+            }
+        }
+    }
+}
+//------------------------------------------------------------------------------

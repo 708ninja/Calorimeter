@@ -1,0 +1,407 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{64CDA088-0298-4A0E-92E0-45CA5ADF4C06}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Hnc.Calorimeter.Client</RootNamespace>
+    <AssemblyName>Hnc.Calorimeter.Client</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>aircondition_s.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Charts.v18.1.Core, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Data.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.DataAccess.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.DataAccess.v18.1.UI, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Office.v18.1.Core, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Printing.v18.1.Core, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.RichEdit.v18.1.Core, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Sparkline.v18.1.Core, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Spreadsheet.v18.1.Core, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v18.1.UI, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraBars.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraCharts.v18.1.Wizard, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraCharts.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraEditors.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraGrid.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraLayout.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraNavBar.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraPrinting.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraRichEdit.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraSpreadsheet.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraTreeList.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraVerticalGrid.v18.1, Version=18.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="FirebirdSql.Data.FirebirdClient, Version=5.12.1.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FirebirdSql.Data.FirebirdClient.5.12.1\lib\net452\FirebirdSql.Data.FirebirdClient.dll</HintPath>
+    </Reference>
+    <Reference Include="NModbus4, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NModbus4.2.1.0\lib\net40\NModbus4.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TwinCAT.Ads, Version=4.1.8.0, Culture=neutral, PublicKeyToken=180016cd49e5e8c3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\TwinCat.Ads.4.0.30319\lib\TwinCAT.Ads.dll</HintPath>
+    </Reference>
+    <Reference Include="Ulee.Framework, Version=1.0.0.20149, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Ulee.Framework\Bin\Debug\Ulee.Framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Source\01.Forms\01.Main\FormClientMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\01.Forms\01.Main\FormClientMain.Designer.cs">
+      <DependentUpon>FormClientMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\01.Forms\01.Main\FormUserLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\01.Forms\01.Main\FormUserLogin.designer.cs">
+      <DependentUpon>FormUserLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormAllParamEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormAllParamEdit.Designer.cs">
+      <DependentUpon>FormAllParamEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormControllerEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormControllerEdit.Designer.cs">
+      <DependentUpon>FormControllerEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormOpenAllParam.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormOpenAllParam.Designer.cs">
+      <DependentUpon>FormOpenAllParam.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormOpenCondition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormOpenCondition.Designer.cs">
+      <DependentUpon>FormOpenCondition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormOpenSchedule.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\01.Forms\02.Dialog\FormOpenSchedule.Designer.cs">
+      <DependentUpon>FormOpenSchedule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.Test\CtrlTestCondition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.Test\CtrlTestCondition.Designer.cs">
+      <DependentUpon>CtrlTestCondition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.Test\CtrlTestRight.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.Test\CtrlTestRight.Designer.cs">
+      <DependentUpon>CtrlTestRight.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.Test\CtrlTestMeas.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.Test\CtrlTestMeas.Designer.cs">
+      <DependentUpon>CtrlTestMeas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.Test\CtrlTestRated.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.Test\CtrlTestRated.Designer.cs">
+      <DependentUpon>CtrlTestRated.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.Test\CtrlTestLeft.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\01.Test\CtrlTestLeft.Designer.cs">
+      <DependentUpon>CtrlTestLeft.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\02.View\CtrlViewRight.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\02.View\CtrlViewRight.Designer.cs">
+      <DependentUpon>CtrlViewRight.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\02.View\CtrlViewGraph.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\02.View\CtrlViewGraph.Designer.cs">
+      <DependentUpon>CtrlViewGraph.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlDeviceRecorder.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlDeviceRecorder.Designer.cs">
+      <DependentUpon>CtrlDeviceRecorder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlPlcView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlPlcView.Designer.cs">
+      <DependentUpon>CtrlPlcView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\02.View\CtrlViewReport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\02.View\CtrlViewReport.Designer.cs">
+      <DependentUpon>CtrlViewReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\02.View\CtrlViewLeft.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\02.View\CtrlViewLeft.Designer.cs">
+      <DependentUpon>CtrlViewLeft.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlControllerView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlControllerView.Designer.cs">
+      <DependentUpon>CtrlControllerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlDeviceAll.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlDeviceAll.Designer.cs">
+      <DependentUpon>CtrlDeviceAll.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlDeviceController.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlDeviceController.Designer.cs">
+      <DependentUpon>CtrlDeviceController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlDevicePlc.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlDevicePlc.Designer.cs">
+      <DependentUpon>CtrlDevicePlc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlDevicePowerMeter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlDevicePowerMeter.Designer.cs">
+      <DependentUpon>CtrlDevicePowerMeter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlDeviceLeft.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlDeviceLeft.Designer.cs">
+      <DependentUpon>CtrlDeviceLeft.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlPowerMeterView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlPowerMeterView.Designer.cs">
+      <DependentUpon>CtrlPowerMeterView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlRecorderView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\03.Device\CtrlRecorderView.Designer.cs">
+      <DependentUpon>CtrlRecorderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\04.Log\CtrlLogLeft.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\04.Log\CtrlLogLeft.Designer.cs">
+      <DependentUpon>CtrlLogLeft.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\05.Config\CtrlConfigCondition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\05.Config\CtrlConfigCondition.Designer.cs">
+      <DependentUpon>CtrlConfigCondition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\05.Config\CtrlConfigLeft.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\05.Config\CtrlConfigLeft.Designer.cs">
+      <DependentUpon>CtrlConfigLeft.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\02.Controls\05.Config\CtrlConfigSchedule.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\02.Controls\05.Config\CtrlConfigSchedule.Designer.cs">
+      <DependentUpon>CtrlConfigSchedule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\03.Units\UnitClient.cs" />
+    <Compile Include="Source\03.Units\UnitClientDatabase.cs" />
+    <Compile Include="Source\03.Units\UnitClientDevice.cs" />
+    <Compile Include="Source\03.Units\UnitClientListener.cs" />
+    <Compile Include="Source\03.Units\UnitClientSender.cs" />
+    <Compile Include="Source\03.Units\UnitClientInvalidThread.cs" />
+    <Compile Include="Source\03.Units\UnitClientResource.cs" />
+    <Compile Include="Source\03.Units\UnitClientTypes.cs" />
+    <Compile Include="Source\03.Units\UnitClientValueUnit.cs" />
+    <Compile Include="Source\03.Units\UnitGridBookmark.cs" />
+    <Compile Include="Source\03.Units\UnitTestContext.cs" />
+    <Compile Include="Source\ClientMain.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Source\01.Forms\01.Main\FormClientMain.resx">
+      <DependentUpon>FormClientMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\01.Forms\01.Main\FormUserLogin.resx">
+      <DependentUpon>FormUserLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\01.Forms\02.Dialog\FormAllParamEdit.resx">
+      <DependentUpon>FormAllParamEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\01.Forms\02.Dialog\FormControllerEdit.resx">
+      <DependentUpon>FormControllerEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\01.Forms\02.Dialog\FormOpenAllParam.resx">
+      <DependentUpon>FormOpenAllParam.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\01.Forms\02.Dialog\FormOpenCondition.resx">
+      <DependentUpon>FormOpenCondition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\01.Forms\02.Dialog\FormOpenSchedule.resx">
+      <DependentUpon>FormOpenSchedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\01.Test\CtrlTestCondition.resx">
+      <DependentUpon>CtrlTestCondition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\01.Test\CtrlTestRight.resx">
+      <DependentUpon>CtrlTestRight.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\01.Test\CtrlTestMeas.resx">
+      <DependentUpon>CtrlTestMeas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\01.Test\CtrlTestRated.resx">
+      <DependentUpon>CtrlTestRated.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\01.Test\CtrlTestLeft.resx">
+      <DependentUpon>CtrlTestLeft.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\02.View\CtrlViewRight.resx">
+      <DependentUpon>CtrlViewRight.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\02.View\CtrlViewGraph.resx">
+      <DependentUpon>CtrlViewGraph.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\02.View\CtrlViewReport.resx">
+      <DependentUpon>CtrlViewReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\02.View\CtrlViewLeft.resx">
+      <DependentUpon>CtrlViewLeft.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\03.Device\CtrlControllerView.resx">
+      <DependentUpon>CtrlControllerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\03.Device\CtrlDeviceAll.resx">
+      <DependentUpon>CtrlDeviceAll.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\03.Device\CtrlDeviceController.resx">
+      <DependentUpon>CtrlDeviceController.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\03.Device\CtrlDevicePlc.resx">
+      <DependentUpon>CtrlDevicePlc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\03.Device\CtrlDevicePowerMeter.resx">
+      <DependentUpon>CtrlDevicePowerMeter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\03.Device\CtrlDeviceRecorder.resx">
+      <DependentUpon>CtrlDeviceRecorder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\03.Device\CtrlDeviceLeft.resx">
+      <DependentUpon>CtrlDeviceLeft.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\03.Device\CtrlPlcView.resx">
+      <DependentUpon>CtrlPlcView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\03.Device\CtrlPowerMeterView.resx">
+      <DependentUpon>CtrlPowerMeterView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\03.Device\CtrlRecorderView.resx">
+      <DependentUpon>CtrlRecorderView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\04.Log\CtrlLogLeft.resx">
+      <DependentUpon>CtrlLogLeft.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\05.Config\CtrlConfigCondition.resx">
+      <DependentUpon>CtrlConfigCondition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\05.Config\CtrlConfigLeft.resx">
+      <DependentUpon>CtrlConfigLeft.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\02.Controls\05.Config\CtrlConfigSchedule.resx">
+      <DependentUpon>CtrlConfigSchedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Config\Hnc.Calorimeter.3R.Client.Config.Ini" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="aircon.ico" />
+    <Content Include="aircondition_s.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

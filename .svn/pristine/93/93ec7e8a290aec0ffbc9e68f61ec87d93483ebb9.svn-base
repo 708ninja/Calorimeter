@@ -1,0 +1,366 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class CtrlTestRated
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.label1 = new System.Windows.Forms.Label();
+            this.capacityEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.PowerInEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.eepEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.voltEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.currentEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.freqCombo = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.label13 = new System.Windows.Forms.Label();
+            this.phaseCombo = new System.Windows.Forms.ComboBox();
+            this.powerMeterCombo = new System.Windows.Forms.ComboBox();
+            this.bgPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.capacityEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PowerInEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eepEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.voltEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.currentEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.freqCombo.Properties)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.bgPanel.Controls.Add(this.powerMeterCombo);
+            this.bgPanel.Controls.Add(this.phaseCombo);
+            this.bgPanel.Controls.Add(this.label13);
+            this.bgPanel.Controls.Add(this.label12);
+            this.bgPanel.Controls.Add(this.freqCombo);
+            this.bgPanel.Controls.Add(this.label11);
+            this.bgPanel.Controls.Add(this.label9);
+            this.bgPanel.Controls.Add(this.currentEdit);
+            this.bgPanel.Controls.Add(this.label10);
+            this.bgPanel.Controls.Add(this.label7);
+            this.bgPanel.Controls.Add(this.voltEdit);
+            this.bgPanel.Controls.Add(this.label8);
+            this.bgPanel.Controls.Add(this.label4);
+            this.bgPanel.Controls.Add(this.eepEdit);
+            this.bgPanel.Controls.Add(this.label6);
+            this.bgPanel.Controls.Add(this.label2);
+            this.bgPanel.Controls.Add(this.PowerInEdit);
+            this.bgPanel.Controls.Add(this.label3);
+            this.bgPanel.Controls.Add(this.label5);
+            this.bgPanel.Controls.Add(this.capacityEdit);
+            this.bgPanel.Controls.Add(this.label1);
+            this.bgPanel.Size = new System.Drawing.Size(240, 266);
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(4, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(110, 22);
+            this.label1.TabIndex = 70;
+            this.label1.Text = "Capacity";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // capacityEdit
+            // 
+            this.capacityEdit.EditValue = "0.0";
+            this.capacityEdit.Location = new System.Drawing.Point(116, 8);
+            this.capacityEdit.Name = "capacityEdit";
+            this.capacityEdit.Properties.Appearance.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.capacityEdit.Properties.Appearance.Options.UseFont = true;
+            this.capacityEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.capacityEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.capacityEdit.Properties.EditFormat.FormatString = "f1";
+            this.capacityEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.capacityEdit.Properties.Mask.EditMask = "f1";
+            this.capacityEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.capacityEdit.Properties.MaxLength = 4;
+            this.capacityEdit.Size = new System.Drawing.Size(84, 22);
+            this.capacityEdit.TabIndex = 71;
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(202, 8);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(36, 22);
+            this.label5.TabIndex = 72;
+            this.label5.Text = "W";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(202, 34);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(36, 22);
+            this.label2.TabIndex = 75;
+            this.label2.Text = "W";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // PowerInEdit
+            // 
+            this.PowerInEdit.EditValue = "0.0";
+            this.PowerInEdit.Location = new System.Drawing.Point(116, 34);
+            this.PowerInEdit.Name = "PowerInEdit";
+            this.PowerInEdit.Properties.Appearance.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.PowerInEdit.Properties.Appearance.Options.UseFont = true;
+            this.PowerInEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.PowerInEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.PowerInEdit.Properties.EditFormat.FormatString = "f1";
+            this.PowerInEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.PowerInEdit.Properties.Mask.EditMask = "f1";
+            this.PowerInEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.PowerInEdit.Properties.MaxLength = 4;
+            this.PowerInEdit.Size = new System.Drawing.Size(84, 22);
+            this.PowerInEdit.TabIndex = 74;
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(4, 33);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(110, 22);
+            this.label3.TabIndex = 73;
+            this.label3.Text = "Power Input";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(202, 60);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(36, 22);
+            this.label4.TabIndex = 78;
+            this.label4.Text = "W/W";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // eepEdit
+            // 
+            this.eepEdit.EditValue = "0.0";
+            this.eepEdit.Location = new System.Drawing.Point(116, 60);
+            this.eepEdit.Name = "eepEdit";
+            this.eepEdit.Properties.Appearance.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.eepEdit.Properties.Appearance.Options.UseFont = true;
+            this.eepEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.eepEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.eepEdit.Properties.EditFormat.FormatString = "f1";
+            this.eepEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.eepEdit.Properties.Mask.EditMask = "f1";
+            this.eepEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.eepEdit.Properties.MaxLength = 4;
+            this.eepEdit.Size = new System.Drawing.Size(84, 22);
+            this.eepEdit.TabIndex = 77;
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(4, 59);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(110, 22);
+            this.label6.TabIndex = 76;
+            this.label6.Text = "EER/COP";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label7
+            // 
+            this.label7.Location = new System.Drawing.Point(202, 86);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(36, 22);
+            this.label7.TabIndex = 81;
+            this.label7.Text = "V";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // voltEdit
+            // 
+            this.voltEdit.EditValue = "0.0";
+            this.voltEdit.Location = new System.Drawing.Point(116, 86);
+            this.voltEdit.Name = "voltEdit";
+            this.voltEdit.Properties.Appearance.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.voltEdit.Properties.Appearance.Options.UseFont = true;
+            this.voltEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.voltEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.voltEdit.Properties.EditFormat.FormatString = "f1";
+            this.voltEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.voltEdit.Properties.Mask.EditMask = "f1";
+            this.voltEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.voltEdit.Properties.MaxLength = 4;
+            this.voltEdit.Size = new System.Drawing.Size(84, 22);
+            this.voltEdit.TabIndex = 80;
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(4, 85);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(110, 22);
+            this.label8.TabIndex = 79;
+            this.label8.Text = "Voltage";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(202, 112);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(36, 22);
+            this.label9.TabIndex = 84;
+            this.label9.Text = "A";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // currentEdit
+            // 
+            this.currentEdit.EditValue = "0.0";
+            this.currentEdit.Location = new System.Drawing.Point(116, 112);
+            this.currentEdit.Name = "currentEdit";
+            this.currentEdit.Properties.Appearance.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.currentEdit.Properties.Appearance.Options.UseFont = true;
+            this.currentEdit.Properties.DisplayFormat.FormatString = "f1";
+            this.currentEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.currentEdit.Properties.EditFormat.FormatString = "f1";
+            this.currentEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.currentEdit.Properties.Mask.EditMask = "f1";
+            this.currentEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.currentEdit.Properties.MaxLength = 4;
+            this.currentEdit.Size = new System.Drawing.Size(84, 22);
+            this.currentEdit.TabIndex = 83;
+            // 
+            // label10
+            // 
+            this.label10.Location = new System.Drawing.Point(4, 111);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(110, 22);
+            this.label10.TabIndex = 82;
+            this.label10.Text = "Current";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label11
+            // 
+            this.label11.Location = new System.Drawing.Point(4, 138);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(110, 22);
+            this.label11.TabIndex = 85;
+            this.label11.Text = "Phase";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label12
+            // 
+            this.label12.Location = new System.Drawing.Point(4, 164);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(110, 22);
+            this.label12.TabIndex = 87;
+            this.label12.Text = "Frequency";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // freqCombo
+            // 
+            this.freqCombo.Location = new System.Drawing.Point(116, 164);
+            this.freqCombo.Name = "freqCombo";
+            this.freqCombo.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.freqCombo.Properties.Appearance.Options.UseFont = true;
+            this.freqCombo.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.freqCombo.Properties.Items.AddRange(new object[] {
+            "50",
+            "60"});
+            this.freqCombo.Size = new System.Drawing.Size(118, 22);
+            this.freqCombo.TabIndex = 86;
+            // 
+            // label13
+            // 
+            this.label13.Location = new System.Drawing.Point(4, 190);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(110, 22);
+            this.label13.TabIndex = 89;
+            this.label13.Text = "Power Meter";
+            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // phaseCombo
+            // 
+            this.phaseCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.phaseCombo.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.phaseCombo.FormattingEnabled = true;
+            this.phaseCombo.ItemHeight = 15;
+            this.phaseCombo.Location = new System.Drawing.Point(116, 138);
+            this.phaseCombo.Name = "phaseCombo";
+            this.phaseCombo.Size = new System.Drawing.Size(118, 23);
+            this.phaseCombo.TabIndex = 90;
+            // 
+            // powerMeterCombo
+            // 
+            this.powerMeterCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.powerMeterCombo.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.powerMeterCombo.FormattingEnabled = true;
+            this.powerMeterCombo.ItemHeight = 15;
+            this.powerMeterCombo.Location = new System.Drawing.Point(116, 190);
+            this.powerMeterCombo.Name = "powerMeterCombo";
+            this.powerMeterCombo.Size = new System.Drawing.Size(118, 23);
+            this.powerMeterCombo.TabIndex = 91;
+            // 
+            // CtrlTestRated
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlTestRated";
+            this.Size = new System.Drawing.Size(240, 266);
+            this.bgPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.capacityEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PowerInEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eepEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.voltEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.currentEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.freqCombo.Properties)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+        public DevExpress.XtraEditors.TextEdit capacityEdit;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private DevExpress.XtraEditors.ComboBoxEdit freqCombo;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label9;
+        public DevExpress.XtraEditors.TextEdit currentEdit;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label7;
+        public DevExpress.XtraEditors.TextEdit voltEdit;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label4;
+        public DevExpress.XtraEditors.TextEdit eepEdit;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label2;
+        public DevExpress.XtraEditors.TextEdit PowerInEdit;
+        private System.Windows.Forms.Label label3;
+        public System.Windows.Forms.ComboBox powerMeterCombo;
+        public System.Windows.Forms.ComboBox phaseCombo;
+    }
+}

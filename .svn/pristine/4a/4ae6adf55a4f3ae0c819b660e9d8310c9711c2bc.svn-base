@@ -1,0 +1,96 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class FormClientMain : UlFormEng
+    {
+        public FormClientMain()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            DefMenu = new UlMenu(viewPanel);
+            DefMenu.Add(new CtrlTestTop(), testButton);
+            DefMenu.Add(new CtrlViewTop(), viewButton);
+            DefMenu.Add(new CtrlDeviceTop(), deviceButton);
+            DefMenu.Add(new CtrlLogTop(), logButton);
+        }
+
+        private void FormClientMain_Load(object sender, EventArgs e)
+        {
+            DefMenu.Index = 0;
+            Location = new Point(0, 0);
+        }
+
+        private void FormClientMain_Shown(object sender, EventArgs e)
+        {
+            //bgPanel.Text = $"Width : {bgPanel.Width}, Hieght : {bgPanel.Height}";
+        }
+
+        private void FormClientMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (MessageBox.Show("Would you like to exit this program?",
+                "Client", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                == DialogResult.No)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void FormClientMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+
+        }
+
+        private void testLineToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int tag = int.Parse((sender as ToolStripItem).Tag.ToString());
+
+            DefMenu.Index = 0;
+            (DefMenu.Controls(0) as CtrlTestTop).DefMenu.Index = tag;
+        }
+
+        private void testViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int tag = int.Parse((sender as ToolStripItem).Tag.ToString());
+
+            DefMenu.Index = 1;
+            (DefMenu.Controls(1) as CtrlViewTop).DefMenu.Index = tag;
+        }
+
+        private void deviceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int tag = int.Parse((sender as ToolStripItem).Tag.ToString());
+
+            DefMenu.Index = 2;
+            (DefMenu.Controls(2) as CtrlDeviceTop).DefMenu.Index = tag;
+        }
+
+        private void logToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DefMenu.Index = 3;
+        }
+
+        private void configMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void exitMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+    }
+}

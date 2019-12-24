@@ -1,0 +1,150 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Ulee.Controls;
+using Ulee.Device.Connection.Yokogawa;
+
+namespace Hnc.Calorimeter.Client
+{
+    public class ClientDevice
+    {
+        public ClientDevice(CalorimeterClient client)
+        {
+            this.client = client;
+
+            PowerMeters = new List<PowerMeter>();
+            Recorders = new List<Recorder>();
+            Controllers = new List<Controller>();
+            Plcs = new List<Plc>();
+
+            Initialize();
+        }
+
+        private CalorimeterClient client;
+
+        public List<PowerMeter> PowerMeters;
+
+        public List<Recorder> Recorders;
+
+        public List<Controller> Controllers;
+
+        public List<Plc> Plcs;
+
+        private void Initialize()
+        {
+
+        }
+    }
+
+    public class PowerMeter
+    {
+        public PowerMeter(string name, EWT330Phase phase)
+        {
+            Name = name;
+            Phase = phase;
+            Values = new List<DeviceValueRow<float>>();
+
+            switch (Phase)
+            {
+                case EWT330Phase.P1:
+                    for (int i=0; i<7; i++)
+                    {
+                        EWT330P1Series series = (EWT330P1Series)i;
+                        Values.Add(new DeviceValueRow<float>(series.ToString(), 0));
+                    }
+                    break;
+
+                case EWT330Phase.P3:
+                    for (int i = 0; i < 25; i++)
+                    {
+                        EWT330P3Series series = (EWT330P3Series)i;
+                        Values.Add(new DeviceValueRow<float>(series.ToString(), 0));
+                    }
+                    break;
+            }
+        }
+
+        public string Name { get; private set; }
+
+        public EWT330Phase Phase { get; private set; }
+
+        public List<DeviceValueRow<float>> Values { get; private set; }
+    }
+
+    public class Recorder
+    {
+        public Recorder(string name, int length)
+        {
+            Name = name;
+            Values = new List<DeviceValueRow<float>>();
+
+            for (int i=0; i<length; i++)
+            {
+                Values.Add(new DeviceValueRow<float>($"{i + 1:d2}", 0));
+            }
+        }
+
+        public string Name { get; private set; }
+
+        public List<DeviceValueRow<float>> Values { get; private set; }
+    }
+
+    public class Controller
+    {
+        public Controller(string name, int networkNo, int addr)
+        {
+            Name = name;
+            NetworkNo = networkNo;
+            Address = addr;
+            Values = new List<DeviceValueRow<float>>();
+
+            for (int i=0; i<12; i++)
+            {
+                EUT55ARegisterSeries series = (EUT55ARegisterSeries)i;
+                Values.Add(new DeviceValueRow<float>(i.ToString(), 0));
+            }
+        }
+
+        public string Name { get; private set; }
+
+        public int NetworkNo { get; private set; }
+
+        public int Address { get; private set; }
+
+        public List<DeviceValueRow<float>> Values { get; private set; }
+    }
+
+    public class Plc
+    {
+        public Plc(string name, int length)
+        {
+            Name = name;
+            Values = new List<DeviceValueRow<UInt16>>();
+
+            for (int i=0; i<length; i++)
+            {
+                Values.Add(new DeviceValueRow<UInt16>($"{i + 1:d2}", 0));
+            }
+        }
+
+        public string Name { get; private set; }
+
+        public List<DeviceValueRow<UInt16>> Values { get; private set; }
+    }
+
+    public class DeviceValueRow<T>
+    {
+        public DeviceValueRow(string name, T value)
+        {
+            Name = name;
+            Value = value;
+        }
+
+        public string Name { get; private set; }
+
+        public T Value { get; set; }
+    }
+}

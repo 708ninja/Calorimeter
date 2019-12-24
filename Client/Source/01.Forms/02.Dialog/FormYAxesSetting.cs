@@ -1,0 +1,161 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+
+using DevExpress.Utils;
+using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraGrid.Views.Grid.ViewInfo;
+
+using Ulee.Controls;
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class FormYAxesSetting : UlFormEng
+    {
+        public FormYAxesSetting(List<YAxisRow> axes, int min=0)
+        {
+            InitializeComponent();
+
+            orgAxes = axes;
+            Axes = new List<YAxisRow>();
+            SetTimeEdit(min);
+            Initialize();
+        }
+
+        private bool yAxisChecked;
+        private List<YAxisRow> orgAxes;
+
+        public List<YAxisRow> Axes { get; private set; }
+        public int Time { get { return (int)timeEdit.Value; } }
+
+        private void Initialize()
+        {
+            NameValue<EAxisAlign>[] axAlignItems = EnumHelper.GetNameValues<EAxisAlign>();
+            yaAlignLookUp.DataSource = axAlignItems;
+            yaAlignLookUp.DisplayMember = "Name";
+            yaAlignLookUp.ValueMember = "Value";
+            yaAlignLookUp.KeyMember = "Value";
+
+            foreach (YAxisRow axis in orgAxes)
+            {
+                Axes.Add(new YAxisRow(-1, axis.AxisNo, axis.Checked, axis.Align, axis.Name, 
+                    axis.Description, axis.Unit, axis.VisualMin, axis.VisualMax, axis.WholeMin, axis.WholeMax));
+            }
+
+            yAxesGrid.DataSource = Axes;
+            yAxesGrid.UseDirectXPaint = DefaultBoolean.False;
+            yAxesGridView.Columns["Checked"].ImageOptions.ImageIndex = 1;
+            yAxesGridView.Appearance.EvenRow.BackColor = Color.FromArgb(244, 244, 236);
+            yAxesGridView.OptionsView.EnableAppearanceEvenRow = true;
+            yAxesGridView.RefreshData();
+        }
+
+        private void defaultButton_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Would you like to set min and max of all Y-Axes to default values?",
+                Resource.Caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                == DialogResult.No)
+            {
+                return;
+            }
+
+            foreach (YAxisRow row in Axes)
+            {
+                row.WholeMin = -300;
+                row.WholeMax = 300;
+            }
+
+            yAxesGridView.RefreshData();
+        }
+
+        private void yAxesGridView_CustomDrawColumnHeader(object sender, ColumnHeaderCustomDrawEventArgs e)
+        {
+            if (e.Column == null) return;
+
+            if (e.Column.FieldName == "Checked")
+            {
+                Image image = (yAxisChecked == true) ? imageList.Images[1] : imageList.Images[0];
+
+                e.DefaultDraw();
+                e.Cache.DrawImage(image,
+                    new Rectangle(e.Bounds.X + (e.Bounds.Width - image.Size.Width) / 2,
+                    e.Bounds.Y + (e.Bounds.Height - image.Size.Height) / 2 - 1,
+                    image.Size.Width, image.Size.Height));
+
+                e.Handled = true;
+            }
+        }
+
+        private void SetTimeEdit(int min)
+        {
+            bool visible = (min == 0) ? false : true;
+
+            timeEdit.Value = min;
+            timeEdit.Visible = visible;
+            timeLabel.Visible = visible;
+            timeUnitLabel.Visible = visible;
+        }
+
+        private void yAxesGridView_MouseDown(object sender, MouseEventArgs e)
+        {
+            GridView view = sender as GridView;
+            GridHitInfo hit = view.CalcHitInfo(e.Location);
+
+            if (hit == null) return;
+
+            switch (hit.HitTest)
+            {
+                case GridHitTest.Column:
+                    if (hit.Column.FieldName == "Checked")
+                    {
+                        yAxisChecked = !yAxisChecked;
+                        SetYAxesCheckColumn(view);
+                    }
+                    break;
+            }
+        }
+
+        private void SetYAxesCheckColumn(GridView view)
+        {
+            if (view.RowCount < 1) return;
+
+            view.BeginUpdate();
+
+            try
+            {
+                view.Columns["Checked"].ImageOptions.ImageIndex = (yAxisChecked == false) ? 0 : 1;
+
+                for (int i = 0; i < view.RowCount; i++)
+                {
+                    (view.GetRow(i) as YAxisRow).Checked = yAxisChecked;
+                }
+            }
+            finally
+            {
+                view.EndUpdate();
+            }
+        }
+
+        public int GetYAxesCheckedCount()
+        {
+            int count = 0;
+
+            foreach (YAxisRow row in Axes)
+            {
+                if (row.Checked == true) count++;
+            }
+
+            return count;
+        }
+
+        public void RefreshGrid()
+        {
+            yAxesGridView.RefreshData();
+        }
+    }
+}

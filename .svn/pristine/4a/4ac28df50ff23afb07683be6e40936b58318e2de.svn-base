@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+using Ulee.Threading;
+
+namespace Hnc.Calorimeter.Client
+{
+    public class TestThread : UlThread
+    {
+        public TestThread(TestContext context)
+        {
+            this.context = context;
+            Priority = ThreadPriority.Highest;
+        }
+
+        private TestContext context;
+
+        private long prevTicks;
+        private long invalidTicks;
+
+        protected override void Execute()
+        {
+            long ticks = ElapsedMilliseconds;
+
+            if (IsTimeoutMilliseconds(prevTicks, invalidTicks) == true)
+            {
+                prevTicks = ticks;
+            }
+
+            Yield();
+        }
+    }
+}

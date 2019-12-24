@@ -1,0 +1,63 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Hnc.Calorimeter.Client
+{
+    public enum EClientState
+    { Observation, Idle, Preparation, Stabilization, Integration }
+
+    public enum EUserAuthority
+    { Maker, Admin, Operator, Viewer }
+
+    public enum EValueType
+    { Raw, Real }
+
+    public enum ELogItem
+    { Note, Error, Exception }
+
+    public enum ETerminateCode
+    { None, ReceivedTerminateCommand, NonAcknowledgement }
+
+    public enum EDataSetMode
+    { View, New, Modify }
+
+    public class ChamberParams
+    {
+        public ChamberParams()
+        {
+            Indoor1Use = EIndoorUse.Indoor;
+            Indoor1Mode1 = EIndoorMode.Cooling;
+            Indoor1Duct1 = EIndoorDuct.N1;
+            Indoor1Mode2 = EIndoorMode.Cooling;
+            Indoor1Duct2 = EIndoorDuct.N1;
+
+            Indoor2Use = EIndoorUse.Indoor;
+            Indoor2Mode1 = EIndoorMode.Cooling;
+            Indoor2Duct1 = EIndoorDuct.N1;
+            Indoor2Mode2 = EIndoorMode.Cooling;
+            Indoor2Duct2 = EIndoorDuct.N1;
+
+            OutdoorUse = EOutdoorUse.Outdoor;
+            OutdoorDpSensor = EEtcUse.Use;
+            OutdoorAutoVolt = EEtcUse.Use;
+        }
+
+        public EIndoorUse Indoor1Use { get; set; }
+        public EIndoorMode Indoor1Mode1 { get; set; }
+        public EIndoorDuct Indoor1Duct1 { get; set; }
+        public EIndoorMode Indoor1Mode2 { get; set; }
+        public EIndoorDuct Indoor1Duct2 { get; set; }
+        public EIndoorUse Indoor2Use { get; set; }
+        public EIndoorMode Indoor2Mode1 { get; set; }
+        public EIndoorDuct Indoor2Duct1 { get; set; }
+        public EIndoorMode Indoor2Mode2 { get; set; }
+        public EIndoorDuct Indoor2Duct2 { get; set; }
+        public EOutdoorUse OutdoorUse { get; set; }
+        public EEtcUse OutdoorDpSensor { get; set; }
+        public EEtcUse OutdoorAutoVolt { get; set; }
+    }
+}

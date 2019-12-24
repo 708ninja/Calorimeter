@@ -1,0 +1,421 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class CtrlConfigSchedule
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CtrlConfigSchedule));
+            this.ulPanel1 = new Ulee.Controls.UlPanel();
+            this.deleteButton = new System.Windows.Forms.Button();
+            this.copyButton = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.newButton = new System.Windows.Forms.Button();
+            this.scheduleGrid = new DevExpress.XtraGrid.GridControl();
+            this.scheduleGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.sgStandardColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.sgNameColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.searchButton = new System.Windows.Forms.Button();
+            this.makerEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label4 = new System.Windows.Forms.Label();
+            this.menuPanel = new Ulee.Controls.UlPanel();
+            this.saveButton = new DevExpress.XtraEditors.SimpleButton();
+            this.cancelButton = new DevExpress.XtraEditors.SimpleButton();
+            this.textEdit1 = new DevExpress.XtraEditors.TextEdit();
+            this.label1 = new System.Windows.Forms.Label();
+            this.ulPanel2 = new Ulee.Controls.UlPanel();
+            this.textEdit2 = new DevExpress.XtraEditors.TextEdit();
+            this.label2 = new System.Windows.Forms.Label();
+            this.bgPanel.SuspendLayout();
+            this.ulPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.scheduleGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.scheduleGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.makerEdit.Properties)).BeginInit();
+            this.menuPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).BeginInit();
+            this.ulPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit2.Properties)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.bgPanel.Controls.Add(this.ulPanel2);
+            this.bgPanel.Controls.Add(this.ulPanel1);
+            this.bgPanel.Controls.Add(this.menuPanel);
+            this.bgPanel.Size = new System.Drawing.Size(1816, 915);
+            // 
+            // ulPanel1
+            // 
+            this.ulPanel1.BevelInner = Ulee.Controls.EUlBevelStyle.Raised;
+            this.ulPanel1.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel1.Controls.Add(this.deleteButton);
+            this.ulPanel1.Controls.Add(this.copyButton);
+            this.ulPanel1.Controls.Add(this.button2);
+            this.ulPanel1.Controls.Add(this.newButton);
+            this.ulPanel1.Controls.Add(this.scheduleGrid);
+            this.ulPanel1.Controls.Add(this.searchButton);
+            this.ulPanel1.Controls.Add(this.makerEdit);
+            this.ulPanel1.Controls.Add(this.label4);
+            this.ulPanel1.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Location = new System.Drawing.Point(0, 0);
+            this.ulPanel1.Name = "ulPanel1";
+            this.ulPanel1.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Size = new System.Drawing.Size(300, 915);
+            this.ulPanel1.Spacing = 0;
+            this.ulPanel1.TabIndex = 11;
+            this.ulPanel1.TabStop = true;
+            this.ulPanel1.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel1.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // deleteButton
+            // 
+            this.deleteButton.Image = ((System.Drawing.Image)(resources.GetObject("deleteButton.Image")));
+            this.deleteButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.deleteButton.Location = new System.Drawing.Point(223, 34);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.deleteButton.Size = new System.Drawing.Size(71, 22);
+            this.deleteButton.TabIndex = 5;
+            this.deleteButton.Text = "    Delete";
+            this.deleteButton.UseVisualStyleBackColor = true;
+            // 
+            // copyButton
+            // 
+            this.copyButton.Image = ((System.Drawing.Image)(resources.GetObject("copyButton.Image")));
+            this.copyButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.copyButton.Location = new System.Drawing.Point(151, 34);
+            this.copyButton.Name = "copyButton";
+            this.copyButton.Size = new System.Drawing.Size(70, 22);
+            this.copyButton.TabIndex = 4;
+            this.copyButton.Text = "         Copy";
+            this.copyButton.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
+            this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button2.Location = new System.Drawing.Point(78, 34);
+            this.button2.Name = "button2";
+            this.button2.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.button2.Size = new System.Drawing.Size(71, 22);
+            this.button2.TabIndex = 3;
+            this.button2.Text = "      Modify";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // newButton
+            // 
+            this.newButton.Image = ((System.Drawing.Image)(resources.GetObject("newButton.Image")));
+            this.newButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.newButton.Location = new System.Drawing.Point(6, 34);
+            this.newButton.Name = "newButton";
+            this.newButton.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.newButton.Size = new System.Drawing.Size(70, 22);
+            this.newButton.TabIndex = 2;
+            this.newButton.Text = "  New";
+            this.newButton.UseVisualStyleBackColor = true;
+            // 
+            // scheduleGrid
+            // 
+            this.scheduleGrid.Location = new System.Drawing.Point(6, 62);
+            this.scheduleGrid.MainView = this.scheduleGridView;
+            this.scheduleGrid.Name = "scheduleGrid";
+            this.scheduleGrid.Size = new System.Drawing.Size(288, 846);
+            this.scheduleGrid.TabIndex = 6;
+            this.scheduleGrid.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.scheduleGridView});
+            // 
+            // scheduleGridView
+            // 
+            this.scheduleGridView.Appearance.FixedLine.Font = new System.Drawing.Font("Arial", 9F);
+            this.scheduleGridView.Appearance.FixedLine.Options.UseFont = true;
+            this.scheduleGridView.Appearance.FocusedCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.scheduleGridView.Appearance.FocusedCell.Options.UseFont = true;
+            this.scheduleGridView.Appearance.FocusedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.scheduleGridView.Appearance.FocusedRow.Options.UseFont = true;
+            this.scheduleGridView.Appearance.HeaderPanel.Font = new System.Drawing.Font("Arial", 9F);
+            this.scheduleGridView.Appearance.HeaderPanel.Options.UseFont = true;
+            this.scheduleGridView.Appearance.HideSelectionRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.scheduleGridView.Appearance.HideSelectionRow.Options.UseFont = true;
+            this.scheduleGridView.Appearance.OddRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.scheduleGridView.Appearance.OddRow.Options.UseFont = true;
+            this.scheduleGridView.Appearance.Preview.Font = new System.Drawing.Font("Arial", 9F);
+            this.scheduleGridView.Appearance.Preview.Options.UseFont = true;
+            this.scheduleGridView.Appearance.Row.Font = new System.Drawing.Font("Arial", 9F);
+            this.scheduleGridView.Appearance.Row.Options.UseFont = true;
+            this.scheduleGridView.Appearance.SelectedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.scheduleGridView.Appearance.SelectedRow.Options.UseFont = true;
+            this.scheduleGridView.Appearance.ViewCaption.Font = new System.Drawing.Font("Arial", 9F);
+            this.scheduleGridView.Appearance.ViewCaption.Options.UseFont = true;
+            this.scheduleGridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.sgStandardColumn,
+            this.sgNameColumn});
+            this.scheduleGridView.CustomizationFormBounds = new System.Drawing.Rectangle(2884, 580, 210, 186);
+            this.scheduleGridView.GridControl = this.scheduleGrid;
+            this.scheduleGridView.HorzScrollVisibility = DevExpress.XtraGrid.Views.Base.ScrollVisibility.Never;
+            this.scheduleGridView.Name = "scheduleGridView";
+            this.scheduleGridView.OptionsBehavior.Editable = false;
+            this.scheduleGridView.OptionsBehavior.ReadOnly = true;
+            this.scheduleGridView.OptionsView.ColumnAutoWidth = false;
+            this.scheduleGridView.OptionsView.ShowGroupPanel = false;
+            this.scheduleGridView.OptionsView.ShowIndicator = false;
+            this.scheduleGridView.Tag = 1;
+            // 
+            // sgStandardColumn
+            // 
+            this.sgStandardColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sgStandardColumn.AppearanceCell.Options.UseFont = true;
+            this.sgStandardColumn.AppearanceCell.Options.UseTextOptions = true;
+            this.sgStandardColumn.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            this.sgStandardColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sgStandardColumn.AppearanceHeader.Options.UseFont = true;
+            this.sgStandardColumn.AppearanceHeader.Options.UseTextOptions = true;
+            this.sgStandardColumn.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            this.sgStandardColumn.Caption = "Standard";
+            this.sgStandardColumn.FieldName = "Standard";
+            this.sgStandardColumn.Name = "sgStandardColumn";
+            this.sgStandardColumn.OptionsColumn.AllowEdit = false;
+            this.sgStandardColumn.OptionsColumn.AllowFocus = false;
+            this.sgStandardColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.sgStandardColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.sgStandardColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.sgStandardColumn.OptionsColumn.AllowMove = false;
+            this.sgStandardColumn.OptionsColumn.AllowShowHide = false;
+            this.sgStandardColumn.OptionsColumn.AllowSize = false;
+            this.sgStandardColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.sgStandardColumn.OptionsColumn.FixedWidth = true;
+            this.sgStandardColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.sgStandardColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.sgStandardColumn.OptionsColumn.ReadOnly = true;
+            this.sgStandardColumn.OptionsColumn.TabStop = false;
+            this.sgStandardColumn.OptionsFilter.AllowAutoFilter = false;
+            this.sgStandardColumn.OptionsFilter.AllowFilter = false;
+            this.sgStandardColumn.Visible = true;
+            this.sgStandardColumn.VisibleIndex = 0;
+            this.sgStandardColumn.Width = 134;
+            // 
+            // sgNameColumn
+            // 
+            this.sgNameColumn.Caption = "Name";
+            this.sgNameColumn.FieldName = "Name";
+            this.sgNameColumn.Name = "sgNameColumn";
+            this.sgNameColumn.Visible = true;
+            this.sgNameColumn.VisibleIndex = 1;
+            this.sgNameColumn.Width = 134;
+            // 
+            // searchButton
+            // 
+            this.searchButton.Image = ((System.Drawing.Image)(resources.GetObject("searchButton.Image")));
+            this.searchButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.searchButton.Location = new System.Drawing.Point(223, 8);
+            this.searchButton.Name = "searchButton";
+            this.searchButton.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.searchButton.Size = new System.Drawing.Size(71, 22);
+            this.searchButton.TabIndex = 1;
+            this.searchButton.Text = "  Find";
+            this.searchButton.UseVisualStyleBackColor = true;
+            // 
+            // makerEdit
+            // 
+            this.makerEdit.EditValue = "";
+            this.makerEdit.Location = new System.Drawing.Point(78, 8);
+            this.makerEdit.Name = "makerEdit";
+            this.makerEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.makerEdit.Properties.Appearance.Options.UseFont = true;
+            this.makerEdit.Properties.MaxLength = 50;
+            this.makerEdit.Size = new System.Drawing.Size(142, 22);
+            this.makerEdit.TabIndex = 0;
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(7, 8);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(69, 22);
+            this.label4.TabIndex = 79;
+            this.label4.Text = "Standard";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // menuPanel
+            // 
+            this.menuPanel.BackColor = System.Drawing.Color.Silver;
+            this.menuPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.menuPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.menuPanel.Controls.Add(this.saveButton);
+            this.menuPanel.Controls.Add(this.cancelButton);
+            this.menuPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.menuPanel.InnerColor2 = System.Drawing.Color.White;
+            this.menuPanel.Location = new System.Drawing.Point(1732, 0);
+            this.menuPanel.Name = "menuPanel";
+            this.menuPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.menuPanel.OuterColor2 = System.Drawing.Color.White;
+            this.menuPanel.Size = new System.Drawing.Size(84, 915);
+            this.menuPanel.Spacing = 0;
+            this.menuPanel.TabIndex = 12;
+            this.menuPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.menuPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // saveButton
+            // 
+            this.saveButton.AllowFocus = false;
+            this.saveButton.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.saveButton.Appearance.Options.UseBorderColor = true;
+            this.saveButton.Appearance.Options.UseFont = true;
+            this.saveButton.Appearance.Options.UseTextOptions = true;
+            this.saveButton.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Bottom;
+            this.saveButton.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("saveButton.ImageOptions.Image")));
+            this.saveButton.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
+            this.saveButton.ImageOptions.ImageToTextIndent = 12;
+            this.saveButton.Location = new System.Drawing.Point(2, 795);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(80, 58);
+            this.saveButton.TabIndex = 21;
+            this.saveButton.TabStop = false;
+            this.saveButton.Text = "Save";
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.AllowFocus = false;
+            this.cancelButton.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cancelButton.Appearance.Options.UseBorderColor = true;
+            this.cancelButton.Appearance.Options.UseFont = true;
+            this.cancelButton.Appearance.Options.UseTextOptions = true;
+            this.cancelButton.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Bottom;
+            this.cancelButton.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("cancelButton.ImageOptions.Image")));
+            this.cancelButton.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
+            this.cancelButton.ImageOptions.ImageToTextIndent = 10;
+            this.cancelButton.Location = new System.Drawing.Point(2, 855);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(80, 58);
+            this.cancelButton.TabIndex = 20;
+            this.cancelButton.TabStop = false;
+            this.cancelButton.Text = "Cancel";
+            // 
+            // textEdit1
+            // 
+            this.textEdit1.EditValue = "";
+            this.textEdit1.Location = new System.Drawing.Point(70, 8);
+            this.textEdit1.Name = "textEdit1";
+            this.textEdit1.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textEdit1.Properties.Appearance.Options.UseFont = true;
+            this.textEdit1.Properties.MaxLength = 50;
+            this.textEdit1.Size = new System.Drawing.Size(142, 22);
+            this.textEdit1.TabIndex = 80;
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(7, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(57, 22);
+            this.label1.TabIndex = 81;
+            this.label1.Text = "Standard";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ulPanel2
+            // 
+            this.ulPanel2.BevelInner = Ulee.Controls.EUlBevelStyle.Raised;
+            this.ulPanel2.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel2.Controls.Add(this.textEdit2);
+            this.ulPanel2.Controls.Add(this.label2);
+            this.ulPanel2.Controls.Add(this.textEdit1);
+            this.ulPanel2.Controls.Add(this.label1);
+            this.ulPanel2.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel2.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel2.Location = new System.Drawing.Point(306, 0);
+            this.ulPanel2.Name = "ulPanel2";
+            this.ulPanel2.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel2.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel2.Size = new System.Drawing.Size(1420, 38);
+            this.ulPanel2.Spacing = 0;
+            this.ulPanel2.TabIndex = 82;
+            this.ulPanel2.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel2.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // textEdit2
+            // 
+            this.textEdit2.EditValue = "";
+            this.textEdit2.Location = new System.Drawing.Point(271, 8);
+            this.textEdit2.Name = "textEdit2";
+            this.textEdit2.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textEdit2.Properties.Appearance.Options.UseFont = true;
+            this.textEdit2.Properties.MaxLength = 50;
+            this.textEdit2.Size = new System.Drawing.Size(142, 22);
+            this.textEdit2.TabIndex = 82;
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(224, 8);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 22);
+            this.label2.TabIndex = 83;
+            this.label2.Text = "Name";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // CtrlConfigSchedule
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlConfigSchedule";
+            this.Size = new System.Drawing.Size(1816, 915);
+            this.bgPanel.ResumeLayout(false);
+            this.ulPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.scheduleGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.scheduleGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.makerEdit.Properties)).EndInit();
+            this.menuPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).EndInit();
+            this.ulPanel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.textEdit2.Properties)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private Ulee.Controls.UlPanel ulPanel1;
+        private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.Button copyButton;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button newButton;
+        private DevExpress.XtraGrid.GridControl scheduleGrid;
+        private DevExpress.XtraGrid.Views.Grid.GridView scheduleGridView;
+        private DevExpress.XtraGrid.Columns.GridColumn sgStandardColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn sgNameColumn;
+        private System.Windows.Forms.Button searchButton;
+        public DevExpress.XtraEditors.TextEdit makerEdit;
+        private System.Windows.Forms.Label label4;
+        private Ulee.Controls.UlPanel menuPanel;
+        private DevExpress.XtraEditors.SimpleButton saveButton;
+        private DevExpress.XtraEditors.SimpleButton cancelButton;
+        public DevExpress.XtraEditors.TextEdit textEdit1;
+        private System.Windows.Forms.Label label1;
+        private Ulee.Controls.UlPanel ulPanel2;
+        public DevExpress.XtraEditors.TextEdit textEdit2;
+        private System.Windows.Forms.Label label2;
+    }
+}

@@ -1,0 +1,185 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class CtrlTestLeft
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CtrlTestLeft));
+            this.menuPanel = new Ulee.Controls.UlPanel();
+            this.line4Button = new DevExpress.XtraEditors.SimpleButton();
+            this.line2Button = new DevExpress.XtraEditors.SimpleButton();
+            this.line3Button = new DevExpress.XtraEditors.SimpleButton();
+            this.line1Button = new DevExpress.XtraEditors.SimpleButton();
+            this.viewPanel = new Ulee.Controls.UlPanel();
+            this.bgPanel.SuspendLayout();
+            this.menuPanel.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.bgPanel.Controls.Add(this.viewPanel);
+            this.bgPanel.Controls.Add(this.menuPanel);
+            this.bgPanel.Size = new System.Drawing.Size(1904, 915);
+            // 
+            // menuPanel
+            // 
+            this.menuPanel.BackColor = System.Drawing.Color.Silver;
+            this.menuPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.menuPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.menuPanel.Controls.Add(this.line4Button);
+            this.menuPanel.Controls.Add(this.line2Button);
+            this.menuPanel.Controls.Add(this.line3Button);
+            this.menuPanel.Controls.Add(this.line1Button);
+            this.menuPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.menuPanel.InnerColor2 = System.Drawing.Color.White;
+            this.menuPanel.Location = new System.Drawing.Point(0, 0);
+            this.menuPanel.Name = "menuPanel";
+            this.menuPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.menuPanel.OuterColor2 = System.Drawing.Color.White;
+            this.menuPanel.Size = new System.Drawing.Size(84, 915);
+            this.menuPanel.Spacing = 0;
+            this.menuPanel.TabIndex = 0;
+            this.menuPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.menuPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // line4Button
+            // 
+            this.line4Button.AllowFocus = false;
+            this.line4Button.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.line4Button.Appearance.Options.UseBorderColor = true;
+            this.line4Button.Appearance.Options.UseFont = true;
+            this.line4Button.Appearance.Options.UseTextOptions = true;
+            this.line4Button.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Bottom;
+            this.line4Button.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("line4Button.ImageOptions.Image")));
+            this.line4Button.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
+            this.line4Button.ImageOptions.ImageToTextIndent = 10;
+            this.line4Button.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
+            this.line4Button.Location = new System.Drawing.Point(2, 182);
+            this.line4Button.Name = "line4Button";
+            this.line4Button.Size = new System.Drawing.Size(80, 58);
+            this.line4Button.TabIndex = 14;
+            this.line4Button.TabStop = false;
+            this.line4Button.Text = "Line 4";
+            // 
+            // line2Button
+            // 
+            this.line2Button.AllowFocus = false;
+            this.line2Button.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.line2Button.Appearance.Options.UseBorderColor = true;
+            this.line2Button.Appearance.Options.UseFont = true;
+            this.line2Button.Appearance.Options.UseTextOptions = true;
+            this.line2Button.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Bottom;
+            this.line2Button.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("line2Button.ImageOptions.Image")));
+            this.line2Button.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
+            this.line2Button.ImageOptions.ImageToTextIndent = 10;
+            this.line2Button.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
+            this.line2Button.Location = new System.Drawing.Point(2, 62);
+            this.line2Button.Name = "line2Button";
+            this.line2Button.Size = new System.Drawing.Size(80, 58);
+            this.line2Button.TabIndex = 13;
+            this.line2Button.TabStop = false;
+            this.line2Button.Text = "Line 2";
+            // 
+            // line3Button
+            // 
+            this.line3Button.AllowFocus = false;
+            this.line3Button.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.line3Button.Appearance.Options.UseBorderColor = true;
+            this.line3Button.Appearance.Options.UseFont = true;
+            this.line3Button.Appearance.Options.UseTextOptions = true;
+            this.line3Button.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Bottom;
+            this.line3Button.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("line3Button.ImageOptions.Image")));
+            this.line3Button.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
+            this.line3Button.ImageOptions.ImageToTextIndent = 10;
+            this.line3Button.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
+            this.line3Button.Location = new System.Drawing.Point(2, 122);
+            this.line3Button.Name = "line3Button";
+            this.line3Button.Size = new System.Drawing.Size(80, 58);
+            this.line3Button.TabIndex = 12;
+            this.line3Button.TabStop = false;
+            this.line3Button.Text = "Line 3";
+            // 
+            // line1Button
+            // 
+            this.line1Button.AllowFocus = false;
+            this.line1Button.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.line1Button.Appearance.Options.UseBorderColor = true;
+            this.line1Button.Appearance.Options.UseFont = true;
+            this.line1Button.Appearance.Options.UseTextOptions = true;
+            this.line1Button.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Bottom;
+            this.line1Button.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("line1Button.ImageOptions.Image")));
+            this.line1Button.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
+            this.line1Button.ImageOptions.ImageToTextIndent = 10;
+            this.line1Button.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
+            this.line1Button.Location = new System.Drawing.Point(2, 2);
+            this.line1Button.Name = "line1Button";
+            this.line1Button.Size = new System.Drawing.Size(80, 58);
+            this.line1Button.TabIndex = 11;
+            this.line1Button.TabStop = false;
+            this.line1Button.Text = "Line 1";
+            // 
+            // viewPanel
+            // 
+            this.viewPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.viewPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.viewPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.viewPanel.InnerColor2 = System.Drawing.Color.White;
+            this.viewPanel.Location = new System.Drawing.Point(88, 0);
+            this.viewPanel.Name = "viewPanel";
+            this.viewPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.viewPanel.OuterColor2 = System.Drawing.Color.White;
+            this.viewPanel.Size = new System.Drawing.Size(1816, 915);
+            this.viewPanel.Spacing = 0;
+            this.viewPanel.TabIndex = 1;
+            this.viewPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.viewPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // CtrlTestLeft
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlTestLeft";
+            this.Size = new System.Drawing.Size(1904, 915);
+            this.Load += new System.EventHandler(this.CtrlTestTop_Load);
+            this.bgPanel.ResumeLayout(false);
+            this.menuPanel.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private Ulee.Controls.UlPanel menuPanel;
+        private DevExpress.XtraEditors.SimpleButton line4Button;
+        private DevExpress.XtraEditors.SimpleButton line2Button;
+        private DevExpress.XtraEditors.SimpleButton line3Button;
+        private DevExpress.XtraEditors.SimpleButton line1Button;
+        private Ulee.Controls.UlPanel viewPanel;
+    }
+}

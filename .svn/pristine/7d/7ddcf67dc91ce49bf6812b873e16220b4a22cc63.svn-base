@@ -1,0 +1,509 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Ulee.Device.Connection.Yokogawa;
+
+namespace Hnc.Calorimeter.Client
+{
+    #region enums
+    public enum ETestState
+    {
+        Started,
+        Paused,
+        Stopped
+    }
+
+    public enum ETestMode
+    {
+        [Description("Cooling")]
+        Cooling,
+        [Description("Heating")]
+        Heating
+    }
+
+    public enum EIndoorUse
+    {
+        [Description("Indoor")]
+        Indoor,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EIndoorMode
+    {
+        [Description("Cooling")]
+        Cooling,
+        [Description("Heating")]
+        Heating,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EIndoorDuct
+    {
+        [Description("1")]
+        N1,
+        [Description("2")]
+        N2,
+        [Description("3")]
+        N3,
+        [Description("4")]
+        N4,
+        [Description("5")]
+        N5,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EOutdoorUse
+    {
+        [Description("Outdoor")]
+        Outdoor,
+        [Description("Not Used")]
+        NotUsed
+    }
+
+    public enum EEtcUse
+    {
+        [Description("Use")]
+        Use,
+        [Description("Not Used")]
+        NotUsed
+    }
+    #endregion
+
+    #region TestContext
+    public class TestContext
+    {
+        public TestContext()
+        {
+            State = ETestState.Stopped;
+            Condition = new TestCondition();
+            Measure = new TestMeasure();
+        }
+
+        public ETestState State { get; set; }
+        public TestCondition Condition { get; private set; }
+        public TestMeasure Measure { get; private set; }
+    }
+    #endregion
+
+    #region TestCondition
+    public class TestCondition
+    {
+        public TestCondition()
+        {
+            List<TestSchedule> Schedules = new List<TestSchedule>();
+
+            TestMethod Method = new TestMethod();
+
+            TestNote Note = new TestNote();
+
+            Dictionary<ETestRated, TestRated> Rated = new Dictionary<ETestRated, TestRated>();
+            Rated.Add(ETestRated.Total, new TestRated());
+            Rated.Add(ETestRated.ID11, new TestRated());
+            Rated.Add(ETestRated.ID12, new TestRated());
+            Rated.Add(ETestRated.ID21, new TestRated());
+            Rated.Add(ETestRated.ID22, new TestRated());
+
+            Dictionary<string, int> Termocouples = new Dictionary<string, int>();
+
+            Dictionary<string, int> Pressures = new Dictionary<string, int>();
+        }
+
+        public List<TestSchedule> Schedules { get; set; }
+        public TestMethod Method { get; set; }
+        public TestNote Note { get; set; }
+        public Dictionary<ETestRated, TestRated> Rateds { get; set; }
+        public Dictionary<string, int> Termocouples { get; set; }
+        public Dictionary<string, int> Pressures { get; set; }
+    }
+
+    #region TestSchedule
+    public class TestSchedule
+    {
+        public TestSchedule(int no)
+        {
+            No = no;
+        }
+
+        public int No { get; set; }
+        public string Name { get; set; }
+        public int PreRun { get; set; }
+        public int Judge { get; set; }
+        public int Repeat { get; set; }
+        public float Indoor1DB { get; set; }
+        public float Indoor1WB { get; set; }
+        public float Indoor1CP1 { get; set; }
+        public float Indoor1CP2 { get; set; }
+        public float Indoor2DB { get; set; }
+        public float Indoor2WB { get; set; }
+        public float Indoor2CP1 { get; set; }
+        public float Indoor2CP2 { get; set; }
+        public float OutdoorDB { get; set; }
+        public float OutdoorWB { get; set; }
+        public float OutdoorDP { get; set; }
+        public float OutdoorVolt1 { get; set; }
+        public float OutdoorVolt2 { get; set; }
+        public EIndoorUse Indoor1Use { get; set; }
+        public EIndoorMode Indoor1Mode1 { get; set; }
+        public EIndoorDuct Indoor1Duct1 { get; set; }
+        public EIndoorMode Indoor1Mode2 { get; set; }
+        public EIndoorDuct Indoor1Duct2 { get; set; }
+        public EIndoorUse Indoor2Use { get; set; }
+        public EIndoorMode Indoor2Mode1 { get; set; }
+        public EIndoorDuct Indoor2Duct1 { get; set; }
+        public EIndoorMode Indoor2Mode2 { get; set; }
+        public EIndoorDuct Indoor2Duct2 { get; set; }
+        public EOutdoorUse OutdoorUse { get; set; }
+        public EEtcUse OutdoorDpSensor { get; set; }
+        public EEtcUse OutdoorAutoVolt { get; set; }
+    }
+    #endregion
+
+    #region TestMethod
+    public class TestMethod
+    {
+        public TestMethod()
+        {
+            Mode = ETestMode.Cooling;
+            IntegralCount = 1;
+            IntegralTime = 1;
+            ScanTime = 1;
+            Capacity = EUnitCapacity.Watt;
+            AirFlow = EUnitAirFlow.CMM;
+            Enthalpy = EUnitEnthalpy.Watt;
+            Pressure = EUnitBarPressure.Bar;
+            DiffPressure = EUnitmmAqPressure.mmAq;
+            AtmPressure = EUnitmmAqPressure.mmAq;
+            AutoControllerSetting = false;
+            UsePowerMeterIntegral = false;
+        }
+
+        public ETestMode Mode { get; set; }
+        public int IntegralCount { get; set; }
+        public int IntegralTime { get; set; }
+        public int ScanTime { get; set; }
+        public EUnitCapacity Capacity { get; set; }
+        public EUnitAirFlow AirFlow { get; set; }
+        public EUnitEnthalpy Enthalpy { get; set; }
+        public EUnitBarPressure Pressure { get; set; }
+        public EUnitmmAqPressure DiffPressure { get; set; }
+        public EUnitmmAqPressure AtmPressure { get; set; }
+        public EUnitTemperature Temperature { get; set; }
+        public bool AutoControllerSetting { get; set; }
+        public bool UsePowerMeterIntegral { get; set; }
+    }
+    #endregion
+
+    #region TestNote
+    public class TestNote
+    {
+        public TestNote()
+        {
+        }
+
+        public string Company { get; set; }
+        public string Name { get; set; }
+        public string No { get; set; }
+        public string Observer { get; set; }
+        public string Maker { get; set; }
+        public string Model1 { get; set; }
+        public string Serial1 { get; set; }
+        public string Model2 { get; set; }
+        public string Serial2 { get; set; }
+        public string Model3 { get; set; }
+        public string Serial3 { get; set; }
+        public string ExpDevice { get; set; }
+        public string Refrigerant { get; set; }
+        public string RefCharge { get; set; }
+        public string Memo { get; set; }
+    }
+    #endregion
+
+    #region TestRated
+    public enum ETestRated { Total, ID11, ID12, ID21, ID22 }
+
+    public class TestRated
+    {
+        public TestRated()
+        {
+        }
+
+        public float Capacity { get; set; }
+        public float PowerInput { get; set; }
+        public float EER_COP { get; set; }
+        public float Voltage { get; set; }
+        public float Current { get; set; }
+        public EWT330Phase Phase { get; set; }
+        public float Frequency { get; set; }
+        public EWT330Wiring Wiring { get; set; }
+    }
+    #endregion
+    #endregion
+
+    #region TestMeasure
+    public class TestMeasure
+    {
+        public TestMeasure()
+        {
+            TotalRateds = new List<TestMeasureRow>();
+            TotalRateds.Add(new TestMeasureRow("Total Capacity", "", 0, "0.0", "W"));
+            TotalRateds.Add(new TestMeasureRow("Power Input", "", 0, "0.0", "W"));
+            TotalRateds.Add(new TestMeasureRow("EER/COP", "", 0, "0.000", "W/W"));
+            TotalRateds.Add(new TestMeasureRow("", "", 0, "0", "", true));
+            TotalRateds.Add(new TestMeasureRow("Rated Capacity", "", 0, "0.0", "W"));
+            TotalRateds.Add(new TestMeasureRow("Capacity Ratio", "", 0, "0.00", "%"));
+            TotalRateds.Add(new TestMeasureRow("Rated Power Input", "", 0, "0.0", "W"));
+            TotalRateds.Add(new TestMeasureRow("Power Input Ratio", "", 0, "0.00", "%"));
+            TotalRateds.Add(new TestMeasureRow("Rated EER/COP", "", 0, "0.000", "W/W"));
+            TotalRateds.Add(new TestMeasureRow("EER/COP Ratio", "", 0, "0.00", "%"));
+            TotalRateds.Add(new TestMeasureRow("Rated Current", "", 0, "0.00", "A"));
+            TotalRateds.Add(new TestMeasureRow("Current Ratio", "", 0, "0.00", "%"));
+            TotalRateds.Add(new TestMeasureRow("", "", 0, "0", "", true));
+            TotalRateds.Add(new TestMeasureRow("Voltage", "", 0, "0.0", "V"));
+            TotalRateds.Add(new TestMeasureRow("Current", "", 0, "0.000", "A"));
+            TotalRateds.Add(new TestMeasureRow("Frequency", "", 0, "0.0", "Hz"));
+            TotalRateds.Add(new TestMeasureRow("Power Factor", "", 0, "0.0", "%"));
+
+            RunStates = new List<TestMeasureRow>();
+            RunStates.Add(new TestMeasureRow("Condition", "", 0, "", ""));
+            RunStates.Add(new TestMeasureRow("Running Step", "", 0, "", ""));
+            RunStates.Add(new TestMeasureRow("Elapsed Time", "", 0, "", ""));
+            RunStates.Add(new TestMeasureRow("Total Elapsed", "", 0, "", ""));
+            RunStates.Add(new TestMeasureRow("", "", 0, "0", "", true));
+            RunStates.Add(new TestMeasureRow("Preparation", "", 0, "", "00:00:00:00 / 00:00:00:00"));
+            RunStates.Add(new TestMeasureRow("Judgement", "", 0, "", ""));
+            RunStates.Add(new TestMeasureRow("Integration", "", 0, "", ""));
+            RunStates.Add(new TestMeasureRow("", "", 0, "0", "", true));
+            RunStates.Add(new TestMeasureRow("No of Steady", "", 0, "", ""));
+            RunStates.Add(new TestMeasureRow("Repeat", "", 0, "", ""));
+            RunStates.Add(new TestMeasureRow("Schedule", "", 0, "", ""));
+
+            AirSides = new List<TestAirSideRow>();
+            AirSides.Add(new TestAirSideRow("Capacity", 0, 0, 0, 0, "0.0", "W"));
+            AirSides.Add(new TestAirSideRow("Capacity Ratio", 0, 0, 0, 0, "0.00", "%"));
+            AirSides.Add(new TestAirSideRow("Sensible Heat", 0, 0, 0, 0, "0.0", "W"));
+            AirSides.Add(new TestAirSideRow("Latent Heat", 0, 0, 0, 0, "0.0", "W"));
+            AirSides.Add(new TestAirSideRow("Sensible Heat Ratio", 0, 0, 0, 0, "0.00", "%"));
+            AirSides.Add(new TestAirSideRow("Heat Leakage", 0, 0, 0, 0, "0.0", "W"));
+            AirSides.Add(new TestAirSideRow("Drain Weight", 0, 0, 0, 0, "0.00", "kg/h"));
+            AirSides.Add(new TestAirSideRow("Entering DB", 0, 0, 0, 0, "0.00", "℃"));
+            AirSides.Add(new TestAirSideRow("", 0, 0, 0, 0, "0", "", true));
+            AirSides.Add(new TestAirSideRow("Entering WB", 0, 0, 0, 0, "0.00", "℃"));
+            AirSides.Add(new TestAirSideRow("Entering RH", 0, 0, 0, 0, "0.00", "%"));
+            AirSides.Add(new TestAirSideRow("Leaving DB", 0, 0, 0, 0, "0.00", "℃"));
+            AirSides.Add(new TestAirSideRow("Leaving WB", 0, 0, 0, 0, "0.00", "℃"));
+            AirSides.Add(new TestAirSideRow("Leaving RH", 0, 0, 0, 0, "0.00", "%"));
+            AirSides.Add(new TestAirSideRow("", 0, 0, 0, 0, "0", "", true));
+            AirSides.Add(new TestAirSideRow("Entering Enthalpy", 0, 0, 0, 0, "0.000", ""));
+            AirSides.Add(new TestAirSideRow("Leaving Enthalpy", 0, 0, 0, 0, "0.000", ""));
+            AirSides.Add(new TestAirSideRow("Entering Humidity Ratio", 0, 0, 0, 0, "0.0000", ""));
+            AirSides.Add(new TestAirSideRow("Leaving Humidity Ratio", 0, 0, 0, 0, "0.0000", ""));
+            AirSides.Add(new TestAirSideRow("Leaving Specific Heat", 0, 0, 0, 0, "0.0000", ""));
+            AirSides.Add(new TestAirSideRow("Leaving Specific Volumn", 0, 0, 0, 0, "0.0000", ""));
+            AirSides.Add(new TestAirSideRow("", 0, 0, 0, 0, "0", "", true));
+            AirSides.Add(new TestAirSideRow("AirFlow[Lev]", 0, 0, 0, 0, "0.00", ""));
+            AirSides.Add(new TestAirSideRow("Static Pressure", 0, 0, 0, 0, "0.00", ""));
+            AirSides.Add(new TestAirSideRow("Nozzle Diff. Pressure", 0, 0, 0, 0, "0.00", ""));
+            AirSides.Add(new TestAirSideRow("Atmospheric Pressure", 0, 0, 0, 0, "0.0", ""));
+            AirSides.Add(new TestAirSideRow("Nozzle Inlet Temp.", 0, 0, 0, 0, "0.00", ""));
+
+            Outsides = new List<TestMeasureRow>();
+            Outsides.Add(new TestMeasureRow("Entering DB", "", 0, "0.00", "℃"));
+            Outsides.Add(new TestMeasureRow("Entering WB", "", 0, "0.00", "℃"));
+            Outsides.Add(new TestMeasureRow("Entering RH", "", 0, "0.00", "%"));
+            Outsides.Add(new TestMeasureRow("Entering DP", "", 0, "0.00", "%"));
+
+            Methods = new List<TestMeasureRow>();
+            Methods.Add(new TestMeasureRow("Method", "3min * 3times", 0, "0.00", "", true));
+            Methods.Add(new TestMeasureRow("Scan Time", "3 sec", 0, "0.00", "", true));
+
+            Notes = new List<TestMeasureRow>();
+            Notes.Add(new TestMeasureRow("Company", "LG", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("Test Name", "", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("Test No", "", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("Observer", "", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("", "", 0, "0", "", true));
+            Notes.Add(new TestMeasureRow("Maker", "", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("Model(1)", "", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("Serial No(1)", "", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("Model(2)", "", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("Serial No(2)", "", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("Model(3)", "", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("Serial No(3)", "", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("Exp. Device", "", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("Refrigerant", "", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("Ref. Charge", "", 0, "", "", true));
+            Notes.Add(new TestMeasureRow("Memo", "", 0, "", "", true));
+
+            Rateds = new List<TestMeasureRow>();
+            Rateds.Add(new TestMeasureRow("Capacity", "", 0, "0.0", "W"));
+            Rateds.Add(new TestMeasureRow("Power Input", "", 0, "0.0", "W"));
+            Rateds.Add(new TestMeasureRow("EER/COP", "", 0, "0.000", "W/W"));
+            Rateds.Add(new TestMeasureRow("Voltage", "", 0, "0.0", "V"));
+            Rateds.Add(new TestMeasureRow("Current", "", 0, "0.00", "A"));
+            Rateds.Add(new TestMeasureRow("Frequency", "", 0, "0.0", "Hz"));
+            Rateds.Add(new TestMeasureRow("Phase", "Phase 1", 0, "0", "", true));
+            Rateds.Add(new TestMeasureRow("Power Meter", "WT333(1P/3P)", 0, "0", "", true));
+
+            Indoors11 = new List<TestMeasureRow>();
+            Indoors11.Add(new TestMeasureRow("Use", "Indoor", 0, "0.0", "W", true));
+            Indoors11.Add(new TestMeasureRow("Mode", "Use", 0, "0.0", "W", true));
+            Indoors11.Add(new TestMeasureRow("Duct", "Use", 0, "0.000", "W/W", true));
+            Indoors11.Add(new TestMeasureRow("DB", "", 0, "0.0", "℃"));
+            Indoors11.Add(new TestMeasureRow("WB", "", 0, "0.0", "℃"));
+
+            Indoors12 = new List<TestMeasureRow>();
+            Indoors12.Add(new TestMeasureRow("Use", "Indoor", 0, "0.0", "W", true));
+            Indoors12.Add(new TestMeasureRow("Mode", "Use", 0, "0.0", "W", true));
+            Indoors12.Add(new TestMeasureRow("Duct", "Use", 0, "0.000", "W/W", true));
+            Indoors12.Add(new TestMeasureRow("DB", "", 0, "0.0", "℃"));
+            Indoors12.Add(new TestMeasureRow("WB", "", 0, "0.0", "℃"));
+
+            Indoors21 = new List<TestMeasureRow>();
+            Indoors21.Add(new TestMeasureRow("Use", "Indoor", 0, "0.0", "W", true));
+            Indoors21.Add(new TestMeasureRow("Mode", "Use", 0, "0.0", "W", true));
+            Indoors21.Add(new TestMeasureRow("Duct", "Use", 0, "0.000", "W/W", true));
+            Indoors21.Add(new TestMeasureRow("DB", "", 0, "0.0", "℃"));
+            Indoors21.Add(new TestMeasureRow("WB", "", 0, "0.0", "℃"));
+
+            Indoors22 = new List<TestMeasureRow>();
+            Indoors22.Add(new TestMeasureRow("Use", "Indoor", 0, "0.0", "W", true));
+            Indoors22.Add(new TestMeasureRow("Mode", "Use", 0, "0.0", "W", true));
+            Indoors22.Add(new TestMeasureRow("Duct", "Use", 0, "0.000", "W/W", true));
+            Indoors22.Add(new TestMeasureRow("DB", "", 0, "0.0", "℃"));
+            Indoors22.Add(new TestMeasureRow("WB", "", 0, "0.0", "℃"));
+
+            Outdoors = new List<TestMeasureRow>();
+            Outdoors.Add(new TestMeasureRow("Use", "Outdoor", 0, "0", "", true));
+            Outdoors.Add(new TestMeasureRow("DP Sensor", "Use", 0, "0", "", true));
+            Outdoors.Add(new TestMeasureRow("Auto Voltage", "Use", 0, "0", "", true));
+            Outdoors.Add(new TestMeasureRow("DB", "", 0, "0.0", "℃"));
+            Outdoors.Add(new TestMeasureRow("WB", "", 0, "0.0", "℃"));
+        }
+
+        public List<TestMeasureRow> TotalRateds { get; set; }
+        public List<TestMeasureRow> RunStates { get; set; }
+        public List<TestAirSideRow> AirSides { get; set; }
+        public List<TestMeasureRow> Outsides { get; set; }
+        public List<TestMeasureRow> Methods { get; set; }
+        public List<TestMeasureRow> Notes { get; set; }
+        public List<TestMeasureRow> Rateds { get; set; }
+        public List<TestMeasureRow> Indoors11 { get; set; }
+        public List<TestMeasureRow> Indoors12 { get; set; }
+        public List<TestMeasureRow> Indoors21 { get; set; }
+        public List<TestMeasureRow> Indoors22 { get; set; }
+        public List<TestMeasureRow> Outdoors { get; set; }
+    }
+
+    #region TestMeasureRow
+    public class TestMeasureRow
+    {
+        public TestMeasureRow(string name, string sValue, float fValue, string format, string unit, bool @string=false)
+        {
+            Name = name;
+            Value = sValue;
+            FValue = fValue;
+            Format = format;
+            Unit = unit;
+            IsString = @string;
+        }
+
+        public string Name { get; set; }
+
+        private string sValue;
+        public string Value
+        {
+            get
+            {
+                if (IsString == true) return sValue;
+                return FValue.ToString(Format);
+            }
+            set { sValue = value; }
+        }
+        public float FValue { get; set; }
+        public string Format { get; set; }
+        public string Unit { get; set; }
+        public bool IsString { get; set; }
+    }
+    #endregion
+
+    #region TestAirSideRow
+    public class TestAirSideRow
+    {
+        public TestAirSideRow(string name, float indoor11, float indoor12, 
+            float indoor21, float indoor22, string format, string unit, bool empty=false)
+        {
+            Name = name;
+            FIndoor11 = indoor11;
+            FIndoor12 = indoor12;
+            FIndoor21 = indoor21;
+            FIndoor22 = indoor22;
+            Format = format;
+            Unit = unit;
+            Empty = empty;
+        }
+
+        private string name;
+        public string Name
+        {
+            get
+            {
+                if (Empty == true) return "";
+                return name;
+            }
+            set { name = value; }
+        }
+
+        public string Indoor11
+        {
+            get
+            {
+                if (Empty == true) return "";
+                return FIndoor11.ToString(Format);
+            }
+        }
+        public float FIndoor11 { get; set; }
+
+        public string Indoor12
+        {
+            get
+            {
+                if (Empty == true) return "";
+                return FIndoor12.ToString(Format);
+            }
+        }
+        public float FIndoor12 { get; set; }
+
+        public string Indoor21
+        {
+            get
+            {
+                if (Empty == true) return "";
+                return FIndoor21.ToString(Format);
+            }
+        }
+        public float FIndoor21 { get; set; }
+
+        public string Indoor22
+        {
+            get
+            {
+                if (Empty == true) return "";
+                return FIndoor22.ToString(Format);
+            }
+        }
+        public float FIndoor22 { get; set; }
+
+        public string Format { get; set; }
+        public string Unit { get; set; }
+        public bool Empty { get; set; }
+    }
+    #endregion
+    #endregion
+}

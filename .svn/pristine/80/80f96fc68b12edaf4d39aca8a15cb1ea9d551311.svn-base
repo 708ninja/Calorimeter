@@ -1,0 +1,51 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+using Ulee.Threading;
+
+namespace Hnc.Calorimeter.Client
+{
+    public class TestThread : UlThread
+    {
+        public TestThread(TestContext context) : base(true)
+        {
+            this.context = context;
+            prevTicks = 0;
+            //invalidTicks = 1000;
+            Priority = ThreadPriority.Highest;
+        }
+
+        private TestContext context;
+
+        private long prevTicks;
+        //private long invalidTicks;
+
+        protected override void Execute()
+        {
+            long ticks;
+
+            context.Index = 0;
+            ConditionSchedule sch = context.Condition.Schedules[0];
+            context.Value.Integral.Initialize(context.Condition.Method.ScanTime, context.Condition.Method.IntegralTime, sch);
+
+            prevTicks = ElapsedMilliseconds;
+
+            while (Terminated == false)
+            {
+                ticks = ElapsedMilliseconds;
+
+                if (IsTimeoutMilliseconds(prevTicks, 1000) == true)
+                {
+                    prevTicks = ticks;
+                    context.Value.Integral.Integrate();
+                }
+
+                Yield();
+            }
+        }
+    }
+}

@@ -1,0 +1,244 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Net;
+
+using Ulee.Utils;
+using Ulee.Threading;
+using Ulee.DllImport.Win32;
+
+namespace Hnc.Calorimeter.Client
+{
+    public enum EServerCommand : byte
+    {
+        Acknowledge = 100,
+        DeviceValues = 101,
+        ClientList = 102,
+        NotifyTermination = 103
+    }
+
+    public class ClientListener : UlThread
+    {
+        public ClientListener(CalorimeterClient client) : base(false)
+        {
+            this.client = client;
+            Acknowledge = false;
+            NotifyTermination = null;
+            NonAcknowledge = null;
+
+            int fLength = client.Ini.GetInteger("Device", "FValueLength");
+            int nLength = client.Ini.GetInteger("Device", "NValueLength");
+
+            FValues = new float[fLength];
+            NValues = new UInt16[nLength];
+
+            packet = new ClientReceivePacket(fLength*4 + nLength*2 + 17);
+        }
+
+        public const int csAckWaitTime = 100;
+
+        private CalorimeterClient client;
+
+        private ClientReceivePacket packet;
+
+        public event EventHandler NotifyTermination;
+        private void OnNotifyTermination(object sender, EventArgs args)
+        {
+            NotifyTermination?.Invoke(sender, args);
+        }
+
+        public event EventHandler NonAcknowledge;
+        private void OnNonAcknowledge(object sender, EventArgs args)
+        {
+            if (NonAcknowledge == null)
+            {
+                throw new Exception("Can't receive acknowledge from Server!");
+            }
+            else
+            {
+                NonAcknowledge.Invoke(sender, args);
+            }
+        }
+
+        public float[] FValues { get; private set; }
+
+        public UInt16[] NValues { get; private set; }
+
+        public volatile bool Acknowledge;
+
+        public void Lock()
+        {
+            Monitor.Enter(FValues);
+            Monitor.Enter(NValues);
+        }
+
+        public void Unlock()
+        {
+            Monitor.Exit(FValues);
+            Monitor.Exit(NValues);
+        }
+
+
+        public void WaitForAck(long time=csAckWaitTime)
+        {
+            long beginTime = ElapsedMilliseconds;
+
+            while (Acknowledge == false)
+            {
+                if (IsTimeoutMilliseconds(beginTime, time) == true)
+                {
+                    OnNonAcknowledge(this, null);
+                    break;
+                }
+
+                Yield();
+            }
+
+            Acknowledge = false;
+        }
+
+        private void DoDeviceValues()
+        {
+            lock (FValues)
+            {
+                lock (NValues)
+                {
+                    for (int i = 0; i < FValues.Length; i++)
+                    {
+                        FValues[i] = BitConverter.ToSingle(packet.Bytes, 17 + i * 4);
+                    }
+
+                    for (int i = 0; i < NValues.Length; i++)
+                    {
+                        NValues[i] = BitConverter.ToUInt16(packet.Bytes, 17 + FValues.Length * 4 + i * 2);
+                    }
+
+                    client.Devices.RefreshValues();
+                }
+            }
+        }
+
+        protected override void Execute()
+        {
+            byte[] bytes;
+            IPEndPoint ipPoint = new IPEndPoint(IPAddress.Any, 0);
+
+            // Thread 종료 신호가 들어올때 까지 루프
+            while (Terminated == false)
+            {
+                if (client != null)
+                {
+                    lock (client.Udp)
+                    {
+                        if (client.Udp.Available > 0)
+                        {
+                            try
+                            {
+                                bytes = client.Udp.Receive(ref ipPoint);
+                            }
+                            catch (Exception e)
+                            {
+                                bytes = null;
+                                Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+                                OnNonAcknowledge(this, null);
+                            }
+                        }
+                        else
+                        {
+                            bytes = null;
+                        }
+                    }
+
+                    if (bytes != null)
+                    {
+                        if (ipPoint.ToString() == client.IpPoint.ToString())
+                        {
+                            packet.Clear();
+                            Array.Copy(bytes, 0, packet.Bytes, 0, bytes.Length);
+
+                            CommandExecute();
+                        }
+                    }
+                }
+
+                // 제어권 양보
+                Yield();
+            }
+        }
+
+        private void CommandExecute()
+        {
+            switch (packet.Command)
+            {
+                case EServerCommand.Acknowledge:
+                    Acknowledge = true;
+                    break;
+
+                case EServerCommand.DeviceValues:
+                    DoDeviceValues();
+                    break;
+
+                case EServerCommand.ClientList:
+                    break;
+
+                case EServerCommand.NotifyTermination:
+                    OnNotifyTermination(this, null);
+                    break;
+            }
+        }
+    }
+
+    public class ClientReceivePacket
+    {
+        public ClientReceivePacket(int length)
+        {
+            packet = new UlBinSets(length);
+        }
+
+        public EServerCommand Command
+        {
+            get { return (EServerCommand)packet.Byte(0); }
+            set { packet.Byte(0, (byte)value); }
+        }
+
+        public int IArg1
+        {
+            get { return (int)packet.DWord(1); }
+            set { packet.DWord(1, (UInt32)value); }
+        }
+
+        public int IArg2
+        {
+            get { return (int)packet.DWord(5); }
+            set { packet.DWord(5, (UInt32)value); }
+        }
+
+        public int IArg3
+        {
+            get { return (int)packet.DWord(9); }
+            set { packet.DWord(9, (UInt32)value); }
+        }
+
+        public int IArg4
+        {
+            get { return (int)packet.DWord(13); }
+            set { packet.DWord(13, (UInt32)value); }
+        }
+
+        private UlBinSets packet;
+
+        public void Clear()
+        {
+            packet.Clear();
+        }
+
+        public byte[] Bytes
+        { get { return packet.Bytes; } }
+
+        public int Length
+        { get { return packet.Count; } }
+    }
+}

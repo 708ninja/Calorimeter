@@ -1,0 +1,386 @@
+﻿using System;
+using System.Data;
+using System.Linq;
+using System.Collections.Generic;
+
+using FirebirdSql.Data.FirebirdClient;
+
+using Ulee.Database.Firebird;
+
+namespace Hnc.Calorimeter.Client
+{
+    public class CalorimeterClientDatabase : UlFirebird
+    {
+        public CalorimeterClientDatabase(FbServerType type = FbServerType.Default) : base(type)
+        {
+            ScheduleParamSet = new ScheduleParamDataSet(connect, null, null);
+        }
+
+        public ScheduleParamDataSet ScheduleParamSet { get; private set; }
+    }
+
+    public class ScheduleParamDataSet : UlDataSet
+    {
+        public int RecNo { get; set; }
+        public string Standard { get; set; }
+        public string Name { get; set; }
+        public int NoOfSteady { get; set; }
+        public int Preparation { get; set; }
+        public int Judgement { get; set; }
+        public int Repeat { get; set; }
+
+        // Indoor 1
+        public EIndoorUse ID1Use { get; set; }
+        public EIndoorMode ID1Mode1 { get; set; }
+        public EIndoorDuct ID1Duct1 { get; set; }
+        public EIndoorMode ID1Mode2 { get; set; }
+        public EIndoorDuct ID1Duct2 { get; set; }
+        public float ID1EdbSetup { get; set; }
+        public float ID1EdbAvg { get; set; }
+        public float ID1EdbDev { get; set; }
+        public float ID1EwbSetup { get; set; }
+        public float ID1EwbAvg { get; set; }
+        public float ID1EwbDev { get; set; }
+        public float ID1Ldb1Dev { get; set; }
+        public float ID1Lwb1Dev { get; set; }
+        public float ID1Af1Dev { get; set; }
+        public float ID1Ldb2Dev { get; set; }
+        public float ID1Lwb2Dev { get; set; }
+        public float ID1Af2Dev { get; set; }
+        public float ID1Cdp1Setup { get; set; }
+        public float ID1Cdp1Avg { get; set; }
+        public float ID1Cdp1Dev { get; set; }
+        public float ID1Cdp2Setup { get; set; }
+        public float ID1Cdp2Avg { get; set; }
+        public float ID1Cdp2Dev { get; set; }
+
+        // Indoor 2
+        public EIndoorUse ID2Use { get; set; }
+        public EIndoorMode ID2Mode1 { get; set; }
+        public EIndoorDuct ID2Duct1 { get; set; }
+        public EIndoorMode ID2Mode2 { get; set; }
+        public EIndoorDuct ID2Duct2 { get; set; }
+        public float ID2EdbSetup { get; set; }
+        public float ID2EdbAvg { get; set; }
+        public float ID2EdbDev { get; set; }
+        public float ID2EwbSetup { get; set; }
+        public float ID2EwbAvg { get; set; }
+        public float ID2EwbDev { get; set; }
+        public float ID2Ldb1Dev { get; set; }
+        public float ID2Lwb1Dev { get; set; }
+        public float ID2Af1Dev { get; set; }
+        public float ID2Ldb2Dev { get; set; }
+        public float ID2Lwb2Dev { get; set; }
+        public float ID2Af2Dev { get; set; }
+        public float ID2Cdp1Setup { get; set; }
+        public float ID2Cdp1Avg { get; set; }
+        public float ID2Cdp1Dev { get; set; }
+        public float ID2Cdp2Setup { get; set; }
+        public float ID2Cdp2Avg { get; set; }
+        public float ID2Cdp2Dev { get; set; }
+
+        // Outdoor
+        public EOutdoorUse ODUse { get; set; }
+        public EEtcUse ODDp { get; set; }
+        public EEtcUse ODAutoVolt { get; set; }
+        public float ODEdbSetup { get; set; }
+        public float ODEdbAvg { get; set; }
+        public float ODEdbDev { get; set; }
+        public float ODEwbSetup { get; set; }
+        public float ODEwbAvg { get; set; }
+        public float ODEwbDev { get; set; }
+        public float ODEdpSetup { get; set; }
+        public float ODEdpAvg { get; set; }
+        public float ODEdpDev { get; set; }
+        public float ODVolt1Setup { get; set; }
+        public float ODVolt1Avg { get; set; }
+        public float ODVolt1Dev { get; set; }
+        public float ODVolt2Setup { get; set; }
+        public float ODVolt2Avg { get; set; }
+        public float ODVolt2Dev { get; set; }
+
+        public ScheduleParamDataSet(FbConnection connect, FbCommand command, FbDataAdapter adapter)
+            : base(connect, command, adapter)
+        {
+        }
+
+        public void Select()
+        {
+            SetTrans(null);
+            command.CommandText = "select * from TB_SCHEDULEPARAM order by standard, name asc";
+            dataSet.Clear();
+            dataAdapter.Fill(dataSet);
+        }
+
+        public void Select(string standard)
+        {
+            SetTrans(null);
+            command.CommandText = $"select * from TB_SCHEDULEPARAM where standard like '{standard}%' order by name asc";
+            dataSet.Clear();
+            dataAdapter.Fill(dataSet);
+        }
+
+        public void Insert(FbTransaction trans = null)
+        {
+            string sql = $" insert into TB_SCHEDULEPARAM values ( "
+                + $" {RecNo}, '{Standard}', '{Name}', {NoOfSteady}, {Preparation}, {Judgement}, {Repeat}, "
+                + $" {(int)ID1Use}, {(int)ID1Mode1}, {(int)ID1Duct1}, {(int)ID1Mode2}, {(int)ID1Duct2}, "
+                + $" {ID1EdbSetup}, {ID1EdbAvg}, {ID1EdbDev}, {ID1EwbSetup}, {ID1EwbAvg}, {ID1EwbDev}, "
+                + $" {ID1Ldb1Dev}, {ID1Lwb1Dev}, {ID1Af1Dev}, {ID1Ldb2Dev}, {ID1Lwb2Dev}, {ID1Af2Dev}, "
+                + $" {ID1Cdp1Setup}, {ID1Cdp1Avg}, {ID1Cdp1Dev}, {ID1Cdp2Setup}, {ID1Cdp2Avg}, {ID1Cdp2Dev}, "
+                + $" {(int)ID2Use}, {(int)ID2Mode1}, {(int)ID2Duct1}, {(int)ID2Mode2}, {(int)ID2Duct2}, "
+                + $" {ID2EdbSetup}, {ID2EdbAvg}, {ID2EdbDev}, {ID2EwbSetup}, {ID2EwbAvg}, {ID2EwbDev}, "
+                + $" {ID2Ldb1Dev}, {ID2Lwb1Dev}, {ID2Af1Dev}, {ID2Ldb2Dev}, {ID2Lwb2Dev}, {ID2Af2Dev}, "
+                + $" {ID2Cdp1Setup}, {ID2Cdp1Avg}, {ID2Cdp1Dev}, {ID2Cdp2Setup}, {ID2Cdp2Avg}, {ID2Cdp2Dev}, "
+                + $" {(int)ODUse}, {(int)ODDp}, {(int)ODAutoVolt}, {ODEdbSetup}, {ODEdbAvg}, {ODEdbDev}, "
+                + $" {ODEwbSetup}, {ODEwbAvg}, {ODEwbDev}, {ODEdpSetup}, {ODEdpAvg}, {ODEdpDev}, "
+                + $" {ODVolt1Setup}, {ODVolt1Avg}, {ODVolt1Dev}, {ODVolt2Setup}, {ODVolt2Avg}, {ODVolt2Dev}) ";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Update(FbTransaction trans = null)
+        {
+            string sql = $" update TB_SCHEDULEPARAM set "
+                + $" standard='{Standard}', name='{Name}', noofsteady={NoOfSteady}, "
+                + $" preparation={Preparation}, judgement={Judgement}, repeat={Repeat}, "
+                + $" id1use={(int)ID1Use}, id1mode1={(int)ID1Mode1}, id1duct1={(int)ID1Duct1}, "
+                + $" id1mode2={(int)ID1Mode2}, id1duct2={(int)ID1Duct2}, "
+                + $" id1edbsetup={ID1EdbSetup}, id1edbavg={ID1EdbAvg}, id1edbdev={ID1EdbDev}, "
+                + $" id1ewbsetup={ID1EwbSetup}, id1ewbavg={ID1EwbAvg}, id1ewbdev={ID1EwbDev}, "
+                + $" id1ldb1dev={ID1Ldb1Dev}, id1lwb1dev={ID1Lwb1Dev}, id1af1dev={ID1Af1Dev}, "
+                + $" id1ldb2dev={ID1Ldb2Dev}, id1lwb2dev={ID1Lwb2Dev}, id1af2dev={ID1Af2Dev}, "
+                + $" id1cdp1setup={ID1Cdp1Setup}, id1cdp1avg={ID1Cdp1Avg}, id1cdp1dev={ID1Cdp1Dev}, "
+                + $" id1cdp2setup={ID1Cdp2Setup}, id1cdp2avg={ID1Cdp2Avg}, id1cdp2dev={ID1Cdp2Dev}, "
+                + $" id2use={(int)ID2Use}, id2mode1={(int)ID2Mode1}, id2duct1={(int)ID2Duct1}, "
+                + $" id2mode2={(int)ID2Mode2}, id2duct2={(int)ID2Duct2}, "
+                + $" id2edbsetup={ID2EdbSetup}, id2edbavg={ID2EdbAvg}, id2edbdev={ID2EdbDev}, "
+                + $" id2ewbsetup={ID2EwbSetup}, id2ewbavg={ID2EwbAvg}, id2ewbdev={ID2EwbDev}, "
+                + $" id2ldb1dev={ID2Ldb1Dev}, id2lwb1dev={ID2Lwb1Dev}, id2af1dev={ID2Af1Dev}, "
+                + $" id2ldb2dev={ID2Ldb2Dev}, id2lwb2dev={ID2Lwb2Dev}, id2af2dev={ID2Af2Dev}, "
+                + $" id2cdp1setup={ID2Cdp1Setup}, id2cdp1avg={ID2Cdp1Avg}, id2cdp1dev={ID2Cdp1Dev}, "
+                + $" id2cdp2setup={ID2Cdp2Setup}, id2cdp2avg={ID2Cdp2Avg}, id2cdp2dev={ID2Cdp2Dev}, "
+                + $" oduse={(int)ODUse}, oddp={(int)ODDp}, odautovolt={(int)ODAutoVolt}, "
+                + $" odedbsetup={ODEdbSetup}, odedbavg={ODEdbAvg}, odedbdev={ODEdbDev}, "
+                + $" odewbsetup={ODEwbSetup}, odewbavg={ODEwbAvg}, odewbdev={ODEwbDev}, "
+                + $" odedpsetup={ODEdpSetup}, odedpavg={ODEdpAvg}, odedpdev={ODEdpDev}, "
+                + $" odvolt1setup={ODVolt1Setup}, odvolt1avg={ODVolt1Avg}, odvolt1dev={ODVolt1Dev}, "
+                + $" odvolt2setup={ODVolt2Setup}, odvolt2avg={ODVolt2Avg}, odvolt2dev={ODVolt2Dev} "
+                + $" where pk_recno={RecNo} ";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Delete(FbTransaction trans = null)
+        {
+            string sql = $"delete from TB_SCHEDULEPARAM where pk_recno={RecNo}";
+
+            SetTrans(trans);
+
+            try
+            {
+                BeginTrans(trans);
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                CommitTrans(trans);
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Error, sql);
+                Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+                RollbackTrans(trans, e);
+            }
+        }
+
+        public void Fetch(int index = 0, int tableNo = 0)
+        {
+            if (index < GetRowCount(tableNo))
+            {
+                Fetch(dataSet.Tables[tableNo].Rows[index]);
+            }
+            else
+            {
+                RecNo = 0;
+                Standard = "";
+                Name = "";
+                NoOfSteady = 0;
+                Preparation = 0;
+                Judgement = 0;
+                Repeat = 0;
+
+                ID1Use = EIndoorUse.NotUsed;
+                ID1Mode1 = EIndoorMode.NotUsed;
+                ID1Duct1 = EIndoorDuct.NotUsed;
+                ID1Mode2 = EIndoorMode.NotUsed;
+                ID1Duct2 = EIndoorDuct.NotUsed;
+                ID1EdbSetup = 0;
+                ID1EdbAvg = 0;
+                ID1EdbDev = 0;
+                ID1EwbSetup = 0;
+                ID1EwbAvg = 0;
+                ID1EwbDev = 0;
+                ID1Ldb1Dev = 0;
+                ID1Lwb1Dev = 0;
+                ID1Af1Dev = 0;
+                ID1Ldb2Dev = 0;
+                ID1Lwb2Dev = 0;
+                ID1Af2Dev = 0;
+                ID1Cdp1Setup = 0;
+                ID1Cdp1Avg = 0;
+                ID1Cdp1Dev = 0;
+                ID1Cdp2Setup = 0;
+                ID1Cdp2Avg = 0;
+                ID1Cdp2Dev = 0;
+
+                ID2Use = EIndoorUse.NotUsed;
+                ID2Mode1 = EIndoorMode.NotUsed;
+                ID2Duct1 = EIndoorDuct.NotUsed;
+                ID2Mode2 = EIndoorMode.NotUsed;
+                ID2Duct2 = EIndoorDuct.NotUsed;
+                ID2EdbSetup = 0;
+                ID2EdbAvg = 0;
+                ID2EdbDev = 0;
+                ID2EwbSetup = 0;
+                ID2EwbAvg = 0;
+                ID2EwbDev = 0;
+                ID2Ldb1Dev = 0;
+                ID2Lwb1Dev = 0;
+                ID2Af1Dev = 0;
+                ID2Ldb2Dev = 0;
+                ID2Lwb2Dev = 0;
+                ID2Af2Dev = 0;
+                ID2Cdp1Setup = 0;
+                ID2Cdp1Avg = 0;
+                ID2Cdp1Dev = 0;
+                ID2Cdp2Setup = 0;
+                ID2Cdp2Avg = 0;
+                ID2Cdp2Dev = 0;
+
+                ODUse = EOutdoorUse.NotUsed;
+                ODDp = EEtcUse.NotUsed;
+                ODAutoVolt = EEtcUse.NotUsed;
+                ODEdbSetup = 0;
+                ODEdbAvg = 0;
+                ODEdbDev = 0;
+                ODEwbSetup = 0;
+                ODEwbAvg = 0;
+                ODEwbDev = 0;
+                ODEdpSetup = 0;
+                ODEdpAvg = 0;
+                ODEdpDev = 0;
+                ODVolt1Setup = 0;
+                ODVolt1Avg = 0;
+                ODVolt1Dev = 0;
+                ODVolt2Setup = 0;
+                ODVolt2Avg = 0;
+                ODVolt2Dev = 0;
+            }
+        }
+
+        public void Fetch(DataRow row)
+        {
+            RecNo = Convert.ToInt32(row["pk_recno"]);
+            Standard = Convert.ToString(row["standard"]);
+            Name = Convert.ToString(row["name"]);
+            NoOfSteady = Convert.ToInt32(row["noofsteady"]);
+            Preparation = Convert.ToInt32(row["preparation"]);
+            Judgement = Convert.ToInt32(row["judgement"]);
+            Repeat = Convert.ToInt32(row["repeat"]);
+
+            ID1Use = (EIndoorUse)Convert.ToInt32(row["id1use"]);
+            ID1Mode1 = (EIndoorMode)Convert.ToInt32(row["id1mode1"]);
+            ID1Duct1 = (EIndoorDuct)Convert.ToInt32(row["id1duct1"]);
+            ID1Mode2 = (EIndoorMode)Convert.ToInt32(row["id1mode2"]);
+            ID1Duct2 = (EIndoorDuct)Convert.ToInt32(row["id1duct2"]);
+            ID1EdbSetup = Convert.ToSingle(row["id1edbsetup"]);
+            ID1EdbAvg = Convert.ToSingle(row["id1edbavg"]);
+            ID1EdbDev = Convert.ToSingle(row["id1edbdev"]);
+            ID1EwbSetup = Convert.ToSingle(row["id1ewbsetup"]);
+            ID1EwbAvg = Convert.ToSingle(row["id1ewbavg"]);
+            ID1EwbDev = Convert.ToSingle(row["id1ewbdev"]);
+            ID1Ldb1Dev = Convert.ToSingle(row["id1ldb1dev"]);
+            ID1Lwb1Dev = Convert.ToSingle(row["id1lwb1dev"]);
+            ID1Af1Dev = Convert.ToSingle(row["id1af1dev"]);
+            ID1Ldb2Dev = Convert.ToSingle(row["id1ldb2dev"]);
+            ID1Lwb2Dev = Convert.ToSingle(row["id1lwb2dev"]);
+            ID1Af2Dev = Convert.ToSingle(row["id1af2dev"]);
+            ID1Cdp1Setup = Convert.ToSingle(row["id1cdp1setup"]);
+            ID1Cdp1Avg = Convert.ToSingle(row["id1cdp1avg"]);
+            ID1Cdp1Dev = Convert.ToSingle(row["id1cdp1dev"]);
+            ID1Cdp2Setup = Convert.ToSingle(row["id1cdp2setup"]);
+            ID1Cdp2Avg = Convert.ToSingle(row["id1cdp2avg"]);
+            ID1Cdp2Dev = Convert.ToSingle(row["id1cdp2dev"]);
+
+            ID2Use = (EIndoorUse)Convert.ToInt32(row["id2use"]);
+            ID2Mode1 = (EIndoorMode)Convert.ToInt32(row["id2mode1"]);
+            ID2Duct1 = (EIndoorDuct)Convert.ToInt32(row["id2duct1"]);
+            ID2Mode2 = (EIndoorMode)Convert.ToInt32(row["id2mode2"]);
+            ID2Duct2 = (EIndoorDuct)Convert.ToInt32(row["id2duct2"]);
+            ID2EdbSetup = Convert.ToSingle(row["id2edbsetup"]);
+            ID2EdbAvg = Convert.ToSingle(row["id2edbavg"]);
+            ID2EdbDev = Convert.ToSingle(row["id2edbdev"]);
+            ID2EwbSetup = Convert.ToSingle(row["id2ewbsetup"]);
+            ID2EwbAvg = Convert.ToSingle(row["id2ewbavg"]);
+            ID2EwbDev = Convert.ToSingle(row["id2ewbdev"]);
+            ID2Ldb1Dev = Convert.ToSingle(row["id2ldb1dev"]);
+            ID2Lwb1Dev = Convert.ToSingle(row["id2lwb1dev"]);
+            ID2Af1Dev = Convert.ToSingle(row["id2af1dev"]);
+            ID2Ldb2Dev = Convert.ToSingle(row["id2ldb2dev"]);
+            ID2Lwb2Dev = Convert.ToSingle(row["id2lwb2dev"]);
+            ID2Af2Dev = Convert.ToSingle(row["id2af2dev"]);
+            ID2Cdp1Setup = Convert.ToSingle(row["id2cdp1setup"]);
+            ID2Cdp1Avg = Convert.ToSingle(row["id2cdp1avg"]);
+            ID2Cdp1Dev = Convert.ToSingle(row["id2cdp1dev"]);
+            ID2Cdp2Setup = Convert.ToSingle(row["id2cdp2setup"]);
+            ID2Cdp2Avg = Convert.ToSingle(row["id2cdp2avg"]);
+            ID2Cdp2Dev = Convert.ToSingle(row["id2cdp2dev"]);
+
+            ODUse = (EOutdoorUse)Convert.ToInt32(row["oduse"]);
+            ODDp = (EEtcUse)Convert.ToInt32(row["oddp"]);
+            ODAutoVolt = (EEtcUse)Convert.ToInt32(row["odautovolt"]);
+            ODEdbSetup = Convert.ToSingle(row["odedbsetup"]);
+            ODEdbAvg = Convert.ToSingle(row["odedbavg"]);
+            ODEdbDev = Convert.ToSingle(row["odedbdev"]);
+            ODEwbSetup = Convert.ToSingle(row["odewbsetup"]);
+            ODEwbAvg = Convert.ToSingle(row["odewbavg"]);
+            ODEwbDev = Convert.ToSingle(row["odewbdev"]);
+            ODEdpSetup = Convert.ToSingle(row["odedpsetup"]);
+            ODEdpAvg = Convert.ToSingle(row["odedpavg"]);
+            ODEdpDev = Convert.ToSingle(row["odedpdev"]);
+            ODVolt1Setup = Convert.ToSingle(row["odvolt1setup"]);
+            ODVolt1Avg = Convert.ToSingle(row["odvolt1avg"]);
+            ODVolt1Dev = Convert.ToSingle(row["odvolt1dev"]);
+            ODVolt2Setup = Convert.ToSingle(row["odvolt2setup"]);
+            ODVolt2Avg = Convert.ToSingle(row["odvolt2avg"]);
+            ODVolt2Dev = Convert.ToSingle(row["odvolt2dev"]);
+        }
+    }
+}

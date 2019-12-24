@@ -1,0 +1,377 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.XtraEditors.Controls;
+using DevExpress.XtraGrid.Columns;
+using DevExpress.XtraGrid.Views.Base;
+using DevExpress.XtraGrid.Views.BandedGrid;
+using DevExpress.XtraGrid.Views.Grid;
+
+using Ulee.Controls;
+using Ulee.Device.Connection.Yokogawa;
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlTestCondition : UlUserControlEng
+    {
+        public CtrlTestCondition(TestContext context)
+        {
+            InitializeComponent();
+
+            initialized = false;
+            this.context = context;
+
+            Initialize();
+            initialized = true;
+        }
+
+        private TestContext context;
+
+        private bool initialized;
+
+        private void Initialize()
+        {
+            NameValue<EIndoorUse>[] inUseItems = EnumHelper.GetNameValues<EIndoorUse>();
+            scheduleIDUseLookUp.DataSource = inUseItems;
+            scheduleIDUseLookUp.DisplayMember = "Name";
+            scheduleIDUseLookUp.ValueMember = "Value";
+            scheduleIDUseLookUp.KeyMember = "Value";
+
+            NameValue<EIndoorMode>[] modeItems = EnumHelper.GetNameValues<EIndoorMode>();
+            scheduleIDModeLookUp.DataSource = modeItems;
+            scheduleIDModeLookUp.DisplayMember = "Name";
+            scheduleIDModeLookUp.ValueMember = "Value";
+            scheduleIDModeLookUp.KeyMember = "Value";
+
+            NameValue<EIndoorDuct>[] ductItems = EnumHelper.GetNameValues<EIndoorDuct>();
+            scheduleIDDuctLookUp.DataSource = ductItems;
+            scheduleIDDuctLookUp.DisplayMember = "Name";
+            scheduleIDDuctLookUp.ValueMember = "Value";
+            scheduleIDDuctLookUp.KeyMember = "Value";
+
+            NameValue<EOutdoorUse>[] outUseItems = EnumHelper.GetNameValues<EOutdoorUse>();
+            scheduleODUseLookUp.DataSource = outUseItems;
+            scheduleODUseLookUp.DisplayMember = "Name";
+            scheduleODUseLookUp.ValueMember = "Value";
+            scheduleODUseLookUp.KeyMember = "Value";
+
+            NameValue<EEtcUse>[] etcUseItems = EnumHelper.GetNameValues<EEtcUse>();
+            scheduleEtcUseLookUp.DataSource = etcUseItems;
+            scheduleEtcUseLookUp.DisplayMember = "Name";
+            scheduleEtcUseLookUp.ValueMember = "Value";
+            scheduleEtcUseLookUp.KeyMember = "Value";
+
+            context.Condition.Schedules = new List<ConditionSchedule>();
+
+            scheduleGrid.DataSource = context.Condition.Schedules;
+            scheduleGridView.Appearance.EvenRow.BackColor = Color.FromArgb(244, 244, 236);
+            scheduleGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            NameValue<ETestMode>[] testModeItems = EnumHelper.GetNameValues<ETestMode>();
+            methodTestModeCombo.DataSource = testModeItems;
+            methodTestModeCombo.DisplayMember = "Name";
+            methodTestModeCombo.ValueMember = "Value";
+
+            NameValue<EUnitCapacity>[] capaItems = EnumHelper.GetNameValues<EUnitCapacity>();
+            methodCapaUnitCombo.DataSource = capaItems;
+            methodCapaUnitCombo.DisplayMember = "Name";
+            methodCapaUnitCombo.ValueMember = "Value";
+
+            NameValue<EUnitAirFlow>[] airItems = EnumHelper.GetNameValues<EUnitAirFlow>();
+            methodAirFlowUnitCombo.DataSource = airItems;
+            methodAirFlowUnitCombo.DisplayMember = "Name";
+            methodAirFlowUnitCombo.ValueMember = "Value";
+
+            NameValue<EUnitEnthalpy>[] enItems = EnumHelper.GetNameValues<EUnitEnthalpy>();
+            methodEnthalpyUnitCombo.DataSource = enItems;
+            methodEnthalpyUnitCombo.DisplayMember = "Name";
+            methodEnthalpyUnitCombo.ValueMember = "Value";
+
+            NameValue<EUnitPressure>[] pressItems = EnumHelper.GetNameValues<EUnitPressure>();
+            methodPressureUnitCombo.DataSource = pressItems;
+            methodPressureUnitCombo.DisplayMember = "Name";
+            methodPressureUnitCombo.ValueMember = "Value";
+
+            NameValue<EUnitTemperature>[] tempItems = EnumHelper.GetNameValues<EUnitTemperature>();
+            methodTempUnitCombo.DataSource = tempItems;
+            methodTempUnitCombo.DisplayMember = "Name";
+            methodTempUnitCombo.ValueMember = "Value";
+
+            NameValue<EUnitDiffPressure>[] diffItems = EnumHelper.GetNameValues<EUnitDiffPressure>();
+            methodDiffPressureUnitCombo.DataSource = diffItems;
+            methodDiffPressureUnitCombo.DisplayMember = "Name";
+            methodDiffPressureUnitCombo.ValueMember = "Value";
+
+            NameValue<EUnitAtmPressure>[] atmItems = EnumHelper.GetNameValues<EUnitAtmPressure>();
+            methodAtmPressureUnitCombo.DataSource = atmItems;
+            methodAtmPressureUnitCombo.DisplayMember = "Name";
+            methodAtmPressureUnitCombo.ValueMember = "Value";
+
+            foreach (TabPage page in ratedTab.TabPages)
+            {
+                CtrlTestRated ctrl = new CtrlTestRated();
+
+                NameValue<EWT330Phase>[] phaseItems = EnumHelper.GetNameValues<EWT330Phase>();
+                ctrl.phaseCombo.DataSource = phaseItems;
+                ctrl.phaseCombo.DisplayMember = "Name";
+                ctrl.phaseCombo.ValueMember = "Value";
+
+                NameValue<EWT330Wiring>[] powerMeterItems = EnumHelper.GetNameValues<EWT330Wiring>();
+                ctrl.powerMeterCombo.DataSource = powerMeterItems;
+                ctrl.powerMeterCombo.DisplayMember = "Name";
+                ctrl.powerMeterCombo.ValueMember = "Value";
+
+                page.Controls.Add(ctrl);
+            }
+        }
+
+        private void CtrlTestCondition_Load(object sender, EventArgs e)
+        {
+            methodAirFlowUnitCombo.SelectedValue = EUnitAirFlow.CMM;
+            methodAirFlowUnitCombo_SelectedValueChanged(null, null);
+
+            methodPressureUnitCombo.SelectedValue = EUnitPressure.Bar;
+            methodPressureUnitCombo_SelectedValueChanged(null, null);
+
+            methodAtmPressureUnitCombo.SelectedValue = EUnitAtmPressure.mmHg;
+            methodAtmPressureUnitCombo_SelectedValueChanged(null, null);
+
+            methodDiffPressureUnitCombo.SelectedValue = EUnitDiffPressure.mmAq;
+            methodDiffPressureUnitCombo_SelectedValueChanged(null, null);
+
+            methodTempUnitCombo.SelectedValue = EUnitTemperature.Celsius;
+            methodTempUnitCombo_SelectedValueChanged(null, null);
+
+            methodCapaUnitCombo.SelectedValue = EUnitCapacity.kcal;
+            methodCapaUnitCombo_SelectedValueChanged(null, null);
+
+            methodEnthalpyUnitCombo.SelectedValue = EUnitEnthalpy.kcal;
+            methodEnthalpyUnitCombo_SelectedValueChanged(null, null);
+        }
+
+        #region scheduleGrid Events
+        private void scheduleGridView_CustomDrawBandHeader(object sender, BandHeaderCustomDrawEventArgs e)
+        {
+            if (e.Band == null) return;
+
+            if (e.Band.AppearanceHeader.BackColor != Color.Empty)
+            {
+                e.Info.AllowColoring = true;
+            }
+        }
+
+        private void scheduleGridView_CustomDrawColumnHeader(object sender, ColumnHeaderCustomDrawEventArgs e)
+        {
+            if (e.Column == null) return;
+
+            if (e.Column.AppearanceHeader.BackColor != Color.Empty)
+            {
+                e.Info.AllowColoring = true;
+            }
+        }
+
+        private void scheduleGridView_CellValueChanging(object sender, CellValueChangedEventArgs e)
+        {
+            AdvBandedGridView view = sender as AdvBandedGridView;
+
+            switch (e.Column.FieldName)
+            {
+                case "Indoor1Use":
+                    if ((EIndoorUse)e.Value == EIndoorUse.NotUsed)
+                    {
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor1Mode1"], EIndoorMode.NotUsed);
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor1Duct1"], EIndoorDuct.NotUsed);
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor1Mode2"], EIndoorMode.NotUsed);
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor1Duct2"], EIndoorDuct.NotUsed);
+                    }
+                    break;
+
+                case "Indoor2Use":
+                    if ((EIndoorUse)e.Value == EIndoorUse.NotUsed)
+                    {
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor2Mode1"], EIndoorMode.NotUsed);
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor2Duct1"], EIndoorDuct.NotUsed);
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor2Mode2"], EIndoorMode.NotUsed);
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor2Duct2"], EIndoorDuct.NotUsed);
+                    }
+                    break;
+            }
+        }
+
+        private void scheduleIDModeLookUp_EditValueChanging(object sender, ChangingEventArgs e)
+        {
+            GridColumn column = scheduleGridView.FocusedColumn;
+
+            switch (column.FieldName)
+            {
+                case "Indoor1Mode1":
+                case "Indoor1Duct1":
+                case "Indoor1Mode2":
+                case "Indoor1Duct2":
+                    if ((EIndoorUse)scheduleGridView.GetRowCellValue(
+                        scheduleGridView.FocusedRowHandle, 
+                        scheduleGridView.Columns["Indoor1Use"]) 
+                        == EIndoorUse.NotUsed)
+                    {
+                        e.Cancel = true;
+                    }
+                    else
+                    {
+                        e.Cancel = false;
+                    }
+                    break;
+
+                case "Indoor2Mode1":
+                case "Indoor2Duct1":
+                case "Indoor2Mode2":
+                case "Indoor2Duct2":
+                    if ((EIndoorUse)scheduleGridView.GetRowCellValue(
+                        scheduleGridView.FocusedRowHandle, 
+                        scheduleGridView.Columns["Indoor2Use"])
+                        == EIndoorUse.NotUsed)
+                    {
+                        e.Cancel = true;
+                    }
+                    else
+                    {
+                        e.Cancel = false;
+                    }
+                    break;
+            }
+            #endregion
+        }
+
+        #region Buttons event
+        private void schAddButton_Click(object sender, EventArgs e)
+        {
+            context.Condition.Schedules.Add(new ConditionSchedule(context.Condition.Schedules.Count + 1));
+            scheduleGridView.RefreshData();
+        }
+
+        private void schDeleteButton_Click(object sender, EventArgs e)
+        {
+            if (scheduleGridView.FocusedRowHandle < 0) return;
+
+            scheduleGridView.DeleteRow(scheduleGridView.FocusedRowHandle);
+            for (int i=0; i< context.Condition.Schedules.Count; i++)
+            {
+                context.Condition.Schedules[i].No = i + 1;
+            }
+            scheduleGridView.RefreshData();
+        }
+        #endregion
+
+        #region Method event
+        private void methodTestModeCombo_SelectedValueChanged(object sender, EventArgs e)
+        {
+            int row = scheduleGridView.FocusedRowHandle;
+            if (row < 0) return;
+
+            EIndoorMode mode = (EIndoorMode)methodTestModeCombo.SelectedValue;
+
+            scheduleGridView.SetRowCellValue(row, scheduleGridView.Columns["Indoor1Mode1"], mode);
+            scheduleGridView.SetRowCellValue(row, scheduleGridView.Columns["Indoor1Duct1"], EIndoorDuct.N1);
+            scheduleGridView.SetRowCellValue(row, scheduleGridView.Columns["Indoor1Mode2"], mode);
+            scheduleGridView.SetRowCellValue(row, scheduleGridView.Columns["Indoor1Duct2"], EIndoorDuct.N1);
+
+            scheduleGridView.SetRowCellValue(row, scheduleGridView.Columns["Indoor2Mode1"], mode);
+            scheduleGridView.SetRowCellValue(row, scheduleGridView.Columns["Indoor2Duct1"], EIndoorDuct.N1);
+            scheduleGridView.SetRowCellValue(row, scheduleGridView.Columns["Indoor2Mode2"], mode);
+            scheduleGridView.SetRowCellValue(row, scheduleGridView.Columns["Indoor2Duct2"], EIndoorDuct.N1);
+        }
+
+        private void methodCapaUnitCombo_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (initialized == false) return;
+
+            int nUnit = (int)methodCapaUnitCombo.SelectedValue;
+            string sUnit = methodCapaUnitCombo.Text;
+
+            SetRatedConditionUnit(ETestRatedField.Capacity, sUnit);
+            context.Measure.Control.SetCapacityUnit(nUnit);
+            context.Measure.Control.SetEER_COPUnit(nUnit);
+            context.Value.SetUnitTo(EUnitType.Capacity, nUnit);
+            context.Value.SetUnitTo(EUnitType.EER_COP, nUnit);
+        }
+
+        private void methodAirFlowUnitCombo_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (initialized == false) return;
+
+            int nUnit = (int)methodAirFlowUnitCombo.SelectedValue;
+
+            context.Measure.Control.SetAirFlowUnit(nUnit);
+            context.Value.SetUnitTo(EUnitType.AirFlow, (int)methodAirFlowUnitCombo.SelectedValue);
+        }
+
+        private void methodEnthalpyUnitCombo_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (initialized == false) return;
+
+            int nUnit = (int)methodEnthalpyUnitCombo.SelectedValue;
+
+            context.Measure.Control.SetEnthalpyUnit(nUnit);
+            context.Measure.Control.SetHeatUnit(nUnit);
+            context.Value.SetUnitTo(EUnitType.Enthalpy, (int)methodEnthalpyUnitCombo.SelectedValue);
+            context.Value.SetUnitTo(EUnitType.Heat, (int)methodCapaUnitCombo.SelectedValue);
+        }
+
+        private void methodPressureUnitCombo_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (initialized == false) return;
+
+            int sUnit = (int)methodPressureUnitCombo.SelectedValue;
+
+            context.Measure.Control.SetPressureUnit(sUnit);
+            context.Value.SetUnitTo(EUnitType.Pressure, (int)methodPressureUnitCombo.SelectedValue);
+        }
+
+        private void methodTempUnitCombo_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (initialized == false) return;
+
+            int nUnit = (int)methodTempUnitCombo.SelectedValue;
+
+            context.Measure.Control.SetTemperatureUnit(nUnit);
+            context.Value.SetUnitTo(EUnitType.Temperature, (int)methodTempUnitCombo.SelectedValue);
+        }
+
+        private void methodDiffPressureUnitCombo_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (initialized == false) return;
+
+            int nUnit = (int)methodDiffPressureUnitCombo.SelectedValue;
+
+            context.Measure.Control.SetDiffPressureUnit(nUnit);
+            context.Value.SetUnitTo(EUnitType.DiffPressure, (int)methodDiffPressureUnitCombo.SelectedValue);
+        }
+
+        private void methodAtmPressureUnitCombo_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (initialized == false) return;
+
+            int nUnit = (int)methodAtmPressureUnitCombo.SelectedValue;
+
+            context.Measure.Control.SetAtmPressureUnit(nUnit);
+            context.Value.SetUnitTo(EUnitType.AtmPressure, (int)methodAtmPressureUnitCombo.SelectedValue);
+        }
+        #endregion
+
+        private void SetRatedConditionUnit(ETestRatedField index, string unit)
+        {
+            foreach (TabPage page in ratedTab.TabPages)
+            {
+                CtrlTestRated ctrl = (CtrlTestRated)page.Controls[0];
+                ctrl.SetUnit(index, unit);
+            }
+        }
+    }
+}

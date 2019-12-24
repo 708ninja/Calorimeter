@@ -1,0 +1,341 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class CtrlViewGraph
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.graphTab = new System.Windows.Forms.TabControl();
+            this.graph1Page = new System.Windows.Forms.TabPage();
+            this.graph2Page = new System.Windows.Forms.TabPage();
+            this.graph3Page = new System.Windows.Forms.TabPage();
+            this.graph4Page = new System.Windows.Forms.TabPage();
+            this.graph5Page = new System.Windows.Forms.TabPage();
+            this.graph6Page = new System.Windows.Forms.TabPage();
+            this.graphPanel = new Ulee.Controls.UlPanel();
+            this.viewGraph = new Ulee.Chart.UlLineChart();
+            this.graphCursorButton = new System.Windows.Forms.Button();
+            this.graphResetButton = new System.Windows.Forms.Button();
+            this.graphUndoButton = new System.Windows.Forms.Button();
+            this.graphStackButton = new System.Windows.Forms.Button();
+            this.graphAutosetButton = new System.Windows.Forms.Button();
+            this.graphDescriptionLed = new Ulee.Controls.UlLed();
+            this.graphDescriptionButton = new System.Windows.Forms.Button();
+            this.hideUncheckedCheck = new System.Windows.Forms.CheckBox();
+            this.graphApplyButton = new System.Windows.Forms.Button();
+            this.bgPanel.SuspendLayout();
+            this.graphTab.SuspendLayout();
+            this.graphPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.viewGraph)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.bgPanel.Controls.Add(this.hideUncheckedCheck);
+            this.bgPanel.Controls.Add(this.graphApplyButton);
+            this.bgPanel.Controls.Add(this.graphDescriptionLed);
+            this.bgPanel.Controls.Add(this.graphDescriptionButton);
+            this.bgPanel.Controls.Add(this.graphCursorButton);
+            this.bgPanel.Controls.Add(this.graphResetButton);
+            this.bgPanel.Controls.Add(this.graphUndoButton);
+            this.bgPanel.Controls.Add(this.graphStackButton);
+            this.bgPanel.Controls.Add(this.graphAutosetButton);
+            this.bgPanel.Controls.Add(this.graphPanel);
+            this.bgPanel.Controls.Add(this.graphTab);
+            this.bgPanel.Size = new System.Drawing.Size(1728, 915);
+            // 
+            // graphTab
+            // 
+            this.graphTab.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.graphTab.Controls.Add(this.graph1Page);
+            this.graphTab.Controls.Add(this.graph2Page);
+            this.graphTab.Controls.Add(this.graph3Page);
+            this.graphTab.Controls.Add(this.graph4Page);
+            this.graphTab.Controls.Add(this.graph5Page);
+            this.graphTab.Controls.Add(this.graph6Page);
+            this.graphTab.Location = new System.Drawing.Point(0, 28);
+            this.graphTab.Margin = new System.Windows.Forms.Padding(0);
+            this.graphTab.Name = "graphTab";
+            this.graphTab.Padding = new System.Drawing.Point(0, 0);
+            this.graphTab.SelectedIndex = 0;
+            this.graphTab.Size = new System.Drawing.Size(312, 887);
+            this.graphTab.TabIndex = 1;
+            this.graphTab.SelectedIndexChanged += new System.EventHandler(this.graphTab_SelectedIndexChanged);
+            // 
+            // graph1Page
+            // 
+            this.graph1Page.Location = new System.Drawing.Point(4, 4);
+            this.graph1Page.Margin = new System.Windows.Forms.Padding(0);
+            this.graph1Page.Name = "graph1Page";
+            this.graph1Page.Size = new System.Drawing.Size(304, 859);
+            this.graph1Page.TabIndex = 0;
+            this.graph1Page.Tag = "0";
+            this.graph1Page.Text = " Graph 1 ";
+            this.graph1Page.UseVisualStyleBackColor = true;
+            // 
+            // graph2Page
+            // 
+            this.graph2Page.Location = new System.Drawing.Point(4, 4);
+            this.graph2Page.Margin = new System.Windows.Forms.Padding(0);
+            this.graph2Page.Name = "graph2Page";
+            this.graph2Page.Size = new System.Drawing.Size(304, 859);
+            this.graph2Page.TabIndex = 1;
+            this.graph2Page.Tag = "1";
+            this.graph2Page.Text = " Graph 2 ";
+            this.graph2Page.UseVisualStyleBackColor = true;
+            // 
+            // graph3Page
+            // 
+            this.graph3Page.Location = new System.Drawing.Point(4, 4);
+            this.graph3Page.Margin = new System.Windows.Forms.Padding(0);
+            this.graph3Page.Name = "graph3Page";
+            this.graph3Page.Size = new System.Drawing.Size(304, 859);
+            this.graph3Page.TabIndex = 2;
+            this.graph3Page.Tag = "2";
+            this.graph3Page.Text = " Grpah 3 ";
+            this.graph3Page.UseVisualStyleBackColor = true;
+            // 
+            // graph4Page
+            // 
+            this.graph4Page.Location = new System.Drawing.Point(4, 4);
+            this.graph4Page.Margin = new System.Windows.Forms.Padding(0);
+            this.graph4Page.Name = "graph4Page";
+            this.graph4Page.Size = new System.Drawing.Size(304, 859);
+            this.graph4Page.TabIndex = 3;
+            this.graph4Page.Tag = "3";
+            this.graph4Page.Text = " Graph 4 ";
+            this.graph4Page.UseVisualStyleBackColor = true;
+            // 
+            // graph5Page
+            // 
+            this.graph5Page.Location = new System.Drawing.Point(4, 4);
+            this.graph5Page.Margin = new System.Windows.Forms.Padding(0);
+            this.graph5Page.Name = "graph5Page";
+            this.graph5Page.Size = new System.Drawing.Size(304, 859);
+            this.graph5Page.TabIndex = 4;
+            this.graph5Page.Tag = "4";
+            this.graph5Page.Text = " Graph 5 ";
+            this.graph5Page.UseVisualStyleBackColor = true;
+            // 
+            // graph6Page
+            // 
+            this.graph6Page.Location = new System.Drawing.Point(4, 4);
+            this.graph6Page.Margin = new System.Windows.Forms.Padding(0);
+            this.graph6Page.Name = "graph6Page";
+            this.graph6Page.Size = new System.Drawing.Size(304, 859);
+            this.graph6Page.TabIndex = 5;
+            this.graph6Page.Tag = "5";
+            this.graph6Page.Text = " Graph 6 ";
+            this.graph6Page.UseVisualStyleBackColor = true;
+            // 
+            // graphPanel
+            // 
+            this.graphPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.graphPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.graphPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.Single;
+            this.graphPanel.Controls.Add(this.viewGraph);
+            this.graphPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.graphPanel.InnerColor2 = System.Drawing.Color.White;
+            this.graphPanel.Location = new System.Drawing.Point(314, 28);
+            this.graphPanel.Name = "graphPanel";
+            this.graphPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.graphPanel.OuterColor2 = System.Drawing.Color.White;
+            this.graphPanel.Size = new System.Drawing.Size(1414, 887);
+            this.graphPanel.Spacing = 0;
+            this.graphPanel.TabIndex = 2;
+            this.graphPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.graphPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // viewGraph
+            // 
+            this.viewGraph.CrosshairEnabled = DevExpress.Utils.DefaultBoolean.False;
+            this.viewGraph.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.viewGraph.Legend.Name = "Default Legend";
+            this.viewGraph.Legend.Visibility = DevExpress.Utils.DefaultBoolean.False;
+            this.viewGraph.LegendFont = new System.Drawing.Font("Arial", 8F);
+            this.viewGraph.Location = new System.Drawing.Point(0, 0);
+            this.viewGraph.Name = "viewGraph";
+            this.viewGraph.SeriesSerializable = new DevExpress.XtraCharts.Series[0];
+            this.viewGraph.Size = new System.Drawing.Size(1414, 887);
+            this.viewGraph.TabIndex = 0;
+            this.viewGraph.CustomDrawAxisLabel += new DevExpress.XtraCharts.CustomDrawAxisLabelEventHandler(this.viewGraph_CustomDrawAxisLabel);
+            // 
+            // graphCursorButton
+            // 
+            this.graphCursorButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.graphCursorButton.Location = new System.Drawing.Point(1240, 0);
+            this.graphCursorButton.Name = "graphCursorButton";
+            this.graphCursorButton.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.graphCursorButton.Size = new System.Drawing.Size(96, 26);
+            this.graphCursorButton.TabIndex = 18;
+            this.graphCursorButton.Text = "Cursor";
+            this.graphCursorButton.UseVisualStyleBackColor = true;
+            this.graphCursorButton.Click += new System.EventHandler(this.graphCursorButton_Click);
+            // 
+            // graphResetButton
+            // 
+            this.graphResetButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.graphResetButton.Location = new System.Drawing.Point(1632, 0);
+            this.graphResetButton.Name = "graphResetButton";
+            this.graphResetButton.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.graphResetButton.Size = new System.Drawing.Size(96, 26);
+            this.graphResetButton.TabIndex = 17;
+            this.graphResetButton.Text = "Reset";
+            this.graphResetButton.UseVisualStyleBackColor = true;
+            this.graphResetButton.Click += new System.EventHandler(this.graphResetButton_Click);
+            // 
+            // graphUndoButton
+            // 
+            this.graphUndoButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.graphUndoButton.Location = new System.Drawing.Point(1534, 0);
+            this.graphUndoButton.Name = "graphUndoButton";
+            this.graphUndoButton.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.graphUndoButton.Size = new System.Drawing.Size(96, 26);
+            this.graphUndoButton.TabIndex = 16;
+            this.graphUndoButton.Text = "Undo";
+            this.graphUndoButton.UseVisualStyleBackColor = true;
+            this.graphUndoButton.Click += new System.EventHandler(this.graphUndoButton_Click);
+            // 
+            // graphStackButton
+            // 
+            this.graphStackButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.graphStackButton.Location = new System.Drawing.Point(1436, 0);
+            this.graphStackButton.Name = "graphStackButton";
+            this.graphStackButton.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.graphStackButton.Size = new System.Drawing.Size(96, 26);
+            this.graphStackButton.TabIndex = 15;
+            this.graphStackButton.Text = "Stack";
+            this.graphStackButton.UseVisualStyleBackColor = true;
+            this.graphStackButton.Click += new System.EventHandler(this.graphStackButton_Click);
+            // 
+            // graphAutosetButton
+            // 
+            this.graphAutosetButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.graphAutosetButton.Location = new System.Drawing.Point(1338, 0);
+            this.graphAutosetButton.Name = "graphAutosetButton";
+            this.graphAutosetButton.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.graphAutosetButton.Size = new System.Drawing.Size(96, 26);
+            this.graphAutosetButton.TabIndex = 14;
+            this.graphAutosetButton.Text = "Auto Set";
+            this.graphAutosetButton.UseVisualStyleBackColor = true;
+            this.graphAutosetButton.Click += new System.EventHandler(this.graphAutosetButton_Click);
+            // 
+            // graphDescriptionLed
+            // 
+            this.graphDescriptionLed.Active = false;
+            this.graphDescriptionLed.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.graphDescriptionLed.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.graphDescriptionLed.Gap = 0;
+            this.graphDescriptionLed.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.graphDescriptionLed.InnerColor2 = System.Drawing.Color.White;
+            this.graphDescriptionLed.Location = new System.Drawing.Point(320, 6);
+            this.graphDescriptionLed.Name = "graphDescriptionLed";
+            this.graphDescriptionLed.OffColor = System.Drawing.Color.Black;
+            this.graphDescriptionLed.OnColor = System.Drawing.Color.Red;
+            this.graphDescriptionLed.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.graphDescriptionLed.OuterColor2 = System.Drawing.Color.White;
+            this.graphDescriptionLed.Size = new System.Drawing.Size(14, 14);
+            this.graphDescriptionLed.Spacing = 0;
+            this.graphDescriptionLed.TabIndex = 20;
+            this.graphDescriptionLed.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.graphDescriptionLed.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            this.graphDescriptionLed.Type = Ulee.Controls.EUlLedType.Rectangle;
+            // 
+            // graphDescriptionButton
+            // 
+            this.graphDescriptionButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.graphDescriptionButton.Location = new System.Drawing.Point(314, 0);
+            this.graphDescriptionButton.Name = "graphDescriptionButton";
+            this.graphDescriptionButton.Padding = new System.Windows.Forms.Padding(16, 0, 0, 0);
+            this.graphDescriptionButton.Size = new System.Drawing.Size(96, 26);
+            this.graphDescriptionButton.TabIndex = 19;
+            this.graphDescriptionButton.Text = "Description";
+            this.graphDescriptionButton.UseVisualStyleBackColor = true;
+            this.graphDescriptionButton.Click += new System.EventHandler(this.graphPauseButton_Click);
+            // 
+            // hideUncheckedCheck
+            // 
+            this.hideUncheckedCheck.AutoSize = true;
+            this.hideUncheckedCheck.Location = new System.Drawing.Point(166, 4);
+            this.hideUncheckedCheck.Name = "hideUncheckedCheck";
+            this.hideUncheckedCheck.Size = new System.Drawing.Size(145, 19);
+            this.hideUncheckedCheck.TabIndex = 69;
+            this.hideUncheckedCheck.Text = "Hide unchecked rows";
+            this.hideUncheckedCheck.UseVisualStyleBackColor = true;
+            this.hideUncheckedCheck.CheckedChanged += new System.EventHandler(this.hideUncheckedCheck_CheckedChanged);
+            // 
+            // graphApplyButton
+            // 
+            this.graphApplyButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.graphApplyButton.Location = new System.Drawing.Point(0, 0);
+            this.graphApplyButton.Name = "graphApplyButton";
+            this.graphApplyButton.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.graphApplyButton.Size = new System.Drawing.Size(96, 26);
+            this.graphApplyButton.TabIndex = 68;
+            this.graphApplyButton.Text = "Apply";
+            this.graphApplyButton.UseVisualStyleBackColor = true;
+            this.graphApplyButton.Click += new System.EventHandler(this.graphApplyButton_Click);
+            // 
+            // CtrlViewGraph
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlViewGraph";
+            this.Size = new System.Drawing.Size(1728, 915);
+            this.Enter += new System.EventHandler(this.CtrlViewGraph_Enter);
+            this.bgPanel.ResumeLayout(false);
+            this.bgPanel.PerformLayout();
+            this.graphTab.ResumeLayout(false);
+            this.graphPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.viewGraph)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.TabControl graphTab;
+        private System.Windows.Forms.TabPage graph1Page;
+        private System.Windows.Forms.TabPage graph2Page;
+        private System.Windows.Forms.TabPage graph3Page;
+        private System.Windows.Forms.TabPage graph4Page;
+        private System.Windows.Forms.TabPage graph5Page;
+        private System.Windows.Forms.TabPage graph6Page;
+        private Ulee.Controls.UlPanel graphPanel;
+        private Ulee.Chart.UlLineChart viewGraph;
+        private System.Windows.Forms.Button graphCursorButton;
+        private System.Windows.Forms.Button graphResetButton;
+        private System.Windows.Forms.Button graphUndoButton;
+        private System.Windows.Forms.Button graphStackButton;
+        private System.Windows.Forms.Button graphAutosetButton;
+        private Ulee.Controls.UlLed graphDescriptionLed;
+        private System.Windows.Forms.Button graphDescriptionButton;
+        private System.Windows.Forms.CheckBox hideUncheckedCheck;
+        private System.Windows.Forms.Button graphApplyButton;
+    }
+}

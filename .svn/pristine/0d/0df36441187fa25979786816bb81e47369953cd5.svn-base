@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.XtraEditors;
+
+namespace Hnc.Calorimeter.Server
+{
+    static class Program
+    {
+        /// The main entry point for the application.
+        [STAThread]
+        static void Main()
+        {
+            bool isAlone;
+            Mutex mutex = new Mutex(true, @"Global\Hnc.Calorimeter.Server", out isAlone);
+
+            if (isAlone == true)
+            {
+                //WindowsFormsSettings.ForceDirectXPaint();
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+
+                try
+                {
+                    Resource.Create();
+                    Application.Run(new FormServerMain());
+                }
+                catch (Exception e)
+                {
+                    Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+                    MessageBox.Show(e.ToString(), Resource.Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    Resource.Destroy();
+                    mutex.ReleaseMutex();
+                }
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Cannot run this program because of running it already!",
+                    Resource.Caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+
+                Application.Exit();
+            }
+        }
+    }
+}

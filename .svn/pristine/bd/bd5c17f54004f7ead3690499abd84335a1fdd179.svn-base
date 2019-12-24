@@ -1,0 +1,142 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class CtrlConfigLeft
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CtrlConfigLeft));
+            this.viewPanel = new Ulee.Controls.UlPanel();
+            this.menuPanel = new Ulee.Controls.UlPanel();
+            this.conditionButton = new DevExpress.XtraEditors.SimpleButton();
+            this.scheduleButton = new DevExpress.XtraEditors.SimpleButton();
+            this.bgPanel.SuspendLayout();
+            this.menuPanel.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.bgPanel.Controls.Add(this.viewPanel);
+            this.bgPanel.Controls.Add(this.menuPanel);
+            this.bgPanel.Size = new System.Drawing.Size(1904, 915);
+            // 
+            // viewPanel
+            // 
+            this.viewPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.viewPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.viewPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.viewPanel.InnerColor2 = System.Drawing.Color.White;
+            this.viewPanel.Location = new System.Drawing.Point(88, 0);
+            this.viewPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.viewPanel.Name = "viewPanel";
+            this.viewPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.viewPanel.OuterColor2 = System.Drawing.Color.White;
+            this.viewPanel.Size = new System.Drawing.Size(1816, 915);
+            this.viewPanel.Spacing = 0;
+            this.viewPanel.TabIndex = 4;
+            this.viewPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.viewPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // menuPanel
+            // 
+            this.menuPanel.BackColor = System.Drawing.Color.Silver;
+            this.menuPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.menuPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.menuPanel.Controls.Add(this.conditionButton);
+            this.menuPanel.Controls.Add(this.scheduleButton);
+            this.menuPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.menuPanel.InnerColor2 = System.Drawing.Color.White;
+            this.menuPanel.Location = new System.Drawing.Point(0, 0);
+            this.menuPanel.Name = "menuPanel";
+            this.menuPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.menuPanel.OuterColor2 = System.Drawing.Color.White;
+            this.menuPanel.Size = new System.Drawing.Size(84, 915);
+            this.menuPanel.Spacing = 0;
+            this.menuPanel.TabIndex = 3;
+            this.menuPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.menuPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // conditionButton
+            // 
+            this.conditionButton.AllowFocus = false;
+            this.conditionButton.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.conditionButton.Appearance.Options.UseBorderColor = true;
+            this.conditionButton.Appearance.Options.UseFont = true;
+            this.conditionButton.Appearance.Options.UseTextOptions = true;
+            this.conditionButton.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Bottom;
+            this.conditionButton.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("conditionButton.ImageOptions.Image")));
+            this.conditionButton.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
+            this.conditionButton.ImageOptions.ImageToTextIndent = 8;
+            this.conditionButton.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
+            this.conditionButton.Location = new System.Drawing.Point(2, 62);
+            this.conditionButton.Name = "conditionButton";
+            this.conditionButton.Size = new System.Drawing.Size(80, 58);
+            this.conditionButton.TabIndex = 14;
+            this.conditionButton.TabStop = false;
+            this.conditionButton.Text = "Condition";
+            // 
+            // scheduleButton
+            // 
+            this.scheduleButton.AllowFocus = false;
+            this.scheduleButton.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.scheduleButton.Appearance.Options.UseBorderColor = true;
+            this.scheduleButton.Appearance.Options.UseFont = true;
+            this.scheduleButton.Appearance.Options.UseTextOptions = true;
+            this.scheduleButton.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Bottom;
+            this.scheduleButton.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("scheduleButton.ImageOptions.Image")));
+            this.scheduleButton.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
+            this.scheduleButton.ImageOptions.ImageToTextIndent = 12;
+            this.scheduleButton.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
+            this.scheduleButton.Location = new System.Drawing.Point(2, 2);
+            this.scheduleButton.Name = "scheduleButton";
+            this.scheduleButton.Size = new System.Drawing.Size(80, 58);
+            this.scheduleButton.TabIndex = 11;
+            this.scheduleButton.TabStop = false;
+            this.scheduleButton.Text = "Schedule";
+            // 
+            // CtrlConfigLeft
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlConfigLeft";
+            this.Size = new System.Drawing.Size(1904, 915);
+            this.Load += new System.EventHandler(this.CtrlConfigLeft_Load);
+            this.bgPanel.ResumeLayout(false);
+            this.menuPanel.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private Ulee.Controls.UlPanel viewPanel;
+        private Ulee.Controls.UlPanel menuPanel;
+        private DevExpress.XtraEditors.SimpleButton conditionButton;
+        private DevExpress.XtraEditors.SimpleButton scheduleButton;
+    }
+}

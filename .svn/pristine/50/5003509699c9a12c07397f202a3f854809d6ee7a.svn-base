@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.XtraGrid.Views.BandedGrid;
+using DevExpress.XtraGrid.Views.Grid;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlTestCondition : UlUserControlEng
+    {
+        public CtrlTestCondition()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            foreach (TabPage page in ratedTab.TabPages)
+            {
+                page.Controls.Add(new CtrlTestRated());
+            }
+        }
+
+        private void scheduleGridView_CustomDrawBandHeader(object sender, BandHeaderCustomDrawEventArgs e)
+        {
+            if (e.Band == null) return;
+
+            if (e.Band.AppearanceHeader.BackColor != Color.Empty)
+            {
+                e.Info.AllowColoring = true;
+            }
+        }
+
+        private void scheduleGridView_CustomDrawColumnHeader(object sender, ColumnHeaderCustomDrawEventArgs e)
+        {
+            if (e.Column == null) return;
+
+            if (e.Column.AppearanceHeader.BackColor != Color.Empty)
+            {
+                e.Info.AllowColoring = true;
+            }
+        }
+    }
+}

@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2015
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hnc.Calorimeter.Server", "Server\Hnc.Calorimeter.Server.csproj", "{6AB3808B-1095-4D62-8978-D29CEB150D34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ulee.Framework", "Ulee.Framework\Ulee.Framework.csproj", "{BC751C67-DDDD-4632-93B6-B4693BDE9770}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hnc.Calorimeter.Client", "Client\Hnc.Calorimeter.Client.csproj", "{64CDA088-0298-4A0E-92E0-45CA5ADF4C06}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6AB3808B-1095-4D62-8978-D29CEB150D34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AB3808B-1095-4D62-8978-D29CEB150D34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AB3808B-1095-4D62-8978-D29CEB150D34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AB3808B-1095-4D62-8978-D29CEB150D34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC751C67-DDDD-4632-93B6-B4693BDE9770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC751C67-DDDD-4632-93B6-B4693BDE9770}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC751C67-DDDD-4632-93B6-B4693BDE9770}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC751C67-DDDD-4632-93B6-B4693BDE9770}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64CDA088-0298-4A0E-92E0-45CA5ADF4C06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64CDA088-0298-4A0E-92E0-45CA5ADF4C06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64CDA088-0298-4A0E-92E0-45CA5ADF4C06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64CDA088-0298-4A0E-92E0-45CA5ADF4C06}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {588EA851-E9F8-4476-B2C4-93B7CAA17FC3}
+	EndGlobalSection
+EndGlobal

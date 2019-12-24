@@ -1,0 +1,583 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using System.IO;
+using System.Text;
+using System.Threading;
+
+namespace Ulee.Device.Connection.Yokogawa
+{
+    public enum EGM10Exception
+    {
+        Default = 0,
+        Timeout = -100,
+        Stream = -101,
+        Send = -102,
+        Receive = -103,
+        UnknownHead = -104,
+        Connect = -105,
+        InvalidAddress = -106,
+        InvalidIPandPort = -107,
+        Convert = -108
+    }
+
+    public class GM10Exception : EthernetConnectionException
+    {
+        public GM10Exception(
+            string msg = "Occurred Yokogawa GM10 ethernet exception!", 
+            EGM10Exception code = EGM10Exception.Default)
+            : base(msg, (int)code)
+        {
+        }
+    }
+
+    internal class UlGM10StringPacket
+    {
+        public UlGM10StringPacket(int count, float fValue)
+        {
+            Count = 0;
+            invalidFloatValue = fValue;
+            MaxCount = count;
+            packet = new StringBuilder(33 + count * csValueTotalLength + 2);
+            floatList = new List<float>(count);
+        }
+
+        const int csValueStart = 52;
+        const int csValueTotalLength = 32;
+        const int csValueFloatLength = 13;
+
+        private StringBuilder packet;
+
+        private List<float> floatList;
+
+        private float invalidFloatValue;
+
+        public void Clear()
+        {
+            lock (this)
+            {
+                Count = 0;
+                packet.Clear();
+            }
+        }
+
+        public string Head { get { return packet.ToString().Substring(0, 2); } }
+
+        public DateTime DateTime
+        {
+            get
+            {
+                DateTime retDate;
+
+                lock (this)
+                {
+                    int hour;
+
+                    int.TryParse(packet.ToString().Substring(20, 2), out hour);
+
+                    if (hour > 11) hour -= 12;
+
+                    string date = "20" + packet.ToString().Substring(7, 8) +
+                        " " + hour.ToString("00") + ":" + packet.ToString().Substring(23, 9);
+
+                    if (DateTime.TryParse(date, out retDate) == false)
+                    {
+                        retDate = DateTime.Now;
+                    }
+                }
+
+                return retDate;
+            }
+        }
+
+        public string Tail { get { return packet.ToString().Substring(packet.Length - 2, 2); } }
+
+        public int MaxCount { get; private set; }
+
+        public int Count { get; private set; }
+
+        public void Append(string str, bool reqLock = true)
+        {
+            if (reqLock == true)
+            {
+                lock (this)
+                {
+                    if (str[1] == ' ') Count++;
+                    packet.Append(str);
+                }
+            }
+            else
+            {
+                if (str[1] == ' ') Count++;
+                packet.Append(str);
+            }
+        }
+
+        public float ToFloat(int index, bool reqLock = true)
+        {
+            string str;
+            float value;
+
+            if (reqLock == true)
+            {
+                lock (this)
+                {
+                    str = packet.ToString().Substring(
+                        csValueStart + index * csValueTotalLength, csValueFloatLength);
+                }
+            }
+            else
+            {
+                str = packet.ToString().Substring(
+                    csValueStart + index * csValueTotalLength, csValueFloatLength);
+            }
+
+            if (float.TryParse(str, out value) == false)
+            {
+                value = invalidFloatValue;
+            }
+
+            return value;
+        }
+
+        public float[] ToFloat()
+        {
+            lock (this)
+            {
+                floatList.Clear();
+
+                for (int i = 0; i < Count; i++)
+                {
+                    floatList.Add(ToFloat(i, false));
+                }
+            }
+
+            return floatList.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return packet.ToString();
+        }
+    }
+
+    public class UlGM10EthernetClient : UlEthernetClient
+    {
+        private UlGM10EthernetClient(
+            string name, int length, int scanTime, EEthernetProtocol protocol, int timeout)
+            : base(name, scanTime, protocol, timeout)
+        {
+            recvPacket = new UlGM10StringPacket(csMaxCount, InvalidFloatValue);
+            Values = new float[length];
+        }
+
+        public UlGM10EthernetClient(
+            string name,
+            IPEndPoint ipPoint, 
+            int length,
+            int scanTime,
+            EEthernetProtocol protocol = EEthernetProtocol.Tcp,
+            int timeout = 1000)
+            : this(name, length, scanTime, protocol, timeout)
+        {
+            IpPoint = ipPoint;
+        }
+
+        public UlGM10EthernetClient(
+            string name,
+            string ip, 
+            int port,
+            int length,
+            int scanTime,
+            EEthernetProtocol protocol = EEthernetProtocol.Tcp,
+            int timeout = 1000)
+            : this(name, length, scanTime, protocol, timeout)
+        {
+            try
+            {
+                IpPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+            }
+            catch (Exception e)
+            {
+                Log(EEthernetLogItem.Exception, e.Message);
+
+                throw new GM10Exception(
+                    "Occurred invalid IP and Port in UlGM10EthernetClient.Creater",
+                    EGM10Exception.InvalidIPandPort);
+            }
+        }
+
+        private const int csMaxCount = 512;
+
+        private const string csCmdReqStringValue = "FData,0";
+
+        private const string csReceiveHead = "EA";
+        private const string csReceiveTail = "EN";
+        private const string csConnectionHead = "E0";
+
+        private UlGM10StringPacket recvPacket;
+
+        public int Length { get { return Values.Length; } }
+
+        public override void Connect()
+        {
+            if (Protocol == EEthernetProtocol.Udp) return;
+
+            if (tcpClient == null)
+            {
+                tcpClient = new TcpClient();
+            }
+
+            try
+            {
+                base.Connect();
+                reader = new StreamReader(tcpClient.GetStream());
+
+                if (reader.ReadLine() != csConnectionHead)
+                {
+                    string str = "Occurred TCP connection failing error in UlGM10EthernetClient.Connect";
+
+                    Log(EEthernetLogItem.Exception, str);
+                    throw new GM10Exception(str, EGM10Exception.Connect);
+                }
+            }
+            catch (Exception e)
+            {
+                Log(EEthernetLogItem.Exception, e.Message);
+                throw new GM10Exception(
+                   "Occurred TCP connection failing error in UlGM10EthernetClient.Connect", 
+                   EGM10Exception.Connect);
+            }
+        }
+
+        public DateTime DateTime { get { return recvPacket.DateTime; } }
+
+        public float ToFloat(int index)
+        {
+            return recvPacket.ToFloat(index);
+        }
+
+        public float[] ToFloat()
+        {
+            return recvPacket.ToFloat();
+        }
+
+        public void Lock()
+        {
+            Monitor.Enter(Values);
+        }
+
+        public void Unlock()
+        {
+            Monitor.Exit(Values);
+        }
+
+        public float[] Values { get; private set; }
+
+        private void Send(string message)
+        {
+            if (Mode == EEthernetMode.Virtual)
+            {
+                SetVirtualValues();
+            }
+            else
+            {
+                switch (Protocol)
+                {
+                    case EEthernetProtocol.Tcp:
+                        if (Connected == true)
+                        {
+                            SendTcp(message);
+                            ReceiveTcp();
+                        }
+                        break;
+
+                    case EEthernetProtocol.Udp:
+                        SendUdp(message);
+                        ReceiveUdp();
+                        break;
+                }
+
+                StrToFloat();
+            }
+        }
+
+        private void StrToFloat()
+        {
+            try
+            {
+                lock (Values)
+                {
+                    lock (recvPacket)
+                    {
+                        for (int i = 0; i < Values.Length; i++)
+                        {
+                            Values[i] = recvPacket.ToFloat(i, false);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Log(EEthernetLogItem.Exception, e.Message);
+                throw new GM10Exception(
+                    "Occurred ToFloat error in UlGM10EthernetClient.StrToFloat",
+                    EGM10Exception.Convert);
+            }
+        }
+
+        private void SetVirtualValues()
+        {
+            lock (Values)
+            {
+                for (int i=0; i<Values.Length; i++)
+                {
+                    Values[i] = 50.0f;
+                    //Values[i] = (float)(rand.NextDouble() * 100.0);
+                }
+            }
+        }
+
+        private void SendTcp(string message)
+        {
+            OnSending(true);
+
+            lock (tcpClient)
+            {
+                try
+                {
+                    try
+                    {
+                        writer = new StreamWriter(tcpClient.GetStream());
+                    }
+                    catch (Exception e)
+                    {
+                        Log(EEthernetLogItem.Exception, e.Message);
+                        throw new GM10Exception(
+                            "Occurred TCP stream creating error in UlGM10EthernetClient.SendTcp",
+                            EGM10Exception.Stream);
+                    }
+
+                    try
+                    {
+                        writer.WriteLine(message);
+                        writer.Flush();
+                    }
+                    catch (Exception e)
+                    {
+                        Log(EEthernetLogItem.Exception, e.Message);
+                        throw new GM10Exception(
+                            "Occurred TCP stream sending error in UlGM10EthernetClient.SendTcp",
+                            EGM10Exception.Send);
+                    }
+
+                    Log(EEthernetLogItem.Send, message);
+                }
+                finally
+                {
+                    OnSending(false);
+                }
+            }
+        }
+
+        private void ReceiveTcp()
+        {
+            stopWatch.Restart();
+            OnReceiving(true);
+
+            lock (tcpClient)
+            {
+                try
+                {
+                    NetworkStream stream;
+
+                    try
+                    {
+                        stream = tcpClient.GetStream();
+                    }
+                    catch (Exception e)
+                    {
+                        Log(EEthernetLogItem.Exception, e.Message);
+                        throw new GM10Exception(
+                            "Occurred TCP stream creating error in UlGM10EthernetClient.ReceiveTcp",
+                            EGM10Exception.Stream);
+                    }
+
+                    // 지정된 시간동안 수신을 대기
+                    while (stream.DataAvailable == false)
+                    {
+                        // 수신 대기시간이 초과 되었나?
+                        if (stopWatch.ElapsedMilliseconds > Timeout)
+                        {
+                            string str = "Occurred TCP recieve timeout error in UlGM10EthernetClient.ReceiveTcp";
+
+                            Log(EEthernetLogItem.Exception, str);
+                            throw new GM10Exception(str, EGM10Exception.Timeout);
+                        }
+
+                        Thread.Sleep(1);
+                    }
+
+                    try
+                    {
+                        reader = new StreamReader(stream);
+
+                        lock (recvPacket)
+                        {
+                            recvPacket.Clear();
+
+                            for (int i = 0; i < recvPacket.MaxCount + 4; i++)
+                            {
+                                recvPacket.Append(reader.ReadLine(), false);
+
+                                if (recvPacket.Tail == csReceiveTail) break;
+                            }
+                        }
+
+                        Log(EEthernetLogItem.Receive, recvPacket.ToString());
+
+                        if (recvPacket.Head != csReceiveHead)
+                        {
+                            string str = $"Occurred unknown head({recvPacket.Head}) readed error in UlGM10EthernetClient.ReceiveTcp";
+
+                            Log(EEthernetLogItem.Exception, str);
+                            throw new GM10Exception(str, EGM10Exception.UnknownHead);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log(EEthernetLogItem.Exception, e.Message);
+                        throw new GM10Exception(
+                            "Occurred TCP stream receiving error in UlGM10EthernetClient.ReceiveTcp",
+                            EGM10Exception.Receive);
+                    }
+                }
+                finally
+                {
+                    OnReceiving(false);
+                }
+            }
+        }
+
+        private void SendUdp(string message)
+        {
+            lock (udpClient)
+            {
+                try
+                {
+                    message += "\r\n";
+                    byte[] bytes = Encoding.UTF8.GetBytes(message);
+
+                    udpClient.Send(bytes, bytes.Length, IpPoint);
+                }
+                catch (Exception e)
+                {
+                    Log(EEthernetLogItem.Exception, e.Message);
+                    throw new GM10Exception(
+                        "Occurred UDP stream creating error in UlGM10EthernetClient.SendUdp",
+                        EGM10Exception.Stream);
+                }
+            }
+
+            Log(EEthernetLogItem.Send, message);
+        }
+
+        private void ReceiveUdp()
+        {
+            byte[] bytes;
+
+            stopWatch.Restart();
+            OnReceiving(true);
+
+            lock (udpClient)
+            {
+                try
+                {
+                    IPEndPoint ipPoint = new IPEndPoint(IPAddress.Any, 0);
+                    MemoryStream stream = new MemoryStream();
+
+                lbRetry:
+                    // 지정된 시간동안 수신을 대기
+                    while (udpClient.Available == 0)
+                    {
+                        // 수신 대기시간이 초과 되었나?
+                        if (stopWatch.ElapsedMilliseconds > Timeout)
+                        {
+                            string str = "Occurred UDP receive timeout error in UlGM10EthernetClient.ReceiveUdp";
+
+                            Log(EEthernetLogItem.Exception, str);
+                            throw new GM10Exception(str, EGM10Exception.Timeout);
+                        }
+
+                        Thread.Sleep(1);
+                    }
+
+                    bytes = udpClient.Receive(ref ipPoint);
+                    if (ipPoint.Address.ToString() != IpPoint.Address.ToString())
+                    {
+                        goto lbRetry;
+                    }
+
+                    stream.Write(bytes, 0, bytes.Length);
+
+                    try
+                    {
+                        reader = new StreamReader(stream);
+
+                        lock (recvPacket)
+                        {
+                            recvPacket.Clear();
+
+                            for (int i = 0; i < recvPacket.MaxCount + 4; i++)
+                            {
+                                recvPacket.Append(reader.ReadLine(), false);
+
+                                if (recvPacket.Tail == csReceiveTail) break;
+                            }
+                        }
+
+                        Log(EEthernetLogItem.Receive, recvPacket.ToString());
+
+                        if (recvPacket.Head != csReceiveHead)
+                        {
+                            string str = $"Occurred unknown head({recvPacket.Head}) readed error in UlGM10EthernetClient.ReceiveUdp";
+
+                            Log(EEthernetLogItem.Exception, str);
+                            throw new GM10Exception(str, EGM10Exception.UnknownHead);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log(EEthernetLogItem.Exception, e.Message);
+                        throw new GM10Exception(
+                            "Occurred UDP stream reading error in UlGM10EthernetClient.ReceiveUdp",
+                            EGM10Exception.Receive);
+                    }
+                }
+                finally
+                {
+                    OnReceiving(false);
+                }
+            }
+        }
+
+        public override void Read()
+        {
+            Send(csCmdReqStringValue);
+        }
+
+        public void Read(int address, int count)
+        {
+            if (address < 1)
+            {
+                string str = "Occurred invalid address in UlGM10EthernetClient.GetValues";
+
+                Log(EEthernetLogItem.Exception, str);
+                throw new GM10Exception(str, EGM10Exception.InvalidAddress);
+            }
+
+            Send($"{csCmdReqStringValue},{address:d4},{address + count - 1:d4}");
+        }
+    }
+}

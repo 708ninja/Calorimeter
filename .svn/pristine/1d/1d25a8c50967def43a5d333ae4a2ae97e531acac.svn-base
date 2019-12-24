@@ -1,0 +1,189 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class FormAllParamEdit
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAllParamEdit));
+            this.okButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.label17 = new System.Windows.Forms.Label();
+            this.memoEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label5 = new System.Windows.Forms.Label();
+            this.dateTimeEdit = new DevExpress.XtraEditors.TextEdit();
+            this.label1 = new System.Windows.Forms.Label();
+            this.userNameEdit = new DevExpress.XtraEditors.TextEdit();
+            this.bgPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.memoEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimeEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.userNameEdit.Properties)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.Controls.Add(this.okButton);
+            this.bgPanel.Controls.Add(this.cancelButton);
+            this.bgPanel.Controls.Add(this.label17);
+            this.bgPanel.Controls.Add(this.memoEdit);
+            this.bgPanel.Controls.Add(this.label5);
+            this.bgPanel.Controls.Add(this.dateTimeEdit);
+            this.bgPanel.Controls.Add(this.label1);
+            this.bgPanel.Controls.Add(this.userNameEdit);
+            this.bgPanel.Size = new System.Drawing.Size(484, 158);
+            // 
+            // okButton
+            // 
+            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.okButton.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.okButton.Image = ((System.Drawing.Image)(resources.GetObject("okButton.Image")));
+            this.okButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.okButton.Location = new System.Drawing.Point(262, 112);
+            this.okButton.Name = "okButton";
+            this.okButton.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.okButton.Size = new System.Drawing.Size(100, 32);
+            this.okButton.TabIndex = 3;
+            this.okButton.Text = "Save";
+            this.okButton.UseVisualStyleBackColor = true;
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cancelButton.Image = ((System.Drawing.Image)(resources.GetObject("cancelButton.Image")));
+            this.cancelButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.cancelButton.Location = new System.Drawing.Point(364, 112);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.cancelButton.Size = new System.Drawing.Size(100, 32);
+            this.cancelButton.TabIndex = 4;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(17, 82);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(41, 15);
+            this.label17.TabIndex = 33;
+            this.label17.Text = "Memo";
+            // 
+            // memoEdit
+            // 
+            this.memoEdit.EditValue = "";
+            this.memoEdit.Location = new System.Drawing.Point(103, 80);
+            this.memoEdit.Name = "memoEdit";
+            this.memoEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.memoEdit.Properties.Appearance.Options.UseFont = true;
+            this.memoEdit.Properties.MaxLength = 50;
+            this.memoEdit.Size = new System.Drawing.Size(360, 22);
+            this.memoEdit.TabIndex = 2;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(17, 50);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(61, 15);
+            this.label5.TabIndex = 32;
+            this.label5.Text = "DateTime";
+            // 
+            // dateTimeEdit
+            // 
+            this.dateTimeEdit.EditValue = "";
+            this.dateTimeEdit.Location = new System.Drawing.Point(103, 48);
+            this.dateTimeEdit.Name = "dateTimeEdit";
+            this.dateTimeEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTimeEdit.Properties.Appearance.Options.UseFont = true;
+            this.dateTimeEdit.Properties.MaxLength = 19;
+            this.dateTimeEdit.Properties.ReadOnly = true;
+            this.dateTimeEdit.Size = new System.Drawing.Size(148, 22);
+            this.dateTimeEdit.TabIndex = 1;
+            this.dateTimeEdit.TabStop = false;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(17, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(34, 15);
+            this.label1.TabIndex = 31;
+            this.label1.Text = "User";
+            // 
+            // userNameEdit
+            // 
+            this.userNameEdit.EditValue = "";
+            this.userNameEdit.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.userNameEdit.Location = new System.Drawing.Point(103, 16);
+            this.userNameEdit.Name = "userNameEdit";
+            this.userNameEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userNameEdit.Properties.Appearance.Options.UseFont = true;
+            this.userNameEdit.Properties.MaxLength = 20;
+            this.userNameEdit.Properties.ReadOnly = true;
+            this.userNameEdit.Size = new System.Drawing.Size(148, 22);
+            this.userNameEdit.TabIndex = 0;
+            this.userNameEdit.TabStop = false;
+            // 
+            // FormAllParamEdit
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(484, 158);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.KeyPreview = true;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormAllParamEdit";
+            this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Save all parameters";
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.FormAllParamEdit_KeyPress);
+            this.bgPanel.ResumeLayout(false);
+            this.bgPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.memoEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimeEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.userNameEdit.Properties)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Label label17;
+        private DevExpress.XtraEditors.TextEdit memoEdit;
+        private System.Windows.Forms.Label label5;
+        private DevExpress.XtraEditors.TextEdit dateTimeEdit;
+        private System.Windows.Forms.Label label1;
+        private DevExpress.XtraEditors.TextEdit userNameEdit;
+    }
+}

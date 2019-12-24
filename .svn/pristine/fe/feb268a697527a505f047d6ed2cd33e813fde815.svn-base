@@ -1,0 +1,510 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using FirebirdSql.Data.FirebirdClient;
+
+using DevExpress.XtraGrid.Views.Base;
+using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraGrid.Views.Grid.ViewInfo;
+
+using Ulee.Controls;
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlTestGraphSetting : UlUserControlEng
+    {
+        public CtrlTestGraphSetting(int lineNo, int graphNo, 
+            Dictionary<string, ValueRow> rows, ConditionMethod method)
+        {
+            InitializeComponent();
+
+            LineNo = lineNo;
+            GraphNo = graphNo;
+            GraphRows = rows;
+            Method = method;
+            Initialize();
+        }
+
+        public int LineNo { get; set; }
+        public int GraphNo { get; set; }
+        public double Time { get; private set; }
+        public Dictionary<string, ValueRow> GraphRows { get; set; }
+        public ConditionMethod Method { get; set; }
+        public bool InvisibleUnchecked { get; set; }
+
+        public List<YAxisRow> YAxisRows { get; private set; }
+        public List<SeriesRow> SeriesRows { get; private set; }
+
+        public GridView YAxisGridView { get { return yAxesGridView; } }
+        public GridView SeriesGridView { get { return plotSeriesGridView; } }
+
+        public int YAxesCheckCount
+        {
+            get
+            {
+                int count = 0;
+
+                foreach (YAxisRow row in YAxisRows)
+                {
+                    if (row.Checked == true) count++;
+                }
+
+                return count;
+            }
+        }
+
+        public int SeriesCheckCount
+        {
+            get
+            {
+                int count = 0;
+
+                foreach (SeriesRow row in SeriesRows)
+                {
+                    if (row.Checked == true) count++;
+                }
+
+                return count;
+            }
+        }
+
+        private bool yAxisChecked { get; set; }
+        private bool seriesChecked { get; set; }
+
+        private void Initialize()
+        {
+            timeEdit.Value = 1;
+            Apply();
+
+            NameValue<EAxisAlign>[] axAlignItems = EnumHelper.GetNameValues<EAxisAlign>();
+            yaAlignLookUp.DataSource = axAlignItems;
+            yaAlignLookUp.DisplayMember = "Name";
+            yaAlignLookUp.ValueMember = "Value";
+            yaAlignLookUp.KeyMember = "Value";
+
+            yAxisChecked = false;
+            YAxisRows = new List<YAxisRow>();
+
+            int i = 0;
+            string unit = "None";
+
+            foreach (EUnitType unitType in Enum.GetValues(typeof(EUnitType)))
+            {
+                if (unitType == EUnitType.None) continue;
+                if (unitType == EUnitType.Time) continue;
+
+                switch (unitType)
+                {
+                    case EUnitType.Current:
+                    case EUnitType.Voltage:
+                    case EUnitType.Frequency:
+                    case EUnitType.Flux:
+                    case EUnitType.Ratio:
+                    case EUnitType.HumidityRatio:
+                    case EUnitType.Power:
+                    case EUnitType.PowerComsumption:
+                    case EUnitType.Velocity:
+                    case EUnitType.Volume:
+                        unit = UnitQuery.GetUnitDescription(unitType);
+                        break;
+
+                    case EUnitType.AirFlow:
+                        unit = UnitQuery.GetUnitDescription(unitType, (int)Method.AirFlow);
+                        break;
+
+                    case EUnitType.Capacity:
+                    case EUnitType.EER_COP:
+                        unit = UnitQuery.GetUnitDescription(unitType, (int)Method.CoolingCapacity);
+                        break;
+
+                    case EUnitType.Enthalpy:
+                    case EUnitType.Heat:
+                        unit = UnitQuery.GetUnitDescription(unitType, (int)Method.Enthalpy);
+                        break;
+
+                    case EUnitType.Temperature:
+                        unit = UnitQuery.GetUnitDescription(unitType, (int)Method.Temperature);
+                        break;
+
+                    case EUnitType.Pressure:
+                        unit = UnitQuery.GetUnitDescription(unitType, (int)Method.Pressure);
+                        break;
+
+                    case EUnitType.DiffPressure:
+                        unit = UnitQuery.GetUnitDescription(unitType, (int)Method.DiffPressure);
+                        break;
+
+                    case EUnitType.AtmPressure:
+                        unit = UnitQuery.GetUnitDescription(unitType, (int)Method.AtmPressure);
+                        break;
+                }
+
+                YAxisRows.Add(new YAxisRow(-1, i++, false, EAxisAlign.Left, 
+                    unitType.ToString(), unitType.ToDescription(), unit, -100, 100, -100, 100));
+            }
+
+            YAxisRows[(int)EUnitType.Voltage - 1].Checked = true;
+            YAxisRows[(int)EUnitType.Current - 1].Checked = true;
+            YAxisRows[(int)EUnitType.Power - 1].Checked = true;
+
+            yAxesGrid.DataSource = YAxisRows;
+            yAxesGridView.Columns["Checked"].ImageOptions.ImageIndex = 1;
+            yAxesGridView.Appearance.EvenRow.BackColor = Color.FromArgb(244, 244, 236);
+            yAxesGridView.OptionsView.EnableAppearanceEvenRow = true;
+            yAxesGridView.RefreshData();
+
+            seriesChecked = false;
+            SeriesRows = new List<SeriesRow>();
+
+            int color = (int)KnownColor.AliceBlue;
+
+            foreach (KeyValuePair<string, ValueRow> row in GraphRows)
+            {
+                if (row.Value.Unit.Type == EUnitType.Time) continue;
+
+                SeriesRows.Add(new SeriesRow(-1, false, row.Key, "0.0", row.Value.Unit.Type.ToString(), 
+                    row.Value.Unit.ToDescription, Color.FromKnownColor((KnownColor)color)));
+
+                if ((KnownColor)color == KnownColor.YellowGreen) color = (int)KnownColor.AliceBlue;
+                else color++;
+            }
+
+            SeriesRows[1].Checked = true;
+            SeriesRows[2].Checked = true;
+
+            plotSeriesGrid.DataSource = SeriesRows;
+            plotSeriesGridView.Columns["Checked"].ImageOptions.ImageIndex = 1;
+            plotSeriesGridView.Appearance.EvenRow.BackColor = Color.FromArgb(244, 244, 236);
+            plotSeriesGridView.OptionsView.EnableAppearanceEvenRow = true;
+            plotSeriesGridView.RefreshData();
+        }
+
+        private void yAxesGridView_MouseDown(object sender, MouseEventArgs e)
+        {
+            GridView view = sender as GridView;
+            GridHitInfo hit = view.CalcHitInfo(e.Location);
+
+            if (hit == null) return;
+
+            switch (hit.HitTest)
+            {
+                case GridHitTest.Column:
+                    if (hit.Column.FieldName == "Checked")
+                    {
+                        yAxisChecked = !yAxisChecked;
+                        SetYAxesCheckColumn(view);
+                    }
+                    break;
+            }
+        }
+
+        private void yAxesGridView_CustomDrawColumnHeader(object sender, ColumnHeaderCustomDrawEventArgs e)
+        {
+            if (e.Column == null) return;
+
+            if (e.Column.FieldName == "Checked")
+            {
+                Image image = (yAxisChecked == true) ? imageList.Images[1] : imageList.Images[0];
+
+                e.DefaultDraw();
+                e.Cache.DrawImage(image,
+                    new Rectangle(e.Bounds.X + (e.Bounds.Width - image.Size.Width) / 2,
+                    e.Bounds.Y + (e.Bounds.Height - image.Size.Height) / 2 - 1,
+                    image.Size.Width, image.Size.Height));
+
+                e.Handled = true;
+            }
+        }
+
+        private void SetYAxesCheckColumn(GridView view)
+        {
+            if (view.RowCount < 1) return;
+
+            view.BeginUpdate();
+
+            try
+            {
+                view.Columns["Checked"].ImageOptions.ImageIndex = (yAxisChecked == false) ? 0 : 1;
+
+                for (int i = 0; i < view.RowCount; i++)
+                {
+                    (view.GetRow(i) as YAxisRow).Checked = yAxisChecked;
+                }
+            }
+            finally
+            {
+                view.EndUpdate();
+            }
+        }
+
+        private void plotSeriesGridView_MouseDown(object sender, MouseEventArgs e)
+        {
+            GridView view = sender as GridView;
+            GridHitInfo hit = view.CalcHitInfo(e.Location);
+
+            if (hit == null) return;
+
+            switch (hit.HitTest)
+            {
+                case GridHitTest.Column:
+                    if (hit.Column.FieldName == "Checked")
+                    {
+                        seriesChecked = !seriesChecked;
+                        SetSeriesCheckColumn(view);
+                    }
+                    break;
+            }
+        }
+
+        private void plotSeriesGridView_CustomDrawColumnHeader(object sender, ColumnHeaderCustomDrawEventArgs e)
+        {
+            if (e.Column == null) return;
+
+            if (e.Column.FieldName == "Checked")
+            {
+                Image image = (seriesChecked == true) ? imageList.Images[1] : imageList.Images[0];
+
+                e.DefaultDraw();
+                e.Cache.DrawImage(image,
+                    new Rectangle(e.Bounds.X + (e.Bounds.Width - image.Size.Width) / 2,
+                    e.Bounds.Y + (e.Bounds.Height - image.Size.Height) / 2 - 1,
+                    image.Size.Width, image.Size.Height));
+
+                e.Handled = true;
+            }
+        }
+
+        private void plotSeriesGridView_CustomRowFilter(object sender, RowFilterEventArgs e)
+        {
+            ColumnView view = sender as ColumnView;
+
+            if (InvisibleUnchecked == true)
+            {
+                e.Visible = (bool)view.GetListSourceRowCellValue(e.ListSourceRow, "Checked");
+                e.Handled = true;
+            }
+        }
+
+        private void yAxesGridView_CustomRowFilter(object sender, RowFilterEventArgs e)
+        {
+            ColumnView view = sender as ColumnView;
+
+            if (InvisibleUnchecked == true)
+            {
+                e.Visible = (bool)view.GetListSourceRowCellValue(e.ListSourceRow, "Checked");
+                e.Handled = true;
+            }
+        }
+
+        private void SetSeriesCheckColumn(GridView view)
+        {
+            if (view.RowCount < 1) return;
+
+            view.BeginUpdate();
+
+            try
+            {
+                view.Columns["Checked"].ImageOptions.ImageIndex = (seriesChecked == false) ? 0 : 1;
+
+                for (int i = 0; i < view.RowCount; i++)
+                {
+                    (view.GetRow(i) as SeriesRow).Checked = seriesChecked;
+                }
+            }
+            finally
+            {
+                view.EndUpdate();
+            }
+        }
+
+        public void Apply()
+        {
+            Time = (double)timeEdit.Value * 60000;
+        }
+
+        public void RefreshGrid()
+        {
+            yAxesGridView.RefreshData();
+            yAxesGridView.FocusedRowHandle = 0;
+
+            plotSeriesGridView.RefreshData();
+            plotSeriesGridView.FocusedRowHandle = 0;
+        }
+
+        public void RefreshSeriesUnit()
+        {
+            List<ValueRow> rows = GraphRows.Values.ToList<ValueRow>();
+
+            for (int i=0; i<rows.Count; i++)
+            {
+                SeriesRows[i].UnitFrom = rows[i].Unit.ToDescription;
+            }
+
+            plotSeriesGridView.RefreshData();
+        }
+
+        public void RefreshGridData()
+        {
+            Resource.TestDB[LineNo].Lock();
+
+            try
+            {
+                yAxisChecked = false;
+
+                YAxisSettingDataSet yAxisSet = Resource.TestDB[LineNo].YAxisSettingSet;
+                yAxisSet.Ip = Resource.Ip;
+                yAxisSet.GraphNo = GraphNo;
+                yAxisSet.Select();
+
+                if (yAxisSet.IsEmpty() == false)
+                {
+                    if (YAxisRows.Count == yAxisSet.GetRowCount())
+                    {
+                        for (int i = 0; i < YAxisRows.Count; i++)
+                        {
+                            yAxisSet.Fetch(i);
+
+                            YAxisRows[i].RecNo = yAxisSet.RecNo;
+                            YAxisRows[i].Checked = yAxisSet.Checked;
+                            YAxisRows[i].Align = yAxisSet.Align;
+                            YAxisRows[i].VisualMin = yAxisSet.VisualMin;
+                            YAxisRows[i].VisualMax = yAxisSet.VisualMax;
+                            YAxisRows[i].WholeMin = yAxisSet.WholeMin;
+                            YAxisRows[i].WholeMax = yAxisSet.WholeMax;
+                        }
+
+                        yAxesGridView.RefreshData();
+                    }
+                }
+
+                seriesChecked = false;
+
+                SeriesSettingDataSet seriesSet = Resource.TestDB[LineNo].SeriesSettingSet;
+                seriesSet.Ip = Resource.Ip;
+                seriesSet.GraphNo = GraphNo;
+                seriesSet.Select();
+
+                if (seriesSet.IsEmpty() == false)
+                {
+                    if (SeriesRows.Count == seriesSet.GetRowCount())
+                    {
+                        for (int i = 0; i < SeriesRows.Count; i++)
+                        {
+                            seriesSet.Fetch(i);
+
+                            SeriesRows[i].RecNo = seriesSet.RecNo;
+                            SeriesRows[i].Checked = seriesSet.Checked;
+                            SeriesRows[i].Color = seriesSet.Color;
+                        }
+
+                        plotSeriesGridView.RefreshData();
+                    }
+                }
+            }
+            finally
+            {
+                Resource.TestDB[LineNo].Unlock();
+            }
+        }
+
+        public void Insert()
+        {
+            Resource.TestDB[LineNo].Lock();
+            FbTransaction trans = Resource.TestDB[LineNo].BeginTrans();
+
+            try
+            {
+                YAxisSettingDataSet yAxisSet = Resource.TestDB[LineNo].YAxisSettingSet;
+
+                for (int i = 0; i < yAxesGridView.RowCount; i++)
+                {
+                    YAxisRow row = yAxesGridView.GetRow(i) as YAxisRow;
+
+                    yAxisSet.Ip = Resource.Ip;
+                    yAxisSet.GraphNo = GraphNo;
+                    yAxisSet.Checked = row.Checked;
+                    yAxisSet.Align = row.Align;
+                    yAxisSet.Name = row.Name;
+                    yAxisSet.Desc = row.Description;
+                    yAxisSet.Unit = row.Unit;
+                    yAxisSet.VisualMin = row.VisualMin;
+                    yAxisSet.VisualMax = row.VisualMax;
+                    yAxisSet.WholeMin = row.WholeMin;
+                    yAxisSet.WholeMax = row.WholeMax;
+
+                    if (row.RecNo == -1)
+                    {
+                        yAxisSet.RecNo = (int)Resource.TestDB[LineNo].GetGenNo("GN_YAXISSETTING");
+                        yAxisSet.Insert(trans);
+                    }
+                    else
+                    {
+                        yAxisSet.RecNo = row.RecNo;
+                        yAxisSet.Update(trans);
+                    }
+                }
+
+                SeriesSettingDataSet seriesSet = Resource.TestDB[LineNo].SeriesSettingSet;
+
+                for (int i = 0; i < plotSeriesGridView.RowCount; i++)
+                {
+                    SeriesRow row = plotSeriesGridView.GetRow(i) as SeriesRow;
+
+                    seriesSet.Ip = Resource.Ip;
+                    seriesSet.GraphNo = GraphNo;
+                    seriesSet.Checked = row.Checked;
+                    seriesSet.Color = row.Color;
+                    seriesSet.Name = row.Name;
+                    seriesSet.UnitType = row.UnitType;
+ 
+                    if (row.RecNo == -1)
+                    {
+                        seriesSet.RecNo = (int)Resource.TestDB[LineNo].GetGenNo("GN_SERIESSETTING");
+                        seriesSet.Insert(trans);
+                    }
+                    else
+                    {
+                        seriesSet.RecNo = row.RecNo;
+                        seriesSet.Update(trans);
+                    }
+                }
+
+                Resource.TestDB[LineNo].CommitTrans();
+            }        
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+                Resource.TestDB[LineNo].RollbackTrans();
+            }
+            finally
+            {
+                Resource.TestDB[LineNo].Unlock();
+            }
+        }
+
+        public int GetAxisNo(string name)
+        {
+            int axisNo = -1;
+
+            foreach (YAxisRow row in YAxisRows)
+            {
+                if (row.Name == name)
+                {
+                    axisNo = row.AxisNo;
+                    break;
+                }
+            }
+
+            return axisNo;
+        }
+    }
+}
+ 

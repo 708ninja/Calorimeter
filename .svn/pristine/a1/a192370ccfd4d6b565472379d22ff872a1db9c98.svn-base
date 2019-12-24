@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
+
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    public class CalorimeterClient
+    {
+        public CalorimeterClient(UlIniFile ini)
+        {
+            IpPoint = new IPEndPoint(
+                IPAddress.Parse(Ini.GetString("Server", "ip")), 
+                Ini.GetInteger("Server", "port"));
+
+            Udp = new UdpClient(IpPoint);
+
+            Devices = new ClientDevice(this);
+
+            Listener = new ClientListener(this);
+
+            Sender = new ClientSender(this);
+        }
+
+        public UlIniFile Ini;
+
+        public UdpClient Udp { get; private set; }
+
+        public IPEndPoint IpPoint { get; private set; }
+
+        public ClientDevice Devices { get; private set; }
+
+        public ClientListener Listener { get; private set; }
+
+        public ClientSender Sender { get; private set;}
+    }
+}

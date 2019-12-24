@@ -1,0 +1,268 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class FormOpenAllParam
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormOpenAllParam));
+            this.paramGrid = new DevExpress.XtraGrid.GridControl();
+            this.paramGridView = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.pgUserNameColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.pgDateTimeColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.pgMemoColumn = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.okButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.schDeleteButton = new System.Windows.Forms.Button();
+            this.bgPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.paramGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.paramGridView)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.Controls.Add(this.schDeleteButton);
+            this.bgPanel.Controls.Add(this.okButton);
+            this.bgPanel.Controls.Add(this.cancelButton);
+            this.bgPanel.Controls.Add(this.paramGrid);
+            this.bgPanel.Size = new System.Drawing.Size(412, 407);
+            // 
+            // paramGrid
+            // 
+            this.paramGrid.Location = new System.Drawing.Point(12, 12);
+            this.paramGrid.MainView = this.paramGridView;
+            this.paramGrid.Name = "paramGrid";
+            this.paramGrid.Size = new System.Drawing.Size(386, 348);
+            this.paramGrid.TabIndex = 0;
+            this.paramGrid.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.paramGridView});
+            this.paramGrid.DoubleClick += new System.EventHandler(this.paramGrid_DoubleClick);
+            // 
+            // paramGridView
+            // 
+            this.paramGridView.ActiveFilterEnabled = false;
+            this.paramGridView.Appearance.FixedLine.Font = new System.Drawing.Font("Arial", 9F);
+            this.paramGridView.Appearance.FixedLine.Options.UseFont = true;
+            this.paramGridView.Appearance.FocusedCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.paramGridView.Appearance.FocusedCell.Options.UseFont = true;
+            this.paramGridView.Appearance.FocusedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.paramGridView.Appearance.FocusedRow.Options.UseFont = true;
+            this.paramGridView.Appearance.HeaderPanel.Font = new System.Drawing.Font("Arial", 9F);
+            this.paramGridView.Appearance.HeaderPanel.Options.UseFont = true;
+            this.paramGridView.Appearance.HideSelectionRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.paramGridView.Appearance.HideSelectionRow.Options.UseFont = true;
+            this.paramGridView.Appearance.OddRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.paramGridView.Appearance.OddRow.Options.UseFont = true;
+            this.paramGridView.Appearance.Preview.Font = new System.Drawing.Font("Arial", 9F);
+            this.paramGridView.Appearance.Preview.Options.UseFont = true;
+            this.paramGridView.Appearance.Row.Font = new System.Drawing.Font("Arial", 9F);
+            this.paramGridView.Appearance.Row.Options.UseFont = true;
+            this.paramGridView.Appearance.SelectedRow.Font = new System.Drawing.Font("Arial", 9F);
+            this.paramGridView.Appearance.SelectedRow.Options.UseFont = true;
+            this.paramGridView.Appearance.ViewCaption.Font = new System.Drawing.Font("Arial", 9F);
+            this.paramGridView.Appearance.ViewCaption.Options.UseFont = true;
+            this.paramGridView.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.pgUserNameColumn,
+            this.pgDateTimeColumn,
+            this.pgMemoColumn});
+            this.paramGridView.CustomizationFormBounds = new System.Drawing.Rectangle(2884, 580, 210, 186);
+            this.paramGridView.GridControl = this.paramGrid;
+            this.paramGridView.HorzScrollVisibility = DevExpress.XtraGrid.Views.Base.ScrollVisibility.Never;
+            this.paramGridView.Name = "paramGridView";
+            this.paramGridView.OptionsBehavior.Editable = false;
+            this.paramGridView.OptionsBehavior.ReadOnly = true;
+            this.paramGridView.OptionsFilter.AllowAutoFilterConditionChange = DevExpress.Utils.DefaultBoolean.False;
+            this.paramGridView.OptionsFilter.AllowFilterEditor = false;
+            this.paramGridView.OptionsView.ColumnAutoWidth = false;
+            this.paramGridView.OptionsView.ShowGroupPanel = false;
+            this.paramGridView.OptionsView.ShowIndicator = false;
+            this.paramGridView.Tag = 1;
+            this.paramGridView.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.paramGridView_FocusedRowChanged);
+            // 
+            // pgUserNameColumn
+            // 
+            this.pgUserNameColumn.AppearanceCell.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pgUserNameColumn.AppearanceCell.Options.UseFont = true;
+            this.pgUserNameColumn.AppearanceCell.Options.UseTextOptions = true;
+            this.pgUserNameColumn.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            this.pgUserNameColumn.AppearanceHeader.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pgUserNameColumn.AppearanceHeader.Options.UseFont = true;
+            this.pgUserNameColumn.AppearanceHeader.Options.UseTextOptions = true;
+            this.pgUserNameColumn.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            this.pgUserNameColumn.Caption = "User Name";
+            this.pgUserNameColumn.FieldName = "USERNAME";
+            this.pgUserNameColumn.Name = "pgUserNameColumn";
+            this.pgUserNameColumn.OptionsColumn.AllowEdit = false;
+            this.pgUserNameColumn.OptionsColumn.AllowFocus = false;
+            this.pgUserNameColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.pgUserNameColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.pgUserNameColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.pgUserNameColumn.OptionsColumn.AllowMove = false;
+            this.pgUserNameColumn.OptionsColumn.AllowShowHide = false;
+            this.pgUserNameColumn.OptionsColumn.AllowSize = false;
+            this.pgUserNameColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.pgUserNameColumn.OptionsColumn.FixedWidth = true;
+            this.pgUserNameColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.pgUserNameColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.pgUserNameColumn.OptionsColumn.ReadOnly = true;
+            this.pgUserNameColumn.OptionsColumn.TabStop = false;
+            this.pgUserNameColumn.OptionsFilter.AllowAutoFilter = false;
+            this.pgUserNameColumn.OptionsFilter.AllowFilter = false;
+            this.pgUserNameColumn.OptionsFilter.ImmediateUpdateAutoFilter = false;
+            this.pgUserNameColumn.OptionsFilter.ShowEmptyDateFilter = false;
+            this.pgUserNameColumn.Visible = true;
+            this.pgUserNameColumn.VisibleIndex = 0;
+            this.pgUserNameColumn.Width = 96;
+            // 
+            // pgDateTimeColumn
+            // 
+            this.pgDateTimeColumn.Caption = "Date Time";
+            this.pgDateTimeColumn.FieldName = "REGTIME";
+            this.pgDateTimeColumn.Name = "pgDateTimeColumn";
+            this.pgDateTimeColumn.OptionsColumn.AllowEdit = false;
+            this.pgDateTimeColumn.OptionsColumn.AllowFocus = false;
+            this.pgDateTimeColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.pgDateTimeColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.pgDateTimeColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.pgDateTimeColumn.OptionsColumn.AllowMove = false;
+            this.pgDateTimeColumn.OptionsColumn.AllowShowHide = false;
+            this.pgDateTimeColumn.OptionsColumn.AllowSize = false;
+            this.pgDateTimeColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.pgDateTimeColumn.OptionsColumn.FixedWidth = true;
+            this.pgDateTimeColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.pgDateTimeColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.pgDateTimeColumn.OptionsColumn.ReadOnly = true;
+            this.pgDateTimeColumn.OptionsFilter.AllowAutoFilter = false;
+            this.pgDateTimeColumn.OptionsFilter.AllowFilter = false;
+            this.pgDateTimeColumn.OptionsFilter.ImmediateUpdateAutoFilter = false;
+            this.pgDateTimeColumn.OptionsFilter.ShowEmptyDateFilter = false;
+            this.pgDateTimeColumn.Visible = true;
+            this.pgDateTimeColumn.VisibleIndex = 1;
+            this.pgDateTimeColumn.Width = 127;
+            // 
+            // pgMemoColumn
+            // 
+            this.pgMemoColumn.Caption = "Memo";
+            this.pgMemoColumn.FieldName = "MEMO";
+            this.pgMemoColumn.Name = "pgMemoColumn";
+            this.pgMemoColumn.OptionsColumn.AllowEdit = false;
+            this.pgMemoColumn.OptionsColumn.AllowFocus = false;
+            this.pgMemoColumn.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.pgMemoColumn.OptionsColumn.AllowIncrementalSearch = false;
+            this.pgMemoColumn.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+            this.pgMemoColumn.OptionsColumn.AllowMove = false;
+            this.pgMemoColumn.OptionsColumn.AllowShowHide = false;
+            this.pgMemoColumn.OptionsColumn.AllowSize = false;
+            this.pgMemoColumn.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+            this.pgMemoColumn.OptionsColumn.FixedWidth = true;
+            this.pgMemoColumn.OptionsColumn.ImmediateUpdateRowPosition = DevExpress.Utils.DefaultBoolean.False;
+            this.pgMemoColumn.OptionsColumn.Printable = DevExpress.Utils.DefaultBoolean.False;
+            this.pgMemoColumn.OptionsColumn.ReadOnly = true;
+            this.pgMemoColumn.OptionsFilter.AllowAutoFilter = false;
+            this.pgMemoColumn.OptionsFilter.AllowFilter = false;
+            this.pgMemoColumn.OptionsFilter.ImmediateUpdateAutoFilter = false;
+            this.pgMemoColumn.OptionsFilter.ShowEmptyDateFilter = false;
+            this.pgMemoColumn.Visible = true;
+            this.pgMemoColumn.VisibleIndex = 2;
+            this.pgMemoColumn.Width = 140;
+            // 
+            // okButton
+            // 
+            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.okButton.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.okButton.Image = ((System.Drawing.Image)(resources.GetObject("okButton.Image")));
+            this.okButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.okButton.Location = new System.Drawing.Point(196, 366);
+            this.okButton.Name = "okButton";
+            this.okButton.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.okButton.Size = new System.Drawing.Size(100, 32);
+            this.okButton.TabIndex = 2;
+            this.okButton.Text = "Ok";
+            this.okButton.UseVisualStyleBackColor = true;
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cancelButton.Image = ((System.Drawing.Image)(resources.GetObject("cancelButton.Image")));
+            this.cancelButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.cancelButton.Location = new System.Drawing.Point(298, 366);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.cancelButton.Size = new System.Drawing.Size(100, 32);
+            this.cancelButton.TabIndex = 3;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            // 
+            // schDeleteButton
+            // 
+            this.schDeleteButton.Image = ((System.Drawing.Image)(resources.GetObject("schDeleteButton.Image")));
+            this.schDeleteButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.schDeleteButton.Location = new System.Drawing.Point(12, 366);
+            this.schDeleteButton.Name = "schDeleteButton";
+            this.schDeleteButton.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.schDeleteButton.Size = new System.Drawing.Size(100, 32);
+            this.schDeleteButton.TabIndex = 1;
+            this.schDeleteButton.TabStop = false;
+            this.schDeleteButton.Text = "Delete";
+            this.schDeleteButton.UseVisualStyleBackColor = true;
+            this.schDeleteButton.Click += new System.EventHandler(this.schDeleteButton_Click);
+            // 
+            // FormOpenAllParam
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(412, 407);
+            this.KeyPreview = true;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormOpenAllParam";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Open All Parameters";
+            this.Load += new System.EventHandler(this.FormOpenAllParam_Load);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.FormOpenAllParam_KeyPress);
+            this.bgPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.paramGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.paramGridView)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private DevExpress.XtraGrid.GridControl paramGrid;
+        private DevExpress.XtraGrid.Views.Grid.GridView paramGridView;
+        private DevExpress.XtraGrid.Columns.GridColumn pgUserNameColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn pgDateTimeColumn;
+        private DevExpress.XtraGrid.Columns.GridColumn pgMemoColumn;
+        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Button schDeleteButton;
+    }
+}

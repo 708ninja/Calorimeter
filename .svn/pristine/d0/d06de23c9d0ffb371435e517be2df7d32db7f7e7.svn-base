@@ -1,0 +1,52 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{
+    public enum ETestPanel { Condition, Measurement }
+
+    public partial class CtrlTestLine1 : UlUserControlEng
+    {
+        public CtrlTestLine1()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            conditionPanel.Controls.Add(new CtrlTestCondition());
+            measPanel.Controls.Add(new CtrlTestMeas());
+        }
+
+        private void CtrlTestLine1_Load(object sender, EventArgs e)
+        {
+            ShowPanel(ETestPanel.Condition);
+        }
+
+        public void ShowPanel(ETestPanel panel)
+        {
+            switch (panel)
+            {
+                case ETestPanel.Condition:
+                    measPanel.Hide();
+                    conditionPanel.Show();
+                    break;
+
+                case ETestPanel.Measurement:
+                    conditionPanel.Hide();
+                    measPanel.Show();
+                    break;
+            }
+        }
+    }
+}

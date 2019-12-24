@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    static public class Resource
+    {
+        private const string csConfigIniFName = @"..\..\Config\Hnc.Calorimeter.3R.Client.Config.Ini";
+
+        public const string Caption = "Calorimeter.Client";
+
+        static public int UserNo { get; set; }
+
+        static public EUserAuthority Authority { get; set; }
+
+        static public UlIniFile Ini;
+
+        static public UlLogger TLog { get; private set; }
+
+        static public UlLogger ALog { get; private set; }
+
+        //static public CalorimeterDatabase Db { get; private set; }
+
+        static public CalorimeterClient Client { get; private set; }
+
+        static public void Create()
+        {
+            UserNo = 0;
+            Authority = EUserAuthority.Viewer;
+
+            Ini = new UlIniFile(csConfigIniFName);
+
+            TLog = new UlLogger();
+            TLog.Path = Ini.GetString("Log", "TotalPath");
+            TLog.FName = Ini.GetString("Log", "TotalFileName");
+            TLog.AddHead("NOTE");
+            TLog.AddHead("ERROR");
+            TLog.AddHead("EXCEPTION");
+
+            Client = new CalorimeterClient(Ini);
+
+            //Db = new CalorimeterDatabase();
+            //Db.Database = Ini.GetString("Database", "FileName");
+            //Db.Open();
+
+            //Db.Load(Ini.GetInteger("Calibrator", "CalibrationNo"));
+        }
+
+        static public void Destroy()
+        {
+            //if (Db != null)
+            //{
+            //    Db.Close();
+            //}
+        }
+    }
+}

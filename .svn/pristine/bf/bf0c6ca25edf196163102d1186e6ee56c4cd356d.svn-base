@@ -1,0 +1,355 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Ulee.Controls;
+using Ulee.Device.Connection.Yokogawa;
+
+namespace Hnc.Calorimeter.Client
+{
+    public class ClientDevice
+    {
+        public ClientDevice(CalorimeterClient client)
+        {
+            this.client = client;
+
+            PowerMeter = new DeviceFrame<PowerMeterRow<float>, float>();
+            Recorder = new RecorderFrame<RecorderRow<float>, float>();
+            Controller = new DeviceFrame<ControllerRow<float>, float>();
+            Plc = new DeviceFrame<PlcRow<UInt16>, UInt16>();
+
+            Initialize();
+        }
+
+        private CalorimeterClient client;
+
+        public DeviceFrame<PowerMeterRow<float>, float> PowerMeter { get; private set; }
+
+        public RecorderFrame<RecorderRow<float>, float> Recorder { get; private set; }
+
+        public DeviceFrame<ControllerRow<float>, float> Controller { get; private set; }
+
+        public DeviceFrame<PlcRow<UInt16>, UInt16> Plc { get; private set; }
+
+        private void Initialize()
+        {
+            // Load powermeter parameters
+            int i = 1;
+            int index = 0;
+            string section;
+            string key = $"PM{i}";
+            string param = client.Ini.GetString("PowerMeter", key);
+            PowerMeter.Rows.Clear();
+
+            while (string.IsNullOrWhiteSpace(param) == false)
+            {
+                string[] @params = param.Split(new[] { ',' }, StringSplitOptions.None);
+                EWT330Phase phase = (@params[1] == "P1") ? EWT330Phase.P1 : EWT330Phase.P3;
+
+                PowerMeterRow<float> row = new PowerMeterRow<float>(@params[0], phase);
+                PowerMeter.Rows.Add(row);
+
+                int j = 1;
+                section = $"{key}.Channel";
+                key = $"CH{j}";
+                param = client.Ini.GetString(section, key);
+
+                while (string.IsNullOrWhiteSpace(param) == false)
+                {
+                    //@params = param.Split(new[] { ',' }, StringSplitOptions.None);
+                    //index = int.Parse(@params[1]);
+
+                    DeviceValueRow<float> valueRow = 
+                        new DeviceValueRow<float>(param, index++, 0);
+                    row.Values.Add(valueRow);
+                    PowerMeter.Values.Add(valueRow);
+
+                    j++;
+                    key = $"CH{j}";
+                    param = client.Ini.GetString(section, key);
+                }
+
+                i++;
+                key = $"PM{i}";
+                param = client.Ini.GetString("PowerMeter", key);
+            }
+
+            // Load recorder parameters
+            i = 1;
+            key = $"Rec{i}";
+            param = client.Ini.GetString("Recorder", key);
+            Recorder.Rows.Clear();
+
+            while (string.IsNullOrWhiteSpace(param) == false)
+            {
+                RecorderRow<float> row = new RecorderRow<float>(param);
+                Recorder.Rows.Add(row);
+
+                int j = 1;
+                section = $"{key}.Channel";
+                key = $"CH{j}";
+                param = client.Ini.GetString(section, key);
+
+                while (string.IsNullOrWhiteSpace(param) == false)
+                {
+                    DeviceValueRow<float> valueRow =
+                        new DeviceValueRow<float>(param, index++, 0);
+                    row.Values.Add(valueRow);
+                    Recorder.Values.Add(valueRow);
+
+                    j++;
+                    key = $"CH{j}";
+                    param = client.Ini.GetString(section, key);
+                }
+
+                i++;
+                key = $"Rec{i}";
+                param = client.Ini.GetString("Recorder", key);
+            }
+
+            int count = Recorder.Values.Count / 4;
+            for (int k = 0; k < count; k++)
+            {
+                Recorder.ValueList[0].Add(Recorder.Values[k]);
+                Recorder.ValueList[1].Add(Recorder.Values[k + count]);
+                Recorder.ValueList[2].Add(Recorder.Values[k + count * 2]);
+
+                if ((k + count * 3) < Recorder.Values.Count)
+                {
+                    Recorder.ValueList[3].Add(Recorder.Values[k + count * 3]);
+                }
+            }
+
+            // Load controller parameters
+            i = 1;
+            key = $"Ctrl{i}";
+            param = client.Ini.GetString("Controller", key);
+            Controller.Rows.Clear();
+
+            while (string.IsNullOrWhiteSpace(param) == false)
+            {
+                string[] @params = param.Split(new[] { ',' }, StringSplitOptions.None);
+                int networkNo = int.Parse(@params[1]);
+                int addr = int.Parse(@params[2]);
+
+                ControllerRow<float> row = new ControllerRow<float>(@params[0], networkNo, addr);
+                Controller.Rows.Add(row);
+
+                int j = 1;
+                section = $"{key}.Channel";
+                key = $"CH{j}";
+                param = client.Ini.GetString(section, key);
+
+                while (string.IsNullOrWhiteSpace(param) == false)
+                {
+                    //@params = param.Split(new[] { ',' }, StringSplitOptions.None);
+                    //index = int.Parse(@params[1]);
+
+                    DeviceValueRow<float> valueRow = 
+                        new DeviceValueRow<float>(param, index++, 0);
+                    row.Values.Add(valueRow);
+                    Controller.Values.Add(valueRow);
+
+                    j++;
+                    key = $"CH{j}";
+                    param = client.Ini.GetString(section, key);
+                }
+
+                i++;
+                key = $"Ctrl{i}";
+                param = client.Ini.GetString("Controller", key);
+            }
+
+            // Load PLC parameters
+            i = 1;
+            index = 0;
+            key = $"Plc{i}";
+            param = client.Ini.GetString("Plc", key);
+            Plc.Rows.Clear();
+
+            while (string.IsNullOrWhiteSpace(param) == false)
+            {
+                PlcRow<UInt16> row = new PlcRow<UInt16>(param);
+                Plc.Rows.Add(row);
+
+                int j = 1;
+                section = $"{key}.Channel";
+                key = $"CH{j}";
+                param = client.Ini.GetString(section, key);
+
+                while (string.IsNullOrWhiteSpace(param) == false)
+                {
+                    DeviceValueRow<UInt16> valueRow = 
+                        new DeviceValueRow<UInt16>(param, index++, 0);
+                    row.Values.Add(valueRow);
+                    Plc.Values.Add(valueRow);
+
+                    j++;
+                    key = $"CH{j}";
+                    param = client.Ini.GetString(section, key);
+                }
+
+                i++;
+                key = $"Plc{i}";
+                param = client.Ini.GetString("Plc", key);
+            }
+        }
+
+        public void RefreshValues()
+        {
+            int i = 0;
+            foreach (PowerMeterRow<float> rows in PowerMeter.Rows)
+            {
+                foreach (DeviceValueRow<float> valueRows in rows.Values)
+                {
+                    valueRows.Value = client.Listener.FValues[valueRows.Index];
+                    PowerMeter.Values[i++].Value = valueRows.Value;
+                }
+            }
+
+            i = 0;
+            foreach (RecorderRow<float> rows in Recorder.Rows)
+            {
+                foreach (DeviceValueRow<float> valueRows in rows.Values)
+                {
+                    valueRows.Value = client.Listener.FValues[valueRows.Index];
+                    Recorder.Values[i++].Value = valueRows.Value;
+                }
+            }
+
+            i = 0;
+            foreach (ControllerRow<float> rows in Controller.Rows)
+            {
+                foreach (DeviceValueRow<float> valueRows in rows.Values)
+                {
+                    valueRows.Value = client.Listener.FValues[valueRows.Index];
+                    Controller.Values[i++].Value = valueRows.Value;
+                }
+            }
+
+            int count = Recorder.Values.Count / 4;
+            for (int k = 0; k < count; k++)
+            {
+                Recorder.ValueList[0][k].Value = Recorder.Values[k].Value;
+                Recorder.ValueList[1][k].Value = Recorder.Values[k + count].Value;
+                Recorder.ValueList[2][k].Value = Recorder.Values[k + count * 2].Value;
+
+                if ((k + count * 3) < Recorder.Values.Count)
+                {
+                    Recorder.ValueList[3][k].Value = Recorder.Values[k + count * 3].Value;
+                }
+            }
+
+            i = 0;
+            foreach (PlcRow<UInt16> rows in Plc.Rows)
+            {
+                foreach (DeviceValueRow<UInt16> valueRows in rows.Values)
+                {
+                    valueRows.Value = client.Listener.NValues[valueRows.Index];
+                    Plc.Values[i++].Value = valueRows.Value;
+                }
+            }
+        }
+    }
+
+    public class DeviceFrame<T1, T2>
+    {
+        public DeviceFrame()
+        {
+            Rows = new List<T1>();
+            Values = new List<DeviceValueRow<T2>>();
+        }
+
+        public List<T1> Rows { get; private set; }
+
+        public List<DeviceValueRow<T2>> Values { get; private set; }
+    }
+
+    public abstract class DeviceFrameRow<T>
+    {
+        public DeviceFrameRow(string name)
+        {
+            Name = name;
+            Values = new List<DeviceValueRow<T>>();
+        }
+
+        public string Name { get; private set; }
+
+        public List<DeviceValueRow<T>> Values { get; private set; }
+
+        public int Length { get { return Values.Count; } }
+    }
+
+    public class PowerMeterRow<T> : DeviceFrameRow<T>
+    {
+        public PowerMeterRow(string name, EWT330Phase phase) : base(name)
+        {
+            Phase = phase;
+        }
+
+        public EWT330Phase Phase { get; private set; }
+    }
+
+    public class RecorderFrame<T1, T2> : DeviceFrame<T1, T2>
+    {
+        public RecorderFrame()
+        {
+            ValueList = new List<List<DeviceValueRow<T2>>>();
+            ValueList.Add(new List<DeviceValueRow<T2>>());
+            ValueList.Add(new List<DeviceValueRow<T2>>());
+            ValueList.Add(new List<DeviceValueRow<T2>>());
+            ValueList.Add(new List<DeviceValueRow<T2>>());
+        }
+
+        public List<List<DeviceValueRow<T2>>> ValueList;
+    }
+
+    public class RecorderRow<T> : DeviceFrameRow<T>
+    {
+        public RecorderRow(string name) : base(name)
+        {
+        }
+    }
+
+    public class ControllerRow<T> : DeviceFrameRow<T>
+    {
+        public ControllerRow(string name, int networkNo, int addr) : base(name)
+        {
+            NetworkNo = networkNo;
+            Address = addr;
+        }
+
+        public int NetworkNo { get; private set; }
+
+        public int Address { get; private set; }
+    }
+
+    public class PlcRow<T> : DeviceFrameRow<T>
+    {
+        public PlcRow(string name) : base(name)
+        {
+        }
+    }
+
+    public class DeviceValueRow<T>
+    {
+        public DeviceValueRow(string name, int index, T value)
+        {
+            Name = name;
+            Index = index;
+            Value = value;
+        }
+
+        public string Name { get; private set; }
+
+        public int Index { get; private set; }
+
+        public T Value { get; set; }
+
+        public string Format { get; set; }
+
+        public UnitConvert Convert { get; set; }
+    }
+}

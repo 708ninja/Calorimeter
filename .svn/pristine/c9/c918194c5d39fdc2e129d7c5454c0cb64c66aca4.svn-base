@@ -1,0 +1,155 @@
+[Database]
+FileName = D:\Database\Hnc\Firebird.2.5\Calorimeter.3R\Hnc.Calorimeter.3R.FDB
+
+[Log]
+TotalPath = ..\..\Log\Total
+TotalFileName = Hnc.Calorimeter.Total
+AlarmlPath = ..\..\Log\Alarm
+AlarmFileName = Hnc.Calorimeter.Alarm
+
+[Server]
+ip = 127.0.0.1
+port = 54321
+
+[Listener]
+LogPath = ..\..\Log\Listener
+LogFileName = Hnc.Calorimeter.Listener
+Logging = Event
+
+[Sender]
+LogPath = ..\..\Log\Sender
+LogFileName = Hnc.Calorimeter.Sender
+Logging = All
+
+[Device]
+FValueLength = 104
+NValueLength = 2
+
+[PowerMeter]
+PM1 = WT333-01,P3
+PM2 = WT333-02,P1
+
+[Controller]
+Ctrl1 = UT55A-01,0,1
+
+[Recorder]
+Rec1 = GM10-01
+
+[Plc]
+Plc1 = MasterK-01
+
+[PM1.Channel]
+CH1 = PM1.R.W,0
+CH2 = PM1.R.V,1
+CH3 = PM1.R.A,2
+CH4 = PM1.R.Hz,3
+CH5 = PM1.R.PF,4
+CH6 = PM1.R.Wh,5
+CH7 = PM1.S.W,6
+CH8 = PM1.S.V,7
+CH9 = PM1.S.A,8
+CH10 = PM1.S.Hz,9
+CH11 = PM1.S.PF,10
+CH12 = PM1.S.Wh,11
+CH13 = PM1.T.W,12
+CH14 = PM1.T.V,13
+CH15 = PM1.T.A,14
+CH16 = PM1.T.Hz,15
+CH17 = PM1.T.PF,16
+CH18 = PM1.T.Wh,17
+CH19 = PM1.Sigma.W,18
+CH20 = PM1.Sigma.V,19
+CH21 = PM1.Sigma.A,20
+CH22 = PM1.Sigma.Hz,21
+CH23 = PM1.Sigma.PF,22
+CH24 = PM1.Sigma.Wh,23
+CH25 = PM1.Integ.Time,24
+
+[PM2.Channel]
+CH1 = PM2.R.W,25
+CH2 = PM2.R.V,26
+CH3 = PM2.R.A,27
+CH4 = PM2.R.Hz,28
+CH5 = PM2.R.PF,29
+CH6 = PM2.R.Wh,30
+CH7 = PM2.Integ.Time,31
+
+[Ctrl1.Channel]
+CH1 = CTRL1.PV,32
+CH2 = CTRL1.SV,33
+CH3 = CTRL1.OUT,34
+CH4 = CTRL1.Mode,35
+CH5 = CTRL1.SPN,36
+CH6 = CTRL1.P,37
+CH7 = CTRL1.I,38
+CH8 = CTRL1.D,39
+CH9 = CTRL1.DEV,40
+CH10 = CTRL1.BS,41
+CH11 = CTRL1.FL,42
+CH12 = CTRL1.MOUT,43
+
+[Rec1.Channel]
+CH1 = TC_001,44
+CH2 = TC_002,45
+CH3 = TC_003,46
+CH4 = TC_004,47
+CH5 = TC_005,48
+CH6 = TC_006,49
+CH7 = TC_007,50
+CH8 = TC_008,51
+CH9 = TC_009,52
+CH10 = TC_010,53
+CH11 = TC_011,54
+CH12 = TC_012,55
+CH13 = TC_013,56
+CH14 = TC_014,57
+CH15 = TC_015,58
+CH16 = TC_016,59
+CH17 = TC_017,60
+CH18 = TC_018,61
+CH19 = TC_019,62
+CH20 = TC_020,63
+CH21 = TC_021,64
+CH22 = TC_022,65
+CH23 = TC_023,66
+CH24 = TC_024,67
+CH25 = TC_025,68
+CH26 = TC_026,69
+CH27 = TC_027,70
+CH28 = TC_028,71
+CH29 = TC_029,72
+CH30 = TC_030,73
+CH31 = TC_031,74
+CH32 = TC_032,75
+CH33 = TC_033,76
+CH34 = TC_034,77
+CH35 = TC_035,78
+CH36 = TC_036,79
+CH37 = TC_037,80
+CH38 = TC_038,81
+CH39 = TC_039,82
+CH40 = TC_040,83
+CH41 = TC_041,84
+CH42 = TC_042,85
+CH43 = TC_043,86
+CH44 = TC_044,87
+CH45 = TC_045,88
+CH46 = TC_046,89
+CH47 = TC_047,90
+CH48 = TC_048,91
+CH49 = TC_049,92
+CH50 = TC_050,93
+CH51 = TC_051,94
+CH52 = TC_052,95
+CH53 = TC_053,96
+CH54 = TC_054,97
+CH55 = TC_055,98
+CH56 = TC_056,99
+CH57 = TC_057,100
+CH58 = TC_058,101
+CH59 = TC_059,102
+CH60 = TC_060,103
+
+[Plc1.Channel]
+CH1 = PLC1.1,0
+CH2 = PLC1.2,0

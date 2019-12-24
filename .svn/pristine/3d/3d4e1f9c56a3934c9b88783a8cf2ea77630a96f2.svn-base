@@ -1,0 +1,851 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Hnc.Calorimeter.Client
+{
+    #region TestValue
+    public class TestValue
+    {
+        public TestValue()
+        {
+            saving = false;
+            Const = new Dictionary<string, ValueRow>();
+            Calcurated = new Dictionary<string, ValueRow>();
+            Measured = new Dictionary<string, ValueRow>();
+            Initialize();
+
+            Integral = new IntegralSheets();
+            Integral.Initialize(this);
+        }
+
+        public Dictionary<string, ValueRow> Const { get; set; }
+        public Dictionary<string, ValueRow> Calcurated { get; set; }
+        public Dictionary<string, ValueRow> Measured { get; set; }
+        public IntegralSheets Integral { get; set; }
+
+        private void Initialize()
+        {
+            // Load constant variables
+            int i = 1;
+            string key = $"CH{i}";
+            string param = Resource.Ini.GetString("Constant.Channel", key);
+            Const.Clear();
+
+            while (string.IsNullOrWhiteSpace(param) == false)
+            {
+                string[] @params = param.Split(new[] { ',' }, StringSplitOptions.None);
+
+                EUnitType type = (EUnitType)Enum.Parse(typeof(EUnitType), @params[1]);
+                int unitNo = GetUnitNo(type, @params[2]);
+                UnitConvert unit = new UnitConvert(type, unitNo, unitNo);
+                ValueRow row = new ValueRow(i - 1, @params[0], 0f, @params[3], unit);
+
+                Const.Add(@params[0], row);
+
+                i++;
+                key = $"CH{i}";
+                param = Resource.Ini.GetString("Constant.Channel", key);
+            }
+
+            // Load calculated variables
+            i = 1;
+            key = $"CH{i}";
+            param = Resource.Ini.GetString("Calculated.Channel", key);
+            Calcurated.Clear();
+
+            while (string.IsNullOrWhiteSpace(param) == false)
+            {
+                string[] @params = param.Split(new[] { ',' }, StringSplitOptions.None);
+
+                EUnitType type = (EUnitType)Enum.Parse(typeof(EUnitType), @params[1]);
+                int unitNo = GetUnitNo(type, @params[2]);
+                UnitConvert unit = new UnitConvert(type, unitNo, unitNo);
+                ValueRow row = new ValueRow(i - 1, @params[0], 0f, @params[3], unit, type, true, true);
+
+                Calcurated.Add(@params[0], row);
+
+                i++;
+                key = $"CH{i}";
+                param = Resource.Ini.GetString("Calculated.Channel", key);
+            }
+
+            // Load measured variables
+            i = 1;
+            key = $"CH{i}";
+            param = Resource.Ini.GetString("Measured.Channel", key);
+            Measured.Clear();
+
+            while (string.IsNullOrWhiteSpace(param) == false)
+            {
+                string[] @params = param.Split(new[] { ',' }, StringSplitOptions.None);
+
+                EUnitType type = (EUnitType)Enum.Parse(typeof(EUnitType), @params[1]);
+                int unitNo = GetUnitNo(type, @params[2]);
+                UnitConvert unit = new UnitConvert(type, unitNo, unitNo);
+                ValueRow row = new ValueRow(i - 1, @params[0], 0f, @params[3], unit, type, true, true);
+
+                Measured.Add(@params[0], row);
+
+                i++;
+                key = $"CH{i}";
+                param = Resource.Ini.GetString("Measured.Channel", key);
+            }
+        }
+
+        public void Lock()
+        {
+            Monitor.Enter(Const);
+            Monitor.Enter(Calcurated);
+            Monitor.Enter(Measured);
+            Monitor.Enter(Integral);
+        }
+
+        public void Unlock()
+        {
+            Monitor.Exit(Const);
+            Monitor.Exit(Calcurated);
+            Monitor.Exit(Measured);
+            Monitor.Exit(Integral);
+        }
+
+        private bool saving;
+        public bool Saving
+        {
+            get { return saving; }
+            set
+            {
+                Lock();
+
+                try
+                {
+                    foreach (KeyValuePair<string, ValueRow> row in Const)
+                    {
+                        if (row.Value.Save == true)
+                        {
+                            row.Value.Storage.Saving = value;
+                            if (value == true) row.Value.Storage.Reset();
+                        }
+                    }
+
+                    foreach (KeyValuePair<string, ValueRow> row in Calcurated)
+                    {
+                        if (row.Value.Save == true)
+                        {
+                            row.Value.Storage.Saving = value;
+                            if (value == true) row.Value.Storage.Reset();
+                        }
+                    }
+
+                    foreach (KeyValuePair<string, ValueRow> row in Measured)
+                    {
+                        if (row.Value.Save == true)
+                        {
+                            row.Value.Storage.Saving = value;
+                            if (value == true) row.Value.Storage.Reset();
+                        }
+                    }
+                }
+                finally
+                {
+                    Unlock();
+                }
+            }
+        }
+
+        private int GetUnitNo(EUnitType type, string name)
+        {
+            int no;
+
+            switch (type)
+            {
+                case EUnitType.Current:
+                case EUnitType.Voltage:
+                case EUnitType.Frequency:
+                case EUnitType.Flux:
+                case EUnitType.Ratio:
+                case EUnitType.HumidityRatio:
+                case EUnitType.Power:
+                case EUnitType.PowerComsumption:
+                case EUnitType.Velocity:
+                case EUnitType.Volume:
+                case EUnitType.Time:
+                    no = (int)Enum.Parse(typeof(EUnitSingle), name);
+                    break;
+
+                case EUnitType.AirFlow:
+                    no = (int)Enum.Parse(typeof(EUnitAirFlow), name);
+                    break;
+
+                case EUnitType.Capacity:
+                    no = (int)Enum.Parse(typeof(EUnitCapacity), name);
+                    break;
+
+                case EUnitType.Enthalpy:
+                    no = (int)Enum.Parse(typeof(EUnitEnthalpy), name);
+                    break;
+
+                case EUnitType.Heat:
+                    no = (int)Enum.Parse(typeof(EUnitHeat), name);
+                    break;
+
+                case EUnitType.EER_COP:
+                    no = (int)Enum.Parse(typeof(EUnitEER_COP), name);
+                    break;
+
+                case EUnitType.Temperature:
+                    no = (int)Enum.Parse(typeof(EUnitTemperature), name);
+                    break;
+
+                case EUnitType.Pressure:
+                    no = (int)Enum.Parse(typeof(EUnitPressure), name);
+                    break;
+
+                case EUnitType.DiffPressure:
+                    no = (int)Enum.Parse(typeof(EUnitDiffPressure), name);
+                    break;
+
+                case EUnitType.AtmPressure:
+                    no = (int)Enum.Parse(typeof(EUnitAtmPressure), name);
+                    break;
+
+                default:
+                    no = 0;
+                    break;
+            }
+
+            return no;
+        }
+
+        public void SetUnitTo(EUnitType type, int unit)
+        {
+            Lock();
+
+            try
+            {
+                foreach (KeyValuePair<string, ValueRow> row in Const)
+                {
+                    if (row.Value.Unit.Type == type)
+                    {
+                        row.Value.Unit.To = unit;
+                    }
+                }
+
+                foreach (KeyValuePair<string, ValueRow> row in Calcurated)
+                {
+                    if (row.Value.Unit.Type == type)
+                    {
+                        row.Value.Unit.To = unit;
+                    }
+                }
+
+                foreach (KeyValuePair<string, ValueRow> row in Measured)
+                {
+                    if (row.Value.Unit.Type == type)
+                    {
+                        row.Value.Unit.To = unit;
+                    }
+                }
+            }
+            finally
+            {
+                Unlock();
+            }
+        }
+    }
+
+    public class ValueRow
+    {
+        public ValueRow(
+            int index, string name, float value, string format, UnitConvert unit,
+            EUnitType yAxis = EUnitType.None, bool chart = false, bool save = false)
+        {
+            Index = index;
+            Name = name;
+            Value = value;
+            Format = format;
+            Unit = unit;
+            State = EValueState.None;
+            YAxis = yAxis;
+            Chart = chart;
+            Save = save;
+            Storage = (Save == true) ? new ValueStorage(csLength) : null;
+        }
+
+        public const int csLength = 600;
+
+        public int Index { get; set; }
+        public string Name { get; set; }
+
+        private float fValue;
+        public float Value
+        {
+            get
+            {
+                return (float)Unit.Convert(fValue);
+            }
+            set
+            {
+                fValue = value;
+
+                if ((float.IsInfinity(fValue) == true) || (float.IsNaN(fValue) == true))
+                {
+                    fValue = 0.0f;
+                }
+
+                Storage?.Add(fValue);
+            }
+        }
+
+        public float Raw
+        {
+            get { return fValue; }
+        }
+
+        public string StringValue
+        { get { return Value.ToString(Format); } }
+
+        public float Convert(int to)
+        {
+            return (float)Unit.Convert(fValue, to);
+        }
+
+        public string Format { get; set; }
+        public UnitConvert Unit { get; set; }
+        public EUnitType YAxis { get; set; }
+        public EValueState State { get; set; }
+        public bool Chart { get; set; }
+        public bool Save { get; set; }
+        public ValueStorage Storage { get; set; }
+    }
+
+    public class ValueStorage
+    {
+        public ValueStorage(int length)
+        {
+            i = 0;
+            j = 0;
+            HalfFull = false;
+            Saving = false;
+            this.length = length;
+
+            values = new float[2][];
+            for (int k = 0; k < 2; k++)
+            {
+                values[k] = new float[length];
+            }
+        }
+
+        private int i;
+        private int j;
+        private int length;
+
+        private float[][] values;
+        public float[] GetValues
+        {
+            get
+            {
+                HalfFull = false;
+                return values[i];
+            }
+        }
+
+        public bool HalfFull { get; private set; }
+
+        public bool Saving { get; set; }
+
+        public void Add(float value)
+        {
+            if (Saving == false) return;
+
+            values[i][j++] = value;
+
+            if ((j % length) == 0)
+            {
+                if (HalfFull == true)
+                {
+                    throw new Exception("Occured value storage overflow in ValueStorage.Add");
+                }
+
+                j = 0;
+                i = (i == 0) ? 1 : 0;
+                HalfFull = true;
+            }
+        }
+
+        public void Reset()
+        {
+            i = 0;
+            j = 0;
+            HalfFull = false;
+        }
+    }
+    #endregion
+
+    #region IntegralSheets
+    public class IntegralSheets
+    {
+        public IntegralSheets(int time = 60)
+        {
+            this.time = time;
+            Sheets = new Dictionary<string, IntegralValues>();
+        }
+
+        private int time;
+
+        public int Count { get; set; }
+        public Dictionary<string, IntegralValues> Sheets { get; set; }
+
+        public IntegralValues this[string tag]
+        { get { return Sheets[tag]; } }
+
+        public void Initialize(TestValue value)
+        {
+            lock (this)
+            {
+                // Set judgement values
+                Sheets.Add("Judge", new IntegralValues());
+                Sheets["Judge"].Values.Add("Total.IDU.Voltage", new IntegralValue(value.Calcurated["Total.IDU.Voltage"]));
+                Sheets["Judge"].Values.Add("Total.ODU.Voltage", new IntegralValue(value.Calcurated["Total.ODU.Voltage"]));
+
+                Sheets["Judge"].Values.Add("ID11.Entering.DB", new IntegralValue(value.Measured["ID11.Entering.DB"]));
+                Sheets["Judge"].Values.Add("ID11.Entering.WB", new IntegralValue(value.Measured["ID11.Entering.WB"]));
+                Sheets["Judge"].Values.Add("ID11.Leaving.DB", new IntegralValue(value.Measured["ID11.Leaving.DB"]));
+                Sheets["Judge"].Values.Add("ID11.Leaving.WB", new IntegralValue(value.Measured["ID11.Leaving.WB"]));
+                Sheets["Judge"].Values.Add("ID11.Air.Flow.Lev", new IntegralValue(value.Calcurated["ID11.Air.Flow.Lev"]));
+                Sheets["Judge"].Values.Add("ID11.Static.Pressure", new IntegralValue(value.Measured["ID11.Static.Pressure"]));
+
+                Sheets["Judge"].Values.Add("ID12.Entering.DB", new IntegralValue(value.Measured["ID12.Entering.DB"]));
+                Sheets["Judge"].Values.Add("ID12.Entering.WB", new IntegralValue(value.Measured["ID12.Entering.WB"]));
+                Sheets["Judge"].Values.Add("ID12.Leaving.DB", new IntegralValue(value.Measured["ID12.Leaving.DB"]));
+                Sheets["Judge"].Values.Add("ID12.Leaving.WB", new IntegralValue(value.Measured["ID12.Leaving.WB"]));
+                Sheets["Judge"].Values.Add("ID12.Air.Flow.Lev", new IntegralValue(value.Calcurated["ID12.Air.Flow.Lev"]));
+                Sheets["Judge"].Values.Add("ID12.Static.Pressure", new IntegralValue(value.Measured["ID12.Static.Pressure"]));
+
+                Sheets["Judge"].Values.Add("ID21.Entering.DB", new IntegralValue(value.Measured["ID21.Entering.DB"]));
+                Sheets["Judge"].Values.Add("ID21.Entering.WB", new IntegralValue(value.Measured["ID21.Entering.WB"]));
+                Sheets["Judge"].Values.Add("ID21.Leaving.DB", new IntegralValue(value.Measured["ID21.Leaving.DB"]));
+                Sheets["Judge"].Values.Add("ID21.Leaving.WB", new IntegralValue(value.Measured["ID21.Leaving.WB"]));
+                Sheets["Judge"].Values.Add("ID21.Air.Flow.Lev", new IntegralValue(value.Calcurated["ID21.Air.Flow.Lev"]));
+                Sheets["Judge"].Values.Add("ID21.Static.Pressure", new IntegralValue(value.Measured["ID21.Static.Pressure"]));
+
+                Sheets["Judge"].Values.Add("ID22.Entering.DB", new IntegralValue(value.Measured["ID22.Entering.DB"]));
+                Sheets["Judge"].Values.Add("ID22.Entering.WB", new IntegralValue(value.Measured["ID22.Entering.WB"]));
+                Sheets["Judge"].Values.Add("ID22.Leaving.DB", new IntegralValue(value.Measured["ID22.Leaving.DB"]));
+                Sheets["Judge"].Values.Add("ID22.Leaving.WB", new IntegralValue(value.Measured["ID22.Leaving.WB"]));
+                Sheets["Judge"].Values.Add("ID22.Air.Flow.Lev", new IntegralValue(value.Calcurated["ID22.Air.Flow.Lev"]));
+                Sheets["Judge"].Values.Add("ID22.Static.Pressure", new IntegralValue(value.Measured["ID22.Static.Pressure"]));
+
+                Sheets["Judge"].Values.Add("OD.Entering.DB", new IntegralValue(value.Measured["OD.Entering.DB"]));
+                Sheets["Judge"].Values.Add("OD.Entering.WB", new IntegralValue(value.Measured["OD.Entering.WB"]));
+                Sheets["Judge"].Values.Add("OD.Entering.DP", new IntegralValue(value.Measured["OD.Entering.DP"]));
+
+                // Set Indoor No.1 #1 integral values
+                Sheets.Add("ID11", new IntegralValues());
+                Sheets["ID11"].Values.Add("Total.Capacity", new IntegralValue(value.Calcurated["Total.Capacity"]));
+                Sheets["ID11"].Values.Add("Total.Power", new IntegralValue(value.Calcurated["Total.Power"]));
+                Sheets["ID11"].Values.Add("Total.EER_COP", new IntegralValue(value.Calcurated["Total.EER_COP"]));
+                Sheets["ID11"].Values.Add("Total.Capacity.Ratio", new IntegralValue(value.Calcurated["Total.Capacity.Ratio"]));
+                Sheets["ID11"].Values.Add("Total.Power.Ratio", new IntegralValue(value.Calcurated["Total.Power.Ratio"]));
+                Sheets["ID11"].Values.Add("Total.EER_COP.Ratio", new IntegralValue(value.Calcurated["Total.EER_COP.Ratio"]));
+
+                Sheets["ID11"].Values.Add("ID1.IDU.Power", new IntegralValue(value.Calcurated["ID1.IDU.Power"]));
+                Sheets["ID11"].Values.Add("ID1.IDU.Voltage", new IntegralValue(value.Calcurated["ID1.IDU.Voltage"]));
+                Sheets["ID11"].Values.Add("ID1.IDU.Current", new IntegralValue(value.Calcurated["ID1.IDU.Current"]));
+                Sheets["ID11"].Values.Add("ID1.IDU.Frequency", new IntegralValue(value.Calcurated["ID1.IDU.Frequency"]));
+                Sheets["ID11"].Values.Add("ID1.IDU.Power.Factor", new IntegralValue(value.Calcurated["ID1.IDU.Power.Factor"]));
+
+                Sheets["ID11"].Values.Add("ID1.ODU.Power", new IntegralValue(value.Calcurated["ID1.ODU.Power"]));
+                Sheets["ID11"].Values.Add("ID1.ODU.Voltage", new IntegralValue(value.Calcurated["ID1.ODU.Voltage"]));
+                Sheets["ID11"].Values.Add("ID1.ODU.Current", new IntegralValue(value.Calcurated["ID1.ODU.Current"]));
+                Sheets["ID11"].Values.Add("ID1.ODU.Frequency", new IntegralValue(value.Calcurated["ID1.ODU.Frequency"]));
+                Sheets["ID11"].Values.Add("ID1.ODU.Power.Factor", new IntegralValue(value.Calcurated["ID1.ODU.Power.Factor"]));
+
+                Sheets["ID11"].Values.Add("ID11.Capacity", new IntegralValue(value.Calcurated["ID11.Capacity"]));
+                Sheets["ID11"].Values.Add("ID11.Capacity.Ratio", new IntegralValue(value.Calcurated["ID11.Capacity.Ratio"]));
+                Sheets["ID11"].Values.Add("ID11.Sensible.Heat", new IntegralValue(value.Calcurated["ID11.Sensible.Heat"]));
+                Sheets["ID11"].Values.Add("ID11.Latent.Heat", new IntegralValue(value.Calcurated["ID11.Latent.Heat"]));
+                Sheets["ID11"].Values.Add("ID11.Sensible.Heat.Ratio", new IntegralValue(value.Calcurated["ID11.Sensible.Heat.Ratio"]));
+                Sheets["ID11"].Values.Add("ID11.Heat.Leakage", new IntegralValue(value.Calcurated["ID11.Heat.Leakage"]));
+                Sheets["ID11"].Values.Add("ID11.Drain.Weight", new IntegralValue(value.Calcurated["ID11.Drain.Weight"]));
+
+                Sheets["ID11"].Values.Add("ID11.Entering.DB", new IntegralValue(value.Measured["ID11.Entering.DB"]));
+                Sheets["ID11"].Values.Add("ID11.Entering.WB", new IntegralValue(value.Measured["ID11.Entering.WB"]));
+                Sheets["ID11"].Values.Add("ID11.Entering.RH", new IntegralValue(value.Calcurated["ID11.Entering.RH"]));
+                Sheets["ID11"].Values.Add("ID11.Leaving.DB", new IntegralValue(value.Measured["ID11.Leaving.DB"]));
+                Sheets["ID11"].Values.Add("ID11.Leaving.WB", new IntegralValue(value.Measured["ID11.Leaving.WB"]));
+                Sheets["ID11"].Values.Add("ID11.Leaving.RH", new IntegralValue(value.Calcurated["ID11.Leaving.RH"]));
+
+                Sheets["ID11"].Values.Add("ID11.Entering.Enthalpy", new IntegralValue(value.Calcurated["ID11.Entering.Enthalpy"]));
+                Sheets["ID11"].Values.Add("ID11.Leaving.Enthalpy", new IntegralValue(value.Calcurated["ID11.Leaving.Enthalpy"]));
+                Sheets["ID11"].Values.Add("ID11.Entering.Humidity.Ratio", new IntegralValue(value.Calcurated["ID11.Entering.Humidity.Ratio"]));
+                Sheets["ID11"].Values.Add("ID11.Leaving.Humidity.Ratio", new IntegralValue(value.Calcurated["ID11.Leaving.Humidity.Ratio"]));
+                Sheets["ID11"].Values.Add("ID11.Leaving.Specific.Heat", new IntegralValue(value.Calcurated["ID11.Leaving.Specific.Heat"]));
+                Sheets["ID11"].Values.Add("ID11.Leaving.Specific.Volume", new IntegralValue(value.Calcurated["ID11.Leaving.Specific.Volume"]));
+
+                Sheets["ID11"].Values.Add("ID11.Air.Flow.Lev", new IntegralValue(value.Calcurated["ID11.Air.Flow.Lev"]));
+                Sheets["ID11"].Values.Add("ID11.Static.Pressure", new IntegralValue(value.Measured["ID11.Static.Pressure"]));
+                Sheets["ID11"].Values.Add("ID11.Nozzle.Diff.Pressure", new IntegralValue(value.Measured["ID11.Nozzle.Diff.Pressure"]));
+                Sheets["ID11"].Values.Add("ID1.Atm.Pressure", new IntegralValue(value.Measured["ID1.Atm.Pressure"]));
+                Sheets["ID11"].Values.Add("ID11.Nozzle.Inlet.Temp", new IntegralValue(value.Measured["ID11.Nozzle.Inlet.Temp"]));
+
+                Sheets["ID11"].Values.Add("OD.Entering.DB", new IntegralValue(value.Measured["OD.Entering.DB"]));
+                Sheets["ID11"].Values.Add("OD.Entering.WB", new IntegralValue(value.Measured["OD.Entering.WB"]));
+                Sheets["ID11"].Values.Add("OD.Entering.RH", new IntegralValue(value.Calcurated["OD.Entering.RH"]));
+                Sheets["ID11"].Values.Add("OD.Entering.DP", new IntegralValue(value.Measured["OD.Entering.DP"]));
+
+                // Set Indoor No.1 #2 integral values
+                Sheets.Add("ID12", new IntegralValues());
+                Sheets["ID12"].Values.Add("Total.Capacity", new IntegralValue(value.Calcurated["Total.Capacity"]));
+                Sheets["ID12"].Values.Add("Total.Power", new IntegralValue(value.Calcurated["Total.Power"]));
+                Sheets["ID12"].Values.Add("Total.EER_COP", new IntegralValue(value.Calcurated["Total.EER_COP"]));
+                Sheets["ID12"].Values.Add("Total.Capacity.Ratio", new IntegralValue(value.Calcurated["Total.Capacity.Ratio"]));
+                Sheets["ID12"].Values.Add("Total.Power.Ratio", new IntegralValue(value.Calcurated["Total.Power.Ratio"]));
+                Sheets["ID12"].Values.Add("Total.EER_COP.Ratio", new IntegralValue(value.Calcurated["Total.EER_COP.Ratio"]));
+
+                Sheets["ID12"].Values.Add("ID1.IDU.Power", new IntegralValue(value.Calcurated["ID1.IDU.Power"]));
+                Sheets["ID12"].Values.Add("ID1.IDU.Voltage", new IntegralValue(value.Calcurated["ID1.IDU.Voltage"]));
+                Sheets["ID12"].Values.Add("ID1.IDU.Current", new IntegralValue(value.Calcurated["ID1.IDU.Current"]));
+                Sheets["ID12"].Values.Add("ID1.IDU.Frequency", new IntegralValue(value.Calcurated["ID1.IDU.Frequency"]));
+                Sheets["ID12"].Values.Add("ID1.IDU.Power.Factor", new IntegralValue(value.Calcurated["ID1.IDU.Power.Factor"]));
+
+                Sheets["ID12"].Values.Add("ID1.ODU.Power", new IntegralValue(value.Calcurated["ID1.ODU.Power"]));
+                Sheets["ID12"].Values.Add("ID1.ODU.Voltage", new IntegralValue(value.Calcurated["ID1.ODU.Voltage"]));
+                Sheets["ID12"].Values.Add("ID1.ODU.Current", new IntegralValue(value.Calcurated["ID1.ODU.Current"]));
+                Sheets["ID12"].Values.Add("ID1.ODU.Frequency", new IntegralValue(value.Calcurated["ID1.ODU.Frequency"]));
+                Sheets["ID12"].Values.Add("ID1.ODU.Power.Factor", new IntegralValue(value.Calcurated["ID1.ODU.Power.Factor"]));
+
+                Sheets["ID12"].Values.Add("ID12.Capacity", new IntegralValue(value.Calcurated["ID12.Capacity"]));
+                Sheets["ID12"].Values.Add("ID12.Capacity.Ratio", new IntegralValue(value.Calcurated["ID12.Capacity.Ratio"]));
+                Sheets["ID12"].Values.Add("ID12.Sensible.Heat", new IntegralValue(value.Calcurated["ID12.Sensible.Heat"]));
+                Sheets["ID12"].Values.Add("ID12.Latent.Heat", new IntegralValue(value.Calcurated["ID12.Latent.Heat"]));
+                Sheets["ID12"].Values.Add("ID12.Sensible.Heat.Ratio", new IntegralValue(value.Calcurated["ID12.Sensible.Heat.Ratio"]));
+                Sheets["ID12"].Values.Add("ID12.Heat.Leakage", new IntegralValue(value.Calcurated["ID12.Heat.Leakage"]));
+                Sheets["ID12"].Values.Add("ID12.Drain.Weight", new IntegralValue(value.Calcurated["ID12.Drain.Weight"]));
+
+                Sheets["ID12"].Values.Add("ID12.Entering.DB", new IntegralValue(value.Measured["ID12.Entering.DB"]));
+                Sheets["ID12"].Values.Add("ID12.Entering.WB", new IntegralValue(value.Measured["ID12.Entering.WB"]));
+                Sheets["ID12"].Values.Add("ID12.Entering.RH", new IntegralValue(value.Calcurated["ID12.Entering.RH"]));
+                Sheets["ID12"].Values.Add("ID12.Leaving.DB", new IntegralValue(value.Measured["ID12.Leaving.DB"]));
+                Sheets["ID12"].Values.Add("ID12.Leaving.WB", new IntegralValue(value.Measured["ID12.Leaving.WB"]));
+                Sheets["ID12"].Values.Add("ID12.Leaving.RH", new IntegralValue(value.Calcurated["ID12.Leaving.RH"]));
+
+                Sheets["ID12"].Values.Add("ID12.Entering.Enthalpy", new IntegralValue(value.Calcurated["ID12.Entering.Enthalpy"]));
+                Sheets["ID12"].Values.Add("ID12.Leaving.Enthalpy", new IntegralValue(value.Calcurated["ID12.Leaving.Enthalpy"]));
+                Sheets["ID12"].Values.Add("ID12.Entering.Humidity.Ratio", new IntegralValue(value.Calcurated["ID12.Entering.Humidity.Ratio"]));
+                Sheets["ID12"].Values.Add("ID12.Leaving.Humidity.Ratio", new IntegralValue(value.Calcurated["ID12.Leaving.Humidity.Ratio"]));
+                Sheets["ID12"].Values.Add("ID12.Leaving.Specific.Heat", new IntegralValue(value.Calcurated["ID12.Leaving.Specific.Heat"]));
+                Sheets["ID12"].Values.Add("ID12.Leaving.Specific.Volume", new IntegralValue(value.Calcurated["ID12.Leaving.Specific.Volume"]));
+
+                Sheets["ID12"].Values.Add("ID12.Air.Flow.Lev", new IntegralValue(value.Calcurated["ID12.Air.Flow.Lev"]));
+                Sheets["ID12"].Values.Add("ID12.Static.Pressure", new IntegralValue(value.Measured["ID12.Static.Pressure"]));
+                Sheets["ID12"].Values.Add("ID12.Nozzle.Diff.Pressure", new IntegralValue(value.Measured["ID12.Nozzle.Diff.Pressure"]));
+                Sheets["ID12"].Values.Add("ID1.Atm.Pressure", new IntegralValue(value.Measured["ID1.Atm.Pressure"]));
+                Sheets["ID12"].Values.Add("ID12.Nozzle.Inlet.Temp", new IntegralValue(value.Measured["ID12.Nozzle.Inlet.Temp"]));
+
+                Sheets["ID12"].Values.Add("OD.Entering.DB", new IntegralValue(value.Measured["OD.Entering.DB"]));
+                Sheets["ID12"].Values.Add("OD.Entering.WB", new IntegralValue(value.Measured["OD.Entering.WB"]));
+                Sheets["ID12"].Values.Add("OD.Entering.RH", new IntegralValue(value.Calcurated["OD.Entering.RH"]));
+                Sheets["ID12"].Values.Add("OD.Entering.DP", new IntegralValue(value.Measured["OD.Entering.DP"]));
+
+                // Set Indoor No.2 #1 integral values
+                Sheets.Add("ID21", new IntegralValues());
+                Sheets["ID21"].Values.Add("Total.Capacity", new IntegralValue(value.Calcurated["Total.Capacity"]));
+                Sheets["ID21"].Values.Add("Total.Power", new IntegralValue(value.Calcurated["Total.Power"]));
+                Sheets["ID21"].Values.Add("Total.EER_COP", new IntegralValue(value.Calcurated["Total.EER_COP"]));
+                Sheets["ID21"].Values.Add("Total.Capacity.Ratio", new IntegralValue(value.Calcurated["Total.Capacity.Ratio"]));
+                Sheets["ID21"].Values.Add("Total.Power.Ratio", new IntegralValue(value.Calcurated["Total.Power.Ratio"]));
+                Sheets["ID21"].Values.Add("Total.EER_COP.Ratio", new IntegralValue(value.Calcurated["Total.EER_COP.Ratio"]));
+
+                Sheets["ID21"].Values.Add("ID2.IDU.Power", new IntegralValue(value.Calcurated["ID2.IDU.Power"]));
+                Sheets["ID21"].Values.Add("ID2.IDU.Voltage", new IntegralValue(value.Calcurated["ID2.IDU.Voltage"]));
+                Sheets["ID21"].Values.Add("ID2.IDU.Current", new IntegralValue(value.Calcurated["ID2.IDU.Current"]));
+                Sheets["ID21"].Values.Add("ID2.IDU.Frequency", new IntegralValue(value.Calcurated["ID2.IDU.Frequency"]));
+                Sheets["ID21"].Values.Add("ID2.IDU.Power.Factor", new IntegralValue(value.Calcurated["ID2.IDU.Power.Factor"]));
+
+                Sheets["ID21"].Values.Add("ID2.ODU.Power", new IntegralValue(value.Calcurated["ID2.ODU.Power"]));
+                Sheets["ID21"].Values.Add("ID2.ODU.Voltage", new IntegralValue(value.Calcurated["ID2.ODU.Voltage"]));
+                Sheets["ID21"].Values.Add("ID2.ODU.Current", new IntegralValue(value.Calcurated["ID2.ODU.Current"]));
+                Sheets["ID21"].Values.Add("ID2.ODU.Frequency", new IntegralValue(value.Calcurated["ID2.ODU.Frequency"]));
+                Sheets["ID21"].Values.Add("ID2.ODU.Power.Factor", new IntegralValue(value.Calcurated["ID2.ODU.Power.Factor"]));
+
+                Sheets["ID21"].Values.Add("ID21.Capacity", new IntegralValue(value.Calcurated["ID21.Capacity"]));
+                Sheets["ID21"].Values.Add("ID21.Capacity.Ratio", new IntegralValue(value.Calcurated["ID21.Capacity.Ratio"]));
+                Sheets["ID21"].Values.Add("ID21.Sensible.Heat", new IntegralValue(value.Calcurated["ID21.Sensible.Heat"]));
+                Sheets["ID21"].Values.Add("ID21.Latent.Heat", new IntegralValue(value.Calcurated["ID21.Latent.Heat"]));
+                Sheets["ID21"].Values.Add("ID21.Sensible.Heat.Ratio", new IntegralValue(value.Calcurated["ID21.Sensible.Heat.Ratio"]));
+                Sheets["ID21"].Values.Add("ID21.Heat.Leakage", new IntegralValue(value.Calcurated["ID21.Heat.Leakage"]));
+                Sheets["ID21"].Values.Add("ID21.Drain.Weight", new IntegralValue(value.Calcurated["ID21.Drain.Weight"]));
+
+                Sheets["ID21"].Values.Add("ID21.Entering.DB", new IntegralValue(value.Measured["ID21.Entering.DB"]));
+                Sheets["ID21"].Values.Add("ID21.Entering.WB", new IntegralValue(value.Measured["ID21.Entering.WB"]));
+                Sheets["ID21"].Values.Add("ID21.Entering.RH", new IntegralValue(value.Calcurated["ID21.Entering.RH"]));
+                Sheets["ID21"].Values.Add("ID21.Leaving.DB", new IntegralValue(value.Measured["ID21.Leaving.DB"]));
+                Sheets["ID21"].Values.Add("ID21.Leaving.WB", new IntegralValue(value.Measured["ID21.Leaving.WB"]));
+                Sheets["ID21"].Values.Add("ID21.Leaving.RH", new IntegralValue(value.Calcurated["ID21.Leaving.RH"]));
+
+                Sheets["ID21"].Values.Add("ID21.Entering.Enthalpy", new IntegralValue(value.Calcurated["ID21.Entering.Enthalpy"]));
+                Sheets["ID21"].Values.Add("ID21.Leaving.Enthalpy", new IntegralValue(value.Calcurated["ID21.Leaving.Enthalpy"]));
+                Sheets["ID21"].Values.Add("ID21.Entering.Humidity.Ratio", new IntegralValue(value.Calcurated["ID21.Entering.Humidity.Ratio"]));
+                Sheets["ID21"].Values.Add("ID21.Leaving.Humidity.Ratio", new IntegralValue(value.Calcurated["ID21.Leaving.Humidity.Ratio"]));
+                Sheets["ID21"].Values.Add("ID21.Leaving.Specific.Heat", new IntegralValue(value.Calcurated["ID21.Leaving.Specific.Heat"]));
+                Sheets["ID21"].Values.Add("ID21.Leaving.Specific.Volume", new IntegralValue(value.Calcurated["ID21.Leaving.Specific.Volume"]));
+
+                Sheets["ID21"].Values.Add("ID21.Air.Flow.Lev", new IntegralValue(value.Calcurated["ID21.Air.Flow.Lev"]));
+                Sheets["ID21"].Values.Add("ID21.Static.Pressure", new IntegralValue(value.Measured["ID21.Static.Pressure"]));
+                Sheets["ID21"].Values.Add("ID21.Nozzle.Diff.Pressure", new IntegralValue(value.Measured["ID21.Nozzle.Diff.Pressure"]));
+                Sheets["ID21"].Values.Add("ID2.Atm.Pressure", new IntegralValue(value.Measured["ID2.Atm.Pressure"]));
+                Sheets["ID21"].Values.Add("ID21.Nozzle.Inlet.Temp", new IntegralValue(value.Measured["ID21.Nozzle.Inlet.Temp"]));
+
+                Sheets["ID21"].Values.Add("OD.Entering.DB", new IntegralValue(value.Measured["OD.Entering.DB"]));
+                Sheets["ID21"].Values.Add("OD.Entering.WB", new IntegralValue(value.Measured["OD.Entering.WB"]));
+                Sheets["ID21"].Values.Add("OD.Entering.RH", new IntegralValue(value.Calcurated["OD.Entering.RH"]));
+                Sheets["ID21"].Values.Add("OD.Entering.DP", new IntegralValue(value.Measured["OD.Entering.DP"]));
+
+                // Set Indoor No.2 #2 integral values
+                Sheets.Add("ID22", new IntegralValues());
+                Sheets["ID22"].Values.Add("Total.Capacity", new IntegralValue(value.Calcurated["Total.Capacity"]));
+                Sheets["ID22"].Values.Add("Total.Power", new IntegralValue(value.Calcurated["Total.Power"]));
+                Sheets["ID22"].Values.Add("Total.EER_COP", new IntegralValue(value.Calcurated["Total.EER_COP"]));
+                Sheets["ID22"].Values.Add("Total.Capacity.Ratio", new IntegralValue(value.Calcurated["Total.Capacity.Ratio"]));
+                Sheets["ID22"].Values.Add("Total.Power.Ratio", new IntegralValue(value.Calcurated["Total.Power.Ratio"]));
+                Sheets["ID22"].Values.Add("Total.EER_COP.Ratio", new IntegralValue(value.Calcurated["Total.EER_COP.Ratio"]));
+
+                Sheets["ID22"].Values.Add("ID2.IDU.Power", new IntegralValue(value.Calcurated["ID2.IDU.Power"]));
+                Sheets["ID22"].Values.Add("ID2.IDU.Voltage", new IntegralValue(value.Calcurated["ID2.IDU.Voltage"]));
+                Sheets["ID22"].Values.Add("ID2.IDU.Current", new IntegralValue(value.Calcurated["ID2.IDU.Current"]));
+                Sheets["ID22"].Values.Add("ID2.IDU.Frequency", new IntegralValue(value.Calcurated["ID2.IDU.Frequency"]));
+                Sheets["ID22"].Values.Add("ID2.IDU.Power.Factor", new IntegralValue(value.Calcurated["ID2.IDU.Power.Factor"]));
+
+                Sheets["ID22"].Values.Add("ID2.ODU.Power", new IntegralValue(value.Calcurated["ID2.ODU.Power"]));
+                Sheets["ID22"].Values.Add("ID2.ODU.Voltage", new IntegralValue(value.Calcurated["ID2.ODU.Voltage"]));
+                Sheets["ID22"].Values.Add("ID2.ODU.Current", new IntegralValue(value.Calcurated["ID2.ODU.Current"]));
+                Sheets["ID22"].Values.Add("ID2.ODU.Frequency", new IntegralValue(value.Calcurated["ID2.ODU.Frequency"]));
+                Sheets["ID22"].Values.Add("ID2.ODU.Power.Factor", new IntegralValue(value.Calcurated["ID2.ODU.Power.Factor"]));
+
+                Sheets["ID22"].Values.Add("ID22.Capacity", new IntegralValue(value.Calcurated["ID22.Capacity"]));
+                Sheets["ID22"].Values.Add("ID22.Capacity.Ratio", new IntegralValue(value.Calcurated["ID22.Capacity.Ratio"]));
+                Sheets["ID22"].Values.Add("ID22.Sensible.Heat", new IntegralValue(value.Calcurated["ID22.Sensible.Heat"]));
+                Sheets["ID22"].Values.Add("ID22.Latent.Heat", new IntegralValue(value.Calcurated["ID22.Latent.Heat"]));
+                Sheets["ID22"].Values.Add("ID22.Sensible.Heat.Ratio", new IntegralValue(value.Calcurated["ID22.Sensible.Heat.Ratio"]));
+                Sheets["ID22"].Values.Add("ID22.Heat.Leakage", new IntegralValue(value.Calcurated["ID22.Heat.Leakage"]));
+                Sheets["ID22"].Values.Add("ID22.Drain.Weight", new IntegralValue(value.Calcurated["ID22.Drain.Weight"]));
+
+                Sheets["ID22"].Values.Add("ID22.Entering.DB", new IntegralValue(value.Measured["ID22.Entering.DB"]));
+                Sheets["ID22"].Values.Add("ID22.Entering.WB", new IntegralValue(value.Measured["ID22.Entering.WB"]));
+                Sheets["ID22"].Values.Add("ID22.Entering.RH", new IntegralValue(value.Calcurated["ID22.Entering.RH"]));
+                Sheets["ID22"].Values.Add("ID22.Leaving.DB", new IntegralValue(value.Measured["ID22.Leaving.DB"]));
+                Sheets["ID22"].Values.Add("ID22.Leaving.WB", new IntegralValue(value.Measured["ID22.Leaving.WB"]));
+                Sheets["ID22"].Values.Add("ID22.Leaving.RH", new IntegralValue(value.Calcurated["ID22.Leaving.RH"]));
+
+                Sheets["ID22"].Values.Add("ID22.Entering.Enthalpy", new IntegralValue(value.Calcurated["ID22.Entering.Enthalpy"]));
+                Sheets["ID22"].Values.Add("ID22.Leaving.Enthalpy", new IntegralValue(value.Calcurated["ID22.Leaving.Enthalpy"]));
+                Sheets["ID22"].Values.Add("ID22.Entering.Humidity.Ratio", new IntegralValue(value.Calcurated["ID22.Entering.Humidity.Ratio"]));
+                Sheets["ID22"].Values.Add("ID22.Leaving.Humidity.Ratio", new IntegralValue(value.Calcurated["ID22.Leaving.Humidity.Ratio"]));
+                Sheets["ID22"].Values.Add("ID22.Leaving.Specific.Heat", new IntegralValue(value.Calcurated["ID22.Leaving.Specific.Heat"]));
+                Sheets["ID22"].Values.Add("ID22.Leaving.Specific.Volume", new IntegralValue(value.Calcurated["ID22.Leaving.Specific.Volume"]));
+
+                Sheets["ID22"].Values.Add("ID22.Air.Flow.Lev", new IntegralValue(value.Calcurated["ID22.Air.Flow.Lev"]));
+                Sheets["ID22"].Values.Add("ID22.Static.Pressure", new IntegralValue(value.Measured["ID22.Static.Pressure"]));
+                Sheets["ID22"].Values.Add("ID22.Nozzle.Diff.Pressure", new IntegralValue(value.Measured["ID22.Nozzle.Diff.Pressure"]));
+                Sheets["ID22"].Values.Add("ID2.Atm.Pressure", new IntegralValue(value.Measured["ID2.Atm.Pressure"]));
+                Sheets["ID22"].Values.Add("ID22.Nozzle.Inlet.Temp", new IntegralValue(value.Measured["ID22.Nozzle.Inlet.Temp"]));
+
+                Sheets["ID22"].Values.Add("OD.Entering.DB", new IntegralValue(value.Measured["OD.Entering.DB"]));
+                Sheets["ID22"].Values.Add("OD.Entering.WB", new IntegralValue(value.Measured["OD.Entering.WB"]));
+                Sheets["ID22"].Values.Add("OD.Entering.RH", new IntegralValue(value.Calcurated["OD.Entering.RH"]));
+                Sheets["ID22"].Values.Add("OD.Entering.DP", new IntegralValue(value.Measured["OD.Entering.DP"]));
+
+                Sheets.Add("ID1TC", new IntegralValues());
+                Sheets.Add("ID2TC", new IntegralValues());
+                Sheets.Add("ODTC", new IntegralValues());
+            }
+        }
+
+        public void Initialize(int scanTime, int integTime, ConditionSchedule sch)
+        {
+            lock (this)
+            {
+                Sheets["Judge"]["Total.IDU.Voltage"].Set(sch.OutdoorVolt1, sch.OutdoorVolt1Avg, sch.OutdoorVolt1Dev);
+                Sheets["Judge"]["Total.ODU.Voltage"].Set(sch.OutdoorVolt2, sch.OutdoorVolt2Avg, sch.OutdoorVolt2Dev);
+
+                Sheets["Judge"]["ID11.Entering.DB"].Set(sch.Indoor1DB, sch.Indoor1DBAvg, sch.Indoor1DBDev);
+                Sheets["Judge"]["ID11.Entering.WB"].Set(sch.Indoor1WB, sch.Indoor1WBAvg, sch.Indoor1WBDev);
+                Sheets["Judge"]["ID11.Leaving.DB"].Set(0, 0, sch.Indoor1LDB1Dev);
+                Sheets["Judge"]["ID11.Leaving.WB"].Set(0, 0, sch.Indoor1LWB1Dev);
+                Sheets["Judge"]["ID11.Air.Flow.Lev"].Set(0, 0, sch.Indoor1AirFlow1Dev);
+                Sheets["Judge"]["ID11.Static.Pressure"].Set(sch.Indoor1CP1, sch.Indoor1CP1Avg, sch.Indoor1CP1Dev);
+
+                Sheets["Judge"]["ID12.Entering.DB"].Set(sch.Indoor1DB, sch.Indoor1DBAvg, sch.Indoor1DBDev);
+                Sheets["Judge"]["ID12.Entering.WB"].Set(sch.Indoor1WB, sch.Indoor1WBAvg, sch.Indoor1WBDev);
+                Sheets["Judge"]["ID12.Leaving.DB"].Set(0, 0, sch.Indoor1LDB2Dev);
+                Sheets["Judge"]["ID12.Leaving.WB"].Set(0, 0, sch.Indoor1LWB2Dev);
+                Sheets["Judge"]["ID12.Air.Flow.Lev"].Set(0, 0, sch.Indoor1AirFlow2Dev);
+                Sheets["Judge"]["ID12.Static.Pressure"].Set(sch.Indoor1CP2, sch.Indoor1CP2Avg, sch.Indoor1CP2Dev);
+
+                Sheets["Judge"]["ID21.Entering.DB"].Set(sch.Indoor2DB, sch.Indoor2DBAvg, sch.Indoor2DBDev);
+                Sheets["Judge"]["ID21.Entering.WB"].Set(sch.Indoor2WB, sch.Indoor2WBAvg, sch.Indoor2WBDev);
+                Sheets["Judge"]["ID21.Leaving.DB"].Set(0, 0, sch.Indoor2LDB1Dev);
+                Sheets["Judge"]["ID21.Leaving.WB"].Set(0, 0, sch.Indoor2LWB1Dev);
+                Sheets["Judge"]["ID21.Air.Flow.Lev"].Set(0, 0, sch.Indoor2AirFlow1Dev);
+                Sheets["Judge"]["ID21.Static.Pressure"].Set(sch.Indoor2CP1, sch.Indoor2CP1Avg, sch.Indoor2CP1Dev);
+
+                Sheets["Judge"]["ID22.Entering.DB"].Set(sch.Indoor2DB, sch.Indoor2DBAvg, sch.Indoor2DBDev);
+                Sheets["Judge"]["ID22.Entering.WB"].Set(sch.Indoor2WB, sch.Indoor2WBAvg, sch.Indoor2WBDev);
+                Sheets["Judge"]["ID22.Leaving.DB"].Set(0, 0, sch.Indoor2LDB2Dev);
+                Sheets["Judge"]["ID22.Leaving.WB"].Set(0, 0, sch.Indoor2LWB2Dev);
+                Sheets["Judge"]["ID22.Air.Flow.Lev"].Set(0, 0, sch.Indoor2AirFlow2Dev);
+                Sheets["Judge"]["ID22.Static.Pressure"].Set(sch.Indoor2CP2, sch.Indoor2CP2Avg, sch.Indoor2CP2Dev);
+
+                Sheets["Judge"]["OD.Entering.DB"].Set(sch.OutdoorDB, sch.OutdoorDBAvg, sch.OutdoorDBDev);
+                Sheets["Judge"]["OD.Entering.WB"].Set(sch.OutdoorWB, sch.OutdoorWBAvg, sch.OutdoorWBDev);
+                Sheets["Judge"]["OD.Entering.DP"].Set(sch.OutdoorDP, sch.OutdoorDPAvg, sch.OutdoorDPDev);
+
+                foreach (KeyValuePair<string, IntegralValues> sheet in Sheets)
+                {
+                    if (sheet.Key == "Judge") continue;
+
+                    foreach (KeyValuePair<string, IntegralValue> row in sheet.Value.Values)
+                    {
+                        row.Value.Set(0, 0, 0, scanTime, integTime*60);
+                    }
+                }
+            }
+        }
+
+        public void Clear()
+        {
+            foreach (KeyValuePair<string, IntegralValues> sheet in Sheets)
+            {
+                foreach (KeyValuePair<string, IntegralValue> row in sheet.Value.Values)
+                {
+                    row.Value.Clear();
+                }
+            }
+        }
+
+        public void Integrate()
+        {
+            foreach (KeyValuePair<string, IntegralValues> sheet in Sheets)
+            {
+                foreach (KeyValuePair<string, IntegralValue> row in sheet.Value.Values)
+                {
+                    row.Value.Integrate();
+                }
+            }
+        }
+
+        public void Decide()
+        {
+            foreach (KeyValuePair<string, IntegralValues> sheet in Sheets)
+            {
+                foreach (KeyValuePair<string, IntegralValue> row in sheet.Value.Values)
+                {
+                    row.Value.Decide();
+                }
+            }
+        }
+    }
+
+    public class IntegralValues
+    {
+        public IntegralValues()
+        {
+            Values = new Dictionary<string, IntegralValue>();
+        }
+
+        public Dictionary<string, IntegralValue> Values { get; set; }
+        public IntegralValue this[string tag]
+        { get { return Values[tag]; } }
+    }
+
+    public class IntegralValue
+    {
+        public IntegralValue(ValueRow row, float setup=0, float avg=0, float dev=0, int scanTime=1, int integTime=60)
+        {
+            this.row = row;
+            this.setup = setup;
+            this.avg = avg;
+            this.dev = dev;
+            this.scanTime = scanTime;
+            this.integTime = integTime;
+            Clear();
+        }
+
+        private int count;
+        private ValueRow row;
+        private float setup;
+        private float avg;
+        private float dev;
+        private int scanTime;
+        private int integTime;
+        private float squaredSum;
+
+        public EValueState State { get { return row.State; } }
+        public float Sum { get; private set; }
+        public float AverageSum { get; private set; }
+
+        public void Clear()
+        {
+            count = 0;
+            squaredSum = 0;
+            Sum = 0;
+            AverageSum = 0;
+            row.State = EValueState.None;
+        }
+
+        public void Set(float setup, float avg, float dev, int scanTime=1, int integTime=60)
+        {
+            this.setup = setup;
+            this.avg = avg;
+            this.dev = dev;
+            this.scanTime = scanTime;
+            this.integTime = integTime;
+            this.row.State = EValueState.None;
+        }
+
+        public void Integrate()
+        {
+            if (scanTime == 0) return;
+
+            count++;
+
+            if ((count % scanTime) == 0)
+            {
+                Sum += row.Raw;
+                squaredSum += (float)Math.Pow(row.Raw, 2);
+            }
+
+            if ((count % integTime) == 0) Decide();
+        }
+
+        public void Decide()
+        {
+            if (count == 0) return;
+
+            int divLen = count / scanTime;
+            AverageSum = Sum / divLen;
+
+            if ((avg == 0) && dev == 0) return;
+
+            float fSquaredAvg = squaredSum / divLen;
+            float stdDev = (float)Math.Sqrt(fSquaredAvg - (float)Math.Pow(AverageSum, 2));
+            float avgDev = Math.Abs(AverageSum - setup);
+
+            Clear();
+            if (avg != 0)
+            {
+                row.State = (avgDev <= avg) ? EValueState.Ok : EValueState.Ng;
+            }
+
+            if (row.State != EValueState.Ng)
+            {
+                row.State = (stdDev <= dev) ? EValueState.Ok : EValueState.Ng;
+            }
+        }
+    }
+    #endregion
+}

@@ -1,0 +1,94 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class CtrlTestLine1
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.conditionPanel = new Ulee.Controls.UlPanel();
+            this.measPanel = new Ulee.Controls.UlPanel();
+            this.bgPanel.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.Controls.Add(this.measPanel);
+            this.bgPanel.Controls.Add(this.conditionPanel);
+            this.bgPanel.Size = new System.Drawing.Size(1816, 915);
+            // 
+            // conditionPanel
+            // 
+            this.conditionPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.conditionPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.conditionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.conditionPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.conditionPanel.InnerColor2 = System.Drawing.Color.White;
+            this.conditionPanel.Location = new System.Drawing.Point(0, 0);
+            this.conditionPanel.Name = "conditionPanel";
+            this.conditionPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.conditionPanel.OuterColor2 = System.Drawing.Color.White;
+            this.conditionPanel.Size = new System.Drawing.Size(1816, 915);
+            this.conditionPanel.Spacing = 0;
+            this.conditionPanel.TabIndex = 0;
+            this.conditionPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.conditionPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // measPanel
+            // 
+            this.measPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.measPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.measPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.measPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.measPanel.InnerColor2 = System.Drawing.Color.White;
+            this.measPanel.Location = new System.Drawing.Point(0, 0);
+            this.measPanel.Name = "measPanel";
+            this.measPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.measPanel.OuterColor2 = System.Drawing.Color.White;
+            this.measPanel.Size = new System.Drawing.Size(1816, 915);
+            this.measPanel.Spacing = 0;
+            this.measPanel.TabIndex = 1;
+            this.measPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.measPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // CtrlTestLine1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlTestLine1";
+            this.Size = new System.Drawing.Size(1816, 915);
+            this.Load += new System.EventHandler(this.CtrlTestLine1_Load);
+            this.bgPanel.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        public Ulee.Controls.UlPanel measPanel;
+        public Ulee.Controls.UlPanel conditionPanel;
+    }
+}

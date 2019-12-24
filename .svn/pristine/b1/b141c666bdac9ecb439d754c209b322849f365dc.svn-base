@@ -1,0 +1,642 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class CtrlControllerView
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.ulPanel6 = new Ulee.Controls.UlPanel();
+            this.ulPanel1 = new Ulee.Controls.UlPanel();
+            this.pvPanel = new Ulee.Controls.UlPanel();
+            this.svPanel = new Ulee.Controls.UlPanel();
+            this.ulPanel9 = new Ulee.Controls.UlPanel();
+            this.modePanel = new Ulee.Controls.UlPanel();
+            this.ulPanel13 = new Ulee.Controls.UlPanel();
+            this.outPanel = new Ulee.Controls.UlPanel();
+            this.ulPanel17 = new Ulee.Controls.UlPanel();
+            this.flPanel = new Ulee.Controls.UlPanel();
+            this.ulPanel10 = new Ulee.Controls.UlPanel();
+            this.dPanel = new Ulee.Controls.UlPanel();
+            this.ulPanel19 = new Ulee.Controls.UlPanel();
+            this.iPanel = new Ulee.Controls.UlPanel();
+            this.ulPanel22 = new Ulee.Controls.UlPanel();
+            this.pPanel = new Ulee.Controls.UlPanel();
+            this.ulPanel25 = new Ulee.Controls.UlPanel();
+            this.setButton = new System.Windows.Forms.Button();
+            this.svEdit = new DevExpress.XtraEditors.TextEdit();
+            this.outEdit = new DevExpress.XtraEditors.TextEdit();
+            this.iEdit = new DevExpress.XtraEditors.TextEdit();
+            this.pEdit = new DevExpress.XtraEditors.TextEdit();
+            this.flEdit = new DevExpress.XtraEditors.TextEdit();
+            this.dEdit = new DevExpress.XtraEditors.TextEdit();
+            this.modeCombo = new System.Windows.Forms.ComboBox();
+            this.bgPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.svEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.flEdit.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dEdit.Properties)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.BevelInner = Ulee.Controls.EUlBevelStyle.Raised;
+            this.bgPanel.Controls.Add(this.modeCombo);
+            this.bgPanel.Controls.Add(this.flEdit);
+            this.bgPanel.Controls.Add(this.dEdit);
+            this.bgPanel.Controls.Add(this.iEdit);
+            this.bgPanel.Controls.Add(this.pEdit);
+            this.bgPanel.Controls.Add(this.outEdit);
+            this.bgPanel.Controls.Add(this.svEdit);
+            this.bgPanel.Controls.Add(this.setButton);
+            this.bgPanel.Controls.Add(this.flPanel);
+            this.bgPanel.Controls.Add(this.ulPanel10);
+            this.bgPanel.Controls.Add(this.dPanel);
+            this.bgPanel.Controls.Add(this.ulPanel19);
+            this.bgPanel.Controls.Add(this.iPanel);
+            this.bgPanel.Controls.Add(this.ulPanel22);
+            this.bgPanel.Controls.Add(this.pPanel);
+            this.bgPanel.Controls.Add(this.ulPanel25);
+            this.bgPanel.Controls.Add(this.modePanel);
+            this.bgPanel.Controls.Add(this.ulPanel13);
+            this.bgPanel.Controls.Add(this.outPanel);
+            this.bgPanel.Controls.Add(this.ulPanel17);
+            this.bgPanel.Controls.Add(this.svPanel);
+            this.bgPanel.Controls.Add(this.ulPanel9);
+            this.bgPanel.Controls.Add(this.pvPanel);
+            this.bgPanel.Controls.Add(this.ulPanel1);
+            this.bgPanel.Controls.Add(this.ulPanel6);
+            this.bgPanel.Size = new System.Drawing.Size(222, 300);
+            // 
+            // ulPanel6
+            // 
+            this.ulPanel6.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.ulPanel6.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel6.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel6.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel6.ForeColor = System.Drawing.Color.White;
+            this.ulPanel6.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel6.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel6.Location = new System.Drawing.Point(6, 6);
+            this.ulPanel6.Name = "ulPanel6";
+            this.ulPanel6.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel6.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel6.Size = new System.Drawing.Size(210, 28);
+            this.ulPanel6.Spacing = 0;
+            this.ulPanel6.TabIndex = 6;
+            this.ulPanel6.Text = "CONTROLLER";
+            this.ulPanel6.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel6.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel1
+            // 
+            this.ulPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(78)))), ((int)(((byte)(152)))));
+            this.ulPanel1.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel1.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel1.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel1.ForeColor = System.Drawing.Color.White;
+            this.ulPanel1.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Location = new System.Drawing.Point(6, 40);
+            this.ulPanel1.Name = "ulPanel1";
+            this.ulPanel1.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Size = new System.Drawing.Size(50, 30);
+            this.ulPanel1.Spacing = 0;
+            this.ulPanel1.TabIndex = 7;
+            this.ulPanel1.Text = "PV";
+            this.ulPanel1.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel1.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // pvPanel
+            // 
+            this.pvPanel.BackColor = System.Drawing.Color.Black;
+            this.pvPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.pvPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.pvPanel.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pvPanel.ForeColor = System.Drawing.Color.Lime;
+            this.pvPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.pvPanel.InnerColor2 = System.Drawing.Color.White;
+            this.pvPanel.Location = new System.Drawing.Point(58, 40);
+            this.pvPanel.Name = "pvPanel";
+            this.pvPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.pvPanel.OuterColor2 = System.Drawing.Color.White;
+            this.pvPanel.Size = new System.Drawing.Size(78, 30);
+            this.pvPanel.Spacing = 0;
+            this.pvPanel.TabIndex = 8;
+            this.pvPanel.Text = "0.0";
+            this.pvPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Right;
+            this.pvPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // svPanel
+            // 
+            this.svPanel.BackColor = System.Drawing.Color.Black;
+            this.svPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.svPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.svPanel.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.svPanel.ForeColor = System.Drawing.Color.Lime;
+            this.svPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.svPanel.InnerColor2 = System.Drawing.Color.White;
+            this.svPanel.Location = new System.Drawing.Point(58, 72);
+            this.svPanel.Name = "svPanel";
+            this.svPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.svPanel.OuterColor2 = System.Drawing.Color.White;
+            this.svPanel.Size = new System.Drawing.Size(78, 30);
+            this.svPanel.Spacing = 0;
+            this.svPanel.TabIndex = 12;
+            this.svPanel.Text = "0.0";
+            this.svPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Right;
+            this.svPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel9
+            // 
+            this.ulPanel9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(78)))), ((int)(((byte)(152)))));
+            this.ulPanel9.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel9.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel9.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel9.ForeColor = System.Drawing.Color.White;
+            this.ulPanel9.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel9.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel9.Location = new System.Drawing.Point(6, 72);
+            this.ulPanel9.Name = "ulPanel9";
+            this.ulPanel9.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel9.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel9.Size = new System.Drawing.Size(50, 30);
+            this.ulPanel9.Spacing = 0;
+            this.ulPanel9.TabIndex = 11;
+            this.ulPanel9.Text = "SV";
+            this.ulPanel9.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel9.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // modePanel
+            // 
+            this.modePanel.BackColor = System.Drawing.Color.Black;
+            this.modePanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.modePanel.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.modePanel.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.modePanel.ForeColor = System.Drawing.Color.White;
+            this.modePanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.modePanel.InnerColor2 = System.Drawing.Color.White;
+            this.modePanel.Location = new System.Drawing.Point(58, 136);
+            this.modePanel.Name = "modePanel";
+            this.modePanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.modePanel.OuterColor2 = System.Drawing.Color.White;
+            this.modePanel.Size = new System.Drawing.Size(78, 30);
+            this.modePanel.Spacing = 0;
+            this.modePanel.TabIndex = 20;
+            this.modePanel.Text = "AUTO";
+            this.modePanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.modePanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel13
+            // 
+            this.ulPanel13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(78)))), ((int)(((byte)(152)))));
+            this.ulPanel13.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel13.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel13.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel13.ForeColor = System.Drawing.Color.White;
+            this.ulPanel13.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel13.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel13.Location = new System.Drawing.Point(6, 136);
+            this.ulPanel13.Name = "ulPanel13";
+            this.ulPanel13.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel13.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel13.Size = new System.Drawing.Size(50, 30);
+            this.ulPanel13.Spacing = 0;
+            this.ulPanel13.TabIndex = 19;
+            this.ulPanel13.Text = "MODE";
+            this.ulPanel13.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel13.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // outPanel
+            // 
+            this.outPanel.BackColor = System.Drawing.Color.Black;
+            this.outPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.outPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.outPanel.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.outPanel.ForeColor = System.Drawing.Color.Lime;
+            this.outPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.outPanel.InnerColor2 = System.Drawing.Color.White;
+            this.outPanel.Location = new System.Drawing.Point(58, 104);
+            this.outPanel.Name = "outPanel";
+            this.outPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.outPanel.OuterColor2 = System.Drawing.Color.White;
+            this.outPanel.Size = new System.Drawing.Size(78, 30);
+            this.outPanel.Spacing = 0;
+            this.outPanel.TabIndex = 16;
+            this.outPanel.Text = "0.0";
+            this.outPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Right;
+            this.outPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel17
+            // 
+            this.ulPanel17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(78)))), ((int)(((byte)(152)))));
+            this.ulPanel17.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel17.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel17.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel17.ForeColor = System.Drawing.Color.White;
+            this.ulPanel17.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel17.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel17.Location = new System.Drawing.Point(6, 104);
+            this.ulPanel17.Name = "ulPanel17";
+            this.ulPanel17.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel17.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel17.Size = new System.Drawing.Size(50, 30);
+            this.ulPanel17.Spacing = 0;
+            this.ulPanel17.TabIndex = 15;
+            this.ulPanel17.Text = "OUT";
+            this.ulPanel17.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel17.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // flPanel
+            // 
+            this.flPanel.BackColor = System.Drawing.Color.Black;
+            this.flPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.flPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.flPanel.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flPanel.ForeColor = System.Drawing.Color.Lime;
+            this.flPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.flPanel.InnerColor2 = System.Drawing.Color.White;
+            this.flPanel.Location = new System.Drawing.Point(58, 264);
+            this.flPanel.Name = "flPanel";
+            this.flPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.flPanel.OuterColor2 = System.Drawing.Color.White;
+            this.flPanel.Size = new System.Drawing.Size(78, 30);
+            this.flPanel.Spacing = 0;
+            this.flPanel.TabIndex = 32;
+            this.flPanel.Text = "0.0";
+            this.flPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Right;
+            this.flPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel10
+            // 
+            this.ulPanel10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(78)))), ((int)(((byte)(152)))));
+            this.ulPanel10.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel10.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel10.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel10.ForeColor = System.Drawing.Color.White;
+            this.ulPanel10.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel10.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel10.Location = new System.Drawing.Point(6, 264);
+            this.ulPanel10.Name = "ulPanel10";
+            this.ulPanel10.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel10.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel10.Size = new System.Drawing.Size(50, 30);
+            this.ulPanel10.Spacing = 0;
+            this.ulPanel10.TabIndex = 31;
+            this.ulPanel10.Text = "FL";
+            this.ulPanel10.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel10.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // dPanel
+            // 
+            this.dPanel.BackColor = System.Drawing.Color.Black;
+            this.dPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.dPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.dPanel.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dPanel.ForeColor = System.Drawing.Color.Lime;
+            this.dPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.dPanel.InnerColor2 = System.Drawing.Color.White;
+            this.dPanel.Location = new System.Drawing.Point(58, 232);
+            this.dPanel.Name = "dPanel";
+            this.dPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.dPanel.OuterColor2 = System.Drawing.Color.White;
+            this.dPanel.Size = new System.Drawing.Size(78, 30);
+            this.dPanel.Spacing = 0;
+            this.dPanel.TabIndex = 29;
+            this.dPanel.Text = "0.0";
+            this.dPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Right;
+            this.dPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel19
+            // 
+            this.ulPanel19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(78)))), ((int)(((byte)(152)))));
+            this.ulPanel19.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel19.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel19.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel19.ForeColor = System.Drawing.Color.White;
+            this.ulPanel19.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel19.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel19.Location = new System.Drawing.Point(6, 232);
+            this.ulPanel19.Name = "ulPanel19";
+            this.ulPanel19.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel19.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel19.Size = new System.Drawing.Size(50, 30);
+            this.ulPanel19.Spacing = 0;
+            this.ulPanel19.TabIndex = 28;
+            this.ulPanel19.Text = "D";
+            this.ulPanel19.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel19.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // iPanel
+            // 
+            this.iPanel.BackColor = System.Drawing.Color.Black;
+            this.iPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.iPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.iPanel.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iPanel.ForeColor = System.Drawing.Color.Lime;
+            this.iPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.iPanel.InnerColor2 = System.Drawing.Color.White;
+            this.iPanel.Location = new System.Drawing.Point(58, 200);
+            this.iPanel.Name = "iPanel";
+            this.iPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.iPanel.OuterColor2 = System.Drawing.Color.White;
+            this.iPanel.Size = new System.Drawing.Size(78, 30);
+            this.iPanel.Spacing = 0;
+            this.iPanel.TabIndex = 26;
+            this.iPanel.Text = "0.0";
+            this.iPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Right;
+            this.iPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel22
+            // 
+            this.ulPanel22.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(78)))), ((int)(((byte)(152)))));
+            this.ulPanel22.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel22.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel22.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel22.ForeColor = System.Drawing.Color.White;
+            this.ulPanel22.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel22.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel22.Location = new System.Drawing.Point(6, 200);
+            this.ulPanel22.Name = "ulPanel22";
+            this.ulPanel22.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel22.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel22.Size = new System.Drawing.Size(50, 30);
+            this.ulPanel22.Spacing = 0;
+            this.ulPanel22.TabIndex = 25;
+            this.ulPanel22.Text = "I";
+            this.ulPanel22.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel22.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // pPanel
+            // 
+            this.pPanel.BackColor = System.Drawing.Color.Black;
+            this.pPanel.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.pPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.pPanel.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pPanel.ForeColor = System.Drawing.Color.Lime;
+            this.pPanel.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.pPanel.InnerColor2 = System.Drawing.Color.White;
+            this.pPanel.Location = new System.Drawing.Point(58, 168);
+            this.pPanel.Name = "pPanel";
+            this.pPanel.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.pPanel.OuterColor2 = System.Drawing.Color.White;
+            this.pPanel.Size = new System.Drawing.Size(78, 30);
+            this.pPanel.Spacing = 0;
+            this.pPanel.TabIndex = 23;
+            this.pPanel.Text = "0.0";
+            this.pPanel.TextHAlign = Ulee.Controls.EUlHoriAlign.Right;
+            this.pPanel.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel25
+            // 
+            this.ulPanel25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(78)))), ((int)(((byte)(152)))));
+            this.ulPanel25.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel25.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel25.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel25.ForeColor = System.Drawing.Color.White;
+            this.ulPanel25.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel25.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel25.Location = new System.Drawing.Point(6, 168);
+            this.ulPanel25.Name = "ulPanel25";
+            this.ulPanel25.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel25.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel25.Size = new System.Drawing.Size(50, 30);
+            this.ulPanel25.Spacing = 0;
+            this.ulPanel25.TabIndex = 22;
+            this.ulPanel25.Text = "P";
+            this.ulPanel25.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel25.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // setButton
+            // 
+            this.setButton.Location = new System.Drawing.Point(138, 40);
+            this.setButton.Name = "setButton";
+            this.setButton.Size = new System.Drawing.Size(78, 30);
+            this.setButton.TabIndex = 0;
+            this.setButton.Text = "Setting";
+            this.setButton.UseVisualStyleBackColor = true;
+            // 
+            // svEdit
+            // 
+            this.svEdit.EditValue = "0.0";
+            this.svEdit.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.svEdit.Location = new System.Drawing.Point(138, 73);
+            this.svEdit.Name = "svEdit";
+            this.svEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.svEdit.Properties.Appearance.Options.UseFont = true;
+            this.svEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.svEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.svEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.svEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.svEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.svEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.svEdit.Properties.DisplayFormat.FormatString = "{0:f1}";
+            this.svEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.svEdit.Properties.EditFormat.FormatString = "{0:f1}";
+            this.svEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.svEdit.Properties.MaxLength = 5;
+            this.svEdit.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.svEdit.Size = new System.Drawing.Size(78, 28);
+            this.svEdit.TabIndex = 1;
+            // 
+            // outEdit
+            // 
+            this.outEdit.EditValue = "0.0";
+            this.outEdit.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.outEdit.Location = new System.Drawing.Point(138, 105);
+            this.outEdit.Name = "outEdit";
+            this.outEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.outEdit.Properties.Appearance.Options.UseFont = true;
+            this.outEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.outEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.outEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.outEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.outEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.outEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.outEdit.Properties.DisplayFormat.FormatString = "{0:f1}";
+            this.outEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.outEdit.Properties.EditFormat.FormatString = "{0:f1}";
+            this.outEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.outEdit.Properties.MaxLength = 5;
+            this.outEdit.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.outEdit.Size = new System.Drawing.Size(78, 28);
+            this.outEdit.TabIndex = 2;
+            // 
+            // iEdit
+            // 
+            this.iEdit.EditValue = "0.0";
+            this.iEdit.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.iEdit.Location = new System.Drawing.Point(138, 202);
+            this.iEdit.Name = "iEdit";
+            this.iEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iEdit.Properties.Appearance.Options.UseFont = true;
+            this.iEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.iEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.iEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.iEdit.Properties.DisplayFormat.FormatString = "{0:f1}";
+            this.iEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.iEdit.Properties.EditFormat.FormatString = "{0:f1}";
+            this.iEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.iEdit.Properties.MaxLength = 5;
+            this.iEdit.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.iEdit.Size = new System.Drawing.Size(78, 28);
+            this.iEdit.TabIndex = 5;
+            // 
+            // pEdit
+            // 
+            this.pEdit.EditValue = "0.0";
+            this.pEdit.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.pEdit.Location = new System.Drawing.Point(138, 170);
+            this.pEdit.Name = "pEdit";
+            this.pEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pEdit.Properties.Appearance.Options.UseFont = true;
+            this.pEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.pEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.pEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.pEdit.Properties.DisplayFormat.FormatString = "{0:f1}";
+            this.pEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.pEdit.Properties.EditFormat.FormatString = "{0:f1}";
+            this.pEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.pEdit.Properties.MaxLength = 5;
+            this.pEdit.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.pEdit.Size = new System.Drawing.Size(78, 28);
+            this.pEdit.TabIndex = 4;
+            // 
+            // flEdit
+            // 
+            this.flEdit.EditValue = "0.0";
+            this.flEdit.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.flEdit.Location = new System.Drawing.Point(138, 265);
+            this.flEdit.Name = "flEdit";
+            this.flEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flEdit.Properties.Appearance.Options.UseFont = true;
+            this.flEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.flEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.flEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.flEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.flEdit.Properties.DisplayFormat.FormatString = "{0:f1}";
+            this.flEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.flEdit.Properties.EditFormat.FormatString = "{0:f1}";
+            this.flEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.flEdit.Properties.MaxLength = 5;
+            this.flEdit.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.flEdit.Size = new System.Drawing.Size(78, 28);
+            this.flEdit.TabIndex = 7;
+            // 
+            // dEdit
+            // 
+            this.dEdit.EditValue = "0.0";
+            this.dEdit.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.dEdit.Location = new System.Drawing.Point(138, 233);
+            this.dEdit.Name = "dEdit";
+            this.dEdit.Properties.Appearance.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dEdit.Properties.Appearance.Options.UseFont = true;
+            this.dEdit.Properties.AppearanceDisabled.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dEdit.Properties.AppearanceDisabled.Options.UseFont = true;
+            this.dEdit.Properties.AppearanceFocused.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dEdit.Properties.AppearanceFocused.Options.UseFont = true;
+            this.dEdit.Properties.AppearanceReadOnly.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dEdit.Properties.AppearanceReadOnly.Options.UseFont = true;
+            this.dEdit.Properties.DisplayFormat.FormatString = "{0:f1}";
+            this.dEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.dEdit.Properties.EditFormat.FormatString = "{0:f1}";
+            this.dEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.dEdit.Properties.MaxLength = 5;
+            this.dEdit.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.dEdit.Size = new System.Drawing.Size(78, 28);
+            this.dEdit.TabIndex = 6;
+            // 
+            // modeCombo
+            // 
+            this.modeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.modeCombo.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.modeCombo.FormattingEnabled = true;
+            this.modeCombo.Items.AddRange(new object[] {
+            "Manual",
+            "Auto"});
+            this.modeCombo.Location = new System.Drawing.Point(138, 139);
+            this.modeCombo.Name = "modeCombo";
+            this.modeCombo.Size = new System.Drawing.Size(78, 24);
+            this.modeCombo.TabIndex = 3;
+            // 
+            // CtrlControllerView
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlControllerView";
+            this.Size = new System.Drawing.Size(222, 300);
+            this.Load += new System.EventHandler(this.CtrlControllerView_Load);
+            this.bgPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.svEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.flEdit.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dEdit.Properties)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private Ulee.Controls.UlPanel ulPanel6;
+        private Ulee.Controls.UlPanel flPanel;
+        private Ulee.Controls.UlPanel ulPanel10;
+        private Ulee.Controls.UlPanel dPanel;
+        private Ulee.Controls.UlPanel ulPanel19;
+        private Ulee.Controls.UlPanel iPanel;
+        private Ulee.Controls.UlPanel ulPanel22;
+        private Ulee.Controls.UlPanel pPanel;
+        private Ulee.Controls.UlPanel ulPanel25;
+        private Ulee.Controls.UlPanel modePanel;
+        private Ulee.Controls.UlPanel ulPanel13;
+        private Ulee.Controls.UlPanel outPanel;
+        private Ulee.Controls.UlPanel ulPanel17;
+        private Ulee.Controls.UlPanel svPanel;
+        private Ulee.Controls.UlPanel ulPanel9;
+        private Ulee.Controls.UlPanel pvPanel;
+        private Ulee.Controls.UlPanel ulPanel1;
+        private System.Windows.Forms.Button setButton;
+        private System.Windows.Forms.ComboBox modeCombo;
+        private DevExpress.XtraEditors.TextEdit flEdit;
+        private DevExpress.XtraEditors.TextEdit dEdit;
+        private DevExpress.XtraEditors.TextEdit iEdit;
+        private DevExpress.XtraEditors.TextEdit pEdit;
+        private DevExpress.XtraEditors.TextEdit outEdit;
+        private DevExpress.XtraEditors.TextEdit svEdit;
+    }
+}

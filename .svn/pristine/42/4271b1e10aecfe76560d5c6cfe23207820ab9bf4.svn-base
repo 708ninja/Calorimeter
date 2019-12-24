@@ -1,0 +1,204 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+using Ulee.DllImport.Win32;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class FormClientMain : UlFormEng
+    {
+        public FormClientMain()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private const int csInvalidTime = 500;
+
+        private const int WM_PROG_TERMINATE = (Win32.WM_USER + 0);
+
+        private bool isFirst;
+
+        private InvalidThread invalidThread;
+
+        private void Initialize()
+        {
+            isFirst = true;
+            DefMenu = new UlMenu(viewPanel);
+            DefMenu.Add(new CtrlTestTop(), testButton);
+            DefMenu.Add(new CtrlViewTop(), viewButton);
+            DefMenu.Add(new CtrlDeviceTop(), deviceButton);
+            DefMenu.Add(new CtrlLogTop(), logButton);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
+                case WM_PROG_TERMINATE:
+                    Close();
+                    break;
+            }
+
+            base.WndProc(ref m);
+        }
+
+        private void FormClientMain_Load(object sender, EventArgs args)
+        {
+            Resource.TLog.Log((int)ELogItem.Note, "Start Calorimeter Client Program.");
+            DispCaption();
+
+            DefMenu.Index = 0;
+            Location = new Point(0, 0);
+
+            Resource.TLog.Log((int)ELogItem.Note, "Resume the thread for listener.");
+            Resource.Client.Resume();
+
+            Resource.TLog.Log((int)ELogItem.Note, "Send connection command to Server.");
+            try
+            {
+                Resource.Client.Connect();
+            }
+            catch (Exception e)
+            {
+                Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+                Close();
+            }
+
+            Resource.TLog.Log((int)ELogItem.Note, "Resume invalidation thread of screen.");
+            invalidThread = new InvalidThread(csInvalidTime);
+            invalidThread.InvalidControls += InvalidForm;
+            invalidThread.Resume();
+
+        }
+
+        private void FormClientMain_Shown(object sender, EventArgs e)
+        {
+            isFirst = false;
+        }
+
+        private void FormClientMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isFirst == true) return;
+
+            if (MessageBox.Show("Would you like to exit this program?",
+                "Client", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                == DialogResult.No)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void FormClientMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            invalidThread.Terminate();
+
+            if (isFirst == false)
+            {
+                Resource.Client.Disconnect();
+            }
+            Resource.Client.Terminate();
+
+            Resource.TLog.Log((int)ELogItem.Note, "Exit Calorimeter Client Program.");
+        }
+
+        private void testLineToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int tag = int.Parse((sender as ToolStripItem).Tag.ToString());
+
+            DefMenu.Index = 0;
+            (DefMenu.Controls(0) as CtrlTestTop).DefMenu.Index = tag;
+        }
+
+        private void testViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int tag = int.Parse((sender as ToolStripItem).Tag.ToString());
+
+            DefMenu.Index = 1;
+            (DefMenu.Controls(1) as CtrlViewTop).DefMenu.Index = tag;
+        }
+
+        private void deviceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int tag = int.Parse((sender as ToolStripItem).Tag.ToString());
+
+            DefMenu.Index = 2;
+            (DefMenu.Controls(2) as CtrlDeviceTop).DefMenu.Index = tag;
+        }
+
+        private void logToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DefMenu.Index = 3;
+        }
+
+        private void configMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void exitMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void DoNotifyTermination(object sender, EventArgs e)
+        {
+            Win32.PostMessage(this.Handle, WM_PROG_TERMINATE, (IntPtr)0, (IntPtr)0);
+        }
+
+        private void DispCaption()
+        {
+            Text = "H&C System Calorimeter Client Program Ver " +
+                Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
+
+
+        public override void InvalidForm(object sender, EventArgs args)
+        {
+            if (this.InvokeRequired == true)
+            {
+                EventHandler func = new EventHandler(InvalidForm);
+                Invoke(func);
+            }
+            else
+            {
+                InvalidDateTime();
+                InvalidUserControls(DefMenu);
+            }
+        }
+
+        private void InvalidDateTime()
+        {
+            string dateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+
+            if (dateTimeStatusLabel.Text != dateTime)
+            {
+                dateTimeStatusLabel.Text = dateTime;
+            }
+        }
+
+        private void InvalidUserControls(UlMenu menu)
+        {
+            UlUserControlEng userControl = null;
+
+            for (int i = 0; i < menu.ControlsCount; i++)
+            {
+                userControl = menu.Controls(i) as UlUserControlEng;
+                userControl.InvalidControl(this, null);
+
+                if (userControl.DefMenu != null)
+                {
+                    InvalidUserControls(userControl.DefMenu);
+                }
+            }
+        }
+    }
+}

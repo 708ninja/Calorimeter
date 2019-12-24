@@ -1,0 +1,623 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.Spreadsheet;
+using DevExpress.XtraGrid.Views.Base;
+using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraSpreadsheet;
+
+using Ulee.Controls;
+using Ulee.Device.Connection.Yokogawa;
+using Ulee.Utils;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlTestMeas : UlUserControlEng
+    {
+        public CtrlTestMeas(TestContext context)
+        {
+            InitializeComponent();
+
+            this.context = context;
+            Initialize();
+        }
+
+        private TestContext context;
+        private WorksheetTagCollection sheetTags;
+
+        public event EventHandler Activated;
+        private void OnActivated(object sender, EventArgs args)
+        {
+            Activated?.Invoke(sender, args);
+        }
+
+        private void Initialize()
+        {
+            Color evenColor = Color.FromArgb(244, 244, 236);
+            
+            totalRatedGrid.DataSource = context.Measure.TotalRateds;
+            totalRatedGridView.Appearance.EvenRow.BackColor = evenColor;
+            totalRatedGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            runStateGrid.DataSource = context.Measure.RunStates;
+            runStateGridView.Appearance.EvenRow.BackColor = evenColor;
+            runStateGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            airSideGrid.DataSource = context.Measure.AirSides;
+            airSideGridView.Appearance.EvenRow.BackColor = evenColor;
+            airSideGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            asNozzleGrid.DataSource = context.Measure.Nozzles;
+            asNozzleGridView.Appearance.EvenRow.BackColor = evenColor;
+            asNozzleGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            outsideGrid.DataSource = context.Measure.Outsides;
+            outsideGridView.Appearance.EvenRow.BackColor = evenColor;
+            outsideGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            methodGrid.DataSource = context.Measure.Methods;
+            methodGridView.Appearance.EvenRow.BackColor = evenColor;
+            methodGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            noteGrid.DataSource = context.Measure.Notes;
+            noteGridView.Appearance.EvenRow.BackColor = evenColor;
+            noteGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            ratedGrid.DataSource = context.Measure.Rateds;
+            ratedGridView.Appearance.EvenRow.BackColor = evenColor;
+            ratedGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor11Grid.DataSource = context.Measure.Indoors11;
+            indoor11GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor11GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor12Grid.DataSource = context.Measure.Indoors12;
+            indoor12GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor12GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor21Grid.DataSource = context.Measure.Indoors21;
+            indoor21GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor21GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            indoor22Grid.DataSource = context.Measure.Indoors22;
+            indoor22GridView.Appearance.EvenRow.BackColor = evenColor;
+            indoor22GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            outdoorGrid.DataSource = context.Measure.Outdoors;
+            outdoorGridView.Appearance.EvenRow.BackColor = evenColor;
+            outdoorGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            tc1Grid.DataSource = context.Measure.IndoorTC1;
+            tc1GridView.Appearance.EvenRow.BackColor = evenColor;
+            tc1GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            tc2Grid.DataSource = context.Measure.IndoorTC2;
+            tc2GridView.Appearance.EvenRow.BackColor = evenColor;
+            tc2GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            tc3Grid.DataSource = context.Measure.OutdoorTC;
+            tc3GridView.Appearance.EvenRow.BackColor = evenColor;
+            tc3GridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            pressureGrid.DataSource = context.Measure.Pressures;
+            pressureGridView.Appearance.EvenRow.BackColor = evenColor;
+            pressureGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            reportSheet.LoadDocument(Resource.csExcelOriginReport);
+            sheetTags = null;
+        }
+
+        private void CtrlTestMeas_Load(object sender, EventArgs e)
+        {
+        }
+
+        private void CtrlTestMeas_Enter(object sender, EventArgs e)
+        {
+            OnActivated(this, null);
+
+            if (sheetTags == null)
+            {
+                sheetTags = new WorksheetTagCollection(reportSheet.Document);
+            }
+
+            context.Initialize();
+        }
+
+        public void DoClearSpreadSheet(object sender, EventArgs e)
+        {
+            if (this.InvokeRequired == true)
+            {
+                EventHandler func = new EventHandler(DoClearSpreadSheet);
+                this.BeginInvoke(func, new object[] { sender, e });
+            }
+            else
+            {
+                sheetTags.Clear();
+            }
+        }
+
+        public void DoSetSpreadSheet(object sender, EventArgs e)
+        {
+            if (this.InvokeRequired == true)
+            {
+                EventHandler func = new EventHandler(DoSetSpreadSheet);
+                this.BeginInvoke(func, new object[] { sender, e });
+            }
+            else
+            {
+                TestSpreadSheetArgs sheet = e as TestSpreadSheetArgs;
+
+                switch (sheet.Index)
+                {
+                    case EWorkSheet.Title:
+                        SetSpreadSheetTitleItems(sheet);
+                        break;
+
+                    default:
+                        SetSpreadSheetIntegralValues(sheet);
+                        break;
+                }
+            }
+        }
+
+        public void DoDispState(object sender, EventArgs e)
+        {
+            if (this.InvokeRequired == true)
+            {
+                EventHandler func = new EventHandler(DoDispState);
+                this.BeginInvoke(func, new object[] { sender, e });
+            }
+            else
+            {
+                TestDescriptionArgs desc = e as TestDescriptionArgs;
+                List<MeasureRow> runStates = context.Measure.RunStates;
+
+                runStates[(int)EMeasRunState.Condition].Value = desc.Name;
+                runStates[(int)EMeasRunState.RunningStep].Value = desc.Step.ToString();
+                runStates[(int)EMeasRunState.ElapsedTime].Value = ToDateTimeString(desc.ElapsedTime);
+                runStates[(int)EMeasRunState.TotalElapsed].Value = ToDateTimeString(desc.TotalElapsedTime);
+                runStates[(int)EMeasRunState.Preparation].Value = $"{ToDateTimeString(desc.PrepareCurTime)} / { ToDateTimeString(desc.PrepareMaxTime)} ";
+                runStates[(int)EMeasRunState.Judgement].Value = $"{ToDateTimeString(desc.JudgeCurTime)} / {ToDateTimeString(desc.JudgeMaxTime)}";
+                runStates[(int)EMeasRunState.Integration].Value = $"{ToDateTimeString(desc.IntegCurTime)} / {ToDateTimeString(desc.IntegMaxTime)}";
+                runStates[(int)EMeasRunState.NoOfSteady].Value = $"{desc.JudgeCount} / {desc.JudgeMax}";
+                runStates[(int)EMeasRunState.Repeat].Value = $"{desc.RepeatCount} / {desc.RepeatMax}";
+                runStates[(int)EMeasRunState.Schedule].Value = $"{desc.ScheduleCount} / {desc.ScheduleMax}";
+
+                switch (desc.Step)
+                {
+                    case ETestStep.None:
+                        runStates[(int)EMeasRunState.Preparation].State = EValueState.None;
+                        runStates[(int)EMeasRunState.Judgement].State = EValueState.None;
+                        runStates[(int)EMeasRunState.Integration].State = EValueState.None;
+                        break;
+
+                    case ETestStep.Preparation:
+                        runStates[(int)EMeasRunState.Preparation].State = EValueState.Ok;
+                        runStates[(int)EMeasRunState.Judgement].State = EValueState.None;
+                        runStates[(int)EMeasRunState.Integration].State = EValueState.None;
+                        break;
+
+                    case ETestStep.Judgement:
+                        runStates[(int)EMeasRunState.Preparation].State = EValueState.None;
+                        runStates[(int)EMeasRunState.Judgement].State = EValueState.Ok;
+                        runStates[(int)EMeasRunState.Integration].State = EValueState.None;
+                        break;
+
+                    case ETestStep.Integration:
+                        runStates[(int)EMeasRunState.Preparation].State = EValueState.None;
+                        runStates[(int)EMeasRunState.Judgement].State = EValueState.None;
+                        runStates[(int)EMeasRunState.Integration].State = EValueState.Ok;
+                        break;
+                }
+
+                preparationProgress.Properties.Maximum = (int)desc.PrepareMaxTime;
+                preparationProgress.Position = (int)desc.PrepareCurTime;
+                judgementProgress.Properties.Maximum = (int)desc.JudgeMaxTime;
+                judgementProgress.Position = (int)desc.JudgeCurTime;
+                integrationProgress.Properties.Maximum = (int)desc.IntegMaxTime;
+                integrationProgress.Position = (int)desc.IntegCurTime;
+                noOfSteadyProgress.Properties.Maximum = (int)desc.JudgeMax;
+                noOfSteadyProgress.Position = (int)desc.JudgeCount;
+                repeatProgress.Properties.Maximum = (int)desc.RepeatMax;
+                repeatProgress.Position = (int)desc.RepeatCount;
+                scheduleProgress.Properties.Maximum = (int)desc.ScheduleMax;
+                scheduleProgress.Position = (int)desc.ScheduleCount;
+            }
+        }
+
+        private void SetSpreadSheetTitleItems(TestSpreadSheetArgs sheet)
+        {
+            ConditionNote note = sheet.Report.Note;
+            ConditionRated rated = sheet.Report.Rated;
+            ValueRow row;
+
+            reportSheet.BeginUpdate();
+            sheet.Report.Lock();
+
+            try
+            {
+                foreach (KeyValuePair<string, Dictionary<string, Cell>> tags in sheetTags.Sheets)
+                {
+                    if (tags.Key == "Raw Data") break;
+
+                    tags.Value["{300}"].Value = note.Company;
+                    tags.Value["{302}"].Value = note.Name;
+                    tags.Value["{304}"].Value = note.No;
+                    tags.Value["{306}"].Value = note.Observer;
+                    tags.Value["{308}"].Value = note.Maker;
+                    tags.Value["{310}"].Value = note.Model1;
+                    tags.Value["{312}"].Value = note.Serial1;
+                    tags.Value["{314}"].Value = note.Model2;
+                    tags.Value["{316}"].Value = note.Serial2;
+                    tags.Value["{318}"].Value = note.Model3 + " / " + note.Serial3;
+                    tags.Value["{320}"].Value = $"{sheet.Report.ValueSheets[tags.Key].IndoorDB:f2} / {sheet.Report.ValueSheets[tags.Key].IndoorWB:f2} ℃";
+                    tags.Value["{322}"].Value = $"{sheet.Report.ValueSheets[tags.Key].IndoorMode}, {sheet.Report.ValueSheets[tags.Key].IndoorUse}";
+
+                    row = context.Value.Calcurated["Total.Capacity"];
+                    tags.Value["{301}"].Value = $"{rated.Capacity.ToString(row.Format)} {row.Unit.ToDescription}";
+                    row = context.Value.Calcurated["Total.Power"];
+                    tags.Value["{303}"].Value = $"{rated.PowerInput.ToString(row.Format)} {row.Unit.ToDescription}";
+                    row = context.Value.Calcurated["Total.EER_COP"];
+                    tags.Value["{305}"].Value = $"{rated.EER_COP.ToString(row.Format)} {row.Unit.ToDescription}";
+                    tags.Value["{307}"].Value = $"{rated.Voltage}V / {rated.Current}A / {rated.Frequency}Hz / {EnumHelper.GetNames<EWT330Wiring>()[(int)rated.Wiring]}";
+                    tags.Value["{309}"].Value = note.ExpDevice;
+                    tags.Value["{311}"].Value = note.Refrigerant;
+                    tags.Value["{313}"].Value = note.RefCharge;
+                    tags.Value["{315}"].Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    tags.Value["{321}"].Value = $"{sheet.Report.ValueSheets[tags.Key].OutdoorDB:f2} / {sheet.Report.ValueSheets[tags.Key].OutdoorWB:f2} ℃"; ;
+                    tags.Value["{323}"].Value = $"{sheet.Report.ValueSheets[tags.Key].OutdoorUse}";
+                    tags.Value["{299}"].Value = note.Memo;
+
+                    if (tags.Key.EndsWith("TC") == false)
+                    {
+                        tags.Value["{365}"].Value = " " + sheet.Report.ValueSheets[tags.Key].NozzleName;
+                        tags.Value["{365-0}"].Value = " " + sheet.Report.ValueSheets[tags.Key].NozzleState;
+                    }
+
+                    string cellTag;
+
+                    for (int i = 0; i < 7; i++)
+                    {
+                        cellTag = "{" + $"min-{i + 1}" + "}";
+                        tags.Value[cellTag].Value = (i < sheet.Report.Method.IntegralCount) ? $"{(i + 1) * sheet.Report.Method.IntegralTime} min" : "";
+                    }
+
+                    foreach (KeyValuePair<string, ReportRow> sheetRow in sheet.Report.ValueSheets[tags.Key].Rows)
+                    {
+                        cellTag = "{" + sheetRow.Value.Tag + "}";
+
+                        if (sheetRow.Value.Row == null)
+                            tags.Value[cellTag].Value = "";
+                        else
+                            tags.Value[cellTag].Value = sheetRow.Value.Row.Unit.ToDescription;
+
+                        if (tags.Key.Substring(tags.Key.Length - 2) == "TC")
+                        {
+                            cellTag = "{" + sheetRow.Value.Tag + "-N}";
+                            tags.Value[cellTag].Value = sheetRow.Key;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                sheet.Report.Unlock();
+                reportSheet.EndUpdate();
+            }
+        }
+
+        private void SetSpreadSheetIntegralValues(TestSpreadSheetArgs sheet)
+        {
+            int index = (int)sheet.Index - 1;
+
+            reportSheet.BeginUpdate();
+            sheet.Report.Lock();
+
+            try
+            {
+                foreach (KeyValuePair<string, ReportSheet> valueSheet in sheet.Report.ValueSheets)
+                {
+
+                    if (valueSheet.Key == "Raw Data") break;
+
+                    string cellTag, tag1, tag2;
+                    foreach (KeyValuePair<string, ReportRow> row in valueSheet.Value.Rows)
+                    {
+                        cellTag = row.Value.Cells[index].Tag;
+                        tag2 = "{" + cellTag + "}";
+
+                        sheetTags.Sheets[valueSheet.Key][tag2].Value = row.Value.Cells[index].Value;
+
+                        if (sheet.SettingAverage == true)
+                        {
+                            tag1 = "{" + cellTag.Substring(0, cellTag.Length - 1) + "0}";
+                            sheetTags.Sheets[valueSheet.Key][tag1].Value = row.Value.Average;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                sheet.Report.Unlock();
+                reportSheet.EndUpdate();
+            }
+        }
+
+        private string ToDateTimeString(long msec)
+        {
+            int day = (int)(msec / 86400000);
+            int hour = (int)((msec % 86400000) / 3600000);
+            int min = (int)((msec % 86400000 % 3600000) / 60000);
+            int sec = (int)((msec % 86400000 % 3600000 % 60000) / 1000);
+
+            return $"{day:d2}:{hour:d2}:{min:d2}:{sec:d2}";
+        }
+
+        public override void InvalidControl(object sender, EventArgs e)
+        {
+            if (this.InvokeRequired == true)
+            {
+                EventHandler func = new EventHandler(InvalidControl);
+                this.BeginInvoke(func, new object[] { sender, e });
+            }
+            else
+            {
+                totalRatedGridView.RefreshData();
+                runStateGridView.RefreshData();
+                airSideGridView.RefreshData();
+                asNozzleGridView.RefreshData();
+                outsideGridView.RefreshData();
+                methodGridView.RefreshData();
+                noteGridView.RefreshData();
+                ratedGridView.RefreshData();
+                indoor11GridView.RefreshData();
+                indoor12GridView.RefreshData();
+                indoor21GridView.RefreshData();
+                indoor22GridView.RefreshData();
+                outdoorGridView.RefreshData();
+                tc1GridView.RefreshData();
+                tc2GridView.RefreshData();
+                tc3GridView.RefreshData();
+                pressureGridView.RefreshData();
+            }
+        }
+
+        private void totalRatedGridView_CustomDrawCell(object sender, RowCellCustomDrawEventArgs e)
+        {
+            if (e.DisplayText == "") return;
+
+            Color[] fgColors = { Color.Black, Color.Yellow, Color.White };
+            Color[] bgColors = { SystemColors.Control, Color.LimeGreen, Color.DeepPink };
+
+            bgColors[0] = (e.RowHandle % 2 == 1) ? totalRatedGridView.Appearance.EvenRow.BackColor : Color.White;
+
+            int state = 0;
+
+            switch (e.Column.FieldName)
+            {
+                case "Name":
+                case "Unit":
+                    state = 0;
+                    break;
+
+                case "Value":
+                    state = (int)context.Measure.TotalRateds[e.RowHandle].State;
+                    break;
+
+            }
+
+            e.Appearance.ForeColor = fgColors[state];
+            e.Appearance.BackColor = bgColors[state];
+        }
+
+        private void runStateGridView_CustomDrawCell(object sender, RowCellCustomDrawEventArgs e)
+        {
+            if (e.DisplayText == "") return;
+
+            Color[] fgColors = { Color.Black, Color.Yellow, Color.White };
+            Color[] bgColors = { SystemColors.Control, Color.LimeGreen, Color.DeepPink };
+
+            bgColors[0] = (e.RowHandle % 2 == 1) ? runStateGridView.Appearance.EvenRow.BackColor : Color.White;
+
+            int state = 0;
+
+            switch (e.Column.FieldName)
+            {
+                case "Name":
+                    state = 0;
+                    break;
+
+                case "Value":
+                    state = (int)context.Measure.RunStates[e.RowHandle].State;
+                    break;
+
+            }
+
+            e.Appearance.ForeColor = fgColors[state];
+            e.Appearance.BackColor = bgColors[state];
+        }
+
+        private void outsideGridView_CustomDrawCell(object sender, RowCellCustomDrawEventArgs e)
+        {
+            if (e.DisplayText == "") return;
+
+            Color[] fgColors = { Color.Black, Color.Yellow, Color.White };
+            Color[] bgColors = { SystemColors.Control, Color.LimeGreen, Color.DeepPink };
+
+            bgColors[0] = (e.RowHandle % 2 == 1) ? outsideGridView.Appearance.EvenRow.BackColor : Color.White;
+
+            int state = 0;
+
+            switch (e.Column.FieldName)
+            {
+                case "Name":
+                case "Unit":
+                    state = 0;
+                    break;
+
+                case "Value":
+                    state = (int)context.Measure.Outsides[e.RowHandle].State;
+                    break;
+
+            }
+
+            e.Appearance.ForeColor = fgColors[state];
+            e.Appearance.BackColor = bgColors[state];
+        }
+
+        private void airSideGridView_CustomDrawCell(object sender, RowCellCustomDrawEventArgs e)
+        {
+            if (e.DisplayText == "") return;
+
+            Color[] fgColors = { Color.Black, Color.Yellow, Color.White };
+            Color[] bgColors = { SystemColors.Control, Color.LimeGreen, Color.DeepPink };
+
+            bgColors[0] = (e.RowHandle % 2 == 1) ? airSideGridView.Appearance.EvenRow.BackColor : Color.White;
+
+            int state = 0;
+
+            switch (e.Column.FieldName)
+            {
+                case "Name":
+                case "Unit":
+                    state = 0;
+                    break;
+
+                case "Indoor11":
+                    state = (int)context.Measure.AirSides[e.RowHandle].Indoor11State;
+                    break;
+
+                case "Indoor12":
+                    state = (int)context.Measure.AirSides[e.RowHandle].Indoor12State;
+                    break;
+
+                case "Indoor21":
+                    state = (int)context.Measure.AirSides[e.RowHandle].Indoor21State;
+                    break;
+
+                case "Indoor22":
+                    state = (int)context.Measure.AirSides[e.RowHandle].Indoor22State;
+                    break;
+            }
+
+            e.Appearance.ForeColor = fgColors[state];
+            e.Appearance.BackColor = bgColors[state];
+        }
+
+        public void SetAllGridData()
+        {
+
+        }
+    }
+
+    internal class WorksheetTagCollection
+    {
+        public WorksheetTagCollection(IWorkbook workbook)
+        {
+            this.workbook = workbook;
+            Sheets = new Dictionary<string, Dictionary<string, Cell>>();
+            Initialize();
+        }
+
+        private string csHeadTag = "{";
+        private string csTailTag = "}";
+        private string csEndTag = "{end}";
+
+        private IWorkbook workbook;
+        public Dictionary<string, Dictionary<string, Cell>> Sheets { get; private set; }
+
+        public void Clear()
+        {
+            workbook.BeginUpdate();
+            foreach (KeyValuePair<string, Dictionary<string, Cell>> sheet in Sheets)
+            {
+                foreach (KeyValuePair<string, Cell> tag in sheet.Value)
+                {
+                    tag.Value.Value = "";
+                }
+            }
+            workbook.EndUpdate();
+        }
+
+        private void Initialize()
+        {
+            int rowLength, columnLength;
+
+            workbook.BeginUpdate();
+            foreach (Worksheet sheet in workbook.Worksheets)
+            {
+                rowLength = GetRowLength(sheet, csEndTag);
+                columnLength = GetColumnLength(sheet, csEndTag);
+
+                Dictionary<string, Cell> tags = new Dictionary<string, Cell>();
+                AddTags(sheet, tags, rowLength, columnLength);
+                Sheets.Add(sheet.Name, tags);
+            }
+            workbook.EndUpdate();
+        }
+
+        private void AddTags(Worksheet sheet, Dictionary<string, Cell> tags, int rowLength, int columnLength)
+        {
+            for (int row = 0; row < rowLength; row++)
+            {
+                for (int column = 0; column < columnLength; column++)
+                {
+                    string text = sheet.Cells[row, column].Value.TextValue;
+
+                    if (string.IsNullOrWhiteSpace(text) == false)
+                    {
+                        text = text.Trim();
+
+                        if (text.Length > 2)
+                        {
+                            string head = text.Substring(0, 1);
+                            string tail = text.Substring(text.Length - 1, 1);
+
+                            if ((head == csHeadTag) && (tail == csTailTag))
+                            {
+                                tags.Add(text, sheet.Cells[row, column]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private int GetRowLength(Worksheet sheet, string text, int length = 100)
+        {
+            for (int i = 0; i < length; i++)
+            {
+                if (sheet.Cells[i, 0].Value.TextValue == text)
+                {
+                    sheet.Cells[i, 0].Value = "";
+
+                    return sheet.Cells[i, 0].RowIndex + 1;
+                }
+            }
+
+            return 0;
+        }
+
+        private int GetColumnLength(Worksheet sheet, string text, int length = 100)
+        {
+            for (int i = 0; i < length; i++)
+            {
+                if (sheet.Cells[0, i].Value.TextValue == csEndTag)
+                {
+                    sheet[0, i].Value = "";
+
+                    return sheet[0, i].ColumnIndex + 1;
+                }
+            }
+
+            return 0;
+        }
+    }
+}

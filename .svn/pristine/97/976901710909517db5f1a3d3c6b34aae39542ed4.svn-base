@@ -1,0 +1,419 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.XtraEditors;
+using DevExpress.XtraEditors.Controls;
+using DevExpress.XtraGrid.Columns;
+using DevExpress.XtraGrid.Views.BandedGrid;
+using DevExpress.XtraGrid.Views.Base;
+using DevExpress.XtraGrid.Views.Grid;
+
+using Ulee.Controls;
+using Ulee.Utils;
+using DevExpress.XtraEditors.Repository;
+
+namespace Hnc.Calorimeter.Client
+{ 
+    public partial class CtrlConfigSchedule : UlUserControlEng
+    {
+        private class TestParams
+        {
+            public TestParams()
+            {
+                Indoor1Use = EIndoorUse.Indoor;
+                Indoor1Mode1 = EIndoorMode.Cooling;
+                Indoor1Duct1 = EIndoorDuct.N1;
+                Indoor1Mode2 = EIndoorMode.Cooling;
+                Indoor1Duct2 = EIndoorDuct.N1;
+
+                Indoor2Use = EIndoorUse.Indoor;
+                Indoor2Mode1 = EIndoorMode.Cooling;
+                Indoor2Duct1 = EIndoorDuct.N1;
+                Indoor2Mode2 = EIndoorMode.Cooling;
+                Indoor2Duct2 = EIndoorDuct.N1;
+
+                OutdoorUse = EOutdoorUse.Outdoor;
+                OutdoorDpSensor = EEtcUse.Use;
+                OutdoorAutoVolt = EEtcUse.Use;
+            }
+
+            public EIndoorUse Indoor1Use { get; set; }
+            public EIndoorMode Indoor1Mode1 { get; set; }
+            public EIndoorDuct Indoor1Duct1 { get; set; }
+            public EIndoorMode Indoor1Mode2 { get; set; }
+            public EIndoorDuct Indoor1Duct2 { get; set; }
+            public EIndoorUse Indoor2Use { get; set; }
+            public EIndoorMode Indoor2Mode1 { get; set; }
+            public EIndoorDuct Indoor2Duct1 { get; set; }
+            public EIndoorMode Indoor2Mode2 { get; set; }
+            public EIndoorDuct Indoor2Duct2 { get; set; }
+            public EOutdoorUse OutdoorUse { get; set; }
+            public EEtcUse OutdoorDpSensor { get; set; }
+            public EEtcUse OutdoorAutoVolt { get; set; }
+        }
+
+        public CtrlConfigSchedule()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private List<TextEdit> viewEdits;
+        private List<TextEdit> id1Edits;
+        private List<TextEdit> id2Edits;
+        private List<TextEdit> odEdits;
+        private List<AdvBandedGridView> viewGrids;
+        private List<TestParams> testParams;
+
+        private void Initialize()
+        {
+            viewEdits = new List<TextEdit>();
+            viewEdits.Add(standardEdit);
+            viewEdits.Add(nameEdit);
+            viewEdits.Add(noSteadyEdit);
+            viewEdits.Add(preparationEdit);
+            viewEdits.Add(judgementEdit);
+            viewEdits.Add(repeatEdit);
+
+            id1Edits = new List<TextEdit>();
+            id1Edits.Add(id1EdbSetupEdit);
+            id1Edits.Add(id1EdbAvgEdit);
+            id1Edits.Add(id1EdbDevEdit);
+            id1Edits.Add(id1EwbSetupEdit);
+            id1Edits.Add(id1EwbAvgEdit);
+            id1Edits.Add(id1EwbDevEdit);
+            id1Edits.Add(id1Ldb1DevEdit);
+            id1Edits.Add(id1Lwb1DevEdit);
+            id1Edits.Add(id1Airflow1DevEdit);
+            id1Edits.Add(id1Ldb2DevEdit);
+            id1Edits.Add(id1Lwb2DevEdit);
+            id1Edits.Add(id1Airflow2DevEdit);
+            id1Edits.Add(id1Cdp1SetupEdit);
+            id1Edits.Add(id1Cdp1AvgEdit);
+            id1Edits.Add(id1Cdp1DevEdit);
+            id1Edits.Add(id1Cdp2SetupEdit);
+            id1Edits.Add(id1Cdp2AvgEdit);
+            id1Edits.Add(id1Cdp2DevEdit);
+
+            id2Edits = new List<TextEdit>();
+            id2Edits.Add(id2EdbSetupEdit);
+            id2Edits.Add(id2EdbAvgEdit);
+            id2Edits.Add(id2EdbDevEdit);
+            id2Edits.Add(id2EwbSetupEdit);
+            id2Edits.Add(id2EwbAvgEdit);
+            id2Edits.Add(id2EwbDevEdit);
+            id2Edits.Add(id2Ldb1DevEdit);
+            id2Edits.Add(id2Lwb1DevEdit);
+            id2Edits.Add(id2Airflow1DevEdit);
+            id2Edits.Add(id2Ldb2DevEdit);
+            id2Edits.Add(id2Lwb2DevEdit);
+            id2Edits.Add(id2Airflow2DevEdit);
+            id2Edits.Add(id2Cdp1SetupEdit);
+            id2Edits.Add(id2Cdp1AvgEdit);
+            id2Edits.Add(id2Cdp1DevEdit);
+            id2Edits.Add(id2Cdp2SetupEdit);
+            id2Edits.Add(id2Cdp2AvgEdit);
+            id2Edits.Add(id2Cdp2DevEdit);
+
+            odEdits = new List<TextEdit>();
+            odEdits.Add(odEdbSetupEdit);
+            odEdits.Add(odEdbAvgEdit);
+            odEdits.Add(odEdbDevEdit);
+            odEdits.Add(odEwbSetupEdit);
+            odEdits.Add(odEwbAvgEdit);
+            odEdits.Add(odEwbDevEdit);
+            odEdits.Add(odEdpSetupEdit);
+            odEdits.Add(odEdpAvgEdit);
+            odEdits.Add(odEdpDevEdit);
+            odEdits.Add(odVolt1SetupEdit);
+            odEdits.Add(odVolt1AvgEdit);
+            odEdits.Add(odVolt1DevEdit);
+            odEdits.Add(odVolt2SetupEdit);
+            odEdits.Add(odVolt2AvgEdit);
+            odEdits.Add(odVolt2DevEdit);
+
+            viewGrids = new List<AdvBandedGridView>();
+            viewGrids.Add(indoor1GridView);
+            viewGrids.Add(indoor2GridView);
+            viewGrids.Add(outdoorGridView);
+
+            testParams = new List<TestParams>();
+            testParams.Add(new TestParams());
+
+            indoor1Grid.DataSource = testParams;
+            indoor2Grid.DataSource = testParams;
+            outdoorGrid.DataSource = testParams;
+
+            NameValue<EIndoorUse>[] inUseItems = EnumHelper.GetNameValues<EIndoorUse>();
+            indoor1UseLookUp.DataSource = inUseItems;
+            indoor1UseLookUp.DisplayMember = "Name";
+            indoor1UseLookUp.ValueMember = "Value";
+            indoor1UseLookUp.KeyMember = "Value";
+            indoor2UseLookUp.DataSource = inUseItems;
+            indoor2UseLookUp.DisplayMember = "Name";
+            indoor2UseLookUp.ValueMember = "Value";
+            indoor2UseLookUp.KeyMember = "Value";
+
+            NameValue<EIndoorMode>[] modeItems = EnumHelper.GetNameValues<EIndoorMode>();
+            indoor1ModeLookUp.DataSource = modeItems;
+            indoor1ModeLookUp.DisplayMember = "Name";
+            indoor1ModeLookUp.ValueMember = "Value";
+            indoor1ModeLookUp.KeyMember = "Value";
+            indoor2ModeLookUp.DataSource = modeItems;
+            indoor2ModeLookUp.DisplayMember = "Name";
+            indoor2ModeLookUp.ValueMember = "Value";
+            indoor2ModeLookUp.KeyMember = "Value";
+
+            NameValue<EIndoorDuct>[] ductItems = EnumHelper.GetNameValues<EIndoorDuct>();
+            indoor1DuctLookUp.DataSource = ductItems;
+            indoor1DuctLookUp.DisplayMember = "Name";
+            indoor1DuctLookUp.ValueMember = "Value";
+            indoor1DuctLookUp.KeyMember = "Value";
+            indoor2DuctLookUp.DataSource = ductItems;
+            indoor2DuctLookUp.DisplayMember = "Name";
+            indoor2DuctLookUp.ValueMember = "Value";
+            indoor2DuctLookUp.KeyMember = "Value";
+
+            NameValue<EOutdoorUse>[] outUseItems = EnumHelper.GetNameValues<EOutdoorUse>();
+            outdoorUseLookUp.DataSource = outUseItems;
+            outdoorUseLookUp.DisplayMember = "Name";
+            outdoorUseLookUp.ValueMember = "Value";
+            outdoorUseLookUp.KeyMember = "Value";
+
+            NameValue<EEtcUse>[] etcUseItems = EnumHelper.GetNameValues<EEtcUse>();
+            outdoorEtcUseLookUp.DataSource = etcUseItems;
+            outdoorEtcUseLookUp.DisplayMember = "Name";
+            outdoorEtcUseLookUp.ValueMember = "Value";
+            outdoorEtcUseLookUp.KeyMember = "Value";
+
+            string format;
+            string devFormat;
+
+            foreach (TextEdit edit in id1Edits)
+            {
+                switch (int.Parse(((string)edit.Tag).ToString()))
+                {
+                    // Temperature Edit
+                    case 0:
+                        format = Resource.Variables.Measured["ID11.Entering.DB"].Format;
+                        devFormat = ToDevFormat(format);
+                        break;
+
+                    // Air Flow Edit
+                    case 1:
+                        format = Resource.Variables.Calcurated["ID11.Air.Flow.Lev"].Format;
+                        devFormat = ToDevFormat(format);
+                        break;
+
+                    // Diff. Pressure Edit
+                    case 2:
+                        format = Resource.Variables.Measured["ID11.Nozzle.Diff.Pressure"].Format;
+                        devFormat = ToDevFormat(format);
+                        break;
+
+                    default:
+                        format = "0.0";
+                        devFormat = "f1";
+                        break;
+                }
+
+                edit.Text = format;
+                edit.Properties.Mask.EditMask = devFormat;
+                edit.Properties.DisplayFormat.FormatString = devFormat;
+                edit.Properties.EditFormat.FormatString = devFormat;
+            }
+
+            foreach (TextEdit edit in id2Edits)
+            {
+                switch (int.Parse(((string)edit.Tag).ToString()))
+                {
+                    // Temperature Edit
+                    case 0:
+                        format = Resource.Variables.Measured["ID21.Entering.DB"].Format;
+                        devFormat = ToDevFormat(format);
+                        break;
+
+                    // Air Flow Edit
+                    case 1:
+                        format = Resource.Variables.Calcurated["ID21.Air.Flow.Lev"].Format;
+                        devFormat = ToDevFormat(format);
+                        break;
+
+                    // Diff. Pressure Edit
+                    case 2:
+                        format = Resource.Variables.Measured["ID21.Nozzle.Diff.Pressure"].Format;
+                        devFormat = ToDevFormat(format);
+                        break;
+
+                    default:
+                        format = "0.0";
+                        devFormat = "f1";
+                        break;
+                }
+
+                edit.Text = format;
+                edit.Properties.Mask.EditMask = devFormat;
+                edit.Properties.DisplayFormat.FormatString = devFormat;
+                edit.Properties.EditFormat.FormatString = devFormat;
+            }
+
+            foreach (TextEdit edit in odEdits)
+            {
+                switch (int.Parse(((string)edit.Tag).ToString()))
+                {
+                    // Temperature Edit
+                    case 0:
+                        format = Resource.Variables.Measured["OD.Entering.DB"].Format;
+                        devFormat = ToDevFormat(format);
+                        break;
+
+                    // Air Flow Edit
+                    case 1:
+                        format = Resource.Variables.Calcurated["PM.Voltage"].Format;
+                        devFormat = ToDevFormat(format);
+                        break;
+
+                    default:
+                        format = "0.0";
+                        devFormat = "f1";
+                        break;
+                }
+
+                edit.Text = format;
+                edit.Properties.Mask.EditMask = devFormat;
+                edit.Properties.DisplayFormat.FormatString = devFormat;
+                edit.Properties.EditFormat.FormatString = devFormat;
+            }
+
+            SetPanelActive(false);
+        }
+
+        private string ToDevFormat(string format)
+        {
+            string[] strings = format.Split(new[] { '.' }, StringSplitOptions.None);
+
+            if ((strings == null) || (strings.Length != 2)) return "f0";
+
+            return $"f{strings[1].Length}";
+        }
+
+        private void SetPanelActive(bool active)
+        {
+            viewStatePanel.BackColor = (active == true) ? Color.DeepSkyBlue : Color.Gray;
+
+            foreach (TextEdit edit in id1Edits)
+            {
+                edit.Properties.ReadOnly = !active;
+                edit.EnterMoveNextControl = true;
+            }
+
+            foreach (TextEdit edit in id2Edits)
+            {
+                edit.Properties.ReadOnly = !active;
+                edit.EnterMoveNextControl = true;
+            }
+
+            foreach (TextEdit edit in odEdits)
+            {
+                edit.Properties.ReadOnly = !active;
+                edit.EnterMoveNextControl = true;
+            }
+
+            foreach (TextEdit edit in viewEdits)
+            {
+                edit.Properties.ReadOnly = !active;
+                edit.EnterMoveNextControl = true;
+            }
+
+            foreach (AdvBandedGridView gridView in viewGrids)
+            {
+                gridView.OptionsBehavior.ReadOnly = !active;
+            }
+        }
+
+        private void indoor1GridView_CellValueChanging(object sender, CellValueChangedEventArgs e)
+        {
+            AdvBandedGridView view = sender as AdvBandedGridView;
+
+            switch (e.Column.FieldName)
+            {
+                case "Indoor1Use":
+                    if ((EIndoorUse)e.Value == EIndoorUse.NotUsed)
+                    {
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor1Mode1"], EIndoorMode.NotUsed);
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor1Duct1"], EIndoorDuct.NotUsed);
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor1Mode2"], EIndoorMode.NotUsed);
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor1Duct2"], EIndoorDuct.NotUsed);
+                    }
+                    break;
+
+                case "Indoor2Use":
+                    if ((EIndoorUse)e.Value == EIndoorUse.NotUsed)
+                    {
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor2Mode1"], EIndoorMode.NotUsed);
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor2Duct1"], EIndoorDuct.NotUsed);
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor2Mode2"], EIndoorMode.NotUsed);
+                        view.SetRowCellValue(e.RowHandle, view.Columns["Indoor2Duct2"], EIndoorDuct.NotUsed);
+                    }
+                    break;
+            }
+        }
+
+        private void indoor1GridView_CustomDrawBandHeader(object sender, BandHeaderCustomDrawEventArgs e)
+        {
+            if (e.Band == null) return;
+
+            if (e.Band.AppearanceHeader.BackColor != Color.Empty)
+            {
+                e.Info.AllowColoring = true;
+            }
+        }
+
+        private void indoor1GridView_CustomDrawColumnHeader(object sender, ColumnHeaderCustomDrawEventArgs e)
+        {
+            if (e.Column == null) return;
+
+            if (e.Column.AppearanceHeader.BackColor != Color.Empty)
+            {
+                e.Info.AllowColoring = true;
+            }
+        }
+
+        private void indoor1ModeLookUp_EditValueChanging(object sender, ChangingEventArgs e)
+        {
+            GridView view = indoor1GridView;
+            GridColumn column = view.FocusedColumn;
+
+            if (column.FieldName != "Indoor1Use")
+            {
+                if ((EIndoorUse)view.GetRowCellValue(view.FocusedRowHandle,
+                    view.Columns["Indoor1Use"]) == EIndoorUse.NotUsed)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
+        private void indoor2ModeLookUp_EditValueChanging(object sender, ChangingEventArgs e)
+        {
+            GridView view = indoor2GridView;
+            GridColumn column = view.FocusedColumn;
+
+            if (column.FieldName != "Indoor2Use")
+            {
+                if ((EIndoorUse)view.GetRowCellValue(view.FocusedRowHandle,
+                    view.Columns["Indoor2Use"]) == EIndoorUse.NotUsed)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlTestLeft : UlUserControlEng
+    {
+        public CtrlTestLeft()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            DefMenu = new UlMenu(viewPanel);
+            DefMenu.Add(new CtrlTestRight(), line1Button);
+            DefMenu.Add(new CtrlTestRight(), line2Button);
+            DefMenu.Add(new CtrlTestRight(), line3Button);
+            DefMenu.Add(new CtrlTestRight(), line4Button);
+        }
+
+        private void CtrlTestTop_Load(object sender, EventArgs e)
+        {
+            DefMenu.Index = 0;
+        }
+    }
+}

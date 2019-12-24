@@ -1,0 +1,192 @@
+﻿using System;
+using System.Data;
+using System.Drawing;
+using System.Threading;
+using System.Windows.Forms;
+
+using DevExpress.XtraGrid;
+using DevExpress.XtraGrid.Views.Base;
+using DevExpress.XtraGrid.Views.Grid;
+
+using Ulee.Controls;
+using Ulee.Device.Connection;
+using Ulee.Device.Connection.Yokogawa;
+
+namespace Hnc.Calorimeter.Server
+{
+    public partial class CtrlViewDevice : UlUserControlEng
+    {
+        public CtrlViewDevice()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        private void CtrlViewDevice_Enter(object sender, EventArgs e)
+        {
+            powerMeterGridView.RefreshData();
+            controllerGridView.RefreshData();
+            recorderGridView.RefreshData();
+            plcGridView.RefreshData();
+        }
+
+        private void Initialize()
+        {
+            Color evenColor = Color.FromArgb(244, 244, 236);
+
+            powerMeterGrid.DataSource = Resource.Server.Devices.PowerMeter;
+            powerMeterGridView.Appearance.EvenRow.BackColor = evenColor;
+            powerMeterGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            recorderGrid.DataSource = Resource.Server.Devices.Recorder;
+            recorderGridView.Appearance.EvenRow.BackColor = evenColor;
+            recorderGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            controllerGrid.DataSource = Resource.Server.Devices.Controller;
+            controllerGridView.Appearance.EvenRow.BackColor = evenColor;
+            controllerGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            plcGrid.DataSource = Resource.Server.Devices.Plc;
+            plcGridView.Appearance.EvenRow.BackColor = evenColor;
+            plcGridView.OptionsView.EnableAppearanceEvenRow = true;
+
+            for (int i = 0; i < Resource.Server.Devices.PowerMeter.Count; i++)
+            {
+                Resource.Server.Devices.PowerMeter[i].AddAfterExceptionHandler(DoAfterGridException);
+            }
+
+            for (int i = 0; i < Resource.Server.Devices.Recorder.Count; i++)
+            {
+                Resource.Server.Devices.Recorder[i].AddAfterExceptionHandler(DoAfterGridException);
+            }
+
+            for (int i = 0; i < Resource.Server.Devices.Controller.Count; i++)
+            {
+                Resource.Server.Devices.Controller[i].AddAfterExceptionHandler(DoAfterGridException);
+            }
+
+            for (int i = 0; i < Resource.Server.Devices.Plc.Count; i++)
+            {
+                Resource.Server.Devices.Plc[i].AddAfterExceptionHandler(DoAfterGridException);
+            }
+        }
+
+        private void modifyButton_Click(object sender, EventArgs args)
+        {
+            if (Resource.Authority > EUserAuthority.Admin) return;
+
+            int tag = int.Parse((sender as Button).Tag.ToString());
+            GridView view = GetGridView(tag);
+
+            if (view.FocusedRowHandle < 0) return;
+
+            UlEthernetClient client = GetEthernetClient(tag, view.FocusedRowHandle);
+
+            FormDeviceEdit form = new FormDeviceEdit();
+
+            form.Text = $"{client.Name} Modify";
+            Resource.TLog.Log((int)ELogItem.Note, $"Clicked {form.Text} button.");
+
+            form.linkCombo.SelectedIndex =
+                (client.Connected == false) ? (int)EEthernetLink.Disconnect : (int)EEthernetLink.Connect;
+            form.modeCombo.SelectedIndex = (int)client.Mode;
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                bool link = (form.linkCombo.SelectedIndex == (int)EEthernetLink.Disconnect) ? false : true;
+
+                if (client.Connected != link)
+                {
+                    try
+                    {
+                        if (link == true)
+                        {
+                            Resource.TLog.Log((int)ELogItem.Note, $"Try to Connect TCP socket of {client.Name}");
+                            client.Close();
+                            client.Connect();
+                            Resource.TLog.Log((int)ELogItem.Note, $"Connected TCP socket of {client.Name}");
+                        }
+                        else
+                        {
+                            client.Close();
+                            Resource.TLog.Log((int)ELogItem.Note, $"Disconnected TCP socket of {client.Name}");
+                        }
+
+                        client.Mode = (EEthernetMode)form.modeCombo.SelectedIndex;
+                        Resource.TLog.Log((int)ELogItem.Note, $"Changed mode of {client.Name} to {client.Mode.ToString()}");
+                    }
+                    catch (Exception e)
+                    {
+                        Resource.TLog.Log((int)ELogItem.Exception, e.ToString());
+
+                        MessageBox.Show(
+                            $"Can't change mode of {client.Name}!\r\nPlease check this device and cabling.",
+                            Resource.Caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+
+                view.RefreshData();
+            }
+        }
+
+        private GridView GetGridView(int index)
+        {
+            GridView view = null;
+
+            switch (index)
+            {
+                case 0:
+                    view = powerMeterGridView;
+                    break;
+
+                case 1:
+                    view = recorderGridView;
+                    break;
+
+                case 2:
+                    view = controllerGridView;
+                    break;
+
+                case 3:
+                    view = plcGridView;
+                    break;
+            }
+
+            return view;
+        }
+
+        private UlEthernetClient GetEthernetClient(int index, int row)
+        {
+            UlEthernetClient client = null;
+
+            switch (index)
+            {
+                case 0:
+                    client = Resource.Server.Devices.PowerMeter[row];
+                    break;
+
+                case 1:
+                    client = Resource.Server.Devices.Recorder[row];
+                    break;
+
+                case 2:
+                    client = Resource.Server.Devices.Controller[row];
+                    break;
+
+                case 3:
+                    client = Resource.Server.Devices.Plc[row];
+                    break;
+            }
+
+            return client;
+        }
+
+        private void DoAfterGridException(object sender, EventArgs args)
+        {
+            powerMeterGridView.RefreshData();
+            controllerGridView.RefreshData();
+            recorderGridView.RefreshData();
+            plcGridView.RefreshData();
+        }
+    }
+}

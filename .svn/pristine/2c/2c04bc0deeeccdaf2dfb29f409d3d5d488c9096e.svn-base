@@ -1,0 +1,359 @@
+﻿namespace Hnc.Calorimeter.Client
+{
+    partial class CtrlTestMeas
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CtrlTestMeas));
+            this.ulPanel4 = new Ulee.Controls.UlPanel();
+            this.ulPanel6 = new Ulee.Controls.UlPanel();
+            this.ulPanel1 = new Ulee.Controls.UlPanel();
+            this.ulPanel2 = new Ulee.Controls.UlPanel();
+            this.testMeasTab = new System.Windows.Forms.TabControl();
+            this.measPage = new System.Windows.Forms.TabPage();
+            this.measTab = new System.Windows.Forms.TabControl();
+            this.meas1Page = new System.Windows.Forms.TabPage();
+            this.meas2Page = new System.Windows.Forms.TabPage();
+            this.reportPage = new System.Windows.Forms.TabPage();
+            this.reportSheet = new DevExpress.XtraSpreadsheet.SpreadsheetControl();
+            this.graphPage = new System.Windows.Forms.TabPage();
+            this.graphTab = new System.Windows.Forms.TabControl();
+            this.graph1Page = new System.Windows.Forms.TabPage();
+            this.graph2Page = new System.Windows.Forms.TabPage();
+            this.graph3Page = new System.Windows.Forms.TabPage();
+            this.graph4Page = new System.Windows.Forms.TabPage();
+            this.graph5Page = new System.Windows.Forms.TabPage();
+            this.graph6Page = new System.Windows.Forms.TabPage();
+            this.bgPanel.SuspendLayout();
+            this.ulPanel4.SuspendLayout();
+            this.ulPanel1.SuspendLayout();
+            this.testMeasTab.SuspendLayout();
+            this.measPage.SuspendLayout();
+            this.measTab.SuspendLayout();
+            this.reportPage.SuspendLayout();
+            this.graphPage.SuspendLayout();
+            this.graphTab.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.bgPanel.Controls.Add(this.testMeasTab);
+            this.bgPanel.Controls.Add(this.ulPanel1);
+            this.bgPanel.Controls.Add(this.ulPanel4);
+            this.bgPanel.Size = new System.Drawing.Size(1728, 915);
+            // 
+            // ulPanel4
+            // 
+            this.ulPanel4.BevelInner = Ulee.Controls.EUlBevelStyle.Raised;
+            this.ulPanel4.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel4.Controls.Add(this.ulPanel6);
+            this.ulPanel4.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel4.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel4.Location = new System.Drawing.Point(0, 0);
+            this.ulPanel4.Name = "ulPanel4";
+            this.ulPanel4.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel4.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel4.Size = new System.Drawing.Size(260, 455);
+            this.ulPanel4.Spacing = 0;
+            this.ulPanel4.TabIndex = 5;
+            this.ulPanel4.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel4.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel6
+            // 
+            this.ulPanel6.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.ulPanel6.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel6.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel6.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel6.ForeColor = System.Drawing.Color.White;
+            this.ulPanel6.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel6.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel6.Location = new System.Drawing.Point(6, 6);
+            this.ulPanel6.Name = "ulPanel6";
+            this.ulPanel6.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel6.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel6.Size = new System.Drawing.Size(248, 28);
+            this.ulPanel6.Spacing = 0;
+            this.ulPanel6.TabIndex = 5;
+            this.ulPanel6.Text = "MEASURE INFORMATION";
+            this.ulPanel6.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel6.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel1
+            // 
+            this.ulPanel1.BevelInner = Ulee.Controls.EUlBevelStyle.Raised;
+            this.ulPanel1.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel1.Controls.Add(this.ulPanel2);
+            this.ulPanel1.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Location = new System.Drawing.Point(0, 461);
+            this.ulPanel1.Name = "ulPanel1";
+            this.ulPanel1.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Size = new System.Drawing.Size(260, 455);
+            this.ulPanel1.Spacing = 0;
+            this.ulPanel1.TabIndex = 6;
+            this.ulPanel1.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel1.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel2
+            // 
+            this.ulPanel2.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.ulPanel2.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel2.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.ulPanel2.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ulPanel2.ForeColor = System.Drawing.Color.White;
+            this.ulPanel2.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel2.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel2.Location = new System.Drawing.Point(6, 6);
+            this.ulPanel2.Name = "ulPanel2";
+            this.ulPanel2.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel2.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel2.Size = new System.Drawing.Size(248, 28);
+            this.ulPanel2.Spacing = 0;
+            this.ulPanel2.TabIndex = 5;
+            this.ulPanel2.Text = "RUN INFORMATION";
+            this.ulPanel2.TextHAlign = Ulee.Controls.EUlHoriAlign.Center;
+            this.ulPanel2.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // testMeasTab
+            // 
+            this.testMeasTab.Controls.Add(this.measPage);
+            this.testMeasTab.Controls.Add(this.reportPage);
+            this.testMeasTab.Controls.Add(this.graphPage);
+            this.testMeasTab.Location = new System.Drawing.Point(266, 0);
+            this.testMeasTab.Margin = new System.Windows.Forms.Padding(0);
+            this.testMeasTab.Name = "testMeasTab";
+            this.testMeasTab.Padding = new System.Drawing.Point(0, 0);
+            this.testMeasTab.SelectedIndex = 0;
+            this.testMeasTab.Size = new System.Drawing.Size(1460, 915);
+            this.testMeasTab.TabIndex = 7;
+            // 
+            // measPage
+            // 
+            this.measPage.Controls.Add(this.measTab);
+            this.measPage.Location = new System.Drawing.Point(4, 24);
+            this.measPage.Margin = new System.Windows.Forms.Padding(0);
+            this.measPage.Name = "measPage";
+            this.measPage.Size = new System.Drawing.Size(1452, 887);
+            this.measPage.TabIndex = 0;
+            this.measPage.Text = " Measure ";
+            this.measPage.UseVisualStyleBackColor = true;
+            // 
+            // measTab
+            // 
+            this.measTab.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.measTab.Controls.Add(this.meas1Page);
+            this.measTab.Controls.Add(this.meas2Page);
+            this.measTab.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.measTab.Location = new System.Drawing.Point(0, 0);
+            this.measTab.Margin = new System.Windows.Forms.Padding(0);
+            this.measTab.Multiline = true;
+            this.measTab.Name = "measTab";
+            this.measTab.Padding = new System.Drawing.Point(0, 0);
+            this.measTab.SelectedIndex = 0;
+            this.measTab.Size = new System.Drawing.Size(1452, 887);
+            this.measTab.TabIndex = 0;
+            // 
+            // meas1Page
+            // 
+            this.meas1Page.Location = new System.Drawing.Point(4, 4);
+            this.meas1Page.Margin = new System.Windows.Forms.Padding(0);
+            this.meas1Page.Name = "meas1Page";
+            this.meas1Page.Size = new System.Drawing.Size(1444, 859);
+            this.meas1Page.TabIndex = 0;
+            this.meas1Page.Text = " Measure #1 ";
+            this.meas1Page.UseVisualStyleBackColor = true;
+            // 
+            // meas2Page
+            // 
+            this.meas2Page.Location = new System.Drawing.Point(4, 4);
+            this.meas2Page.Margin = new System.Windows.Forms.Padding(0);
+            this.meas2Page.Name = "meas2Page";
+            this.meas2Page.Size = new System.Drawing.Size(1532, 859);
+            this.meas2Page.TabIndex = 1;
+            this.meas2Page.Text = " Measure #2 ";
+            this.meas2Page.UseVisualStyleBackColor = true;
+            // 
+            // reportPage
+            // 
+            this.reportPage.Controls.Add(this.reportSheet);
+            this.reportPage.Location = new System.Drawing.Point(4, 24);
+            this.reportPage.Margin = new System.Windows.Forms.Padding(0);
+            this.reportPage.Name = "reportPage";
+            this.reportPage.Size = new System.Drawing.Size(1540, 887);
+            this.reportPage.TabIndex = 1;
+            this.reportPage.Text = " Report ";
+            this.reportPage.UseVisualStyleBackColor = true;
+            // 
+            // reportSheet
+            // 
+            this.reportSheet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.reportSheet.Location = new System.Drawing.Point(0, 0);
+            this.reportSheet.Margin = new System.Windows.Forms.Padding(0);
+            this.reportSheet.Name = "reportSheet";
+            this.reportSheet.Options.Import.Csv.Encoding = ((System.Text.Encoding)(resources.GetObject("reportSheet.Options.Import.Csv.Encoding")));
+            this.reportSheet.Options.Import.Txt.Encoding = ((System.Text.Encoding)(resources.GetObject("reportSheet.Options.Import.Txt.Encoding")));
+            this.reportSheet.Options.View.ShowColumnHeaders = false;
+            this.reportSheet.Options.View.ShowRowHeaders = false;
+            this.reportSheet.ReadOnly = true;
+            this.reportSheet.Size = new System.Drawing.Size(1540, 887);
+            this.reportSheet.TabIndex = 1;
+            // 
+            // graphPage
+            // 
+            this.graphPage.Controls.Add(this.graphTab);
+            this.graphPage.Location = new System.Drawing.Point(4, 24);
+            this.graphPage.Margin = new System.Windows.Forms.Padding(0);
+            this.graphPage.Name = "graphPage";
+            this.graphPage.Size = new System.Drawing.Size(1540, 887);
+            this.graphPage.TabIndex = 2;
+            this.graphPage.Text = " Graph ";
+            this.graphPage.UseVisualStyleBackColor = true;
+            // 
+            // graphTab
+            // 
+            this.graphTab.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.graphTab.Controls.Add(this.graph1Page);
+            this.graphTab.Controls.Add(this.graph2Page);
+            this.graphTab.Controls.Add(this.graph3Page);
+            this.graphTab.Controls.Add(this.graph4Page);
+            this.graphTab.Controls.Add(this.graph5Page);
+            this.graphTab.Controls.Add(this.graph6Page);
+            this.graphTab.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.graphTab.Location = new System.Drawing.Point(0, 0);
+            this.graphTab.Margin = new System.Windows.Forms.Padding(0);
+            this.graphTab.Name = "graphTab";
+            this.graphTab.Padding = new System.Drawing.Point(0, 0);
+            this.graphTab.SelectedIndex = 0;
+            this.graphTab.Size = new System.Drawing.Size(1540, 887);
+            this.graphTab.TabIndex = 0;
+            // 
+            // graph1Page
+            // 
+            this.graph1Page.Location = new System.Drawing.Point(4, 4);
+            this.graph1Page.Margin = new System.Windows.Forms.Padding(0);
+            this.graph1Page.Name = "graph1Page";
+            this.graph1Page.Size = new System.Drawing.Size(1532, 859);
+            this.graph1Page.TabIndex = 0;
+            this.graph1Page.Text = " Graph #1 ";
+            this.graph1Page.UseVisualStyleBackColor = true;
+            // 
+            // graph2Page
+            // 
+            this.graph2Page.Location = new System.Drawing.Point(4, 4);
+            this.graph2Page.Margin = new System.Windows.Forms.Padding(0);
+            this.graph2Page.Name = "graph2Page";
+            this.graph2Page.Size = new System.Drawing.Size(1532, 859);
+            this.graph2Page.TabIndex = 1;
+            this.graph2Page.Text = " Graph #2 ";
+            this.graph2Page.UseVisualStyleBackColor = true;
+            // 
+            // graph3Page
+            // 
+            this.graph3Page.Location = new System.Drawing.Point(4, 4);
+            this.graph3Page.Margin = new System.Windows.Forms.Padding(0);
+            this.graph3Page.Name = "graph3Page";
+            this.graph3Page.Size = new System.Drawing.Size(1532, 859);
+            this.graph3Page.TabIndex = 2;
+            this.graph3Page.Text = " Graph #3 ";
+            this.graph3Page.UseVisualStyleBackColor = true;
+            // 
+            // graph4Page
+            // 
+            this.graph4Page.Location = new System.Drawing.Point(4, 4);
+            this.graph4Page.Name = "graph4Page";
+            this.graph4Page.Padding = new System.Windows.Forms.Padding(3);
+            this.graph4Page.Size = new System.Drawing.Size(1532, 859);
+            this.graph4Page.TabIndex = 3;
+            this.graph4Page.Text = " Graph #4 ";
+            this.graph4Page.UseVisualStyleBackColor = true;
+            // 
+            // graph5Page
+            // 
+            this.graph5Page.Location = new System.Drawing.Point(4, 4);
+            this.graph5Page.Name = "graph5Page";
+            this.graph5Page.Padding = new System.Windows.Forms.Padding(3);
+            this.graph5Page.Size = new System.Drawing.Size(1532, 859);
+            this.graph5Page.TabIndex = 4;
+            this.graph5Page.Text = " Graph #5 ";
+            this.graph5Page.UseVisualStyleBackColor = true;
+            // 
+            // graph6Page
+            // 
+            this.graph6Page.Location = new System.Drawing.Point(4, 4);
+            this.graph6Page.Name = "graph6Page";
+            this.graph6Page.Padding = new System.Windows.Forms.Padding(3);
+            this.graph6Page.Size = new System.Drawing.Size(1532, 859);
+            this.graph6Page.TabIndex = 5;
+            this.graph6Page.Text = " Graph #6 ";
+            this.graph6Page.UseVisualStyleBackColor = true;
+            // 
+            // CtrlTestMeas
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlTestMeas";
+            this.Size = new System.Drawing.Size(1728, 915);
+            this.bgPanel.ResumeLayout(false);
+            this.ulPanel4.ResumeLayout(false);
+            this.ulPanel1.ResumeLayout(false);
+            this.testMeasTab.ResumeLayout(false);
+            this.measPage.ResumeLayout(false);
+            this.measTab.ResumeLayout(false);
+            this.reportPage.ResumeLayout(false);
+            this.graphPage.ResumeLayout(false);
+            this.graphTab.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.TabControl testMeasTab;
+        private System.Windows.Forms.TabPage measPage;
+        private System.Windows.Forms.TabControl measTab;
+        private System.Windows.Forms.TabPage meas1Page;
+        private System.Windows.Forms.TabPage meas2Page;
+        private System.Windows.Forms.TabPage reportPage;
+        private System.Windows.Forms.TabPage graphPage;
+        private System.Windows.Forms.TabControl graphTab;
+        private System.Windows.Forms.TabPage graph1Page;
+        private System.Windows.Forms.TabPage graph2Page;
+        private Ulee.Controls.UlPanel ulPanel1;
+        private Ulee.Controls.UlPanel ulPanel2;
+        private Ulee.Controls.UlPanel ulPanel4;
+        private Ulee.Controls.UlPanel ulPanel6;
+        private DevExpress.XtraSpreadsheet.SpreadsheetControl reportSheet;
+        private System.Windows.Forms.TabPage graph3Page;
+        private System.Windows.Forms.TabPage graph4Page;
+        private System.Windows.Forms.TabPage graph5Page;
+        private System.Windows.Forms.TabPage graph6Page;
+    }
+}

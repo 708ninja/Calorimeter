@@ -1,0 +1,278 @@
+﻿namespace Hnc.Calorimeter.Server
+{
+    partial class CtrlCalibTop
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CtrlCalibTop));
+            this.calibTab = new System.Windows.Forms.TabControl();
+            this.totalPointsCombo = new System.Windows.Forms.ComboBox();
+            this.ulPanel2 = new Ulee.Controls.UlPanel();
+            this.ulPanel4 = new Ulee.Controls.UlPanel();
+            this.setButton = new System.Windows.Forms.Button();
+            this.openButton = new System.Windows.Forms.Button();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.getPvButton = new System.Windows.Forms.Button();
+            this.calibrateButton = new System.Windows.Forms.Button();
+            this.svEdit = new DevExpress.XtraEditors.TextEdit();
+            this.ulPanel1 = new Ulee.Controls.UlPanel();
+            this.nameEdit = new Ulee.Controls.UlPanel();
+            this.bgPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.svEdit.Properties)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bgPanel
+            // 
+            this.bgPanel.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.bgPanel.Controls.Add(this.nameEdit);
+            this.bgPanel.Controls.Add(this.ulPanel1);
+            this.bgPanel.Controls.Add(this.svEdit);
+            this.bgPanel.Controls.Add(this.calibrateButton);
+            this.bgPanel.Controls.Add(this.getPvButton);
+            this.bgPanel.Controls.Add(this.saveButton);
+            this.bgPanel.Controls.Add(this.openButton);
+            this.bgPanel.Controls.Add(this.setButton);
+            this.bgPanel.Controls.Add(this.ulPanel4);
+            this.bgPanel.Controls.Add(this.totalPointsCombo);
+            this.bgPanel.Controls.Add(this.ulPanel2);
+            this.bgPanel.Controls.Add(this.calibTab);
+            this.bgPanel.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bgPanel.Size = new System.Drawing.Size(992, 645);
+            // 
+            // calibTab
+            // 
+            this.calibTab.Location = new System.Drawing.Point(0, 29);
+            this.calibTab.Name = "calibTab";
+            this.calibTab.SelectedIndex = 0;
+            this.calibTab.Size = new System.Drawing.Size(992, 616);
+            this.calibTab.TabIndex = 5;
+            // 
+            // totalPointsCombo
+            // 
+            this.totalPointsCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.totalPointsCombo.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.totalPointsCombo.FormattingEnabled = true;
+            this.totalPointsCombo.Items.AddRange(new object[] {
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16"});
+            this.totalPointsCombo.Location = new System.Drawing.Point(243, 0);
+            this.totalPointsCombo.Name = "totalPointsCombo";
+            this.totalPointsCombo.Size = new System.Drawing.Size(48, 23);
+            this.totalPointsCombo.TabIndex = 0;
+            this.totalPointsCombo.SelectedIndexChanged += new System.EventHandler(this.totalPointsCombo_SelectedIndexChanged);
+            // 
+            // ulPanel2
+            // 
+            this.ulPanel2.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel2.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel2.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel2.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel2.Location = new System.Drawing.Point(201, 0);
+            this.ulPanel2.Name = "ulPanel2";
+            this.ulPanel2.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel2.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel2.Size = new System.Drawing.Size(38, 24);
+            this.ulPanel2.Spacing = 0;
+            this.ulPanel2.TabIndex = 3;
+            this.ulPanel2.Text = "Points";
+            this.ulPanel2.TextHAlign = Ulee.Controls.EUlHoriAlign.Right;
+            this.ulPanel2.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // ulPanel4
+            // 
+            this.ulPanel4.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel4.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel4.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel4.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel4.Location = new System.Drawing.Point(409, 0);
+            this.ulPanel4.Name = "ulPanel4";
+            this.ulPanel4.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel4.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel4.Size = new System.Drawing.Size(20, 24);
+            this.ulPanel4.Spacing = 0;
+            this.ulPanel4.TabIndex = 7;
+            this.ulPanel4.Text = "SV";
+            this.ulPanel4.TextHAlign = Ulee.Controls.EUlHoriAlign.Left;
+            this.ulPanel4.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // setButton
+            // 
+            this.setButton.Image = ((System.Drawing.Image)(resources.GetObject("setButton.Image")));
+            this.setButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.setButton.Location = new System.Drawing.Point(500, 0);
+            this.setButton.Name = "setButton";
+            this.setButton.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.setButton.Size = new System.Drawing.Size(100, 24);
+            this.setButton.TabIndex = 3;
+            this.setButton.Text = "Set";
+            this.setButton.UseVisualStyleBackColor = true;
+            this.setButton.Click += new System.EventHandler(this.setButton_Click);
+            // 
+            // openButton
+            // 
+            this.openButton.Image = ((System.Drawing.Image)(resources.GetObject("openButton.Image")));
+            this.openButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.openButton.Location = new System.Drawing.Point(786, 0);
+            this.openButton.Name = "openButton";
+            this.openButton.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.openButton.Size = new System.Drawing.Size(100, 24);
+            this.openButton.TabIndex = 5;
+            this.openButton.Text = "Open";
+            this.openButton.UseVisualStyleBackColor = true;
+            this.openButton.Click += new System.EventHandler(this.openButton_Click);
+            // 
+            // saveButton
+            // 
+            this.saveButton.Image = ((System.Drawing.Image)(resources.GetObject("saveButton.Image")));
+            this.saveButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.saveButton.Location = new System.Drawing.Point(892, 0);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.saveButton.Size = new System.Drawing.Size(100, 24);
+            this.saveButton.TabIndex = 6;
+            this.saveButton.Text = "Save";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // getPvButton
+            // 
+            this.getPvButton.Image = ((System.Drawing.Image)(resources.GetObject("getPvButton.Image")));
+            this.getPvButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.getPvButton.Location = new System.Drawing.Point(303, 0);
+            this.getPvButton.Name = "getPvButton";
+            this.getPvButton.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.getPvButton.Size = new System.Drawing.Size(100, 24);
+            this.getPvButton.TabIndex = 1;
+            this.getPvButton.Text = "Get PV";
+            this.getPvButton.UseVisualStyleBackColor = true;
+            this.getPvButton.Click += new System.EventHandler(this.getPvButton_Click);
+            // 
+            // calibrateButton
+            // 
+            this.calibrateButton.Image = ((System.Drawing.Image)(resources.GetObject("calibrateButton.Image")));
+            this.calibrateButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.calibrateButton.Location = new System.Drawing.Point(606, 0);
+            this.calibrateButton.Name = "calibrateButton";
+            this.calibrateButton.Size = new System.Drawing.Size(100, 24);
+            this.calibrateButton.TabIndex = 4;
+            this.calibrateButton.Text = "    Calibrate";
+            this.calibrateButton.UseVisualStyleBackColor = true;
+            this.calibrateButton.Click += new System.EventHandler(this.calibrateButton_Click);
+            // 
+            // svEdit
+            // 
+            this.svEdit.EditValue = "0.000";
+            this.svEdit.Location = new System.Drawing.Point(433, 1);
+            this.svEdit.Name = "svEdit";
+            this.svEdit.Properties.Appearance.Font = new System.Drawing.Font("Malgun Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.svEdit.Properties.Appearance.Options.UseFont = true;
+            this.svEdit.Properties.DisplayFormat.FormatString = "f3";
+            this.svEdit.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.svEdit.Properties.EditFormat.FormatString = "f3";
+            this.svEdit.Properties.EditFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.svEdit.Properties.Mask.EditMask = "f3";
+            this.svEdit.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.Numeric;
+            this.svEdit.Properties.MaxLength = 8;
+            this.svEdit.Size = new System.Drawing.Size(60, 22);
+            this.svEdit.TabIndex = 2;
+            // 
+            // ulPanel1
+            // 
+            this.ulPanel1.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel1.BevelOuter = Ulee.Controls.EUlBevelStyle.None;
+            this.ulPanel1.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.InnerColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Location = new System.Drawing.Point(0, 0);
+            this.ulPanel1.Name = "ulPanel1";
+            this.ulPanel1.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.ulPanel1.OuterColor2 = System.Drawing.Color.White;
+            this.ulPanel1.Size = new System.Drawing.Size(37, 24);
+            this.ulPanel1.Spacing = 0;
+            this.ulPanel1.TabIndex = 9;
+            this.ulPanel1.Text = "Name";
+            this.ulPanel1.TextHAlign = Ulee.Controls.EUlHoriAlign.Left;
+            this.ulPanel1.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // nameEdit
+            // 
+            this.nameEdit.BevelInner = Ulee.Controls.EUlBevelStyle.None;
+            this.nameEdit.BevelOuter = Ulee.Controls.EUlBevelStyle.Lowered;
+            this.nameEdit.InnerColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.nameEdit.InnerColor2 = System.Drawing.Color.White;
+            this.nameEdit.Location = new System.Drawing.Point(41, 1);
+            this.nameEdit.Name = "nameEdit";
+            this.nameEdit.OuterColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.nameEdit.OuterColor2 = System.Drawing.Color.White;
+            this.nameEdit.Size = new System.Drawing.Size(148, 22);
+            this.nameEdit.Spacing = 0;
+            this.nameEdit.TabIndex = 9;
+            this.nameEdit.TextHAlign = Ulee.Controls.EUlHoriAlign.Left;
+            this.nameEdit.TextVAlign = Ulee.Controls.EUlVertAlign.Middle;
+            // 
+            // CtrlCalibTop
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "CtrlCalibTop";
+            this.Size = new System.Drawing.Size(992, 645);
+            this.Enter += new System.EventHandler(this.CtrlCalibTop_Enter);
+            this.bgPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.svEdit.Properties)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.TabControl calibTab;
+        public System.Windows.Forms.ComboBox totalPointsCombo;
+        private Ulee.Controls.UlPanel ulPanel2;
+        private Ulee.Controls.UlPanel ulPanel4;
+        private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Button openButton;
+        private System.Windows.Forms.Button setButton;
+        private System.Windows.Forms.Button calibrateButton;
+        private System.Windows.Forms.Button getPvButton;
+        public DevExpress.XtraEditors.TextEdit svEdit;
+        private Ulee.Controls.UlPanel ulPanel1;
+        private Ulee.Controls.UlPanel nameEdit;
+    }
+}

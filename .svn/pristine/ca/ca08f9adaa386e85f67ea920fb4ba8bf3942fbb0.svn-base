@@ -1,0 +1,202 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Ulee.Utils;
+using Ulee.Device.Connection.Yokogawa;
+
+namespace Hnc.Calorimeter.Client
+{
+    public class ClientSender
+    {
+        public ClientSender(CalorimeterClient client)
+        {
+            this.client = client;
+            packet = new ClientSendPacket();
+        }
+
+        private CalorimeterClient client;
+
+        private ClientSendPacket packet;
+
+        public void Connect()
+        {
+            lock (client.Udp)
+            {
+                packet.Clear();
+                packet.Command = EClientCommand.ConnectClient;
+                packet.IArg1 = 1000;
+
+                client.Udp.Send(packet.Bytes, packet.Bytes.Length, client.IpPoint);
+            }
+
+            client.Listener.WaitForAck(1000);
+        }
+
+        public void Disconnect()
+        {
+            lock (client.Udp)
+            {
+                packet.Clear();
+                packet.Command = EClientCommand.DisconnectClient;
+
+                client.Udp.Send(packet.Bytes, packet.Bytes.Length, client.IpPoint);
+            }
+
+            client.Listener.WaitForAck(1000);
+        }
+
+        public void SetClientState(EClientState state)
+        {
+            lock (client.Udp)
+            {
+                packet.Clear();
+                packet.Command = EClientCommand.SetClientState;
+                packet.IArg1 = (int)state;
+
+                client.Udp.Send(packet.Bytes, packet.Bytes.Length, client.IpPoint);
+            }
+
+            client.Listener.WaitForAck(1000);
+        }
+
+        public void SetController(int networkNo, int  controllerNo, int addr, float value)
+        {
+            lock (client.Udp)
+            {
+                packet.Clear();
+                packet.Command = EClientCommand.SetController;
+                packet.IArg1 = networkNo;
+                packet.IArg2 = controllerNo;
+                packet.IArg3 = addr;
+                packet.FArg1 = value;
+
+                client.Udp.Send(packet.Bytes, packet.Bytes.Length, client.IpPoint);
+            }
+
+            client.Listener.WaitForAck(1000);
+        }
+
+        public void SetPlc()
+        {
+        }
+
+        public void StartIntegrationPM(int index)
+        {
+            lock (client.Udp)
+            {
+                packet.Clear();
+                packet.Command = EClientCommand.StartIntegrationPM;
+                packet.IArg1 = index;
+
+                client.Udp.Send(packet.Bytes, packet.Bytes.Length, client.IpPoint);
+            }
+
+            client.Listener.WaitForAck(1000);
+        }
+
+        private void StopIntegrationPM(int index)
+        {
+            lock (client.Udp)
+            {
+                packet.Clear();
+                packet.Command = EClientCommand.StopIntegrationPM;
+                packet.IArg1 = index;
+
+                client.Udp.Send(packet.Bytes, packet.Bytes.Length, client.IpPoint);
+            }
+
+            client.Listener.WaitForAck(1000);
+        }
+
+        private void ResetIntegrationPM(int index)
+        {
+            lock (client.Udp)
+            {
+                packet.Clear();
+                packet.Command = EClientCommand.ResetIntegrationPM;
+                packet.IArg1 = index;
+
+                client.Udp.Send(packet.Bytes, packet.Bytes.Length, client.IpPoint);
+            }
+
+            client.Listener.WaitForAck(1000);
+        }
+
+        private void SetWiringPM(int index, EWT330Phase phase)
+        {
+            lock (client.Udp)
+            {
+                packet.Clear();
+                packet.Command = EClientCommand.ResetIntegrationPM;
+                packet.IArg1 = index;
+                packet.IArg2 = (int)phase;
+
+                client.Udp.Send(packet.Bytes, packet.Bytes.Length, client.IpPoint);
+            }
+
+            client.Listener.WaitForAck(1000);
+        }
+    }
+
+    public class ClientSendPacket
+    {
+        public ClientSendPacket()
+        {
+            packet = new UlBinSets(17);
+        }
+
+        public EClientCommand Command
+        {
+            get { return (EClientCommand)packet.Byte(0); }
+            set { packet.Byte(0, (byte)value); }
+        }
+
+        public int IArg1
+        {
+            get { return (int)packet.DWord(1); }
+            set { packet.DWord(1, (UInt32)value); }
+        }
+
+        public int IArg2
+        {
+            get { return (int)packet.DWord(5); }
+            set { packet.DWord(5, (UInt32)value); }
+        }
+
+        public int IArg3
+        {
+            get { return (int)packet.DWord(9); }
+            set { packet.DWord(9, (UInt32)value); }
+        }
+
+        public float FArg1
+        {
+            get { return BitConverter.ToSingle(packet.Bytes, 13); }
+            set
+            {
+                byte[] bytes = BitConverter.GetBytes(value);
+
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    packet.Byte(i + 13, bytes[i]);
+                }
+            }
+        }
+
+        public void Clear()
+        {
+            packet.Clear();
+        }
+
+        private UlBinSets packet;
+
+        public byte[] Bytes
+        { get { return packet.Bytes; } }
+
+        public int Length
+        { get { return packet.Count; } }
+    }
+}

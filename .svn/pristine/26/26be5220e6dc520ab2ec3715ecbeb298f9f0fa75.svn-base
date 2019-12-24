@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+using Ulee.Device.Connection.Yokogawa;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class CtrlControllerView : UlUserControlEng
+    {
+        public CtrlControllerView(string name)
+        {
+            InitializeComponent();
+            titleEdit.Text = name;
+        }
+
+        private void CtrlControllerView_Load(object sender, EventArgs e)
+        {
+            modeCombo.SelectedIndex = 0;
+        }
+
+        public void RefreshMeter(List<DeviceValueRow<float>> rows)
+        {
+            pvPanel.Text = $"{rows[(int)EUT55ARegisterSeries.PV].Value:f1}";
+            svPanel.Text = $"{rows[(int)EUT55ARegisterSeries.SV].Value:f1}";
+            outPanel.Text = $"{rows[(int)EUT55ARegisterSeries.OUT].Value:f1}";
+            modePanel.Text = (rows[(int)EUT55ARegisterSeries.Mode].Value == 0.0) ? "AUTO" : "MANUAL";
+            pPanel.Text = $"{rows[(int)EUT55ARegisterSeries.P].Value:f1}";
+            iPanel.Text = $"{rows[(int)EUT55ARegisterSeries.I].Value:f1}";
+            dPanel.Text = $"{rows[(int)EUT55ARegisterSeries.D].Value:f1}";
+            flPanel.Text = $"{rows[(int)EUT55ARegisterSeries.FL].Value:f1}";
+        }
+    }
+}

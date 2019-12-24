@@ -1,0 +1,131 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{
+    public enum ETestPanel { Condition, Measurement }
+
+    public partial class CtrlTestRight : UlUserControlEng
+    {
+        public CtrlTestRight()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        public TestContext Context { get; set; }
+
+        private void Initialize()
+        {
+            Context = new TestContext();
+            Context.Condition.Control = new CtrlTestCondition(Context);
+            Context.Measure.Control = new CtrlTestMeas(Context);
+
+            DefMenu = new UlMenu(viewPanel);
+            DefMenu.Add(Context.Condition.Control, conditionButton);
+            DefMenu.Add(Context.Measure.Control, measuringButton);
+        }
+
+        private void CtrlTestLine1_Load(object sender, EventArgs e)
+        {
+            DefMenu.Index = 0;
+            SetButtonState(ETestState.Stopped);
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            SetButtonState(ETestState.Started);
+        }
+
+        private void pauseButton_Click(object sender, EventArgs e)
+        {
+            SetButtonState(ETestState.Paused);
+        }
+
+        private void nextButton_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void stopButton_Click(object sender, EventArgs e)
+        {
+            SetButtonState(ETestState.Stopped);
+        }
+
+        private void openScheduleButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void openConditionButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void openAllParamButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void saveAllParamButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void resetConditionButton_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Would you like to reset all parameters?",
+                Resource.Caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                == DialogResult.No)
+            {
+                return;
+            }
+
+            Context.Condition.Control.ResetAllParam();
+        }
+
+        private void SetButtonState(ETestState state)
+        {
+            Context.State = state;
+
+            switch (state)
+            {
+                case ETestState.Started:
+                    startButton.Enabled = false;
+                    pauseButton.Enabled = true;
+                    nextButton.Enabled = true;
+                    resetButton.Enabled = true;
+                    stopButton.Enabled = true;
+                    break;
+
+                case ETestState.Paused:
+                    startButton.Enabled = true;
+                    pauseButton.Enabled = false;
+                    nextButton.Enabled = false;
+                    resetButton.Enabled = false;
+                    stopButton.Enabled = true;
+                    break;
+
+                case ETestState.Stopped:
+                    startButton.Enabled = true;
+                    pauseButton.Enabled = false;
+                    nextButton.Enabled = false;
+                    resetButton.Enabled = false;
+                    stopButton.Enabled = false;
+                    break;
+            }
+        }
+    }
+}

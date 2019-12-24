@@ -1,0 +1,104 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using DevExpress.XtraGrid.Views.Base;
+using DevExpress.XtraGrid.Views.Grid;
+
+using Ulee.Controls;
+
+namespace Hnc.Calorimeter.Client
+{
+    public partial class FormOpenAllParam : UlFormEng
+    {
+        public FormOpenAllParam()
+        {
+            InitializeComponent();
+            Initialize();
+        }
+
+        public GridView ParamGridView { get { return paramGridView; } }
+
+        private void Initialize()
+        {
+            paramGridView.Appearance.EvenRow.BackColor = Color.FromArgb(244, 244, 236);
+            paramGridView.OptionsView.EnableAppearanceEvenRow = true;
+        }
+
+        private void FormOpenAllParam_Load(object sender, EventArgs e)
+        {
+            Resource.Db.Lock();
+
+            try
+            {
+                Resource.Db.AllParamSet.Select();
+                paramGrid.DataSource = Resource.Db.AllParamSet.DataSet.Tables[0];
+            }
+            finally
+            {
+                Resource.Db.Unlock();
+            }
+        }
+
+        private void schDeleteButton_Click(object sender, EventArgs e)
+        {
+            if (paramGridView.FocusedRowHandle < 0) return;
+
+            if (MessageBox.Show("Would you like to delete a parameter focused?",
+                Resource.Caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                == DialogResult.No)
+            {
+                return;
+            }
+
+            Resource.Db.Lock();
+            try
+            {
+                Resource.Db.DeleteAllParam(Resource.Db.AllParamSet.RecNo);
+                Resource.Db.AllParamSet.Select();
+            }
+            finally
+            {
+                Resource.Db.Unlock();
+            }
+        }
+
+        private void paramGridView_FocusedRowChanged(object sender, FocusedRowChangedEventArgs e)
+        {
+            if (e.FocusedRowHandle < 0) return;
+
+            DataRow row = paramGridView.GetDataRow(e.FocusedRowHandle);
+
+            Resource.Db.Lock();
+            try
+            {
+                Resource.Db.AllParamSet.Fetch(row);
+            }
+            finally
+            {
+                Resource.Db.Unlock();
+            }
+        }
+
+        private void paramGrid_DoubleClick(object sender, EventArgs e)
+        {
+            if (paramGridView.FocusedRowHandle < 0) return;
+
+            okButton.PerformClick();
+        }
+
+        private void FormOpenAllParam_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Escape)
+            {
+                cancelButton.PerformClick();
+            }
+        }
+    }
+}
